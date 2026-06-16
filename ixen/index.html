@@ -1,0 +1,30 @@
+---
+title: Ixens
+description: Self-contained mixed-media pages.
+---
+
+<section class="page-heading">
+  <p class="kicker">Ixen archive</p>
+  <h1>Ixens</h1>
+</section>
+
+{% assign ixens = site.data.ixens | sort: "date" | reverse %}
+{% if ixens.size > 0 %}
+  <ol class="ixen-list">
+    {% for ixen in ixens %}
+      <li>
+        <a href="{{ '/ixen/' | append: ixen.slug | append: '/' | relative_url }}">
+          <span>{{ ixen.title }}</span>
+          {% if ixen.date %}
+            <time datetime="{{ ixen.date }}">{{ ixen.date | date: "%Y-%m-%d" }}</time>
+          {% endif %}
+        </a>
+        {% if ixen.description %}
+          <p>{{ ixen.description }}</p>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <p class="empty-state">No Ixens have been published yet.</p>
+{% endif %}

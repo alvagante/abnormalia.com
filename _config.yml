@@ -1,0 +1,28 @@
+title: abnormalia
+description: >
+  Ixens and other abnormalia.
+url: "https://abnormalia.com"
+baseurl: ""
+timezone: Europe/Rome
+lang: en
+
+safe: true
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+exclude:
+  - AGENTS.md
+  - CLAUDE.md
+  - Gemfile
+  - Gemfile.lock
+  - models/
+  - vaults/
+  - workflows/
+
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: default
