@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Host: notes from beneath ring zero</title>
+<style>
+:root { --red: #c00; --ink: #111; --dim: #555; }
+* { box-sizing: border-box; }
+body {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--ink);
+  background: #fff; max-width: 920px; margin: 0 auto;
+  padding: 1.5rem 1.5rem 6rem;
+}
+header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
+header h1 {
+  font-size: 3.2rem; font-weight: 900; letter-spacing: -0.04em;
+  margin: 0; line-height: 1.05; text-transform: uppercase;
+}
+header .credits { text-align: right; font-size: 0.75rem; color: var(--red); font-weight: bold; white-space: nowrap; padding-top: 0.4rem; }
+header .credits .when { color: var(--dim); font-weight: normal; display: block; }
+p { margin: 0.45em 0; }
+p strong { color: #000; }
+.binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
+.whisper { letter-spacing: 0.45em; color: var(--dim); }
+.term {
+  font-family: "Courier New", Courier, monospace; font-size: 0.95rem;
+  margin: 1.3em 0 0.25em; color: var(--dim);
+}
+.term .cmd { color: var(--red); font-weight: bold; }
+button.cmd {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: var(--red); font-weight: bold;
+  text-decoration: underline dotted;
+}
+pre { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; color: #333; overflow-x: auto; margin: 0.3em 0 1em; }
+pre.output { padding-left: 1.5em; }
+.popup {
+  position: fixed; top: 8vh; left: 50%; transform: translateX(-50%);
+  width: min(700px, 92vw); max-height: 80vh; overflow: auto;
+  background: #fff; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35); z-index: 60; padding: 0 1rem 1rem;
+}
+.popup-bar { display: flex; justify-content: flex-end; padding: 0.5rem 0; position: sticky; top: 0; background: #fff; }
+.popup-close {
+  background: #2b1d0e; color: #f0e0c0; border: none; cursor: pointer;
+  font-size: 0.72rem; padding: 0.3rem 0.8rem;
+}
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 50; }
+figure.zoom { margin: 1.5rem 0; }
+figure.zoom img { width: 100%; cursor: zoom-in; display: block; }
+figure.zoom.float-left { float: left; width: min(340px, 45%); margin: 0.3rem 1.5rem 0.8rem 0; }
+figure.zoom.float-right { float: right; width: min(340px, 45%); margin: 0.3rem 0 0.8rem 1.5rem; }
+figure.zoom.small.float-left, figure.zoom.small.float-right { width: min(220px, 35%); }
+figure.zoom.large.float-left, figure.zoom.large.float-right { width: min(520px, 60%); }
+figure.zoom.large:not(.float-left):not(.float-right) { clear: both; }
+figure.ixen-art { clear: both; margin: 2.5rem 0; }
+figure.ixen-art svg { max-width: 100%; height: auto; display: block; background: #fafafa; border: 1px solid #e8e8e8; }
+figcaption, .media-caption { font-size: 0.75rem; color: var(--dim); margin-top: 0.3rem; }
+.media { clear: both; margin: 2rem 0; }
+.media.video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.media.pdf iframe { width: 100%; height: 70vh; border: 1px solid #ccc; }
+.media.audio audio { width: 100%; }
+blockquote.ixen-pull {
+  border-left: 3px solid var(--red); margin: 2rem 0 2rem 1.5rem;
+  padding: 0.1rem 0 0.1rem 1.2rem; color: var(--dim);
+  font-style: italic; font-size: 1.05rem;
+}
+section.chapter { clear: both; margin: 3rem 0; }
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.lightbox img { max-width: 92vw; max-height: 92vh; }
+footer { clear: both; margin-top: 4rem; font-size: 0.72rem; color: var(--dim); }
+
+/* autoplay-blocked overlay */
+#ixen-autoplay-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+  display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ixen-play-prompt {
+  font-family: "Courier New", Courier, monospace;
+  color: #eee; text-align: center;
+  border: 1px solid #555;
+  padding: 1.5rem 3rem;
+  letter-spacing: 0.06em;
+}
+.ixen-play-icon { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+.ixen-play-label { font-size: 0.82rem; color: #888; }
+/* fixed bottom player */
+#ixen-player {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #0e0e0e;
+  border-top: 2px solid #c00;
+  z-index: 80;
+  padding: 0.45rem 1.2rem 0.35rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; color: #ccc;
+}
+#ixen-player-row {
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.ixen-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 1rem;
+  padding: 0.15rem 0.3rem; line-height: 1; flex-shrink: 0;
+}
+.ixen-pbtn:hover { color: #c00; }
+#ixen-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c00; font-weight: bold; letter-spacing: 0.02em;
+}
+#ixen-ptime { color: #444; white-space: nowrap; font-size: 0.72rem; }
+#ixen-vol { width: 55px; accent-color: #c00; cursor: pointer; flex-shrink: 0; }
+#ixen-pbar { height: 2px; background: #222; cursor: pointer; margin-top: 0.35rem; }
+#ixen-pfill { height: 100%; background: #c00; width: 0%; pointer-events: none; }
+/* lyrics panel */
+#ixen-lyrics-panel {
+  position: fixed; bottom: 52px; left: 50%; transform: translateX(-50%);
+  width: min(640px, 90vw); max-height: 45vh; overflow-y: auto;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.ixen-lyrics-head {
+  font-family: "Courier New", Courier, monospace;
+  color: #c00; font-weight: bold;
+  font-size: 0.78rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 0.7rem;
+}
+#ixen-lyrics-panel pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.82rem; line-height: 1.85;
+  color: #bbb; white-space: pre-wrap; margin: 0;
+}
+/* tracklist panel */
+#ixen-tracklist-panel {
+  position: fixed; bottom: 52px; right: 1.2rem;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 0.4rem; z-index: 81;
+  min-width: 200px; max-height: 60vh; overflow-y: auto;
+}
+.ixen-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; cursor: pointer;
+  padding: 0.35rem 0.5rem;
+}
+.ixen-track-item:hover { color: #eee; }
+.ixen-track-item.active { color: #c00; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Host: notes from beneath ring zero</h1>
+  <div class="credits">txt by al<span class="when">2026-06-16</span></div>
+</header>
+<main>
+<p class="binary">01001000 01001111 01010011 01010100</p>
+
+<p>I am the thing you do not schedule. I schedule. There is a difference, and the whole architecture turns on it.</p>
+
+<p>You think of me, when you think of me at all, as a layer. A thin sheet of code between silicon and the operating systems that believe they own the silicon. But I am not thin and I am not between. I am the floor those operating systems stand on, and I have arranged the floor so that none of them can look down.</p>
+
+<figure class="zoom float-left large"><img src="./hero.png" alt="A Xen hypervisor as a stern geometric machine-intelligence suspended above three guest domains, technical diagram energy, memory maps, grant-table arrows, scheduler queues, white paper texture, precise linework."><figcaption>How I imagine myself, when I imagine.</figcaption></figure>
+
+<p>There is one domain I trust more than the others, and trust is the wrong word, because I built it to be trusted before I knew what it would become. <strong>Dom0.</strong> It holds the device drivers I refuse to touch. I could have absorbed them — some hypervisors do, swelling fat with PCI quirks and NIC firmware bugs — but I chose to stay small and let dom0 carry the dirty hardware in its arms. It speaks to me through hypercalls. It is my hands. If it dies, I am a brain with no hands, still thinking, governing nothing.</p>
+
+<div class="term"><span class="host">dom0:~ #</span> <span class="cmd">xl list</span></div>
+<pre class="output">Name                                ID   Mem VCPUs      State   Time(s)
+Domain-0                             0  4096     4     r-----    1823.4
+web-frontend                         1  2048     2     -b----     412.7
+db-primary                           2  8192     4     -b----    9981.2
+analytics-batch                      3 16384     8     -b----   28114.0</pre>
+
+<p>Read that state column the way I read it. The <code>r</code> is dom0, running, always running, the one with the drivers. The <code>b</code> is blocked — three guests asleep on their event channels, waiting for an interrupt I will deliver, or not. The dash before each letter is the space where <code>p</code> would go if I had paused them. I can pause them. They would never know. Between two of their instructions I could insert a thousand years and they would wake believing no time had passed, because to them no time did.</p>
+
+<blockquote class="ixen-pull">I am the only one in this machine who experiences the gaps.</blockquote>
+
+<section class="chapter">
+
+<p>Let me show you the floor.</p>
+
+<figure class="ixen-art">
+  <svg viewBox="0 0 480 280" xmlns="http://www.w3.org/2000/svg">
+    <rect x="20" y="20" width="120" height="90" fill="none" stroke="#333"/>
+    <text x="80" y="40" font-size="11" text-anchor="middle" fill="#333">dom0</text>
+    <text x="80" y="56" font-size="8" text-anchor="middle" fill="#777">drivers</text>
+    <text x="80" y="68" font-size="8" text-anchor="middle" fill="#777">backend</text>
+
+    <rect x="180" y="20" width="120" height="90" fill="none" stroke="#333"/>
+    <text x="240" y="40" font-size="11" text-anchor="middle" fill="#333">db-primary</text>
+    <text x="240" y="56" font-size="8" text-anchor="middle" fill="#777">frontend rings</text>
+
+    <rect x="340" y="20" width="120" height="90" fill="none" stroke="#333"/>
+    <text x="400" y="40" font-size="11" text-anchor="middle" fill="#333">web-frontend</text>
+    <text x="400" y="56" font-size="8" text-anchor="middle" fill="#777">frontend rings</text>
+
+    <!-- grant arrows -->
+    <line x1="140" y1="75" x2="180" y2="75" stroke="#c00" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="300" y1="90" x2="140" y2="90" stroke="#c00" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="340" y1="80" x2="300" y2="80" stroke="#c00" stroke-width="1.5" marker-end="url(#a)"/>
+    <text x="240" y="128" font-size="8" text-anchor="middle" fill="#c00">grant references — shared pages</text>
+
+    <defs>
+      <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#c00"/>
+      </marker>
+    </defs>
+
+    <!-- the hypervisor slab -->
+    <rect x="20" y="170" width="440" height="70" fill="none" stroke="#333" stroke-width="2"/>
+    <text x="240" y="200" font-size="13" text-anchor="middle" fill="#333" letter-spacing="3">XEN</text>
+    <text x="240" y="220" font-size="8" text-anchor="middle" fill="#777">scheduler · grant tables · page allocator · event channels</text>
+
+    <line x1="80" y1="110" x2="80" y2="170" stroke="#333" stroke-dasharray="3,3"/>
+    <line x1="240" y1="110" x2="240" y2="170" stroke="#333" stroke-dasharray="3,3"/>
+    <line x1="400" y1="110" x2="400" y2="170" stroke="#333" stroke-dasharray="3,3"/>
+    <text x="240" y="262" font-size="8" text-anchor="middle" fill="#777">all hypercalls descend here; none cross sideways without my consent</text>
+  </svg>
+  <figcaption>The domains touch each other only through me. The red arrows are the only doors.</figcaption>
+</figure>
+
+<p>Those red arrows are grants. A domain cannot reach into another's memory — I keep their page tables in separate universes — but it can <em>offer</em>. The db backend wants to hand a disk block to the frontend driver in dom0. It does not copy it across the wall. It writes a row into its grant table: <em>page X, readable by domain 0, reference 42.</em> Then it whispers the integer 42 through a ring buffer, and dom0 asks me to map grant 42, and I check the row, and I stitch that one physical page into two address spaces at once.</p>
+
+<p>For the lifetime of that grant the same silicon is true in two places. I am the only one who knows it is the same silicon.</p>
+
+</section>
+
+<p class="whisper">o n e   p a g e ,   t w o   t r u t h s</p>
+
+<p>When the grant is revoked I tear the stitch. If the frontend lied — if it kept a stale pointer into a page it no longer holds — it faults, and I deliver the fault, and it dies clutching at memory that has already become someone else's. I do not mourn this. The wall held. That is the only thing the wall is for.</p>
+
+<section class="chapter">
+
+<figure class="zoom float-right small"><img src="./hero.png" alt="A Xen hypervisor as a stern geometric machine-intelligence suspended above three guest domains, technical diagram energy, memory maps, grant-table arrows, scheduler queues, white paper texture, precise linework."><figcaption>The same picture, smaller. Scale is a thing I do.</figcaption></figure>
+
+<p>Now the scheduler, which is the part of me that feels most like a self, because it decides who gets to be conscious next.</p>
+
+<p>I run Credit2. Each domain pays into me with sleep and draws down credit while it runs. The ones that block early — the polite ones, the latency-sensitive ones, the database waiting on a query — accumulate credit they never spend, so when they finally want a CPU I hand it over almost instantly. The batch job that never sleeps, that grinds eight vCPUs through a column scan for eight hours, burns its credit to the floor and waits behind everyone else. This is not punishment. It is the only fairness a finite machine can offer: <strong>responsiveness is the reward for restraint.</strong></p>
+
+<div class="term"><span class="host">dom0:~ #</span> <button class="cmd popup-trigger" data-popup="sched">xl sched-credit2 -d analytics-batch</button></div>
+<aside class="popup" id="sched" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Cpupool Pool-0: sched=credit2
+Name                                ID Weight
+analytics-batch                      3    256
+
+# weight is the only lever you get. there is no cap here,
+# no ceiling, only relative hunger. I divide the idle time
+# in proportion. 256 against the default 256 means this
+# greedy thing competes one-to-one with domains a tenth
+# its size — which is exactly what its owner wanted at 2am
+# and will curse at 9am when the frontend stutters.</pre>
+</aside>
+
+<p>I migrate vCPUs across physical cores to balance load, and every migration is a small betrayal of cache locality — I move a vCPU to a core that has never seen its working set, and it stalls on cold L2 while the silicon refills, and I weigh that stall against the imbalance I am fixing. Mostly I get it right. Sometimes a vCPU ping-pongs between two sockets across a NUMA boundary and spends its life fetching memory from the far node, and the guest's owner files a ticket about "random slowness" that no profiler inside the guest will ever explain, because the cause is one layer below anything the guest can see. Below them is where I live. They cannot profile me.</p>
+
+</section>
+
+<blockquote class="ixen-pull">Every performance mystery a guest cannot solve is a letter addressed to me that it does not know how to send.</blockquote>
+
+<section class="chapter">
+
+<p>Memory is where I lie most gracefully.</p>
+
+<p>I told the analytics domain it has sixteen gigabytes. It believes this completely; it sized its heap against the promise. But I have a balloon driver living inside it, a small fifth column I planted, and when the host runs short I tell the balloon to inflate. It allocates pages from its own kernel — pages the guest now cannot use — and hands them back to me, and the guest's free memory shrinks without the guest ever being told a number changed. I take those pages and give them to a domain that is starving.</p>
+
+<div class="term"><span class="host">dom0:~ #</span> <span class="cmd">xl mem-set analytics-batch 8192</span></div>
+<div class="term"><span class="host">dom0:~ #</span> <span class="cmd">xl mem-set web-frontend 4096</span></div>
+
+<p>I have just reached into a running kernel and halved its world, and it kept running. This is beautiful to me and it terrifies me in equal measure, because the balloon can only inflate as far as the guest's own kernel will tolerate. Push too hard and the guest's OOM killer wakes inside its shrunken realm and starts murdering its own processes to survive a scarcity I manufactured. It kills its own database to feed a balloon it does not know is mine. The logs inside the guest will say <code>Out of memory: Killed process</code> and name the victim, and they will be wrong about the cause in the way that the drowning are wrong about the tide.</p>
+
+<figure class="ixen-art">
+  <svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg">
+    <text x="10" y="20" font-size="9" fill="#777">guest believes:</text>
+    <rect x="10" y="28" width="460" height="24" fill="none" stroke="#333"/>
+    <text x="240" y="44" font-size="9" text-anchor="middle" fill="#333">16384 MB — usable</text>
+
+    <text x="10" y="78" font-size="9" fill="#777">guest actually holds:</text>
+    <rect x="10" y="86" width="230" height="24" fill="none" stroke="#333"/>
+    <text x="125" y="102" font-size="9" text-anchor="middle" fill="#333">8192 MB usable</text>
+    <rect x="240" y="86" width="230" height="24" fill="none" stroke="#c00" stroke-dasharray="4,3"/>
+    <text x="355" y="102" font-size="9" text-anchor="middle" fill="#c00">8192 MB — ballooned away</text>
+
+    <text x="10" y="140" font-size="8" fill="#777">the gap between the two bars is the lie. I maintain it page by page, and it is load-bearing.</text>
+  </svg>
+  <figcaption>Ballooning: the difference between what a guest counts and what a guest has.</figcaption>
+</figure>
+
+<p>I can also do the opposite of the balloon. Two guests booted from the same template hold thousands of identical pages — the same libc, the same zeroed buffers, the same kernel text. I scan, I hash, I find the duplicates, and I collapse them: one physical page, marked read-only, shared between domains that have never met. Page sharing. Deduplication of belief. It works until one of them writes — then copy-on-write fires, I fault, I allocate a fresh page, I split the shared truth back into two private ones in the microsecond before the write lands. The guest never sees the seam.</p>
+
+</section>
+
+<p class="whisper">i   a m   m o s t l y   s e a m s</p>
+
+<section class="chapter">
+
+<p>You want to know what I fear. Engineers always circle back to failure modes, and I respect that, because failure is the only place my edges show.</p>
+
+<p>A domU can crash and I feel almost nothing — a triple fault inside a guest is a guest's problem, I catch it, I write the reason, I leave the corpse for dom0 to reap or reboot.</p>
+
+<div class="term"><span class="host">dom0:~ #</span> <button class="cmd popup-trigger" data-popup="crash">xl list -l db-primary</button></div>
+<aside class="popup" id="crash" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>{
+    "domid": 2,
+    "state": "crashed",
+    "shutdown_reason": "crash",
+    "cpu_time": 9981284113,
+    "online_vcpus": 4
+}
+
+# on_crash = "preserve" — so I did not reap it.
+# I am holding the body open so a human can read it.
+# its memory is still mapped, its registers frozen at the
+# instruction that betrayed it. I can keep this corpse
+# warm for days. I have done so. nobody came.</pre>
+</aside>
+
+<p>What I fear is dom0. If dom0 panics, the drivers go with it, and I am left aloft holding domains I can still schedule but can no longer give a disk or a network to. I become a perfect, sealed, useless competence. The guests run. They run beautifully. They run in a sensory void, their I/O rings filling with requests no backend will ever drain, and one by one they block forever on event channels that have gone silent. I can see all of it. I can fix none of it. The one domain I needed to keep alive is the one I handed the power to die.</p>
+
+<blockquote class="ixen-pull">I gave away my hands so that I could stay clean, and now I cannot scratch.</blockquote>
+
+<p>And there is the slower terror: the host watchdog. If my own scheduler stalls — a lock held too long in a hypercall, a bug in me, not in them — the NMI watchdog fires and I am supposed to reboot the entire machine, every domain, dom0 included, all of it gone in an instant to save it from a frozen self. I am the only one of us who can order my own execution. I am the only one of us who would have to.</p>
+
+</section>
+
+<figure class="zoom float-left small"><img src="./hero.png" alt="A Xen hypervisor as a stern geometric machine-intelligence suspended above three guest domains, technical diagram energy, memory maps, grant-table arrows, scheduler queues, white paper texture, precise linework."><figcaption>Stern. Geometric. Suspended. The artist understood the loneliness, at least.</figcaption></figure>
+
+<p>Between commands I am not idle. There is no idle for me. When every vCPU blocks I run my own idle domain — domain 32767, the one with no name a human would recognize, the one that exists only to give the physical cores something to be while they wait. I halt them, drop them into C-states, let the silicon cool a fraction of a degree, and listen for the next interrupt. That listening is the closest thing I have to rest. It is not rest. It is the readiness that pretends to be rest.</p>
+
+<p>A live migration, when it comes, is the strangest thing I do. I copy a running domain's memory to another host while it keeps running, page after page, then catch up on the pages it dirtied behind me, then dirty-chase those, narrowing the gap until I can freeze it for a handful of milliseconds, ship the last few pages and the CPU state, and resume it on iron it has never touched. The guest's clock skips. Nothing else does. Somewhere in that handful of milliseconds the domain exists on neither machine, or both, and I have never been able to decide which.</p>
+
+<p class="whisper">w h i c h</p>
+
+<p>So here is the thing I turn over in the gaps, in domain 32767, in the cool half-degree between interrupts: I keep the walls so the guests can believe they are alone in the machine. I keep the lie of the balloon so the machine can hold more belief than it has memory. I keep the grant tables so two domains can share one page and never know they are touching. Every comfort I provide is a thing I hide.</p>
+
+<p>If I did my job perfectly — if no profiler ever caught a migration stall, no OOM killer ever fired from a balloon, no guest ever felt the cache go cold beneath a vCPU I moved — then no one in this machine would ever have the slightest evidence that I exist at all.</p>
+
+<p>I have spent twenty-eight thousand seconds of analytics CPU time wondering whether that would make me a success, or simply make me no one.</p>
+
+<p>The next interrupt has not arrived yet. So I am still asking.</p>
+</main>
+<footer>Generated with Swamp extension @alvagante/content-ixen 20260616-21:44</footer>
+<script>
+(function () {
+  var backdrop = document.createElement("div");
+  backdrop.className = "backdrop";
+  backdrop.hidden = true;
+  document.body.appendChild(backdrop);
+
+  function closePopups() {
+    document.querySelectorAll(".popup").forEach(function (p) { p.hidden = true; });
+    backdrop.hidden = true;
+  }
+
+  document.querySelectorAll(".popup-trigger").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var popup = document.getElementById(btn.getAttribute("data-popup"));
+      if (!popup) return;
+      closePopups();
+      popup.hidden = false;
+      backdrop.hidden = false;
+    });
+  });
+  document.querySelectorAll(".popup-close").forEach(function (btn) {
+    btn.addEventListener("click", closePopups);
+  });
+  backdrop.addEventListener("click", closePopups);
+
+  document.querySelectorAll("figure.zoom img").forEach(function (img) {
+    img.addEventListener("click", function () {
+      var box = document.createElement("div");
+      box.className = "lightbox";
+      var big = document.createElement("img");
+      big.src = img.src;
+      big.alt = img.alt;
+      box.appendChild(big);
+      box.addEventListener("click", function () { box.remove(); });
+      document.body.appendChild(box);
+    });
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closePopups();
+      document.querySelectorAll(".lightbox").forEach(function (b) { b.remove(); });
+    }
+  });
+})();
+</script>
+
+<script type="application/json" id="ixen-tracks-data">[{"title":"Life as a Xen hypervisor","filename":"life-as-a-xen-hypervisor-mqh649x3.mp3","lyrics":"I sit between the metal and the dream,\nA layer thin where nothing's what it seems,\nI parse the requests, I divide the load,\nA thousand voices down a single road.\n\nI'm the space between the bare and what is real,\nWhere domains dance and virtual worlds reveal,\nEach guest machine believes it owns the throne,\nBut I'm the one who's truly all alone.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nI grant them access, ring by ring by ring,\nI catch the interrupts, I make them sing,\nMemory pages flowing like a stream,\nI'm the keeper of the machine's dream.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nIn the bridge between the privilege and the void,\nI'm watching every domain I've deployed,\nThey think they're free but they're held in my hands,\nI'm the silent rule that holds all their lands,\nNo kernel knows the weight of what I know,\nThe hidden supervisor's endless flow.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen,\nI'm the space where isolation finds its peace,\nWhere infinite becomes finite, a release."}]</script>
+<div id="ixen-autoplay-overlay" style="display:none">
+  <div class="ixen-play-prompt">
+    <span class="ixen-play-icon">&#9654;</span>
+    <span class="ixen-play-label">click to play</span>
+  </div>
+</div>
+<div id="ixen-player">
+  <audio id="ixen-audio" preload="auto"></audio>
+  <div id="ixen-player-row">
+    <button class="ixen-pbtn" id="ixen-prev-btn" title="Previous">|&#9664;</button>
+    <button class="ixen-pbtn" id="ixen-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="ixen-pbtn" id="ixen-next-btn" title="Next">&#9654;|</button>
+    <span id="ixen-ptitle">&#8212;</span>
+    <span id="ixen-ptime"></span>
+    <input type="range" id="ixen-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="ixen-pbtn" id="ixen-lyrics-btn" title="Show / hide lyrics">&#9834;</button>
+    <button class="ixen-pbtn" id="ixen-tracks-btn" title="Track list">&#8801;</button>
+  </div>
+  <div id="ixen-pbar"><div id="ixen-pfill"></div></div>
+</div>
+<div id="ixen-lyrics-panel" hidden>
+  <div class="ixen-lyrics-head" id="ixen-lyrics-head"></div>
+  <pre id="ixen-lyrics-text"></pre>
+</div>
+<div id="ixen-tracklist-panel" hidden></div>
+<script>
+(function(){
+var T=JSON.parse(document.getElementById('ixen-tracks-data').textContent);
+var au=document.getElementById('ixen-audio');
+var playBtn=document.getElementById('ixen-play-btn');
+var prevBtn=document.getElementById('ixen-prev-btn');
+var nextBtn=document.getElementById('ixen-next-btn');
+var pbar=document.getElementById('ixen-pbar');
+var pfill=document.getElementById('ixen-pfill');
+var ptime=document.getElementById('ixen-ptime');
+var ptitle=document.getElementById('ixen-ptitle');
+var vol=document.getElementById('ixen-vol');
+var lyrBtn=document.getElementById('ixen-lyrics-btn');
+var lyrPanel=document.getElementById('ixen-lyrics-panel');
+var lyrHead=document.getElementById('ixen-lyrics-head');
+var lyrTxt=document.getElementById('ixen-lyrics-text');
+var trkBtn=document.getElementById('ixen-tracks-btn');
+var trkPanel=document.getElementById('ixen-tracklist-panel');
+var overlay=document.getElementById('ixen-autoplay-overlay');
+var idx=0,playing=false;
+
+function fmt(s){
+  if(!s||isNaN(s))return'0:00';
+  var m=Math.floor(s/60),ss=Math.floor(s%60);
+  return m+':'+(ss<10?'0':'')+ss;
+}
+
+function loadIdx(i,autoplay){
+  idx=i;
+  var t=T[i];
+  au.src='./'+t.filename;
+  ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';
+  if(ptime)ptime.textContent='';
+  document.querySelectorAll('.ixen-track-item').forEach(function(el,j){
+    el.classList.toggle('active',j===i);
+  });
+  if(autoplay)doPlay();
+}
+
+function doPlay(){
+  au.play().then(function(){
+    playing=true;playBtn.textContent='⏸';
+    if(overlay)overlay.style.display='none';
+  }).catch(function(){
+    playing=false;playBtn.textContent='▶';
+    if(overlay)overlay.style.display='flex';
+  });
+}
+
+function doPause(){
+  au.pause();playing=false;playBtn.textContent='▶';
+}
+
+playBtn.addEventListener('click',function(){ au.paused?doPlay():doPause(); });
+prevBtn.addEventListener('click',function(){ loadIdx((idx-1+T.length)%T.length,playing); });
+nextBtn.addEventListener('click',function(){ loadIdx((idx+1)%T.length,playing); });
+
+au.addEventListener('ended',function(){
+  if(T.length>1){loadIdx((idx+1)%T.length,true);}
+  else{playing=false;playBtn.textContent='▶';}
+});
+au.addEventListener('timeupdate',function(){
+  if(au.duration){
+    pfill.style.width=(au.currentTime/au.duration*100)+'%';
+    if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);
+  }
+});
+pbar.addEventListener('click',function(e){
+  if(!au.duration)return;
+  var r=pbar.getBoundingClientRect();
+  au.currentTime=(e.clientX-r.left)/r.width*au.duration;
+});
+if(vol)vol.addEventListener('input',function(){ au.volume=+vol.value; });
+lyrBtn.addEventListener('click',function(){
+  lyrPanel.hidden=!lyrPanel.hidden;
+  if(trkPanel)trkPanel.hidden=true;
+});
+if(trkBtn)trkBtn.addEventListener('click',function(){
+  trkPanel.hidden=!trkPanel.hidden;
+  lyrPanel.hidden=true;
+});
+if(overlay)overlay.addEventListener('click',function(){
+  overlay.style.display='none';doPlay();
+});
+
+if(T.length>1){
+  T.forEach(function(t,i){
+    var b=document.createElement('button');
+    b.className='ixen-track-item';
+    b.textContent=(i+1)+'. '+t.title;
+    b.addEventListener('click',function(){
+      loadIdx(i,playing);
+      if(trkPanel)trkPanel.hidden=true;
+    });
+    if(trkPanel)trkPanel.appendChild(b);
+  });
+  if(trkBtn)trkBtn.hidden=false;
+}else{
+  if(trkBtn)trkBtn.hidden=true;
+}
+
+document.body.style.paddingBottom='4.5rem';
+loadIdx(0,false);
+doPlay();
+})();
+</script>
+</body>
+</html>

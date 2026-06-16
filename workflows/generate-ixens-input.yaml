@@ -1,0 +1,54 @@
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: senior
+outputLength: medium
+ixenModel: claude-opus-4-8
+credits: txt by al
+imageStyle: ixen-light
+imageBackground: opaque
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: auto
+musicGenre: ambient
+musicMood: contemplative
+musicModel: suno-ttapi
+musicInstrumental: false
+musicLyricsOnly: false
+sunoVersion: chirp-v4-5
+ixens:
+  - slug: xen-hypervisor
+    title: Life as a Xen hypervisor
+    description: The host narrates dom0, domU, schedulers, memory ballooning, and isolation.
+    topic: Life as a Xen hypervisor
+    narrator: a Xen hypervisor
+    heroPrompt: >-
+      A Xen hypervisor as a stern geometric machine-intelligence suspended above
+      three guest domains, technical diagram energy, memory maps, grant-table
+      arrows, scheduler queues, white paper texture, precise linework.
+    details: >-
+      Treat the reader as a peer. Talk concretely about dom0, domU, grants,
+      page sharing, schedulers, memory ballooning, and failure modes.
+  - slug: puppet-catalog
+    title: Life as a Puppet catalog compiler
+    description: The compiler speaks about graphs, order, idempotence, and why drift feels personal.
+    topic: Life as a Puppet catalog compiler
+    narrator: a Puppet catalog compiler
+    heroPrompt: >-
+      A Puppet catalog compiler visualized as a red-thread dependency graph
+      engine with manifests, resources, and edges converging into a compiled
+      graph, cerebral and architectural, restrained palette.
+    details: >-
+      Focus on compilation phases, graph edges, exported resources, idempotence,
+      and the tension between declared intent and discovered state.
+  - slug: git-repository
+    title: Life as a Git repository
+    description: A repository narrates packs, refs, rebases, garbage collection, and memory.
+    topic: Life as a Git repository
+    narrator: a Git repository
+    heroPrompt: >-
+      A Git repository as an archaeological vault of objects, refs, and commit
+      lines, packfiles stacked like strata, reflogs glowing faintly in the dark,
+      technical surrealism, crisp documentary detail.
+    details: >-
+      Skip fundamentals. Lean into refs, object identity, packfiles, reflogs,
+      rebases, garbage collection, and incident-response style forensic recovery.

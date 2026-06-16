@@ -1,0 +1,7 @@
+id: 65c3922a-578b-4fdc-8108-f6a69fc201d3
+name: onemin-keys
+type: local_encryption
+config:
+  auto_generate: true
+  base_dir: /Users/al/Documents/GITHUB/swamp-extensions
+createdAt: '2026-06-16T20:59:19.869Z'

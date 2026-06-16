@@ -1,0 +1,18 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#f6f3eb"/>
+  <rect x="96" y="92" width="1008" height="616" fill="none" stroke="#1e1e1e" stroke-width="6"/>
+  <rect x="160" y="152" width="880" height="116" fill="none" stroke="#1e1e1e" stroke-width="5"/>
+  <rect x="160" y="318" width="880" height="116" fill="none" stroke="#9b2c2c" stroke-width="5"/>
+  <rect x="160" y="510" width="236" height="110" fill="none" stroke="#1e1e1e" stroke-width="5"/>
+  <rect x="482" y="510" width="236" height="110" fill="none" stroke="#1e1e1e" stroke-width="5"/>
+  <rect x="804" y="510" width="236" height="110" fill="none" stroke="#1e1e1e" stroke-width="5"/>
+  <line x1="278" y1="434" x2="278" y2="510" stroke="#1e1e1e" stroke-width="4"/>
+  <line x1="600" y1="434" x2="600" y2="510" stroke="#1e1e1e" stroke-width="4"/>
+  <line x1="922" y1="434" x2="922" y2="510" stroke="#1e1e1e" stroke-width="4"/>
+  <text x="600" y="226" text-anchor="middle" font-family="Courier New, monospace" font-size="44" fill="#1e1e1e">hardware / iommu / memory / interrupts</text>
+  <text x="600" y="392" text-anchor="middle" font-family="Courier New, monospace" font-size="40" fill="#9b2c2c">xen scheduler / grant tables / event channels</text>
+  <text x="278" y="575" text-anchor="middle" font-family="Courier New, monospace" font-size="42" fill="#1e1e1e">dom0</text>
+  <text x="600" y="575" text-anchor="middle" font-family="Courier New, monospace" font-size="42" fill="#1e1e1e">domU-a</text>
+  <text x="922" y="575" text-anchor="middle" font-family="Courier New, monospace" font-size="42" fill="#1e1e1e">domU-b</text>
+  <text x="162" y="98" font-family="Courier New, monospace" font-size="22" fill="#6b6b6b">LIFE AS A XEN HYPERVISOR</text>
+</svg>

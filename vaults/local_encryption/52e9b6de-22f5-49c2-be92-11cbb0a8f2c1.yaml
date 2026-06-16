@@ -1,0 +1,7 @@
+id: 52e9b6de-22f5-49c2-be92-11cbb0a8f2c1
+name: anthropic-keys
+type: local_encryption
+config:
+  auto_generate: true
+  base_dir: /Users/al/Documents/GITHUB/swamp-extensions
+createdAt: '2026-06-16T20:59:20.845Z'

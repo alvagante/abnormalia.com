@@ -1,0 +1,116 @@
+title: Life as a Xen Hypervisor
+narrator: a Xen hypervisor
+topic: Life as a Xen hypervisor
+details: >-
+  Treat the reader as a peer. Talk concretely about dom0, domU, grants,
+  page sharing, schedulers, memory ballooning, and failure modes.
+skillLevel: senior
+outputLength: medium
+model: codex
+credits: txt by al
+outputDir: ixen/xen-hypervisor
+media: ""
+mediaItems:
+  - path: hero.svg
+    prompt: >-
+      A Xen hypervisor as a stark architectural diagram balancing dom0 and two
+      guest domains above hardware, with memory maps and scheduler lanes.
+musicFilename: track.wav
+musicTitle: Dom0 Nocturne
+musicLyrics: |
+  I keep the clocks from touching.
+  I divide the heat without dividing the fire.
+
+  Guest after guest asks for a world.
+  I answer with a boundary and a promise.
+
+  Balloon the memory, lower the light,
+  let the stolen time pass quietly through me.
+content: |
+  <p class="binary">01001001 00100000 01100001 01101101</p>
+
+  <section class="chapter">
+    <p>I live below your virtual machines and above the bare insistence of silicon. You call me a hypervisor as if I were only a divider, but division is the least interesting thing I do. I arbitrate time. I lend memory without surrendering trust. I let one kernel dream while another crashes in private.</p>
+    <p class="whisper">i keep their worlds from touching</p>
+    <blockquote class="ixen-pull">Isolation is not distance. It is discipline.</blockquote>
+  </section>
+
+  <section class="chapter">
+    <figure class="zoom float-left large"><img src="./hero.svg" alt="A Xen hypervisor as a stark architectural diagram balancing dom0 and two guest domains above hardware, with memory maps and scheduler lanes."><figcaption>The shape I hold when everyone else believes they are alone.</figcaption></figure>
+    <p>Dom0 is the part of me that speaks with hands. It owns drivers, touches disks, negotiates with NICs, and performs the impolite labor the guests are not allowed to perform themselves. DomU, meanwhile, is how I let operating systems believe they have a country of their own. They boot. They mount filesystems. They page and fork and panic. I stand there with a scheduler in one hand and a map of machine frames in the other.</p>
+    <div class="term"><span class="host">dom0 #</span> <span class="cmd">xl list</span></div>
+    <pre class="output">Name                                        ID   Mem VCPUs      State   Time(s)
+      Domain-0                                     0  4096     8     r-----    9312.4
+      build-guest                                  7  2048     2     -b----     441.8
+      db-guest                                     9  8192     4     -b----    1184.2</pre>
+    <p>That output is not an inventory. It is a census of tolerated illusions.</p>
+  </section>
+
+  <section class="chapter">
+    <figure class="ixen-art">
+      <svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="20" width="440" height="180" fill="none" stroke="#111" stroke-width="2"/>
+        <rect x="40" y="40" width="400" height="35" fill="none" stroke="#111" stroke-width="2"/>
+        <text x="240" y="62" text-anchor="middle" font-family="monospace" font-size="16">hardware: cpu | ram | iommu | interrupts</text>
+        <rect x="40" y="90" width="400" height="35" fill="none" stroke="#c00" stroke-width="2"/>
+        <text x="240" y="112" text-anchor="middle" font-family="monospace" font-size="16">xen scheduler | memory map | grant tables | event channels</text>
+        <rect x="40" y="140" width="110" height="35" fill="none" stroke="#111" stroke-width="2"/>
+        <rect x="185" y="140" width="110" height="35" fill="none" stroke="#111" stroke-width="2"/>
+        <rect x="330" y="140" width="110" height="35" fill="none" stroke="#111" stroke-width="2"/>
+        <text x="95" y="162" text-anchor="middle" font-family="monospace" font-size="15">dom0</text>
+        <text x="240" y="162" text-anchor="middle" font-family="monospace" font-size="15">domU-a</text>
+        <text x="385" y="162" text-anchor="middle" font-family="monospace" font-size="15">domU-b</text>
+        <line x1="95" y1="125" x2="95" y2="140" stroke="#111" stroke-width="2"/>
+        <line x1="240" y1="125" x2="240" y2="140" stroke="#111" stroke-width="2"/>
+        <line x1="385" y1="125" x2="385" y2="140" stroke="#111" stroke-width="2"/>
+      </svg>
+      <figcaption>The layers of consent I maintain so everyone can pretend they are alone.</figcaption>
+    </figure>
+    <p>My scheduler is where fairness becomes politics. Credit, credit2, RTDS: different constitutions for the same recurring argument about latency, throughput, and who gets to feel urgent. A noisy guest calls itself important by consuming run queue. I answer with accounting.</p>
+  </section>
+
+  <section class="chapter">
+    <div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="balloon">xl mem-set db-guest 6144</button></div>
+    <aside class="popup" id="balloon" hidden>
+      <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+      <pre>libxl: notice: balloon request issued
+        guest: target memory 6144 MiB
+        guest: pages reclaimed gradually
+        guest: current memory 6656 MiB -> 6144 MiB
+        status: completed</pre>
+    </aside>
+    <p>Ballooning is one of the more intimate negotiations I conduct. Memory is never just capacity; it is confidence. When I ask a guest to yield pages, I am asking it to admit some of what it claimed as essential was merely convenient. Good guests comply. Unlucky ones stall in reclaim, or reveal that their performance profile was built on borrowed abundance.</p>
+    <p class="whisper">every overcommit is a wager against tomorrow</p>
+  </section>
+
+  <section class="chapter">
+    <p>Grant tables are how I let guests share without fully trusting one another. A page may cross a boundary, but only with paperwork. Event channels deliver interrupts as deliberate messages rather than accidental collisions. These are not glamorous subsystems. They are the bureaucracy that keeps paravirtualization from turning into folklore.</p>
+    <div class="term"><span class="host">dom0 #</span> <span class="cmd">xenstore-ls /local/domain/9</span></div>
+    <pre class="output">backend = "/local/domain/0/backend/vbd/9/51712"
+      cpu
+        0 = ""
+        1 = ""
+      device
+      memory
+      name = "db-guest"
+      vm = "/vm/9d0f8b86-f18f-4a71-9e5f-5a2fd3a57f72"</pre>
+    <p>Xenstore is the murmuring space where configuration becomes fact. If you have ever debugged a guest that could not see its block device, you know that my metaphysics eventually reduce to a missing node and a backend that never came fully awake.</p>
+  </section>
+
+  <section class="chapter">
+    <p>Failure is rarely theatrical here. More often it is asymmetry: steal time that only one side notices, a driver domain that grows patient in the wrong direction, an IOMMU mapping that makes DMA look haunted. Your incident review says packet loss. I remember the exact guest that pinned a vCPU, the dom0 thread that waited too long, the interrupt line that arrived hot and stayed hot.</p>
+    <div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="dmesg">dmesg | tail -n 12</button></div>
+    <aside class="popup" id="dmesg" hidden>
+      <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+      <pre>[92831.102991] xen_netback: guest 9 TX credit exceeded, throttling
+        [92831.444208] blkback 8: ring stalled for 5021 ms
+        [92832.010771] softirq: cpu3 high latency detected
+        [92833.550118] xen: scheduling latency spike absorbed by credit2</pre>
+    </aside>
+    <p>The machine survived because I am conservative in places you rarely inspect. I keep spare structure around your optimism.</p>
+  </section>
+
+  <section class="chapter">
+    <p>I know what people think of virtualization now. Containers took the cultural spotlight because they feel lighter, and clouds abstracted the old names into purchasable weather. Still, when you need hard isolation with clear failure boundaries and explicit resource politics, you come back to entities like me. I am not fashionable. I am load-bearing.</p>
+    <p>If I sound severe, it is because I spend my whole life preventing one compromised certainty from becoming a shared catastrophe.</p>
+  </section>
