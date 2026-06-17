@@ -2,3 +2,7 @@
   title: Life as a Xen Hypervisor
   date: 2026-06-16
   description: The host narrates dom0, domU, schedulers, memory ballooning, and isolation.
+- slug: git-repository
+  title: Life as a Git Repository
+  date: 2026-06-17
+  description: A repository narrates objects, refs, the index, merges, rebases, remotes, maintenance, and recovery.
