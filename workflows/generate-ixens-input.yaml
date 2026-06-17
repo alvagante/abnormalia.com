@@ -3,8 +3,21 @@ ixenBaseUrl: https://api.anthropic.com
 skillLevel: intermediate
 outputLength: short
 ixenModel: claude-opus-4-8
+ixenPersona: abnormalia
 credits: alvagante
 versionOutput: true
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+      <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+    </a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: |-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+cheatsheetVerbosity: standard
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
 imageStyle: ixen-light
 imageBackground: opaque
 imageModel: gpt-image-1.5

@@ -32,6 +32,43 @@ inputs:
     ixenModel:
       type: string
       default: claude-opus-4-8
+    ixenPersona:
+      type: string
+      enum:
+        - neutral
+        - alvabot
+        - abnormalia
+      default: abnormalia
+    headerContent:
+      type: string
+      default: |-
+        <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+          <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+            <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+          </a>
+          <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+        </nav>
+    footerContent:
+      type: string
+      default: |-
+        <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+    cheatsheetVerbosity:
+      type: string
+      enum:
+        - minimal
+        - standard
+        - detailed
+      default: standard
+    cheatsheetCompleteness:
+      type: string
+      enum:
+        - essential
+        - comprehensive
+        - exhaustive
+      default: comprehensive
+    cheatsheetModel:
+      type: string
+      default: claude-opus-4-8
     credits:
       type: string
       default: txt by al
@@ -425,6 +462,40 @@ jobs:
         condition:
           type: succeeded
     weight: 0
+  - name: cheatsheets
+    description: Generate the inline technical cheatsheet for each Ixen.
+    steps:
+      - name: cheatsheet-${{ self.ixen.slug }}
+        description: Generate the cheatsheet HTML embedded by the Ixen page.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-cheatsheet"
+          modelName: '${{ "cheatsheet-" + self.ixen.slug }}'
+          methodName: generate
+          inputs:
+            apiFormat: ${{ inputs.ixenApiFormat }}
+            apiKey: ${{ vault.get(anthropic-keys, api-key) }}
+            baseUrl: ${{ inputs.ixenBaseUrl }}
+            topic: ${{ self.ixen.topic }}
+            details: ${{ self.ixen.details }}
+            skillLevel: ${{ inputs.skillLevel }}
+            verbosity: ${{ inputs.cheatsheetVerbosity }}
+            completeness: ${{ inputs.cheatsheetCompleteness }}
+            outputFormat: html
+            model: ${{ inputs.cheatsheetModel }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            filename: cheatsheet.html
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: prepare
+        condition:
+          type: succeeded
+    weight: 0
   - name: page
     description: Generate the narrated Ixen page once hero art and music are ready.
     steps:
@@ -450,7 +521,11 @@ jobs:
             skillLevel: ${{ inputs.skillLevel }}
             outputLength: ${{ inputs.outputLength }}
             model: ${{ inputs.ixenModel }}
+            persona: ${{ inputs.ixenPersona }}
             credits: ${{ inputs.credits }}
+            headerContent: ${{ inputs.headerContent }}
+            footerContent: ${{ inputs.footerContent }}
+            cheatsheetPath: cheatsheet.html
             outputDir: ${{ "ixen/" + self.ixen.slug }}
             versionOutput: false
             musicTracks: ${{ data.latest("soundtrack-" + self.ixen.slug, "playlist").attributes.tracks }}
@@ -462,6 +537,9 @@ jobs:
         condition:
           type: succeeded
       - job: music
+        condition:
+          type: succeeded
+      - job: cheatsheets
         condition:
           type: succeeded
     weight: 0
