@@ -65,7 +65,7 @@ a:hover {
 }
 
 .site-logo {
-  height: 2rem;
+  height: 1.5rem;
   width: auto;
   display: block;
 }
@@ -77,7 +77,7 @@ a:hover {
 }
 
 .home-logo {
-  height: clamp(6rem, 3vw, 6rem);
+  height: clamp(3rem, 3vw, 3rem);
   width: auto;
   flex: none;
 }
