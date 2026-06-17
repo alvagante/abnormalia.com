@@ -77,7 +77,7 @@ a:hover {
 }
 
 .home-logo {
-  height: clamp(4rem, 3vw, 4rem);
+  height: 2.5rem;
   width: auto;
   flex: none;
 }
