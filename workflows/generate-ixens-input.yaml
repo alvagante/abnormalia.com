@@ -170,31 +170,131 @@ ixens:
       and the tension between declared intent and discovered state.
   - slug: git-repository
     title: Life as a Git repository
-    description: A repository narrates packs, refs, rebases, garbage collection, and memory.
+    description: A repository narrates objects, refs, the index, merges, rebases, remotes, maintenance, and recovery.
     topic: Life as a Git repository
     narrator: a Git repository
     heroPrompt: >-
-      A Git repository as an archaeological vault of objects, refs, and commit
-      lines, packfiles stacked like strata, reflogs glowing faintly in the dark,
-      technical surrealism, crisp documentary detail.
+      A Git repository as an archaeological vault of objects, refs, index
+      entries, remote-tracking branches, packfiles, reflogs, worktrees, and
+      commit DAGs, technical surrealism with crisp documentary detail and
+      forensic systems-map precision.
     concepts:
-      - name: Object storage and packfiles
+      - name: Object model and content identity
         imageFilename: concept-1.png
         imagePrompt: >-
-          Git packfiles, loose objects, and delta chains displayed as a forensic
-          storage cross-section, meticulous ixen-light technical illustration.
+          Git blobs, trees, commits, tags, object IDs, loose objects, packfiles,
+          and delta chains displayed as a forensic storage cross-section,
+          meticulous ixen-light technical illustration.
         details: >-
-          Cover object identity, loose objects, packfiles, delta compression,
-          reachability, and what forensic recovery can still see after ordinary
-          history rewriting.
-      - name: Refs, reflogs, rebases, and garbage collection
+          Cover Git's content-addressed object database: blobs, trees, commits,
+          annotated tags, object IDs, loose objects, packfiles, delta
+          compression, reachability, alternates, and why the repository stores
+          snapshots as linked immutable objects rather than mutable file
+          versions.
+      - name: Working tree, index, and commit construction
         imageFilename: concept-2.png
         imagePrompt: >-
-          Refs, reflogs, rebases, and garbage collection visualized as branching
-          recovery paths through repository history, crisp ixen-light systems art.
+          Git working tree, index, and commit creation rendered as three
+          synchronized filesystem layers with staged hunks, pathspec filters,
+          stat cache entries, and tree writes, crisp ixen-light systems art.
         details: >-
-          Explain refs as movable names, reflogs as local recovery trails, rebase
-          as object rewriting, and garbage collection as delayed forgetting.
+          Explain the three-tree mental model: working tree, index, and HEAD.
+          Cover status, add, restore, reset, commit, diff, rm, mv, clean, stash,
+          patch mode, intent-to-add, pathspecs, attributes, ignores, and how the
+          index is both a staging area and a merge-resolution data structure.
+      - name: Refs, HEAD, reflogs, and revision language
+        imageFilename: concept-3.png
+        imagePrompt: >-
+          Git refs visualized as movable labels over a commit DAG, with HEAD,
+          symbolic refs, packed refs, namespaces, tags, reflogs, revision ranges,
+          and ancestry selectors, precise ixen-light technical diagram.
+        details: >-
+          Cover branches, tags, remote-tracking refs, symbolic HEAD, detached
+          HEAD, packed refs, reflogs, namespaces, rev-parse style revision
+          syntax, ranges, merge bases, ancestry selectors, and the practical
+          difference between moving a name and changing the objects it names.
+      - name: Branching, merging, and conflict logic
+        imageFilename: concept-4.png
+        imagePrompt: >-
+          Git branch and merge logic shown as a commit DAG with merge bases,
+          recursive and ort merge machinery, fast-forward updates, conflict
+          stages in the index, rerere memory, and signed merge commits,
+          ixen-light systems illustration.
+        details: >-
+          Explain branch creation and movement, switch and checkout, merge-base,
+          fast-forward versus true merge commits, conflict stages, ours/theirs
+          semantics, rerere, merge strategies and strategy options, revert
+          versus reset, and why a merge records topology while preserving both
+          sides' ancestry.
+      - name: Rebases, cherry-picks, and history rewriting
+        imageFilename: concept-5.png
+        imagePrompt: >-
+          Git rebase and cherry-pick rendered as commits being replayed onto a
+          new base, old objects becoming unreachable but visible in reflogs,
+          interactive todo lists, autosquash, fixup commits, and force-with-lease
+          guards, crisp ixen-light technical artwork.
+        details: >-
+          Cover rebase, interactive rebase, autosquash, cherry-pick, revert,
+          amend, reset modes, filter-repo style rewriting, signed commits, notes,
+          replace refs, force-with-lease, publication boundaries, and the logic
+          of replaying patches into new commits instead of editing old objects.
+      - name: Remotes, transport, and synchronization
+        imageFilename: concept-6.png
+        imagePrompt: >-
+          Git remotes shown as repositories exchanging object graphs through
+          fetch, push, pull, refspecs, remote-tracking branches, shallow and
+          partial clones, promisor objects, and negotiation bitmaps, precise
+          ixen-light diagram.
+        details: >-
+          Explain clone, remote, fetch, pull, push, refspecs, upstream tracking,
+          remote-tracking branches, tags, pruning, shallow clones, partial
+          clones, bundles, protocol negotiation, pack bitmaps, and the difference
+          between copying objects, updating refs, and integrating fetched
+          history.
+      - name: Collaboration workflows and release motion
+        imageFilename: concept-7.png
+        imagePrompt: >-
+          Git collaboration workflows drawn as parallel lanes for trunk-based
+          development, feature branches, protected branches, stacked changes,
+          release branches, tags, pull requests, CI gates, and bisectable
+          history, ixen-light workflow map.
+        details: >-
+          Cover trunk-based development, feature branches, topic branches,
+          stacked changes, pull requests and merge requests, squash merges,
+          merge queues, release branches, tags, backports, hotfixes, bisectable
+          commits, blame-aware review, signed-off-by trails, hooks, config, and
+          when linear history helps or harms operations.
+      - name: Maintenance, recovery, and advanced repository shapes
+        imageFilename: concept-8.png
+        imagePrompt: >-
+          Git repository maintenance and recovery shown with gc, maintenance,
+          fsck, prune, repack, commit-graph files, multi-pack indexes, worktrees,
+          submodules, sparse checkouts, dangling objects, and reflog rescue
+          paths, forensic ixen-light systems art.
+        details: >-
+          Cover gc, maintenance, repack, prune, fsck, commit-graph, multi-pack
+          indexes, cruft packs, object expiry, reflog expiry, worktree, submodule,
+          sparse-checkout, archive, bundle, cat-file, hash-object, update-index,
+          write-tree, commit-tree, update-ref, for-each-ref, and incident
+          response recovery from reflogs, dangling commits, backups, and remote
+          copies.
     details: >-
-      Skip fundamentals. Lean into refs, object identity, packfiles, reflogs,
-      rebases, garbage collection, and incident-response style forensic recovery.
+      Treat the reader as a peer. Give a complete Git overview: the immutable
+      object model, blobs, trees, commits, tags, object IDs, loose objects,
+      packfiles, delta compression, commit DAGs, reachability, the working tree,
+      the index, HEAD, refs, packed refs, symbolic refs, reflogs, revision
+      selection, pathspecs, attributes, ignores, branch movement, merge-base,
+      merge strategies, conflict stages, rerere, rebase, interactive rebase,
+      cherry-pick, revert, amend, reset, restore, switch, checkout, stash, clean,
+      tags, notes, signed commits, remotes, refspecs, clone, fetch, pull, push,
+      upstream tracking, remote-tracking branches, shallow clones, partial
+      clones, sparse checkout, worktrees, submodules, hooks, config, aliases,
+      bisect, blame, log, show, diff, grep, archive, bundle, gc, maintenance,
+      repack, prune, fsck, commit-graph, multi-pack indexes, cruft packs, and
+      incident-response style recovery. Explain both porcelain commands and the
+      plumbing beneath them, especially cat-file, hash-object, update-index,
+      write-tree, commit-tree, update-ref, rev-parse, and for-each-ref. Emphasize
+      repository logic and usage: Git copies objects separately from moving
+      refs, integration is separate from transport, rewriting creates new
+      objects, garbage collection is delayed forgetting, and collaboration
+      workflows are policies layered on top of the same object graph.

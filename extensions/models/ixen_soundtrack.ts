@@ -105,6 +105,15 @@ function uniqueStrings(values: string[]): string[] {
   return [...new Set(values.filter(Boolean))];
 }
 
+function isHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function extractTrackUrls(record: OneMinRecord | undefined): string[] {
   if (!record) {
     return [];
@@ -142,7 +151,7 @@ function extractTrackUrls(record: OneMinRecord | undefined): string[] {
     }
   }
 
-  return uniqueStrings(urls);
+  return uniqueStrings(urls).filter(isHttpUrl);
 }
 
 async function generateLyrics(
