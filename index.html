@@ -5,10 +5,33 @@ description: Ixens and other abnormalia.
 
 <section class="home-intro">
   <p class="kicker">abnormalia.com</p>
-  <h1>Ixens, artifacts, and technical apparitions.</h1>
+  <div class="home-title">
+    <h1>Abnormal web artifacts and technical apparitions.</h1>
+    <a href="{{ '/' | relative_url }}"><img src="{{ '/assets/img/logo.png' | relative_url }}" alt="abnormalia" class="home-logo"></a>
+  </div>
   <p>
-    This site begins as a collection of Ixens: self-contained mixed-media pages
-    with their text, graphics, music, and other assets stored beside the page.
+    Abnormalia has lived several incarnations. From an Amiga DiskMag to a social apparition, from experimental web projects to this AI slop with style. This site begins as a collection of Ixens: self-contained mixed-media pages inspired by the original I, Xen by Alvagante in 2005.
   </p>
-  <a class="text-link" href="{{ '/ixen/' | relative_url }}">Enter the Ixen archive</a>
+  <div class="home-links">
+    <a class="text-link" href="{{ '/i-xen/' | relative_url }}">Read: I. Xen (original, 2005)</a>
+    <a class="text-link" href="{{ '/ixen/' | relative_url }}">Enter the Ixen archive</a>
+  </div>
 </section>
+
+{% assign recent_ixens = site.data.ixens | sort: "date" | reverse | limit: 5 %}
+{% if recent_ixens.size > 0 %}
+<section class="home-recent">
+  <p class="kicker">Latest Ixens</p>
+  <ol class="ixen-list">
+    {% for ixen in recent_ixens %}
+      <li>
+        <a href="{{ '/ixen/' | append: ixen.slug | append: '/' | relative_url }}">
+          <span>{{ ixen.title }}</span>
+          {% if ixen.date %}<time datetime="{{ ixen.date }}">{{ ixen.date | date: "%Y-%m-%d" }}</time>{% endif %}
+        </a>
+        {% if ixen.description %}<p>{{ ixen.description }}</p>{% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}

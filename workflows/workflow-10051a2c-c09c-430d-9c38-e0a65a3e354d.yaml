@@ -35,6 +35,9 @@ inputs:
     credits:
       type: string
       default: txt by al
+    versionOutput:
+      type: boolean
+      default: true
     imageStyle:
       type: string
       enum:
@@ -112,10 +115,25 @@ inputs:
             type: string
           heroPrompt:
             type: string
-          conceptPrompt1:
-            type: string
-          conceptPrompt2:
-            type: string
+          concepts:
+            type: array
+            minItems: 2
+            maxItems: 2
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                details:
+                  type: string
+                imagePrompt:
+                  type: string
+                imageFilename:
+                  type: string
+              required:
+                - name
+                - imagePrompt
+                - imageFilename
         required:
           - slug
           - title
@@ -124,11 +142,32 @@ inputs:
           - narrator
           - details
           - heroPrompt
-          - conceptPrompt1
-          - conceptPrompt2
+          - concepts
   required:
     - ixens
 jobs:
+  - name: prepare
+    description: Rotate the current Ixen output before writing fresh media and HTML.
+    steps:
+      - name: prepare-${{ self.ixen.slug }}
+        description: Move the existing generated Ixen page and referenced media into the next numeric version directory.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-ixen"
+          modelName: '${{ "ixen-" + self.ixen.slug }}'
+          methodName: prepare
+          inputs:
+            apiFormat: ${{ inputs.ixenApiFormat }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            enabled: ${{ inputs.versionOutput }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn: []
+    weight: 0
   - name: images
     description: Generate the hero and supporting concept images for each Ixen.
     steps:
@@ -168,14 +207,14 @@ jobs:
           methodName: generate
           inputs:
             apiKey: ${{ vault.get(openai-keys, api-key) }}
-            prompt: ${{ self.ixen.conceptPrompt1 }}
+            prompt: ${{ self.ixen.concepts[0].imagePrompt }}
             style: ${{ inputs.imageStyle }}
             model: ${{ inputs.imageModel }}
             background: ${{ inputs.imageBackground }}
             size: ${{ inputs.imageSize }}
             quality: ${{ inputs.imageQuality }}
             format: png
-            filename: concept-1.png
+            filename: ${{ self.ixen.concepts[0].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
         dependsOn: []
         weight: 0
@@ -192,19 +231,22 @@ jobs:
           methodName: generate
           inputs:
             apiKey: ${{ vault.get(openai-keys, api-key) }}
-            prompt: ${{ self.ixen.conceptPrompt2 }}
+            prompt: ${{ self.ixen.concepts[1].imagePrompt }}
             style: ${{ inputs.imageStyle }}
             model: ${{ inputs.imageModel }}
             background: ${{ inputs.imageBackground }}
             size: ${{ inputs.imageSize }}
             quality: ${{ inputs.imageQuality }}
             format: png
-            filename: concept-2.png
+            filename: ${{ self.ixen.concepts[1].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
         dependsOn: []
         weight: 0
         allowFailure: false
-    dependsOn: []
+    dependsOn:
+      - job: prepare
+        condition:
+          type: succeeded
     weight: 0
   - name: music
     description: Reuse existing soundtrack files when present, otherwise generate a fresh soundtrack.
@@ -234,7 +276,10 @@ jobs:
         dependsOn: []
         weight: 0
         allowFailure: false
-    dependsOn: []
+    dependsOn:
+      - job: prepare
+        condition:
+          type: succeeded
     weight: 0
   - name: page
     description: Generate the narrated Ixen page once hero art and music are ready.
@@ -256,18 +301,14 @@ jobs:
             topic: ${{ self.ixen.topic }}
             narrator: ${{ self.ixen.narrator }}
             details: ${{ self.ixen.details }}
-            mediaItems:
-              - path: hero.png
-                prompt: ${{ self.ixen.heroPrompt }}
-              - path: concept-1.png
-                prompt: ${{ self.ixen.conceptPrompt1 }}
-              - path: concept-2.png
-                prompt: ${{ self.ixen.conceptPrompt2 }}
+            media: hero.png
+            concepts: ${{ self.ixen.concepts }}
             skillLevel: ${{ inputs.skillLevel }}
             outputLength: ${{ inputs.outputLength }}
             model: ${{ inputs.ixenModel }}
             credits: ${{ inputs.credits }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            versionOutput: false
             musicTracks: ${{ data.latest("soundtrack-" + self.ixen.slug, "playlist").attributes.tracks }}
         dependsOn: []
         weight: 0

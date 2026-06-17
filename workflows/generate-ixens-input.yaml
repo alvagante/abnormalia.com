@@ -1,9 +1,10 @@
 ixenApiFormat: anthropic
 ixenBaseUrl: https://api.anthropic.com
-skillLevel: senior
+skillLevel: intermediate
 outputLength: medium
 ixenModel: claude-opus-4-8
-credits: txt by al
+credits: alvagante
+versionOutput: true
 imageStyle: ixen-light
 imageBackground: opaque
 imageModel: gpt-image-1.5
@@ -24,14 +25,27 @@ ixens:
       A Xen hypervisor as a stern geometric machine-intelligence suspended above
       three guest domains, technical diagram energy, memory maps, grant-table
       arrows, scheduler queues, white paper texture, precise linework.
-    conceptPrompt1: >-
-      Xen grant tables and event channels rendered as a precise white-paper
-      systems diagram, guest domains exchanging memory pages through explicit
-      capabilities, ixen-light technical illustration.
-    conceptPrompt2: >-
-      Xen scheduler queues and memory ballooning visualized as disciplined
-      resource choreography between dom0 and domU guests, crisp ixen-light
-      systems artwork.
+    concepts:
+      - name: Grant tables and event channels
+        imageFilename: concept-1.png
+        imagePrompt: >-
+          Xen grant tables and event channels rendered as a precise white-paper
+          systems diagram, guest domains exchanging memory pages through explicit
+          capabilities, ixen-light technical illustration.
+        details: >-
+          Explain how grants authorize page sharing between domains, how event
+          channels carry notifications, and where the isolation boundaries can
+          fail operationally.
+      - name: Scheduler queues and memory ballooning
+        imageFilename: concept-2.png
+        imagePrompt: >-
+          Xen scheduler queues and memory ballooning visualized as disciplined
+          resource choreography between dom0 and domU guests, crisp ixen-light
+          systems artwork.
+        details: >-
+          Cover credit-style scheduling, steal time, vCPU contention, balloon
+          drivers, overcommit pressure, and the difference between capacity and
+          entitlement.
     details: >-
       Treat the reader as a peer. Talk concretely about dom0, domU, grants,
       page sharing, schedulers, memory ballooning, and failure modes.
@@ -44,14 +58,27 @@ ixens:
       A Puppet catalog compiler visualized as a red-thread dependency graph
       engine with manifests, resources, and edges converging into a compiled
       graph, cerebral and architectural, restrained palette.
-    conceptPrompt1: >-
-      Puppet resource edges, containment, and ordering constraints shown as a
-      rigorous compilation graph with classes, defined types, and exported
-      resources, ixen-light technical illustration.
-    conceptPrompt2: >-
-      A Puppet compiler reconciling declared state with discovered system facts,
-      idempotence and drift detection visualized as a clean diagnostic systems
-      diagram, ixen-light style.
+    concepts:
+      - name: Resource graph compilation
+        imageFilename: concept-1.png
+        imagePrompt: >-
+          Puppet resource edges, containment, and ordering constraints shown as a
+          rigorous compilation graph with classes, defined types, and exported
+          resources, ixen-light technical illustration.
+        details: >-
+          Focus on how manifests, classes, defined types, containment,
+          relationship metaparameters, and exported resources become a graph
+          whose ordering semantics matter.
+      - name: Facts, declared state, and drift
+        imageFilename: concept-2.png
+        imagePrompt: >-
+          A Puppet compiler reconciling declared state with discovered system facts,
+          idempotence and drift detection visualized as a clean diagnostic systems
+          diagram, ixen-light style.
+        details: >-
+          Explain fact-dependent compilation, catalog determinism, idempotent
+          convergence, drift, and why discovered state complicates declared
+          intent.
     details: >-
       Focus on compilation phases, graph edges, exported resources, idempotence,
       and the tension between declared intent and discovered state.
@@ -64,12 +91,24 @@ ixens:
       A Git repository as an archaeological vault of objects, refs, and commit
       lines, packfiles stacked like strata, reflogs glowing faintly in the dark,
       technical surrealism, crisp documentary detail.
-    conceptPrompt1: >-
-      Git packfiles, loose objects, and delta chains displayed as a forensic
-      storage cross-section, meticulous ixen-light technical illustration.
-    conceptPrompt2: >-
-      Refs, reflogs, rebases, and garbage collection visualized as branching
-      recovery paths through repository history, crisp ixen-light systems art.
+    concepts:
+      - name: Object storage and packfiles
+        imageFilename: concept-1.png
+        imagePrompt: >-
+          Git packfiles, loose objects, and delta chains displayed as a forensic
+          storage cross-section, meticulous ixen-light technical illustration.
+        details: >-
+          Cover object identity, loose objects, packfiles, delta compression,
+          reachability, and what forensic recovery can still see after ordinary
+          history rewriting.
+      - name: Refs, reflogs, rebases, and garbage collection
+        imageFilename: concept-2.png
+        imagePrompt: >-
+          Refs, reflogs, rebases, and garbage collection visualized as branching
+          recovery paths through repository history, crisp ixen-light systems art.
+        details: >-
+          Explain refs as movable names, reflogs as local recovery trails, rebase
+          as object rewriting, and garbage collection as delayed forgetting.
     details: >-
       Skip fundamentals. Lean into refs, object identity, packfiles, reflogs,
       rebases, garbage collection, and incident-response style forensic recovery.

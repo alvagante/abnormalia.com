@@ -1,0 +1,9 @@
+/* TEAM */
+Operator: Lab42 Srl
+Contact: info [at] lab42.it
+Location: Italy
+
+/* SITE */
+Language: English
+Standards: HTML5, CSS3
+Components: Jekyll, GitHub Pages, Cloudflare

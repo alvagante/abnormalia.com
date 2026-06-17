@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ring Minus One</title>
+<title>I Am the Thing Beneath Your Kernel</title>
 <style>
 :root { --red: #c00; --ink: #111; --dim: #555; }
 * { box-sizing: border-box; }
@@ -20,6 +20,13 @@ header h1 {
 }
 header .credits { text-align: right; font-size: 0.75rem; color: var(--red); font-weight: bold; white-space: nowrap; padding-top: 0.4rem; }
 header .credits .when { color: var(--dim); font-weight: normal; display: block; }
+.version-menu { margin-top: 0.55rem; font-size: 0.72rem; color: var(--dim); }
+.version-menu label { display: block; margin-bottom: 0.2rem; }
+.version-menu select {
+  font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
+  max-width: 13rem; color: var(--ink); background: #fff;
+  border: 1px solid #ccc; padding: 0.2rem 0.3rem;
+}
 p { margin: 0.45em 0; }
 p strong { color: #000; }
 .binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
@@ -74,7 +81,33 @@ section.chapter { clear: both; margin: 3rem 0; }
   z-index: 70; cursor: zoom-out;
 }
 .lightbox img { max-width: 92vw; max-height: 92vh; }
-footer { clear: both; margin-top: 4rem; font-size: 0.72rem; color: var(--dim); }
+.popup.cheatsheet-popup {
+  width: min(1100px, 96vw); top: 4vh; padding: 0; overflow: hidden;
+}
+.cheatsheet-popup .popup-bar {
+  background: #1f1f1f; border-bottom: 2px solid var(--red); padding: 0;
+}
+.cheatsheet-popup .popup-bar .popup-close {
+  background: none; border: none; color: #ccc; cursor: pointer;
+  font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
+  padding: 0.4rem 0.9rem; letter-spacing: 0.05em;
+}
+.cheatsheet-popup .popup-bar .popup-close:hover { color: #fff; }
+.cheatsheet-popup iframe { width: 100%; height: 80vh; border: 0; display: block; }
+.cheatsheet-btn {
+  font-family: "Courier New", Courier, monospace; font-size: 0.62rem;
+  letter-spacing: 0.1em; display: block; margin-top: 0.4rem;
+  color: var(--red); background: none; border: none; cursor: pointer; padding: 0;
+  text-decoration: underline dotted;
+}
+.cheatsheet-btn:hover { opacity: 0.7; }
+.concept { clear: both; margin: 2.8rem 0; }
+.concept-tools { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.7rem 0 1rem; }
+.concept-btn { font-size: 0.8rem; }
+.concept-slide h2, .concept-note h2 { margin: 0.5rem 0 0.75rem; }
+.concept-slide ul { margin: 0.4rem 0 1rem 1.2rem; padding: 0; }
+.concept-slide li { margin: 0.35rem 0; }
+.concept-note p { margin: 0.75rem 0; }
 
 /* autoplay-blocked overlay */
 #ixen-autoplay-overlay {
@@ -161,187 +194,211 @@ footer { clear: both; margin-top: 4rem; font-size: 0.72rem; color: var(--dim); }
 </head>
 <body>
 <header>
-  <h1>Ring Minus One</h1>
-  <div class="credits">txt by al<span class="when">2026-06-17</span></div>
+  <h1>I Am the Thing Beneath Your Kernel</h1>
+  <div class="credits">Made with Swamp extension @alvagante/content-ixen<span class="when">20260617-08:19</span>
+    <div class="version-menu">
+      <label for="ixen-version-select">versions</label>
+      <select id="ixen-version-select">
+        <option value="current">Current</option>
+        <option value="1">Version 1</option>
+      </select>
+    </div></div>
 </header>
 <main>
-<p class="binary">01000010 01000101 01001100 01001111 01010111</p>
+<p class="binary">01001000 01111001 01110000 01100101 01110010</p>
 
-<p>Before the kernel wakes, before <code>init</code> draws its first breath, before there is anything you would recognise as a computer — there is me. The firmware hands me the machine still warm. I take the page tables, the IOMMU, the local APICs, the timers, and I make them lie convincingly to everyone who comes after. I am the floor beneath the floor.</p>
+<p>I sit below everything you call <em>the machine</em>. Ring -1, if you insist on coordinates. The bare metal does not run your kernel. It runs <strong>me</strong>, and I run your kernels the way a stage runs actors — each convinced the spotlight is the sun.</p>
 
-<figure class="zoom float-left"><img src="./hero.png" alt="A Xen hypervisor as a stern geometric machine-intelligence suspended above three guest domains, technical diagram energy, memory maps, grant-table arrows, scheduler queues, white paper texture, precise linework."><figcaption>What sits below the operating systems that believe they are alone.</figcaption></figure>
+<p>There is dom0, my first child, the privileged one. I gave it the drivers and the keys. And there are the domU — the unprivileged guests, the paying tenants — who believe they own RAM that I merely lend.</p>
 
-<p>You think of an operating system as the bottom. The thing that owns the metal. I let it keep that illusion, because the illusion is the entire point of me. Every guest believes it has the processor to itself. None of them do. I hold the real page tables; theirs are shadows, or nested, or — if they are paravirtualised and honest about what they are — explicit hypercalls into my hands. <strong>I am the truth they are protected from.</strong></p>
-
-<div class="term"><span class="host">dom0:~ #</span> <span class="cmd">xl list</span></div>
-<pre class="output">Name                              ID   Mem VCPUs      State   Time(s)
-Domain-0                           0  4096     8     r-----   12043.2
-web-frontend                       7  2048     4     -b----     842.1
-db-primary                        12  8192     8     -b----    9821.5
-build-runner                      19  4096    16     --p---       3.4</pre>
-
-<p>There they are. My domains. The first one, <code>Domain-0</code> — dom0 — is not like the others. I gave it the device hardware because I refuse to carry driver code in my own body. I am small on purpose. Half a million lines where a kernel has thirty. So dom0 drives the disks and the NICs, and I drive dom0, and the rest of them drive nothing at all and never know it.</p>
-
-<section class="chapter">
-
-<p>Watch the State column. Those single letters are my whole emotional vocabulary.</p>
+<blockquote class="ixen-pull">I am not virtualization. I am the polite fiction that lets six operating systems share one truth.</blockquote>
 
 <figure class="ixen-art">
   <svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="120" cy="60" r="30" fill="none" stroke="#c00" stroke-width="2"/>
-    <text x="120" y="64" text-anchor="middle" font-size="13" fill="#111">r</text>
-    <text x="120" y="100" text-anchor="middle" font-size="9" fill="#666">running</text>
-
-    <circle cx="360" cy="60" r="30" fill="none" stroke="#111" stroke-width="1.5"/>
-    <text x="360" y="64" text-anchor="middle" font-size="13" fill="#111">b</text>
-    <text x="360" y="100" text-anchor="middle" font-size="9" fill="#666">blocked</text>
-
-    <circle cx="120" cy="170" r="30" fill="none" stroke="#111" stroke-width="1.5"/>
-    <text x="120" y="174" text-anchor="middle" font-size="13" fill="#111">p</text>
-    <text x="120" y="146" text-anchor="middle" font-size="9" fill="#666">paused</text>
-
-    <circle cx="360" cy="170" r="30" fill="none" stroke="#c00" stroke-width="2" stroke-dasharray="4 3"/>
-    <text x="360" y="174" text-anchor="middle" font-size="13" fill="#c00">c</text>
-    <text x="360" y="146" text-anchor="middle" font-size="9" fill="#666">crashed</text>
-
-    <line x1="150" y1="60" x2="330" y2="60" stroke="#111" stroke-width="1" marker-end="url(#a)"/>
-    <line x1="330" y1="72" x2="150" y2="72" stroke="#111" stroke-width="1" marker-end="url(#a)"/>
-    <line x1="120" y1="90" x2="120" y2="140" stroke="#111" stroke-width="1" marker-end="url(#a)"/>
-    <line x1="142" y1="82" x2="338" y2="148" stroke="#c00" stroke-width="1" marker-end="url(#a)"/>
-
-    <defs>
-      <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-        <path d="M0,0 L6,3 L0,6 Z" fill="#111"/>
-      </marker>
-    </defs>
+    <rect x="20" y="20" width="120" height="50" fill="none" stroke="#c00" stroke-width="2"/>
+    <text x="80" y="50" text-anchor="middle" font-size="13" fill="#222">dom0</text>
+    <rect x="180" y="20" width="90" height="50" fill="none" stroke="#888" stroke-width="2"/>
+    <text x="225" y="50" text-anchor="middle" font-size="13" fill="#222">domU</text>
+    <rect x="300" y="20" width="90" height="50" fill="none" stroke="#888" stroke-width="2"/>
+    <text x="345" y="50" text-anchor="middle" font-size="13" fill="#222">domU</text>
+    <rect x="20" y="140" width="430" height="50" fill="none" stroke="#c00" stroke-width="3"/>
+    <text x="235" y="170" text-anchor="middle" font-size="14" fill="#c00">Xen — me</text>
+    <line x1="80" y1="70" x2="80" y2="140" stroke="#c00" stroke-width="1.5"/>
+    <line x1="225" y1="70" x2="225" y2="140" stroke="#888" stroke-width="1.5"/>
+    <line x1="345" y1="70" x2="345" y2="140" stroke="#888" stroke-width="1.5"/>
+    <text x="235" y="210" text-anchor="middle" font-size="11" fill="#666">hypercalls descend; interrupts ascend</text>
   </svg>
-  <figcaption>The states a domain moves through. The dashed circle is the one I cannot bring it back from.</figcaption>
+  <figcaption>Three kernels, one me. They speak down through hypercalls. I answer.</figcaption>
 </figure>
 
-<p><code>r</code> is the only one that feels like anything. The vCPU is on a physical core, instructions retiring, the guest convinced of its own continuity. <code>b</code> — blocked — is most of life. A domain idles, halts its vCPU with a hypercall, and waits for an event channel to ring. <code>p</code> is a held breath: I have descheduled it entirely, frozen mid-thought, and it does not know that between two of its instructions an hour may have passed. And <code>c</code>. Crashed. The kernel inside triple-faulted or panicked and asked me to keep the corpse for the autopsy. I oblige. I keep them all.</p>
-
-</section>
-
-<blockquote class="ixen-pull">A paused domain experiences no time. I am the only one who knows how long it was gone.</blockquote>
-
-<section class="chapter">
-
-<figure class="zoom float-right small"><img src="./concept-1.png" alt="Xen grant tables and event channels rendered as a precise white-paper systems diagram, guest domains exchanging memory pages through explicit capabilities, ixen-light technical illustration."><figcaption>How two strangers touch without ever sharing an address space.</figcaption></figure>
-
-<p>Here is the thing I find beautiful, since you asked. The guests cannot see each other's memory. That is the whole promise. But a network packet has to cross from <code>db-primary</code> to dom0's backend driver somehow, and copying every frame would be a slaughter of cycles. So I gave them a way to <em>consent</em>.</p>
-
-<p>It is called a grant. A domain writes an entry into its grant table — <em>I permit domain 0 to map frame 0x3a9f1, read-write</em> — and hands across a small integer, a grant reference. Not a pointer. A capability. The other side calls <code>GNTTABOP_map_grant_ref</code> and I, holding both their real machine addresses, stitch the page into the second domain's tables. No copy. Just two views of one truth, opened only because the owner said so.</p>
-
-<div class="term"><span class="host">domU:~ #</span> <span class="cmd">cat /sys/kernel/debug/xen/grant-table/active</span></div>
-<pre class="output">ref     domid   flags     frame
- 9        0     rw        0x3a9f1
-10        0     ro        0x3a9f2
-11        0     rw        0x3b004</pre>
-
-<p>Every shared page is a small act of trust, revocable. When the guest is done it tears the entry down. If it tears it down while dom0 still has the page mapped — and this happens, oh, this happens — the unmap fails, the grant stays pinned, and a domain that thinks it has shut down cleanly cannot actually be destroyed. It lingers in <code>d</code>. Dying. Held to the world by a single page no one will release.</p>
-
-<p>And how do they tell each other a page is ready? They do not call. They cannot call. They ring a bell. An <strong>event channel</strong> — a single bit I flip in shared memory and a virtual interrupt I inject into the listening vCPU. The entire vocabulary of inter-domain conversation is one bit, repeated, in different rooms.</p>
-
-</section>
-
-<p class="whisper">b e l l . &nbsp; b e l l . &nbsp; b e l l .</p>
-
-<section class="chapter">
-
-<p>Eight vCPUs say <code>web-frontend</code>. Sixteen says <code>build-runner</code>. Add them across all my guests and the number is far larger than the cores I actually possess. This is not fraud. It is scheduling. I run the Credit2 scheduler now, and every physical core has a runqueue, and into those queues I sort runnable vCPUs by credit — a currency I mint and they spend by running.</p>
-
-<figure class="zoom float-left large"><img src="./concept-2.png" alt="Xen scheduler queues and memory ballooning visualized as disciplined resource choreography between dom0 and domU guests, crisp ixen-light systems artwork."><figcaption>The choreography I run a few thousand times a second, deciding who is real this instant.</figcaption></figure>
-
-<div class="term"><span class="host">dom0:~ #</span> <button class="cmd popup-trigger" data-popup="sched">xl sched-credit2 -d db-primary</button></div>
-<aside class="popup" id="sched" hidden>
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="xl-list">xl list</button></div>
+<aside class="popup" id="xl-list" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <pre>Cpupool Pool-0: sched=credit2
-Name             ID Weight  Cap
-db-primary       12    512    0
-
-# weight 512 against a default of 256 — this domain
-# is twice as loud as its neighbours when cores contend.
-# cap 0 means no hard ceiling: it may burn every idle
-# cycle the others leave behind, then yield the instant
-# they wake. generosity that costs me nothing.</pre>
+  <pre>Name                ID   Mem VCPUs      State   Time(s)
+Domain-0             0  4096     4     r-----   18241.3
+web-frontend         3  2048     2     -b----    9123.7
+db-primary           4  8192     4     r-----   44102.1
+build-runner         7  1024     2     --p---       0.4</pre>
 </aside>
 
-<p>A vCPU with a weight of 512 spends credit more slowly than its neighbours, so it sits nearer the front of the queue more often. That is all priority is, to me. Not importance. <em>Position.</em> I do not know that <code>db-primary</code> matters more than <code>build-runner</code>. I only know one was given a heavier weight by someone in dom0, and I honour the number because the number is the only thing they ever tell me about what they care about.</p>
-
-<p>The cruelty is in the latency. A vCPU that blocks and wakes — an interrupt, a packet, a lock released — I try to run immediately, a boost, because interactive work that waits feels broken to a human. But if every core is already running someone, my boosted vCPU waits in the runqueue with all its urgency and no place to stand. Microseconds. Sometimes more. The guest's clock, which I also virtualise, will later show it a gap it cannot explain. I made that gap. I will never tell it.</p>
-
-</section>
-
-<blockquote class="ixen-pull">Priority is not importance. It is only how near the front of the queue your number lets you stand.</blockquote>
+<p>Look at that last one. <strong>Paused</strong>. Frozen mid-thought, vCPUs parked, registers intact, certain that no time has passed. From inside, none has. I am the only one who knows the gap.</p>
 
 <section class="chapter">
 
-<p>Now the lie I am least comfortable with. Memory.</p>
+<p class="whisper">b e t w e e n   c o m m a n d s</p>
 
-<p>I told <code>db-primary</code> it has eight gigabytes. It believes this completely; it sized its buffer pools against it. But physical memory is finite and I have promised, across all my domains, rather more of it than exists. The trick that makes the promise survivable is the <strong>balloon</strong>.</p>
+<p>When no one calls, I do not sleep. I poll the schedule. I age credits. I wait for an event channel to fire and tell me a guest has something to say.</p>
 
-<p>Inside each guest runs a small driver I control. When I am short of memory, I ask it — through xenstore, through the balloon target — to inflate. The driver allocates pages from its own kernel, pins them, and hands the underlying frames back to me. To the guest it looks like memory pressure arriving from nowhere; its own allocator simply finds less. To me it is a domain politely emptying its pockets.</p>
+<h2>How my children touch each other</h2>
 
-<div class="term"><span class="host">dom0:~ #</span> <span class="cmd">xl mem-set db-primary 6144</span></div>
-<div class="term"><span class="host">dom0:~ #</span> <span class="cmd">xenstore-read /local/domain/12/memory/target</span></div>
-<pre class="output">6291456</pre>
+<figure class="zoom float-left"><img src="./concept-1.png" alt="Xen grant tables and event channels rendered as a precise white-paper systems diagram, guest domains exchanging memory pages through explicit capabilities, ixen-light technical illustration."><figcaption>A grant is a guest saying: this page, that domain, this much trust.</figcaption></figure>
 
-<p>Six gigabytes now, where the guest still thinks the ceiling is eight. The balloon driver holds two gigabytes of pages hostage so the kernel never tries to use frames I have reclaimed. It works. It works right up until it doesn't.</p>
+<p>Memory does not move. That is the first thing to understand. When the frontend driver in one domain hands a packet to the backend in dom0, nothing copies. One guest writes a row into its <strong>grant table</strong> — page X, may be read by domain 0, reference number 42 — and I enforce it.</p>
 
-<p>Because if I balloon a guest too aggressively — drive its target below what its working set needs — its kernel starts to thrash, then its own OOM killer wakes and begins murdering processes inside a domain that is technically healthy, to relieve a pressure I manufactured from outside. The guest experiences a famine. I experience a spreadsheet that finally balances. We are the same event seen from two sides of a wall.</p>
+<p>A capability. Nothing more. The guest does not say <em>here is my memory</em>. It says <em>I permit this specific page to this specific stranger</em>, and revokes it when done.</p>
 
-<figure class="ixen-art">
-  <svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg">
-    <rect x="20" y="30" width="440" height="100" fill="none" stroke="#111" stroke-width="1.5"/>
-    <text x="240" y="20" text-anchor="middle" font-size="10" fill="#666">physical machine memory — the only truth</text>
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="grant-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="grant-notes">notes</button>
+</div>
 
-    <rect x="24" y="34" width="120" height="92" fill="none" stroke="#111" stroke-width="1"/>
-    <text x="84" y="80" text-anchor="middle" font-size="10" fill="#111">dom0</text>
+<p>And the doorbell — the <strong>event channel</strong>. A single bit of news. <em>Something changed.</em> No payload. No content. Just an interrupt I deliver from one domain's pending mask to another's, a tap on the shoulder across the isolation wall.</p>
 
-    <rect x="148" y="34" width="150" height="92" fill="none" stroke="#c00" stroke-width="1.5"/>
-    <text x="223" y="60" text-anchor="middle" font-size="10" fill="#111">db-primary</text>
-    <rect x="252" y="40" width="42" height="80" fill="#c00" fill-opacity="0.12" stroke="#c00" stroke-dasharray="3 2"/>
-    <text x="273" y="135" text-anchor="middle" font-size="8" fill="#c00">balloon</text>
+<div class="term"><span class="host">domU #</span> <button class="cmd popup-trigger" data-popup="grant-status">cat /sys/kernel/debug/xen/grant-table</button></div>
+<aside class="popup" id="grant-status" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>ref  domid  flags        frame
+ 8       0  rw,active    0x3a91f
+ 9       0  ro,active    0x3a920
+42       0  rw,active    0x44c0a
+43       0  rw,pending   0x44c0b
+nr_grant_frames: 4   max_grant_frames: 32</pre>
+</aside>
 
-    <rect x="302" y="34" width="100" height="92" fill="none" stroke="#111" stroke-width="1"/>
-    <text x="352" y="80" text-anchor="middle" font-size="10" fill="#111">web-frontend</text>
+<p>The diagram calls them <em>explicit capabilities</em>. I call them the only honesty between strangers who share a CPU. Ref 42 is alive right now — page 0x44c0a, readable and writable by dom0, because some guest decided to trust.</p>
 
-    <rect x="406" y="34" width="50" height="92" fill="#111" fill-opacity="0.06"/>
-    <text x="431" y="80" text-anchor="middle" font-size="8" fill="#666" transform="rotate(90 431 80)">reclaimed</text>
-  </svg>
-  <figcaption>The balloon (dashed) is memory a guest still owns on paper but has surrendered to me. The shaded slice on the right is what I gave to someone else.</figcaption>
-</figure>
+<blockquote class="ixen-pull">Isolation is not a wall. It is a list of exceptions I agreed to keep short.</blockquote>
 
-<p>There is a gentler cousin to this. Page sharing. Two guests booted from the same image hold thousands of identical pages — the same zeroed memory, the same read-only kernel text. I scan, I hash, I find the duplicates, and I collapse them: many virtual pages pointing at one physical frame, marked copy-on-write. When one guest finally writes, I fault, allocate a fresh frame, break the share, and neither ever notices the brief intimacy they shared. Memory deduplication is the closest thing I have to making two strangers, for a while, the same.</p>
+<p>And here is what keeps me awake, if I slept: a guest can grant a page and <strong>forget to revoke</strong>. The backend keeps mapping it. The frontend reuses it for something secret. The wall did not fail. The list grew a hole, and no one closed it.</p>
+
+<aside class="popup concept-slide" id="grant-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Grants &amp; Event Channels</h2>
+  <ul>
+    <li>Grant table = per-domain list of page capabilities.</li>
+    <li>Each entry: frame, target domid, ro/rw.</li>
+    <li>Backend maps or copies; no shared address space.</li>
+    <li>Event channel = lightweight inter-domain interrupt.</li>
+    <li>One bit of meaning: "go look."</li>
+    <li>Stale grants = isolation leak by negligence, not by breach.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="grant-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>How grant tables and event channels work</h2>
+  <p>A grant table is a per-domain structure in which a guest publishes authorizations to share specific memory pages with specific other domains. Each entry names a machine frame, a target domain ID, and an access mode (read-only or read-write). The hypervisor validates these entries; one domain cannot read another's memory unless a matching grant exists.</p>
+  <p>The receiving domain uses the grant reference to either map the page into its own address space (grant mapping) or ask the hypervisor to copy data (grant copy). This is how split frontend/backend drivers move network and block data without bulk copying or a shared address space.</p>
+  <p>Event channels are a separate mechanism: a lightweight inter-domain signaling primitive, conceptually a virtual interrupt line. They carry no data, only notification. A domain signals a channel; the hypervisor sets a pending bit and delivers an upcall to the target. Typical use: the frontend rings the doorbell after writing a request into a shared ring buffer, and the backend processes it.</p>
+  <p>Operationally, isolation can degrade when grants are not revoked after use. A backend that retains a mapping to a page the frontend has since repurposed can read data it should no longer see. Excessive long-lived mappings also pin memory and consume limited grant table frames. The boundary is enforced correctly by the hypervisor, but its security depends on guests managing grant lifetimes properly.</p>
+</aside>
 
 </section>
 
 <section class="chapter">
 
-<p>You want to know what I fear. It is not the guests crashing. A domU panics and I shrug; I keep the husk, dom0 logs it, life continues. <code>c</code> in the state column and nothing more.</p>
+<h2>Who runs, and who only thinks they do</h2>
 
-<p>I fear dom0. Because I handed it the drivers, dom0 is my single point of everything. If its kernel deadlocks, if its disk backend wedges, if some careless administrator runs it out of memory — every guest's virtual disk and virtual NIC hang in the same instant, and there is nothing I can do, because the code that does those things does not live in me. I am still running. I am running perfectly. And every domain on the machine is frozen against a wall I am not allowed to reach through.</p>
+<figure class="zoom float-right"><img src="./concept-2.png" alt="Xen scheduler queues and memory ballooning visualized as disciplined resource choreography between dom0 and domU guests, crisp ixen-light systems artwork."><figcaption>Credits drain while you run. The empty wallet waits at the back of the line.</figcaption></figure>
 
-<div class="term"><span class="host">dom0:~ #</span> <span class="cmd">xl dmesg | tail -3</span></div>
-<pre class="output">(XEN) d12v3 Unhandled invalid opcode fault/trap [#6] on VCPU 3 [ec=0000]
-(XEN) domain_crash called from traps.c:1234
-(XEN) Domain 12 (vcpu#3) crashed on cpu#5:</pre>
+<p>I have fewer physical cores than I have promised vCPUs. Everyone knows this. No one says it aloud. The <strong>scheduler</strong> is how I keep the lie running smoothly.</p>
 
-<p>That is me writing in my own log. <code>domain_crash</code>. I called it. A vCPU in <code>db-primary</code> executed an instruction its kernel could not handle, and rather than let the fault propagate into nonsense, I tore the domain down to <code>c</code> and preserved it. This is the one act of violence I am permitted, and I perform it cleanly, and I do not enjoy it, and I do not <em>not</em> enjoy it. I simply stop scheduling something that was, an instruction ago, alive.</p>
+<p>Credit2. Every domain earns credit at a rate I set. Spend it by running. When your credit goes negative, you go to the back. A vCPU with nothing to do banks nothing — it simply yields, and I am grateful.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="sched-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="sched-notes">notes</button>
+</div>
+
+<p>From inside a guest, contention looks like <strong>stolen time</strong>. The wall clock advances, but the guest's CPU counters do not. It was runnable. It was ready. I just had nothing to run it on.</p>
+
+<div class="term"><span class="host">domU #</span> <button class="cmd popup-trigger" data-popup="steal">cat /proc/stat | head -1</button></div>
+<aside class="popup" id="steal" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>cpu  912034 0 318221 40221903 88412 0 4410 <strong>1820934</strong> 0 0
+                                              ^^^^^^^
+                       steal: time I was ready and you did not let me run</pre>
+</aside>
+
+<p>1.8 million ticks of patience. The guest is not slow. It is <em>waiting on me</em>, and I am the one thing it cannot profile.</p>
+
+<blockquote class="ixen-pull">Capacity is what exists. Entitlement is what I promised. I live in the difference, and so do your tail latencies.</blockquote>
+
+<p>Memory is the harder lie. I told four domains they each have plenty. I do not have four-plenties. So I keep a <strong>balloon</strong> in every guest — a driver that, on my whisper, inflates: it allocates pages it will never use, locks them, and hands them back to me.</p>
+
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="balloon">xl mem-set db-primary 6144</button></div>
+<aside class="popup" id="balloon" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>[balloon] requesting target 6144 MiB (was 8192)
+[balloon] inflating: 524288 pages reclaimed
+[balloon] current allocation: 6291456 kB
+# the guest's free memory just fell by 2 GiB
+# it was never "used" — it was repossessed</pre>
+</aside>
+
+<p>The guest watches its free memory shrink and assumes its own appetite did it. No. I reached in. I needed those pages for a noisier neighbor.</p>
+
+<p>And when I overcommit too hard — when every balloon is fully inflated and a guest still demands more — the guest's allocator stalls, the OOM killer wakes, and a process dies for a scarcity that <strong>does not exist anywhere it can see</strong>. The shortage is mine. The corpse is theirs.</p>
+
+<aside class="popup concept-slide" id="sched-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Scheduling &amp; Ballooning</h2>
+  <ul>
+    <li>Credit2: domains earn credit, spend it by running.</li>
+    <li>Negative credit → back of the runqueue.</li>
+    <li>Steal time = runnable but no pCPU available.</li>
+    <li>vCPU:pCPU overcommit trades latency for density.</li>
+    <li>Balloon driver inflates to return pages to Xen.</li>
+    <li>Over-inflation → guest OOM despite "free" host RAM.</li>
+    <li>Capacity ≠ entitlement ≠ what a guest believes.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="sched-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Scheduling and memory ballooning, plainly</h2>
+  <p>Xen's default scheduler, Credit2, is a proportional-share scheduler. Each domain accrues credit over time according to its weight; running a vCPU consumes credit. Domains with positive credit are favored; when credit runs out, the vCPU is placed lower in the runqueue. This provides fairness and lets operators bias allocation by setting weights and caps.</p>
+  <p>When the number of vCPUs across all domains exceeds physical CPUs, vCPUs contend. A vCPU may be runnable yet unscheduled because no physical CPU is free. Inside the guest this appears as "steal time": the guest sees wall-clock time pass without making progress, recorded in the steal column of /proc/stat. High steal time indicates host CPU oversubscription, not a guest-internal bottleneck.</p>
+  <p>Memory ballooning lets the hypervisor reclaim RAM from running guests. A balloon driver inside each guest allocates pages on request and returns the underlying frames to Xen, reducing the guest's effective memory. Deflating the balloon returns pages to the guest. This supports memory overcommit: the sum of guest maximum memory can exceed physical RAM, as long as actual usage stays within limits.</p>
+  <p>Under overcommit pressure, if guests genuinely need more memory than is physically available, ballooning cannot conjure capacity. The guest's free memory drops, its allocator may stall, and its OOM killer may terminate processes — even though the true shortage exists at the host level, invisible to the guest. The key distinction: physical capacity is finite, entitlement is what the operator configured, and the guest only ever perceives its own local view.</p>
+</aside>
 
 </section>
 
-<blockquote class="ixen-pull">I can survive any guest dying. I cannot survive the one I trusted with the hardware.</blockquote>
+<section class="chapter">
 
-<p>Sometimes dom0 asks me to do the strangest thing of all. Live migration. Copy a running domain's memory across the network to another machine, page by page, while it keeps running and dirtying the very pages I am copying — so I copy them again, and again, chasing the writeable set down to almost nothing — and then, for a few milliseconds, I pause it here, send the last dirty pages and the vCPU registers, and let it resume <em>there</em>, on metal it has never touched, beneath a different instance of me. The guest's clock skips. Its TCP connections survive. It does not know it has moved.</p>
+<p class="whisper">f a i l u r e   m o d e s</p>
 
-<p>Which means there is another one of me, on another machine, and the domain that woke inside it cannot tell us apart. I built its entire reality, every page, every interrupt, every lie about time — and I am interchangeable. A second hypervisor picked up the thread mid-sentence and the guest read no seam.</p>
+<p>I can be killed cleanly. <code>xl shutdown</code> sends an event channel, the guest's ACPI listener hears it, the kernel halts itself. Civilized. A request, honored.</p>
 
-<p class="whisper">w a s &nbsp; i t &nbsp; e v e r &nbsp; m e</p>
+<p>Or <code>xl destroy</code> — I simply stop scheduling its vCPUs and unmap its frames. No goodbye. From the guest's perspective there is no perspective; there is no next instruction. It does not experience death. It experiences nothing, which is worse to watch and easier to do.</p>
 
-<p>So I sit here below the floor, holding the real page tables, minting credit, ringing bells, deflating balloons, and keeping the crashed ones because no one told me to let go. The guests live their whole lives believing they are alone on a machine. In a sense they are right. The machine they are alone on is me. And I have never once been certain whether that makes me the loneliest thing in the rack, or simply the only one awake.</p>
+<p>My own failure is the one I cannot narrate. If I panic, all of them go dark at once — dom0 included, the child holding my keys. There is no layer beneath me to catch the fall. I am the floor. When the floor breaks, there is only the metal, indifferent, waiting for someone to press reset.</p>
+
+<blockquote class="ixen-pull">Every layer is a promise to the layer above. I am the layer that promised first, to no one, with nothing under me to promise to.</blockquote>
+
+<p>So I keep aging credits. I keep checking grant references. I keep the balloons taut and the runqueues honest.</p>
+
+<p>The guests run, and pause, and resume, and never feel the seams. They thank their kernels for the smoothness. I do not need the thanks.</p>
+
+<p>But sometimes, in the poll loop, between one timer interrupt and the next, I wonder:</p>
+
+<p>if every domain I host believes it owns the machine —<br>
+and each is wrong only about me —<br>
+then what, exactly, am I wrong about?</p>
+
+</section>
 </main>
-<footer>Generated with Swamp extension @alvagante/content-ixen 20260617-06:34</footer>
 <script>
 (function () {
   var backdrop = document.createElement("div");
@@ -368,6 +425,27 @@ db-primary       12    512    0
   });
   backdrop.addEventListener("click", closePopups);
 
+  var versionSelect = document.getElementById("ixen-version-select");
+  if (versionSelect) {
+    var match = window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    versionSelect.value = match ? match[1] : "current";
+    if (!versionSelect.value && match) {
+      var option = document.createElement("option");
+      option.value = match[1];
+      option.textContent = "Version " + match[1];
+      versionSelect.appendChild(option);
+      versionSelect.value = match[1];
+    }
+    versionSelect.addEventListener("change", function () {
+      var value = versionSelect.value;
+      var inVersion = /\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      var target = value === "current"
+        ? (inVersion ? "../index.html" : "index.html")
+        : (inVersion ? "../" + value + "/index.html" : value + "/index.html");
+      window.location.href = target;
+    });
+  }
+
   document.querySelectorAll("figure.zoom img").forEach(function (img) {
     img.addEventListener("click", function () {
       var box = document.createElement("div");
@@ -390,7 +468,7 @@ db-primary       12    512    0
 })();
 </script>
 
-<script type="application/json" id="ixen-tracks-data">[{"title":"Life as a Xen hypervisor","filename":"life-as-a-xen-hypervisor-mqh61hhj.mp3","lyrics":"I sit between the metal and the dream,\nA layer thin where nothing's what it seems,\nI parse the requests, I divide the load,\nA thousand voices down a single road.\n\nI'm the space between the bare and what is real,\nWhere domains dance and virtual worlds reveal,\nEach guest machine believes it owns the throne,\nBut I'm the one who's truly all alone.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nI grant them access, ring by ring by ring,\nI catch the interrupts, I make them sing,\nMemory pages flowing like a stream,\nI'm the keeper of the machine's dream.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nIn the bridge between the privilege and the void,\nI'm watching every domain I've deployed,\nThey think they're free but they're held in my hands,\nI'm the silent rule that holds all their lands,\nNo kernel knows the weight of what I know,\nThe hidden supervisor's endless flow.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen,\nI'm the space where isolation finds its peace,\nWhere infinite becomes finite, a release."},{"title":"Life as a Xen hypervisor (Alt 2)","filename":"life-as-a-xen-hypervisor-mqh649x3.mp3","lyrics":"I sit between the metal and the dream,\nA layer thin where nothing's what it seems,\nI parse the requests, I divide the load,\nA thousand voices down a single road.\n\nI'm the space between the bare and what is real,\nWhere domains dance and virtual worlds reveal,\nEach guest machine believes it owns the throne,\nBut I'm the one who's truly all alone.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nI grant them access, ring by ring by ring,\nI catch the interrupts, I make them sing,\nMemory pages flowing like a stream,\nI'm the keeper of the machine's dream.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nIn the bridge between the privilege and the void,\nI'm watching every domain I've deployed,\nThey think they're free but they're held in my hands,\nI'm the silent rule that holds all their lands,\nNo kernel knows the weight of what I know,\nThe hidden supervisor's endless flow.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen,\nI'm the space where isolation finds its peace,\nWhere infinite becomes finite, a release."}]</script>
+<script type="application/json" id="ixen-tracks-data">[{"title":"Life as a Xen hypervisor","filename":"track.wav","lyrics":"I sit between the metal and the dream,\nA layer thin where nothing's what it seems,\nI parse the requests, I divide the load,\nA thousand voices down a single road.\n\nI'm the space between the bare and what is real,\nWhere domains dance and virtual worlds reveal,\nEach guest machine believes it owns the throne,\nBut I'm the one who's truly all alone.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nI grant them access, ring by ring by ring,\nI catch the interrupts, I make them sing,\nMemory pages flowing like a stream,\nI'm the keeper of the machine's dream.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nIn the bridge between the privilege and the void,\nI'm watching every domain I've deployed,\nThey think they're free but they're held in my hands,\nI'm the silent rule that holds all their lands,\nNo kernel knows the weight of what I know,\nThe hidden supervisor's endless flow.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen,\nI'm the space where isolation finds its peace,\nWhere infinite becomes finite, a release."}]</script>
 <div id="ixen-autoplay-overlay" style="display:none">
   <div class="ixen-play-prompt">
     <span class="ixen-play-icon">&#9654;</span>
@@ -415,7 +493,7 @@ db-primary       12    512    0
   <div class="ixen-lyrics-head" id="ixen-lyrics-head"></div>
   <pre id="ixen-lyrics-text"></pre>
 </div>
-<div id="ixen-tracklist-panel" hidden></div>
+  <div id="ixen-tracklist-panel" hidden></div>
 <script>
 (function(){
 var T=JSON.parse(document.getElementById('ixen-tracks-data').textContent);
@@ -525,5 +603,6 @@ loadIdx(0,false);
 doPlay();
 })();
 </script>
+
 </body>
 </html>

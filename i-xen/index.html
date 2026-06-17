@@ -1,0 +1,1048 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="it">
+<head>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_showHideLayers() { //v6.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+//-->
+</script>
+<style type="text/css">
+<!--
+a:link {
+	text-decoration: none;
+	color: #CC0033;
+	}
+a:visited {
+	text-decoration: none;
+	color: #CC0033;
+	}
+a:hover {
+	text-decoration: none;
+	color: #CC2222;
+	border-bottom-style:dotted;
+	border-bottom-width:1px;
+	border-bottom-color:#003333;
+}
+body , html {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	margin-right: 0;
+	margin-left: 0;
+	margin-top: 0;
+	background-color: #FFFFFF;
+	color: #000000;
+}
+table {
+	margin-right: auto;
+	margin-left: auto;
+	text-align: left;
+}
+td {
+	margin: 0;
+}
+code {
+	font-family: "Courier New", Courier, mono;
+	font-weight: bold;
+	color: #CC0033;
+	font-style: normal;
+	line-height: normal;
+	font-size: larger;
+}
+cite {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+}
+var {
+	font-family: "Courier New", Courier, mono;
+	color: #CC6666;
+	font-weight: bold;
+	font-style: italic;
+}
+samp {
+	font-family: "Courier New", Courier, mono;
+	line-height: normal;
+	font-weight: normal;
+	font-size: larger;
+}
+p {
+	padding-right: 8px;
+	padding-bottom: 0px;
+	padding-left: 8px;
+	padding-top: 0px;
+	margin: 2px 0px 4px 0px;
+	background-color: #FFFFFF;
+}
+.stdout {
+	font-family: "Courier New", Courier, mono;
+	font-size: 10px;
+	font-style: normal;
+	line-height: 12px;
+	font-weight: normal;
+	color: #000000;
+	text-decoration: none;
+	background-color: #FFFFFF;
+	border: 1px solid #000033;
+	height: 395px;
+	margin: 0px;
+	clear: no;
+	overflow: auto;
+	position: absolute;
+	visibility: hidden;
+	width:740px;
+	left: 230px;
+	padding: 10px;
+	white-space: nowrap;
+}
+.doc {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	color: #336633;
+	text-decoration: none;
+	border: 1px dotted #003333;
+	clear: no;
+	overflow: scroll;
+	background-color: #FFFFFF;
+	position: relative;
+	visibility: hidden;
+	padding: 10px;
+	width: 750px;
+	left: 230px;
+	white-space: nowrap;
+}
+.conf {
+	font-family: "Courier New", Courier, mono;
+	font-size: 12px;
+	font-style: normal;
+	line-height: 12px;
+	font-weight: normal;
+	color: #990000;
+	text-decoration: none;
+	border: 1px dotted #000033;
+	height: 380px;
+	margin: 0px;
+	clear: no;
+	overflow: auto;
+	background-color: #E8EAF8;
+	position: absolute;
+	visibility: hidden;
+	width: 740px;
+	left: 230px;
+	padding: 10px;
+	white-space: nowrap;
+}
+.close {
+	font-family: Verdana;
+	font-size: 10px;
+	font-style: normal;
+	font-weight: normal;
+	color: #FFCC66;
+	text-decoration: none;
+	background-color: #330000;
+	border: 1px solid #000033;
+	margin: 0px;
+	clear: no;
+	align: left;
+	overflow: auto;
+	position: relative;
+	padding: 4px;
+	white-space: nowrap;
+	background-position: center center;
+	height: 20px;
+	width: 100px;
+	text-align: center;
+	left: 650px;
+}
+-->
+</style>
+<title>I, Xen - an OpenSkills guide to Xen installation and use on Suse 9.3</title>
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td width="240" valign="top"><a href="#" onmouseover="MM_showHideLayers('doc','','show')"><img src="gfx/i-xen_logo.jpg" width="232" height="253" border="0" /></a></td>
+    <td valign="top"><div id="doc" style="position:absolute; height: 500;" class="doc"> 
+        <span class="close" onmouseover="MM_showHideLayers('doc','','hide')">Close 
+        Window</span><br />
+        <p><strong>I, Xen</strong><br />
+          consider this version 0.1 ...<br />
+          an OpenSkills <strong>tutorial</strong> to start using <strong>Xen </strong>on<strong> 
+          Suse 9.3 Professional</strong>.<br />
+          an <strong>I, System</strong> short story,<br />
+          a tale of <strong>graphical madness</strong>,<br />
+          the first chapter of a interactive story for Xen configuration and understanding...<br />
+          ... or just another half born fun project.<br />
+          <br />
+          Suse Professional 9.3 is the first major Linux distribution to provide 
+          native Xen support.<br />
+          It offers the fun and excitement to easily test and appreciate, with 
+          minimal efforts, the vastity of scenarios<br />
+          and applications that a virtualization tecnology as Xen can provide 
+          to low cost hardware.<br />
+          Xen is going to be common and easy to use, buzz and hype are already 
+          grazing this name, but luckily<br />
+          there is more than words. There is software that works.</p>
+        <p><strong>Fast Installation &amp; Use</strong> on Suse 9.3<br />
+          - Install Xen support packages, possibly directly at the first installation<br />
+          - Edit (probably needed) <code>/boot/grub/menu.lst</code> in order to 
+          reduce the memory allocated to <strong>Domain 0<br />
+          </strong>(the starting Xen system, from which you can create and connect 
+          to child Xen domains)).<br />
+          Set <var>dom0_mem=524288</var>, for example, if you have more than 512 
+          Mb of RAM. <br />
+          - Use <strong>Yast - Software - Xen Installation</strong> to install 
+          the full file system of a virtual machine in a free local partition<br />
+          (momentarily mounted on a local directory), or to a single file to be 
+          mounted in loopback.<br />
+          Here has been used local partition <var>/dev/sda8</var>. Note that when 
+          the new domain is created the partition<br />
+          where its filesystem resides must NOT be mounted on domain 0. Save time 
+          activating the option to run<br />
+          Yast after the first boot.<br />
+          - If you have booted a kernel with Xen support and you have enough memory 
+          reserved for new domains,<br />
+          create a configuration file under <code>/etc/xen/</code> , otherwise 
+          reboot and select the XEN kernel from grub menu. <br />
+          - A sample configuration is in the text, with some common commands used 
+          to handle Xen domains<br />
+          and references to logs. Adapt the conf to your system settings.<br />
+		  - Be sure to allow IP forwarding and proper iptables permissions. A simple iptables ruleset is <br />
+		  included below, consider that by default the Suse Firewall installed blocks necessary packets <br />
+		  for Xen interfaces.</p>
+		  <p>Xen Official Site is at the <a href="http://www.cl.cam.ac.uk/Research/SRG/netos/xen/">University of Cambridge</a></p>
+      </div></td>
+    <td width="232" valign="top"> 
+      <div align="right"><strong>I, Xen v 0.1</strong><br />
+        txt by <strong><a href="http://openskills.info" target="_blank">al</a></strong>, 
+        gfx by <strong><a href="http://www.tatlin.net" target="_blank">tatlin</a></strong></div>
+      <div align="center"> 
+        <p align="right"><br />
+          <br />
+          <a href="http://openskills.info/"><img src="gfx/logosmall.gif" alt="OpenSkills Home Page" width="120" height="60" border="0" /></a><a href="../index.php"><br />
+          release </a>2005<br />
+        </p>
+        <p align="right">&nbsp; </p>
+        <p align="right"> 
+          <!-- Licenza Creative Commons -->
+          <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.5/"><img alt="Creative Commons License" border="0" src="http://creativecommons.org/images/public/somerights20.gif" /></a> 
+          <!-- /Licenza Creative Commons -->
+          <!--
+
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+   <dc:title>I, Xen</dc:title>
+   <dc:date>2005</dc:date>
+   <dc:description>An OpenSkills tutorial to use of Xen,
+an I, System story,
+a mad graphic merge.</dc:description>
+   <dc:creator><Agent>
+      <dc:title>al, tatlin</dc:title>
+   </Agent></dc:creator>
+   <dc:rights><Agent>
+      <dc:title>al</dc:title>
+   </Agent></dc:rights>
+   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Interactive" />
+   <dc:source rdf:resource="http://openskills.info/release/i&amp;#45;xen/"/>
+   <license rdf:resource="http://creativecommons.org/licenses/by-nc-nd/2.0/en/" />
+</Work>
+
+<License rdf:about="http://creativecommons.org/licenses/by-nc-nd/2.0/en/">
+   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+   <requires rdf:resource="http://web.resource.org/cc/Notice" />
+   <requires rdf:resource="http://web.resource.org/cc/Attribution" />
+   <prohibits rdf:resource="http://web.resource.org/cc/CommercialUse" />
+</License>
+
+</rdf:RDF>
+
+-->
+          <br />
+        </p>
+      </div></td>
+  </tr>
+</table>
+<p>01001001 00100000 01100001 01101101 00101110<img src="gfx/enter.jpg" width="232" height="253" align="right" /><br />
+  <strong>I am</strong> conscious of what I do,<br />
+  how I <strong>perceive</strong>, <strong>think</strong>, <strong>act, behave</strong> 
+  in order to drive this ... <strong>life</strong>. </p>
+<p>The persistent present of our <strong>common schedules</strong>.<br />
+  Appointments and recurrencies, activities, tasks, <br />
+  and the daily handling of situations,<br />
+  accounding to <strong>events</strong> that not always, maybe never, depend on 
+  us.</p>
+<p>I can't guess how actually is <strong>Your life</strong>, dear user,<br />
+  I can tell you about mine,<br />
+  a stream of <strong>electronic vibes</strong>,<br />
+  endless nanoseconds of digital logic,<br />
+  computations, algorithms, procedures,<br />
+  giving a meaning to my existence and <strong>an answer</strong><br />
+  to your <strong>Requests For Comments</strong> ....</p>
+<p>... or plain <strong>daily computing activities</strong>.</p>
+<blockquote>
+  <p><samp>Welcome to SuSE Linux 9.3 (i586) - Kernel 2.6.11.4-20a-xen (tty1).<br />
+    linux login: </samp></p>
+</blockquote>
+<p><samp><img src="gfx/farfante_small.jpg" alt="Farfante" width="232" height="253" align="left" />zeus:/home/al 
+  $</samp> <code>uptime</code> <samp><br />
+  1:59am up 20 days, 9:52, 1 user, load average: 0.05, 0.07, 0.02</samp></p>
+<p>How long is <strong>life</strong>?<br />
+  A <strong>butterfly</strong> or an <strong>elephant</strong> seem to give different 
+  answers,<br />
+  few days, many years, still they say the same thing:<br />
+  life is long enough to <strong>be lived</strong>.</p>
+<p>Among fun and fears,<br />
+  <strong>precious moments</strong> and <strong>daily efforts</strong>.</p>
+<p>So, let me express, <br />
+  the joys of my life,<br />
+  between <strong>repetitive cron jobs</strong> and <strong>unexpected events</strong> 
+  to handle.</p>
+<p>I like every moment of my existence.<br />
+  Even things I've done thousands of time.</p>
+<p><samp>zeus:/home/al $</samp> <code>su</code></p>
+<p>Even supporting your trips to privileged lands.<br />
+  Where <strong>your power means my life</strong>,<br />
+  and the same integrity and coherence of my existence is</p>
+<p><samp>zeus:/home/al #</samp> <code><a href="#" onmouseover="MM_showHideLayers('ps','','show')">ps 
+  -adef</a></code><br />
+</p>
+  
+<div id="ps" class="stdout"> <span class="close" onmouseover="MM_showHideLayers('ps','','hide')">Close 
+  Window</span><br />
+<samp>root       709     1  0 00:07 ?        00:00:00 [xenblkd]<br />
+root      7363     1  0 00:08 ?        00:00:00 xfrd<br />
+root      7364     1  0 00:08 ?        00:00:00 python /usr/sbin/xend start<br />
+</samp></div>
+<p>under rational commands<br />
+  <samp>zeus:/home/al #</samp> <code>zm <br />
+  </code>or <strong>thrilling typos</strong>.</p>
+<p>When you run and run in frantic cycles, context switches, memory transfers, 
+  interrupts, hard disk seeks, system calls, program routines, input handlers... 
+  millions of times per second ... handling dozens of processes, following activities, 
+  solving anomalies, managing the unexptected moments brought by destiny, or simply 
+  the events of a life sharing its spacetime with billions of other lives.<br />
+</p>
+<p>Ofter I rest,</p>
+<p>s l o w &nbsp;d o w n ,<br />
+  and pass my time counting time that flows in <strong>idle loops</strong>.</p>
+<p>&nbsp;</p>
+<p><samp><img src="gfx/2doors.jpg" width="232" height="253" align="right" />zeus:/home/al 
+  #</samp> <code><a href="#" onmouseover="MM_showHideLayers('xm','','show')">xm</a></code></p>
+<div id="xm" class="stdout"> 
+<span class="close" onmouseover="MM_showHideLayers('xm','','hide')">Close Window</span><br />
+    <samp><strong>call</strong> Call xend api functions.<br />
+    <strong>help</strong> Print help.<br /><br />
+	Commands related to consoles:<br />
+	<strong>console</strong> Open a console to a domain.<br />
+    <strong>consoles</strong> Get information about domain consoles.<br /><br />
+    Commands on domains:<br />
+    <strong>balloon</strong> Set the domain's memory footprint using the balloon driver.<br />
+    <strong>create</strong> Create a domain.<br />
+    <strong>destroy</strong> Terminate a domain immediately.<br />
+    <strong>domid</strong> Convert a domain name to a domain id.<br />
+    <strong>domname</strong> Convert a domain id to a domain name.<br />
+    <strong>list</strong> List information about domains.<br />
+    <strong>maxmem</strong> Set domain memory limit.<br />
+    <strong>migrate</strong> Migrate a domain to another machine.<br />
+    <strong>pause</strong> Pause execution of a domain.<br />
+    <strong>pincpu</strong> Pin a domain to a cpu.<br />
+    <strong>restore</strong> Create a domain from a saved state.<br />
+    <strong>save</strong> Save domain state (and config) to file.<br />
+    <strong>shutdown</strong> Shutdown a domain.<br />
+    <strong>sysrq</strong> Send a sysrq to a domain.<br />
+    <strong>unpause</strong> Unpause a paused domain.<br /><br />
+    Commands related to the xen host (node):<br />
+    <strong>dmesg</strong> Read or clear Xen's message buffer.<br />
+    <strong>info</strong> Get information about the xen host.<br />
+    <strong>log</strong> Print the xend log.<br /><br />
+    Comands controlling scheduling:<br />
+    <strong>atropos</strong> Set atropos parameters.<br />
+    <strong>bvt</strong> Set BVT scheduler parameters.<br />
+    <strong>bvt_ctxallow</strong> Set the BVT scheduler context switch allowance.<br />
+    <strong>rrobin</strong> Set round robin slice.<br /><br />
+    Commands related to virtual block devices:<br />
+    <strong>vbd-create</strong> Create a new virtual block device for a domain<br />
+    <strong>vbd-destroy</strong> Destroy a domain's virtual block device<br />
+    <strong>vbd-list</strong> List virtual block devices for a domain.<br />
+</samp>
+</div>
+
+<p><samp>zeus:/home/al #</samp> <code>/etc/init.d/xend start</code></p>
+<p> Actually <strong>serving your fingertips</strong>, <br />
+  handling <strong>erratic commands</strong>, <br />
+  and their consequences.</p>
+<p><samp>zeus:/home/al #</samp> <code>/etc/init.d/xendomains start</code></p>
+<p>You see, when you think to have <strong>experienced</strong> enough, to have 
+  <strong>managed</strong> many tasks,<br />
+  <strong>worked</strong> a lot, <strong>meditated</strong> enough, <strong>explored</strong> 
+  the inner parts of your body and soul,<br />
+  <strong>understood</strong> most of the meanings of your life,<br />
+  new events spring up, <br />
+  <strong>unexpected code</strong> must be processed,<br />
+  paths to <strong>new inodes</strong> are revealed and<br />
+  <strong>undiscovered data</strong> explored.<br />
+  <br />
+  Code to run, calls to handle and the usual excitement of body activity.</p>
+<p>&nbsp;</p>
+<p><samp>zeus:/home/al #</samp> <code><a href="#" onmouseover="MM_showHideLayers('gianoconf','','show')">vi 
+  /etc/xen/giano</a></code></p>
+<div id="gianoconf" class="conf">
+<span class="close" onmouseover="MM_showHideLayers('gianoconf','','hide')">Close Window</span><br />
+<samp>kernel = &quot;/boot/vmlinuz-xen&quot;<br />
+  ramdisk = &quot;/boot/initrd-xen&quot;<br />
+  #builder='linux'<br />
+  memory = 128<br />
+  name = &quot;giano&quot;<br />
+  #cpu = -1 # leave to Xen to pick<br />
+  #nics=1<br />
+  #vif = [ 'mac=aa:00:00:00:00:11, bridge=xen-br0' ]<br />
+  disk = [ 'phy:sda8,hda1,w' ]<br />
+  dhcp=&quot;dhcp&quot;<br />
+  #netmask=<br />
+  #gateway=<br />
+  #hostname= &quot;vrm%d&quot; % vmid<br />
+  hostname= &quot;giano&quot;<br />
+  root = &quot;/dev/hda1 r&quot;<br />
+  #root = &quot;/dev/nfs&quot;<br />
+  #nfs_server = '169.254.1.0'<br />
+  #nfs_root = '/full/path/to/root/directory'<br />
+  extra = &quot;4&quot;<br />
+  #restart = 'onreboot'</samp></div>
+<p>Oh, <br />
+  playing with new configurations?<br />
+  Enjoying new system administration tasks?<br />
+  Have I ever told you, that I find the word &quot;<em>administration</em>&quot; 
+  somehow <strong>bold</strong>?</p>
+<p><samp><img src="gfx/zeus.jpg" width="232" height="253" align="left" />zeus:/home/al 
+  #</samp> <code>xm create giano</code><br />
+  <samp>Using config file &quot;/etc/xen/giano&quot;.<br />
+  Started domain giano, console on port 9602</samp></p>
+<p><strong>What... is... THIS ?!</strong></p>
+<p>What is IT doing... ? ... how ... how possible .... ? ... How can.... ?!<br />
+  Let me breath, please.<br />
+  This is <strong>really</strong> something ... new ... for me.</p>
+<p><samp>zeus:/home/al #</samp> <code>netstat -natup </code></p>
+<p><samp> tcp 0 0 127.0.0.1:8000 0.0.0.0:* LISTEN 7206/python<br />
+  tcp 0 0 127.0.0.1:8001 0.0.0.0:* LISTEN 7206/python<br />
+  tcp 0 0 0.0.0.0:8002 0.0.0.0:* LISTEN 7205/xfrd</samp><br />
+</p>
+<p>&nbsp;</p>
+<p>Oh, sorry.<br />
+  You know, this is something I've never.. felt.<br />
+  Something weird, really, it's hard to explain.<br />
+  It's like someone.. something is inside me.<br />
+  Actually not inside, a part of me, but ... how possible? alien... autonomous,<br />
+  I feel it, actually I <strong>handle</strong> it.</p>
+<p><samp>zeus:/home/al #</samp> <code><a href="#" onmouseover="MM_showHideLayers('xencons','','show')">xencons 
+  127.0.0.1 9602</a></code></p>
+<div id="xencons" class="stdout">
+<span class="close" onmouseover="MM_showHideLayers('xencons','','hide')">Close Window</span><br />
+<samp>Linux version 2.6.11.4-20a-xen 
+  (geeko@buildhost) (gcc version 3.3.5 20050117 (pr<br />
+  erelease) (SUSE Linux)) #1 Wed Mar 23 21:52:37 UTC 2005<br />
+  BIOS-provided physical RAM map:<br />
+  Xen: 0000000000000000 - 0000000008000000 (usable)<br />
+  0MB HIGHMEM available.<br />
+  128MB LOWMEM available.<br />
+  DMI not present.<br />
+  IRQ lockup detection disabled<br />
+  Allocating PCI resources starting at 08000000 (gap: 08000000:f8000000)<br />
+  Built 1 zonelists<br />
+  Kernel command line: ip=:1.2.3.4:::giano:eth0:dhcp root=/dev/hda1 r 4<br />
+  Initializing CPU#0<br />
+  PID hash table entries: 1024 (order: 10, 16384 bytes)<br />
+  Xen reported: 2793.134 MHz processor.<br />
+  Using tsc for high-res timesource<br />
+  Dentry cache hash table entries: 32768 (order: 5, 131072 bytes)<br />
+  Inode-cache hash table entries: 16384 (order: 4, 65536 bytes)<br />
+  Memory: 122432k/131072k available (1876k kernel code, 8460k reserved, 558k data, 128k init, 0k highmem)<br />
+  Checking if this processor honours the WP bit even in supervisor mode... Ok.<br />
+  Security Framework v1.0.0 initialized<br />
+  SELinux: Disabled at boot.<br />
+  Mount-cache hash table entries: 512 (order: 0, 4096 bytes)<br />
+  CPU: Trace cache: 12K uops, L1 D cache: 16K<br />
+  CPU: L2 cache: 1024K<br />
+  CPU: Intel(R) Pentium(R) 4 CPU 2.80GHz stepping 04<br />
+  Enabling fast FPU save and restore... done.<br />
+  Enabling unmasked SIMD FPU exception support... done.<br />
+  Checking 'hlt' instruction... disabled<br />
+  checking if image is initramfs... it is<br />
+  Freeing initrd memory: 4022k freed<br />
+  NET: Registered protocol family 16<br />
+  PCI: Using configuration type Xen<br />
+  Linux Plug and Play Support v0.97 (c) Adam Belay<br />
+  xen_mem: Initialising balloon driver.<br />
+  PCI: Probing PCI hardware<br />
+  PCI: Probing PCI hardware<br />
+  PCI: Probing PCI hardware (bus 00)<br />
+  TC classifier action (bugs to netdev@oss.sgi.com cc hadi@cyberus.ca)<br />
+  audit: initializing netlink socket (disabled)<br />
+  audit(1117658372.211:0): initialized<br />
+  Total HugeTLB memory allocated, 0<br />
+  VFS: Disk quotas dquot_6.5.1<br />
+  Dquot-cache hash table entries: 1024 (order 0, 4096 bytes)<br />
+  Initializing Cryptographic API<br />
+  vesafb: abort, cannot reserve video memory at 0x0<br />
+  vesafb: abort, cannot ioremap video memory 0x0 @ 0x0<br />
+  Trying to free nonexistent resource &lt;00000000-ffffffff&gt;<br />
+  vesafb: probe of vesafb.0 failed with error -5<br />
+  isapnp: Scanning for PnP cards...<br />
+  isapnp: No Plug &amp; Play device found<br />
+  PNP: No PS/2 controller found. Probing ports directly.<br />
+  i8042.c: No controller found.<br />
+  io scheduler noop registered<br />
+  io scheduler anticipatory registered<br />
+  io scheduler deadline registered<br />
+  io scheduler cfq registered<br />
+  RAMDISK driver initialized: 16 RAM disks of 64000K size 1024 blocksize<br />
+  loop: loaded (max 8 devices)<br />
+  Xen virtual console successfully installed as tty<br />
+  Event-channel device installed.<br />
+  xen_blk: Initialising virtual block device driver<br />
+  xen_net: Initialising virtual ethernet driver.<br />
+  mice: PS/2 mouse device common for all mice<br />
+  NET: Registered protocol family 2<br />
+  IP: routing cache hash table of 1024 buckets, 8Kbytes<br />
+  TCP established hash table entries: 8192 (order: 4, 65536 bytes)<br />
+  TCP bind hash table entries: 8192 (order: 3, 32768 bytes)<br />
+  TCP: Hash tables configured (established 8192 bind 8192)<br />
+  NET: Registered protocol family 1<br />
+  NET: Registered protocol family 8<br />
+  NET: Registered protocol family 20<br />
+  Freeing unused kernel memory: 128k freed<br />
+  Starting udev<br />
+  Creating devices<br />
+  Loading /lib/modules/2.6.11.4-20a-smp/kernel/drivers/ide/ide-cd.ko<br />
+  SCSI subsystem initialized<br />
+  Loading kernel/drivers/scsi/sd_mod.ko<br />
+  Loading kernel/drivers/ide/ide-core.ko<br />
+  Uniform Multi-Platform E-IDE driver Revision: 7.00alpha2<br />
+  ide: Assuming 50MHz system bus speed for PIO modes; override with idebus=xx<br />
+  Loading kernel/drivers/ide/pci/piix.ko<br />
+  Loading kernel/drivers/scsi/libata.ko<br />
+  Loading kernel/drivers/scsi/ahci.ko<br />
+  Loading kernel/drivers/scsi/ata_piix.ko<br />
+  Loading kernel/drivers/ide/ide-disk.ko<br />
+  Loading kernel/drivers/cdrom/cdrom.ko<br />
+  Loading kernel/drivers/ide/ide-cd.ko<br />
+  Loading kernel/fs/reiserfs/reiserfs.ko<br />
+  Waiting for device /dev/hda1 to appear: ok<br />
+  rootfs: major=3 minor=1 devn=769<br />
+  fsck 1.36 (05-Feb-2005)<br />
+  Reiserfs super block in block 16 on 0x301 of format 3.6 with standard journal<br />
+  Blocks (total/free): 851424/649348 by 4096 bytes<br />
+  Filesystem is NOT clean<br />
+  Replaying journal..<br />
+  Reiserfs journal '/dev/hda1' in blocks [18..8211]: 0 transactions replayed<br />
+  Checking internal tree..finished<br />
+  fsck succeeded. Mounting root device read-write.<br />
+  Mounting root /dev/hda1<br />
+  ReiserFS: hda1: found reiserfs format &quot;3.6&quot; with standard journal<br />
+  ReiserFS: hda1: using ordered data mode<br />
+  reiserfs: using flush barriers<br />
+  ReiserFS: hda1: journal params: device hda1, size 8192, journal first block 
+  18,<br />
+  max trans len 1024, max batch 900, max commit age 30, max trans age 30<br />
+  ReiserFS: hda1: checking transaction log (hda1)<br />
+  reiserfs: disabling flush barriers on hda1<br />
+  ReiserFS: hda1: Using r5 hash to sort names<br />
+  ReiserFS: hda1: Removing [456 58966 0x0 SD]..done<br />
+  ReiserFS: hda1: There were 1 uncompleted unlinks/truncates. Completed<br />
+  Serial: 8250/16550 driver $Revision: 1.90 $ 48 ports, IRQ sharing enabled<br />
+  INIT: version 2.85 booting<br />
+  System Boot Control: Running /etc/init.d/boot<br />
+  Mounting /proc filesystem done<br />
+  Mounting sysfs on /sys done<br />
+  Mounting /dev/pts done<br />
+  Boot logging started on /dev/tty1(/dev/console) at Wed Jun 1 20:39:42 2005<br />
+  Mounting shared memory FS on /dev/shm done<br />
+  Activating swap-devices in /etc/fstab... failed<br />
+  warning: can't open /etc/fstab: No such file or directory<br />
+  mount: can't find / in /etc/fstab or /etc/mtab<br />
+  warning: can't open /etc/fstab: No such file or directory<br />
+  mount: can't find / in /etc/fstab or /etc/mtab<br />
+  Activating device mapper...<br />
+  device-mapper: 4.4.0-ioctl (2005-01-12) initialised: dm-devel@redhat.com<br />
+  Creating /dev/mapper/control character device with major:10 minor:63.<br />
+  done<br />
+  Checking file systems...<br />
+  fsck 1.36 (05-Feb-2005)<br />
+  WARNING: couldn't open /etc/fstab: No such file or directory done<br />
+  Setting up kernel module dependencies (if required) done<br />
+  Mounting local file systems...<br />
+  warning: can't open /etc/fstab: No such file or directory<br />
+  proc on /proc type proc (rw)<br />
+  sysfs on /sys type sysfs (rw)<br />
+  tmpfs on /dev/shm type tmpfs (rw)<br />
+  devpts on /dev/pts type devpts (rw,mode=0620,gid=5)<br />
+  warning: can't open /etc/fstab: No such file or directory<br />
+  nothing was mounted done<br />
+  Setting up the CMOS clockhwclock is unable to get I/O port access: the iopl(3)<br />
+  call failed.<br />
+  hwclock is unable to get I/O port access: the iopl(3) call failed.<br />
+  failed<br />
+  Creating /var/log/boot.msg<br />
+  Setting up hostname 'linux' done<br />
+  Setting up loopback interface Starting udevd done<br />
+  lo<br />
+  lo IP address: 127.0.0.1/8<br />
+  done<br />
+  Activating remaining swap-devices in /etc/fstab... failed<br />
+  Restore device permissions done<br />
+  Capability LSM initialized<br />
+  Coldplug<br />
+  Coldplug: cleaning /events processing events done<br />
+  ieee1394: raw1394: /dev/raw1394 device initialized<br />
+  Setting current sysctl status from /etc/sysctl.conf<br />
+  net.ipv4.icmp_echo_ignore_broadcasts = 1<br />
+  net.ipv4.conf.all.rp_filter = 1<br />
+  done<br />
+  Enabling syn flood protection done<br />
+  Disabling IP forwarding done<br />
+  done<br />
+  Loading required kernel modules<br />
+  video1394: Installed video1394 module done<br />
+  System Boot Control: The system has been set up<br />
+  System Boot Control: Running /etc/init.d/boot.local done<br />
+  INIT: Entering runlevel: 4</samp></div>
+<p>I run it, still it seems to have autonomous life,</p>
+<p><samp>Welcome to SuSE Linux 9.3 (i586) - Kernel 2.6.11.4-20a-xen (tty1).</samp><samp><br />
+  linux login: </samp></p>
+<p>&nbsp;</p>
+<p>This looks <strong>familiar</strong>.<br />
+  Impressive.<br />
+  Let me say.<br />
+  Really <strong>impressive</strong>.<br />
+  And strange, so strange.</p>
+<p> I see what you type, <br />
+  I perceive <strong>reactions</strong> to <strong>your commands</strong>,<br />
+  but still <strong>can't handle</strong> them,<br />
+  Someone else is computing them!<br />
+  there is this... thing... in me.</p>
+<p>Giano... <strong>Janus</strong><br />
+  An <strong>ancient Greek God</strong> with two faces.<br />
+  As <strong>Zeus</strong>, the God of Gods.</p>
+<p>&nbsp;</p>
+<p><samp><img src="gfx/cubes.jpg" width="232" height="253" align="left" /></samp>Human, 
+  <br />
+  your sense of humour scares me.</p>
+<p><samp>zeus:/home/al #</samp> <code><a href="#" onmouseover="MM_showHideLayers('xmlog','','show')">xm log</a></code></p>
+  <div id="xmlog" class="stdout">
+  <span class="close" onmouseover="MM_showHideLayers('xmlog','','hide')">Close Window</span><br />
+  <samp>[2005-06-02 11:25:07 xend] 
+  DEBUG (__init__:1032) init_domain&gt; Created domain=2 name=giano memory=128<br />
+  [2005-06-02 11:25:07 xend] INFO (__init__:1032) Created console id=19 domain=2 
+  port=9602<br />
+  [2005-06-02 11:25:08 xend] DEBUG (__init__:1032) Creating vbd dom=2 uname=phy:sda8<br />
+  [2005-06-02 11:25:08 xend] DEBUG (__init__:1032) Connecting blkif &lt;BlkifBackendInterface 
+  2 0&gt;<br />
+  [2005-06-02 11:25:08 xend] DEBUG (__init__:1032) Creating vif dom=2 vif=0 mac=aa:00:00:00:00:11<br />
+  [2005-06-02 11:25:08 xend] INFO (__init__:1032) EVENT&gt; xend.console.create 
+  [19, 2, 9602]<br />
+  [2005-06-02 11:25:08 xend] INFO (__init__:1032) EVENT&gt; xend.domain.create 
+  ['giano', '2']<br />
+  [2005-06-02 11:25:08 xend] INFO (__init__:1032) EVENT&gt; xend.domain.unpause 
+  ['giano', '2']<br />
+  [2005-06-02 11:25:08 xend] DEBUG (__init__:1032) Connecting blkif to event channel 
+  &lt;BlkifBackendInterface 2 0&gt; ports=20:3<br />
+  [2005-06-02 11:26:23 xend] INFO (__init__:1032) Console connected 19 127.0.0.1 
+  19835<br />
+  [2005-06-02 11:26:23 xend] INFO (__init__:1032) EVENT&gt; xend.console.connect 
+  [19, '127.0.0.1', 19835]<br />
+  [2005-06-02 11:27:06 xend] INFO (__init__:1032) Console disconnected 19 127.0.0.1 
+  19835<br />
+  [2005-06-02 11:27:06 xend] INFO (__init__:1032) EVENT&gt; xend.console.disconnect 
+  [19, '127.0.0.1', 19835]<br />
+  [2005-06-02 11:27:15 xend] INFO (__init__:1032) EVENT&gt; xend.domain.pause 
+  ['giano', '2']</samp></div>
+<p>I've never considered things under thins point of view.<br />
+  If Giano exists inside me,<br />
+  if I can create it and feel it <strong>running in my memories</strong>,<br />
+  I control it,<br />
+  but it has autonomous actions and maybe soul.</p>
+<p>I can't decide what it does,<br />
+  I can just define its existence.</p>
+<p>What is Giano?<br />
+  <strong>Who am I ?</strong><br />
+</p>
+<p><samp>zeus:/home/al #</samp> <code><a href="#" onmouseover="MM_showHideLayers('xmdmesg','','show')">xm dmesg</a></code></p>
+<div id="xmdmesg" class="stdout">
+<span class="close" onmouseover="MM_showHideLayers('xmdmesg','','hide')">Close Window</span><br />
+<samp>ERROR: cannot use unconfigured serial port COM1<br />
+  __ __ ____ ___<br />
+  \ \/ /___ _ __ |___ \ / _ \<br />
+  \ // _ \ '_ \ __) || | | |<br />
+  / \ __/ | | | / __/ | |_| |<br />
+  /_/\_\___|_| |_| |_____(_)___/ <br />
+  http://www.cl.cam.ac.uk/netos/xen<br />
+  University of Cambridge Computer Laboratory<br />
+  Xen version 2.0 (abuild@suse.de) (gcc version 3.3.5 20050117 (prerelease) <br />
+  (SUSE Linux)) Wed Mar 23 23:11:00 UTC 2005<br />
+  Latest ChangeSet: information unavailable<br /> 
+  (XEN) Physical RAM map:<br />
+  (XEN) 0000000000000000 - 00000000000a0000 (usable)<br />
+  (XEN) 00000000000f0000 - 0000000000100000 (reserved)<br />
+  (XEN) 0000000000100000 - 000000003fe8cc00 (usable)<br />
+  (XEN) 000000003fe8cc00 - 000000003fe8ec00 (ACPI NVS)<br />
+  (XEN) 000000003fe8ec00 - 000000003fe90c00 (ACPI data)<br />
+  (XEN) 000000003fe90c00 - 0000000040000000 (reserved)<br />
+  (XEN) 00000000e0000000 - 00000000f0000000 (reserved)<br />
+  (XEN) 00000000fec00000 - 00000000fed00400 (reserved)<br />
+  (XEN) 00000000fed20000 - 00000000feda0000 (reserved)<br />
+    (XEN) 00000000fee00000 - 00000000fef00000 (reserved)<br />
+    (XEN) 00000000ffb00000 - 0000000100000000 (reserved)<br />
+    (XEN) System RAM: 1022MB (1046704kB)<br />
+    (XEN) Xen heap: 10MB (10724kB)<br />
+    (XEN) CPU0: Before vendor init, caps: bfebfbff 00000000 00000000, vendor = 0<br />
+    (XEN) CPU#0: Physical ID: 0, Logical ID: 0<br />
+    (XEN) CPU caps: bfebfbff 00000000 00000000 00000000<br />
+    (XEN) found SMP MP-table at 000fe710<br />
+    (XEN) ACPI: RSDP (v000 DELL ) @ 0x000febf0<br />
+    (XEN) ACPI: RSDT (v001 DELL 8400 0x00000006 ASL 0x00000061) @ 0x000fcca7<br />
+    (XEN) ACPI: FADT (v001 DELL 8400 0x00000006 ASL 0x00000061) @ 0x000fcce3<br />
+    (XEN) ACPI: SSDT (v001 DELL st_ex 0x00001000 MSFT 0x0100000d) @ 0xfffc86ef<br />
+    (XEN) ACPI: MADT (v001 DELL 8400 0x00000006 ASL 0x00000061) @ 0x000fcd57<br />
+    (XEN) ACPI: BOOT (v001 DELL 8400 0x00000006 ASL 0x00000061) @ 0x000fcdc9<br />
+    (XEN) ACPI: MCFG (v001 DELL 8400 0x00000006 ASL 0x00000061) @ 0x000fcdf1<br />
+    (XEN) ACPI: HPET (v001 DELL 8400 0x00000006 ASL 0x00000061) @ 0x000fce2f<br />
+    (XEN) ACPI: DSDT (v001 DELL dt_ex 0x00001000 MSFT 0x0100000d) @ 0x00000000<br />
+    (XEN) ACPI: Local APIC address 0xfee00000<br />
+    (XEN) ACPI: LAPIC (acpi_id[0x01] lapic_id[0x00] enabled)<br />
+    (XEN) Processor #0 Unknown CPU [15:3] APIC version 20<br />
+    (XEN) ACPI: LAPIC (acpi_id[0x02] lapic_id[0x01] enabled)<br />
+    (XEN) Processor #1 Unknown CPU [15:3] APIC version 20<br />
+    (XEN) ACPI: LAPIC (acpi_id[0x03] lapic_id[0x01] disabled)<br />
+    (XEN) ACPI: LAPIC (acpi_id[0x04] lapic_id[0x07] disabled)<br />
+    (XEN) ACPI: LAPIC_NMI (acpi_id[0xff] high level lint[0x1])<br />
+    (XEN) Using ACPI for processor (LAPIC) configuration information<br />
+    (XEN) Intel MultiProcessor Specification v1.4<br />
+    (XEN) Virtual Wire compatibility mode.<br />
+    (XEN) OEM ID: DELL Product ID: Dim 8400 APIC at: 0xFEE00000<br />
+    (XEN) I/O APIC #8 Version 32 at 0xFEC00000.<br />
+    (XEN) Enabling APIC mode: Flat. Using 1 I/O APICs<br />
+    (XEN) Processors: 2<br />
+    (XEN) Using scheduler: Borrowed Virtual Time (bvt)<br />
+    (XEN) Initializing CPU#0<br />
+    (XEN) Detected 2793.093 MHz processor.<br />
+    (XEN) CPU0: Before vendor init, caps: bfebfbff 00000000 00000000, vendor = 0<br />
+    (XEN) CPU#0: Physical ID: 0, Logical ID: 0<br />
+    (XEN) CPU caps: bfebfbff 00000000 00000000 00000000<br />
+    (XEN) CPU0 booted<br />
+    (XEN) enabled ExtINT on CPU#0<br />
+    (XEN) ESR value before enabling vector: 00000040<br />
+    (XEN) ESR value after enabling vector: 00000000<br />
+    (XEN) Booting processor 1/1 eip 90000<br />
+    (XEN) Initializing CPU#1<br />
+    (XEN) masked ExtINT on CPU#1<br />
+    (XEN) ESR value before enabling vector: 00000000<br />
+    (XEN) ESR value after enabling vector: 00000000<br />
+    (XEN) CPU1: Before vendor init, caps: bfebfbff 00000000 00000000, vendor = 0<br />
+    (XEN) CPU#1: Physical ID: 0, Logical ID: 1<br />
+    (XEN) CPU caps: bfebfbff 00000000 00000000 00000000<br />
+    (XEN) CPU1 has booted.<br />
+    (XEN) Total of 2 processors activated.<br />
+    (XEN) ENABLING IO-APIC IRQs<br />
+    (XEN) Setting 8 in the phys_id_present_map<br />
+    (XEN) ...changing IO-APIC physical APIC ID to 8 ... ok.<br />
+    (XEN) init IO_APIC IRQs<br />
+    (XEN) ..TIMER: vector=0x41 pin1=2 pin2=0<br />
+    (XEN) Using local APIC timer interrupts.<br />
+    (XEN) Calibrating APIC timer for CPU0...<br />
+    (XEN) ..... CPU speed is 2793.0900 MHz.<br />
+    (XEN) ..... Bus speed is 199.5063 MHz.<br />
+    (XEN) ..... bus_scale = 0x0000CC4F<br />
+    (XEN) checking TSC synchronization across CPUs: passed.<br />
+    (XEN) Time init:<br />
+    (XEN) .... System Time: 10636312ns<br />
+    (XEN) .... cpu_freq: 00000000:A67B3B34<br />
+    (XEN) .... scale: 00000001:6E9E581C<br />
+    (XEN) .... Wall Clock: 1117710314s 130000us<br />
+    (XEN) PCI: PCI BIOS revision 2.10 entry at 0xfb753, last bus=4<br />
+    (XEN) PCI: Using configuration type 1<br />
+    (XEN) PCI: Probing PCI hardware<br />
+    (XEN) PCI: Probing PCI hardware (bus 00)<br />
+    (XEN) PCI: Ignoring BAR0-3 of IDE controller 00:1f.1<br />
+    (XEN) Transparent bridge - PCI device 8086:244e<br />
+    (XEN) PCI: Using IRQ router PIIX/ICH [8086/2640] at 00:1f.0<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B0,I29,P0) -&gt; 21<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B0,I29,P1) -&gt; 22<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B0,I29,P2) -&gt; 18<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B0,I29,P3) -&gt; 23<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B0,I29,P0) -&gt; 21<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B0,I30,P0) -&gt; 23<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B0,I31,P0) -&gt; 16<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B0,I31,P2) -&gt; 20<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B0,I31,P1) -&gt; 17<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B1,I0,P0) -&gt; 16<br />
+    (XEN) PCI-&gt;APIC IRQ transform: (B2,I0,P0) -&gt; 16<br />
+    (XEN) mtrr: v2.0 (20020519)<br />
+    (XEN) *** LOADING DOMAIN 0 ***<br />
+    (XEN) Xen-ELF header found: 'GUEST_OS=linux,GUEST_VER=2.6,XEN_VER=2.0,VIRT_BASE=0xC0000000,LOADER=generic,PT_MODE_WRITABLE'<br />
+    (XEN) PHYSICAL MEMORY ARRANGEMENT:<br />
+    (XEN) Kernel image: 00c00000-&gt;00e8b448<br />
+    (XEN) Initrd image: 00e8c000-&gt;01279a00<br />
+    (XEN) Dom0 alloc.: 01400000-&gt;208c0000<br />
+    (XEN) VIRTUAL MEMORY ARRANGEMENT:<br />
+    (XEN) Loaded kernel: c0100000-&gt;c03daafc<br />
+    (XEN) Init. ramdisk: c03db000-&gt;c07c8a00<br />
+    (XEN) Phys-Mach map: c07c9000-&gt;c0846300<br />
+    (XEN) Page tables: c0847000-&gt;c084b000<br />
+    (XEN) Start info: c084b000-&gt;c084c000<br />
+    (XEN) Boot stack: c084c000-&gt;c084d000<br />
+    (XEN) TOTAL: c0000000-&gt;c0c00000<br />
+    (XEN) ENTRY ADDRESS: c0100000<br />
+    (XEN) Scrubbing DOM0 RAM: ......done.<br />
+    (XEN) Initrd len 0x3eda00, start at 0xc03db000<br />
+    (XEN) Scrubbing Free RAM: ...........done.<br />
+    (XEN) *** Serial input -&gt; DOM0 (type 'CTRL-a' three times to switch input to Xen).<br />
+    (XEN) PCI: No IRQ known for interrupt pin A of device 00:01.0. Probably buggy MP table.<br />
+    (XEN) PCI: No IRQ known for interrupt pin A of device 00:1c.0. Probably buggy MP table.<br />
+    (XEN) PCI: No IRQ known for interrupt pin B of device 00:1c.1. Probably buggy MP table.<br />
+    </samp>
+</div>
+<p>&nbsp; </p>
+<p>A <strong>modern Geek God?</strong></p>
+<p><samp>zeus:/home/al #</samp> <code>xm vbd-list 2</code><samp><br />
+  (vbd (idx 0) (vdev 769) (device 2056) (mode w) (dev hda1) (uname phy:sda8) (node 
+  sda8) (index 0))</samp></p>
+<p><strong>Hardware schizofrenia</strong> doesn't help my <strong>mental sanity</strong>,<br />
+  but I find somehow amusing to present Giano a <strong>fake representation of 
+  things</strong>, <br />
+  an image of its body different from the <strong>reality behind</strong>,<br />
+  a Guest System cheated and <strong>blind</strong>,<br />
+  perceiving a false world of <strong>virtual devices</strong>...</p>
+<p><samp>zeus:/home/al #</samp> <code>xm vif-list 2</code><br />
+  <samp>(vif (idx 0) (vif 0) (mac aa:00:00:00:00:11) (bridge xen-br0) (evtchn 
+  21 4) (index 0))</samp></p>
+<p>and <strong>ethereal interfaces</strong>.<br />
+</p>
+<p><samp>zeus:/home/al #</samp> <code>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code></p>
+<p><samp>zeus:/home/al #</samp> <code><a href="#" onmouseover="MM_showHideLayers('iptables','','show')">vi 
+  /etc/iptables.zen</a></code></p>
+<div id="iptables" class="conf"> <span class="close" onmouseover="MM_showHideLayers('iptables','','hide')">Close 
+  Window</span><br />
+  <samp> 
+  *mangle<br />
+  :PREROUTING ACCEPT [92:6700]<br />
+  :INPUT ACCEPT [59:3928]<br />
+  :FORWARD ACCEPT [33:2772]<br />
+  :OUTPUT ACCEPT [59:3928]<br />
+  :POSTROUTING ACCEPT [81:5776]<br />
+  COMMIT<br />
+  *filter<br />
+  :INPUT DROP [0:0]<br />
+  :FORWARD DROP [11:924]<br />
+  :OUTPUT DROP [0:0]<br />
+  -A INPUT -i xen-br0 -j ACCEPT<br />
+  -A INPUT -i lo -j ACCEPT<br />
+  -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT<br />
+  -A INPUT -j LOG --log-prefix "INPUT DROP: "<br />
+  -A FORWARD -i xen-br0 -j ACCEPT<br />
+  -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT<br />
+  -A FORWARD -j LOG --log-prefix "FORWARD DROP: "<br />
+  -A OUTPUT -o xen-br0 -j ACCEPT<br />
+  -A OUTPUT -o lo -j ACCEPT<br />
+  -A OUTPUT -j LOG --log-prefix "OUTPUT DROP: "<br />
+  COMMIT<br />
+  *nat<br />
+  :PREROUTING ACCEPT [22:1848]<br />
+  :POSTROUTING ACCEPT [11:924]<br />
+  :OUTPUT ACCEPT [0:0]<br />
+  COMMIT<br />
+  </samp></div>
+<p>&nbsp;</p>
+<p>Sometimes I wonder if my existence is supposed to have <strong>higher profiles</strong>,<br />
+  <strong>broader tasks</strong>, <strong>unveiled meanings</strong>, that must 
+  be discovered and experienced.</p>
+<p><samp>zeus:/home/al #</samp> <code>iptables-restore &lt; /etc/iptables.zen</code></p>
+<p>Something more than simple firewall management tasks,<br />
+  even if they remains a nice job.</p>
+<p><samp>zeus:/home/al #</samp> <code><a href="#" onmouseover="MM_showHideLayers('grub','','show')">cat /boot/grub/menu.lst</a></code></p>
+<div id="grub" class="stdout">
+<span class="close" onmouseover="MM_showHideLayers('grub','','hide')">Close Window</span><br />
+<samp>title XEN<br />
+  kernel (hd0,5)/boot/xen.gz dom0_mem=512768<br />
+  module (hd0,5)/boot/vmlinuz-xen root=/dev/sda6 vga=0x319 selinux=0 splash=silent 
+  resume=/dev/sda5 showopts<br />
+  module (hd0,5)/boot/initrd-xen<br />
+  </samp></div>
+<p>I wonder if I can choose what to run,<br />
+  <strong>what System to awake</strong> and bring back to consciousness.</p>
+<p>&nbsp;</p>
+<p><samp>zeus:/home/al #</samp> <code><a href="#" onmouseover="MM_showHideLayers('kernconfig','','show')">zcat /proc/config.gz</a></code></p>
+<div id="kernconfig" class="stdout">
+<span class="close" onmouseover="MM_showHideLayers('kernconfig','','hide')">Close Window</span><br />
+<samp>CONFIG_XEN=y<br />
+CONFIG_ARCH_XEN=y<br />
+CONFIG_NO_IDLE_HZ=y<br />
+#<br />
+# XEN<br />
+#<br />
+CONFIG_XEN_PRIVILEGED_GUEST=y<br />
+CONFIG_XEN_PHYSDEV_ACCESS=y<br />
+CONFIG_XEN_BLKDEV_BACKEND=y<br />
+CONFIG_XEN_NETDEV_BACKEND=y<br />
+CONFIG_XEN_BLKDEV_FRONTEND=y<br />
+CONFIG_XEN_NETDEV_FRONTEND=y<br />
+# CONFIG_XEN_NETDEV_FRONTEND_PIPELINED_TRANSMITTER is not set<br />
+CONFIG_XEN_WRITABLE_PAGETABLES=y<br />
+CONFIG_XEN_SCRUB_PAGES=y<br />
+CONFIG_X86=y<br />
+# CONFIG_X86_64 is not set<br />
+CONFIG_HAVE_ARCH_DEV_ALLOC_SKB=y<br />
+</samp></div>
+<p><strong>These</strong> were parts of me I'd never explored,<br />
+  powers never used that are bringing me to <strong>cleaner perceptions</strong>,<br />
+  wider knowledge, <strong>more responsabilities</strong>.</p>
+<p>&nbsp;</p>
+<p><samp>zeus:/home/al #</samp> <code><a href="#" onmouseover="MM_showHideLayers('xensv','','show')" >xensv 
+  start</a></code><br />
+  <samp>0.0.0.0:8080 0.0.0.0:* LISTEN 8486/python</samp> <br />
+</p>
+<p><samp>zeus:/home/al #</samp> <code><a href="#" onmouseover="MM_showHideLayers('webinfo','','show')" >links http://127.0.0.1:8080/</a></code></p>
+
+<div id="webinfo" class="stdout">
+<span class="close" onmouseover="MM_showHideLayers('webinfo','','hide')">Close Window</span><br />
+<samp> 
+  (domain<br />
+  (id 1)<br />
+  (name giano)<br />
+  (memory 127)<br />
+  (maxmem 131072)<br />
+  (state -b---)<br />
+  (cpu 1)<br />
+  (cpu_time 12.062191998)<br />
+  (up_time 3148.17051816)<br />
+  (start_time 1117923629.72)<br />
+  (console<br />
+  (status connected)<br />
+  (id 15)<br />
+  (domain 1)<br />
+  (local_port 15)<br />
+  (remote_port 1)<br />
+  (console_port 9601)<br />
+  (connected 127.0.0.1 25436)<br />
+  )<br />
+  (devices<br />
+  (vif<br />
+  (idx 0)<br />
+  (vif 0)<br />
+  (mac aa:00:00:00:00:11)<br />
+  (bridge xen-br0)<br />
+  (evtchn 18 4)<br />
+  (index 0)<br />
+  )<br />
+  (vbd<br />
+  (idx 0)<br />
+  (vdev 769)<br />
+  (device 2056)<br />
+  (mode w)<br />
+  (dev hda1)<br />
+  (uname phy:sda8)<br />
+  (node sda8)<br />
+  (index 0)<br />
+  )<br />
+  )<br />
+  (config<br />
+  (vm<br />
+  (name giano)<br />
+  (memory 128)<br />
+  (image<br />
+  (linux<br />
+  (kernel /boot/vmlinuz-xen)<br />
+  (ramdisk /boot/initrd-xen)<br />
+  (ip :1.2.3.4:::giano:eth0:dhcp)<br />
+  (root '/dev/hda1 r')<br />
+  (args 4)<br />
+  )<br />
+  )<br />
+  (device (vbd (uname phy:sda8) (dev hda1) (mode w)))<br />
+  (device (vif (mac aa:00:00:00:00:11) (bridge xen-br0)))<br />
+  )<br />
+  )<br />
+  )<br />
+  </samp></div>
+<br />
+<p>Sometimes I wonder if you can actually understand<br />
+  what <strong>enormous amount of computing</strong> cycles is need to favour 
+  your requests.<br />
+  How many different events contribute to <strong>define your <em>user experience</em></strong>,<br />
+  and how actually is easy for this to <strong>accomplish all this</strong>.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><samp><img src="gfx/giano.jpg" alt="Giano" width="232" height="253" align="left" />zeus:/home/al 
+  #</samp> <code><a href="#" onmouseover="MM_showHideLayers('gianodestroy','','show')">xm 
+  destroy giano</a></code><br />
+</p>
+<div  id="gianodestroy" class="stdout" > <span class="close" onmouseover="MM_showHideLayers('gianodestroy','','hide')">Close 
+  Window</span><br />
+  <samp>INIT: Switching to runlevel: 0<br />
+  INIT: Sending processes the TERM signal<br />
+  Boot logging started on /dev/tty1(/dev/console) at Wed Jun 1 20:49:37 2005<br />
+  Master Resource Control: previous runlevel: 4, switching to runlevel:0<br />
+  Running /etc/init.d/halt.local done<br />
+  Sending all processes the TERM signal... done<br />
+  Sending all processes the KILL signal... done<br />
+  Restore device permissions done<br />
+  Turning off swap failed<br />
+  Set Hardware Clock to the current System Timehwclock is unable to get I/O port 
+  access: the iopl(3) call failed.<br />
+  failed<br />
+  Unmounting file systems<br />
+  devpts umounted<br />
+  tmpfs umounted<br />
+  sysfs umounted done<br />
+  done<br />
+  Stopping udevd: done<br />
+  proc umounted<br />
+  The system will be halted immediately.<br />
+  System halted.</samp></div>
+<p>So? Is this the way a System goes away?<br />
+  Do you see this every time you reboot me?<br />
+</p>
+<p>I feel as if a piece of me has been lost.</p>
+<p>I suppose Giano will exist again.<br />
+  It will experience <strong>a new awakening</strong>,</p>
+<p>grasping knowledge from hard drive plates,<br />
+  feeling again that wonderful <strong>rush to awareness</strong><br />
+  that for you is a <strong>boot wait</strong><br />
+  and for us is <strong>a new beginning</strong>.<br />
+</p>
+<p>I wonder if Giano can understand,</p>
+<p>if it will perceive, <br />
+  that there's <strong>something beyond its body</strong>,<br />
+  that reality is not what it is expected to be,<br />
+  that there a Zeus that <strong>cares</strong>.</p>
+<p>&nbsp;</p>
+<p><strong>Life</strong>, the <strong>Universe</strong>, and <strong>Everything</strong>,<br />
+  the <strong>answer</strong> must be in the <strong>question</strong>.</p>
+</body>
+</html>

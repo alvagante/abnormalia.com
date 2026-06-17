@@ -60,6 +60,26 @@ a:hover {
   font-weight: 700;
   letter-spacing: 0;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.site-logo {
+  height: 2rem;
+  width: auto;
+  display: block;
+}
+
+.home-title {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.home-logo {
+  height: clamp(4rem, 10vw, 8rem);
+  width: auto;
+  flex: none;
 }
 
 .site-nav {
@@ -108,11 +128,22 @@ h1 {
   font-size: clamp(1.1rem, 2vw, 1.35rem);
 }
 
+.home-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin-top: 2rem;
+}
+
 .text-link {
   display: inline-block;
   margin-top: 2rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   font-weight: 700;
+}
+
+.home-links .text-link {
+  margin-top: 0;
 }
 
 .ixen-list {

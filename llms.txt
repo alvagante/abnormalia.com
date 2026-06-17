@@ -1,0 +1,16 @@
+# abnormalia
+
+> Ixens and other abnormalia. Self-contained mixed-media pages, creative writing, and technical apparitions.
+
+Abnormalia has lived several incarnations: from an Amiga DiskMag to a social apparition, from experimental web projects to a collection of Ixens — self-contained mixed-media pages inspired by the original I, Xen by Alvagante (2005).
+
+## Content
+
+- [Home](https://abnormalia.com/): Site overview and intro.
+- [I. Xen (original, 2005)](https://abnormalia.com/i-xen/): The original I, Xen by Alvagante.
+- [Ixen archive](https://abnormalia.com/ixen/): All published Ixens.
+
+## Legal
+
+- [Privacy policy](https://abnormalia.com/privacy/): GDPR notice. Operated by Lab42 Srl (IT03677180121).
+- [Cookie policy](https://abnormalia.com/cookies/): Cloudflare technical cookies only.
