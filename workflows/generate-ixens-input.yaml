@@ -1,7 +1,7 @@
 ixenApiFormat: anthropic
 ixenBaseUrl: https://api.anthropic.com
 skillLevel: intermediate
-outputLength: short
+outputLength: long
 ixenModel: claude-opus-4-8
 ixenPersona: abnormalia
 credits: alvagante
