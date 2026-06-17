@@ -8,13 +8,17 @@
   "instrumental": false,
   "outputDir": "ixen/xen-hypervisor",
   "reusedExisting": true,
-  "trackCount": 1,
+  "trackCount": 2,
   "tracks": [
     {
       "title": "Life as a Xen hypervisor",
-      "filename": "track.mp3",
+      "filename": "life-as-a-xen-hypervisor-mqh61hhj.mp3",
       "lyrics": "I sit between the metal and the dream,\nA layer thin where nothing's what it seems,\nI parse the requests, I divide the load,\nA thousand voices down a single road.\n\nI'm the space between the bare and what is real,\nWhere domains dance and virtual worlds reveal,\nEach guest machine believes it owns the throne,\nBut I'm the one who's truly all alone.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nI grant them access, ring by ring by ring,\nI catch the interrupts, I make them sing,\nMemory pages flowing like a stream,\nI'm the keeper of the machine's dream.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nIn the bridge between the privilege and the void,\nI'm watching every domain I've deployed,\nThey think they're free but they're held in my hands,\nI'm the silent rule that holds all their lands,\nNo kernel knows the weight of what I know,\nThe hidden supervisor's endless flow.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen,\nI'm the space where isolation finds its peace,\nWhere infinite becomes finite, a release."
+    },
+    {
+      "title": "Life as a Xen hypervisor (Alt 2)",
+      "filename": "life-as-a-xen-hypervisor-mqh649x3.mp3"
     }
   ],
-  "generatedAt": "2026-06-17T08:17:04.797Z"
+  "generatedAt": "2026-06-17T16:16:32.987Z"
 }

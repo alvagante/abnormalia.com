@@ -1,7 +1,7 @@
 ixenApiFormat: anthropic
 ixenBaseUrl: https://api.anthropic.com
 skillLevel: intermediate
-outputLength: medium
+outputLength: short
 ixenModel: claude-opus-4-8
 credits: alvagante
 versionOutput: true
@@ -18,37 +18,110 @@ sunoVersion: chirp-v4-5
 ixens:
   - slug: xen-hypervisor
     title: Life as a Xen hypervisor
-    description: The host narrates dom0, domU, schedulers, memory ballooning, and isolation.
+    description: The host narrates Xen's domain model, CPU, memory, I/O, device isolation, migration, and failure boundaries.
     topic: Life as a Xen hypervisor
     narrator: a Xen hypervisor
     heroPrompt: >-
       A Xen hypervisor as a stern geometric machine-intelligence suspended above
-      three guest domains, technical diagram energy, memory maps, grant-table
-      arrows, scheduler queues, white paper texture, precise linework.
+      dom0, driver domains, and several domU guests, technical diagram energy,
+      CPU rings, memory maps, IOMMU tables, event channels, scheduler queues,
+      white paper texture, precise linework.
     concepts:
-      - name: Grant tables and event channels
+      - name: Domain model and privilege boundaries
         imageFilename: concept-1.png
         imagePrompt: >-
-          Xen grant tables and event channels rendered as a precise white-paper
-          systems diagram, guest domains exchanging memory pages through explicit
-          capabilities, ixen-light technical illustration.
+          Xen domain architecture rendered as a precise white-paper systems
+          diagram, hypervisor layer below dom0, driver domains, stub domains,
+          and domU guests, privilege boundaries and control paths visible,
+          ixen-light technical illustration.
         details: >-
-          Explain how grants authorize page sharing between domains, how event
-          channels carry notifications, and where the isolation boundaries can
-          fail operationally.
-      - name: Scheduler queues and memory ballooning
+          Cover the Xen split between the small hypervisor, dom0, domU, driver
+          domains, stub domains, and the toolstack. Explain where authority
+          lives, what guests cannot do directly, and why dom0 is both a
+          management plane and a risk concentration.
+      - name: Boot modes and guest execution
         imageFilename: concept-2.png
         imagePrompt: >-
-          Xen scheduler queues and memory ballooning visualized as disciplined
-          resource choreography between dom0 and domU guests, crisp ixen-light
-          systems artwork.
+          Xen PV, HVM, and PVH guest execution modes shown as stacked CPU
+          privilege transitions, hypercalls, emulated devices, paravirtual
+          drivers, and hardware virtualization assists, crisp ixen-light systems
+          artwork.
         details: >-
-          Cover credit-style scheduling, steal time, vCPU contention, balloon
-          drivers, overcommit pressure, and the difference between capacity and
-          entitlement.
+          Explain PV, HVM, and PVH at a systems level: hypercalls, trap handling,
+          emulation, paravirtual drivers, firmware expectations, and the tradeoff
+          between hardware compatibility, performance, and attack surface.
+      - name: CPU scheduling and vCPU topology
+        imageFilename: concept-3.png
+        imagePrompt: >-
+          Xen CPU scheduling visualized as pCPUs, vCPUs, run queues, NUMA nodes,
+          affinity masks, credit accounting, steal time, and latency-sensitive
+          guests, precise ixen-light technical diagram.
+        details: >-
+          Cover credit and credit2 style scheduling, pCPU/vCPU mapping, pinning,
+          NUMA locality, steal time, overcommit, latency-sensitive workloads,
+          and how capacity planning differs from guest-visible entitlement.
+      - name: Memory ownership and translation
+        imageFilename: concept-4.png
+        imagePrompt: >-
+          Xen memory management drawn as machine frames, guest physical frames,
+          page tables, shadow or nested translation, balloon drivers, and
+          controlled page sharing paths, ixen-light technical illustration.
+        details: >-
+          Cover machine frames versus guest physical memory, page table
+          mediation, shadow or hardware-assisted translation, ballooning,
+          overcommit pressure, scrubbing, and how grants fit as one controlled
+          sharing mechanism rather than the whole story.
+      - name: I/O paths and split drivers
+        imageFilename: concept-5.png
+        imagePrompt: >-
+          Xen split-driver I/O path shown from frontend drivers through shared
+          rings, event channels, backend drivers in dom0 or a driver domain, and
+          physical NIC and block devices, crisp ixen-light systems art.
+        details: >-
+          Explain frontend/backend drivers, shared rings, event channels, grant
+          references, blkfront/blkback, netfront/netback, xenstore coordination,
+          and why many operational failures appear as stalled backends or
+          mismatched device state.
+      - name: Device assignment and DMA isolation
+        imageFilename: concept-6.png
+        imagePrompt: >-
+          Xen PCI passthrough and DMA isolation rendered with IOMMU tables,
+          interrupt remapping, SR-IOV virtual functions, assigned devices, and
+          trust boundaries around guests, precise ixen-light diagram.
+        details: >-
+          Cover PCI passthrough, IOMMU and interrupt remapping, SR-IOV, device
+          reset behavior, firmware quirks, DMA containment, and the point where
+          performance isolation becomes a hardware trust problem.
+      - name: Live migration and state transfer
+        imageFilename: concept-7.png
+        imagePrompt: >-
+          Xen live migration as a staged state-transfer diagram, guest memory
+          pages copied and dirtied, vCPU state paused briefly, storage and
+          network identity preserved across hosts, ixen-light technical artwork.
+        details: >-
+          Explain save/restore and live migration, pre-copy memory transfer,
+          dirty page rates, vCPU/device state, shared or replicated storage,
+          network continuity, clock behavior, and why migration exposes hidden
+          coupling between guest, host, and fabric.
+      - name: Operations, observability, and failure modes
+        imageFilename: concept-8.png
+        imagePrompt: >-
+          Xen operational diagnostics shown as xl and xenstore views, dom0 logs,
+          hypervisor traces, stalled rings, IRQ storms, noisy guests, and
+          security boundaries under stress, crisp ixen-light systems diagram.
+        details: >-
+          Cover xl/libxl, xenstore, dom0 logs, hypervisor tracing, driver-domain
+          health, noisy-neighbor behavior, IRQ and softirq pressure, backend
+          stalls, dom0 compromise risk, and the practical shape of Xen incident
+          response.
     details: >-
-      Treat the reader as a peer. Talk concretely about dom0, domU, grants,
-      page sharing, schedulers, memory ballooning, and failure modes.
+      Treat the reader as a peer. Give a full Xen overview: hypervisor versus
+      dom0, domU, driver and stub domains, PV/HVM/PVH execution, CPU scheduling,
+      memory translation and ballooning, I/O split drivers, grant references and
+      event channels, xenstore, PCI passthrough, IOMMU isolation, live migration,
+      observability, security boundaries, and operational failure modes. Do not
+      over-center grants or ballooning; present them as parts of the larger
+      architecture.
   - slug: puppet-catalog
     title: Life as a Puppet catalog compiler
     description: The compiler speaks about graphs, order, idempotence, and why drift feels personal.
