@@ -13,7 +13,6 @@ musicGenre: ambient
 musicMood: contemplative
 musicModel: suno-ttapi
 musicInstrumental: false
-musicLyricsOnly: false
 sunoVersion: chirp-v4-5
 ixens:
   - slug: xen-hypervisor
@@ -25,6 +24,14 @@ ixens:
       A Xen hypervisor as a stern geometric machine-intelligence suspended above
       three guest domains, technical diagram energy, memory maps, grant-table
       arrows, scheduler queues, white paper texture, precise linework.
+    conceptPrompt1: >-
+      Xen grant tables and event channels rendered as a precise white-paper
+      systems diagram, guest domains exchanging memory pages through explicit
+      capabilities, ixen-light technical illustration.
+    conceptPrompt2: >-
+      Xen scheduler queues and memory ballooning visualized as disciplined
+      resource choreography between dom0 and domU guests, crisp ixen-light
+      systems artwork.
     details: >-
       Treat the reader as a peer. Talk concretely about dom0, domU, grants,
       page sharing, schedulers, memory ballooning, and failure modes.
@@ -37,6 +44,14 @@ ixens:
       A Puppet catalog compiler visualized as a red-thread dependency graph
       engine with manifests, resources, and edges converging into a compiled
       graph, cerebral and architectural, restrained palette.
+    conceptPrompt1: >-
+      Puppet resource edges, containment, and ordering constraints shown as a
+      rigorous compilation graph with classes, defined types, and exported
+      resources, ixen-light technical illustration.
+    conceptPrompt2: >-
+      A Puppet compiler reconciling declared state with discovered system facts,
+      idempotence and drift detection visualized as a clean diagnostic systems
+      diagram, ixen-light style.
     details: >-
       Focus on compilation phases, graph edges, exported resources, idempotence,
       and the tension between declared intent and discovered state.
@@ -49,6 +64,12 @@ ixens:
       A Git repository as an archaeological vault of objects, refs, and commit
       lines, packfiles stacked like strata, reflogs glowing faintly in the dark,
       technical surrealism, crisp documentary detail.
+    conceptPrompt1: >-
+      Git packfiles, loose objects, and delta chains displayed as a forensic
+      storage cross-section, meticulous ixen-light technical illustration.
+    conceptPrompt2: >-
+      Refs, reflogs, rebases, and garbage collection visualized as branching
+      recovery paths through repository history, crisp ixen-light systems art.
     details: >-
       Skip fundamentals. Lean into refs, object identity, packfiles, reflogs,
       rebases, garbage collection, and incident-response style forensic recovery.

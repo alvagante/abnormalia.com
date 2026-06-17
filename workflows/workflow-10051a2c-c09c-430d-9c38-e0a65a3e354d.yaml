@@ -1,6 +1,6 @@
 id: 10051a2c-c09c-430d-9c38-e0a65a3e354d
 name: generate-ixens
-description: Generate one self-contained Ixen minisite per topic under ixen/<slug>/ with hero graphics and a music track.
+description: Generate one self-contained Ixen minisite per topic under ixen/<slug>/ with hero art, supporting concept images, and a reusable soundtrack.
 tags: {}
 inputs:
   type: object
@@ -84,9 +84,6 @@ inputs:
     musicInstrumental:
       type: boolean
       default: false
-    musicLyricsOnly:
-      type: boolean
-      default: false
     sunoVersion:
       type: string
       enum:
@@ -115,6 +112,10 @@ inputs:
             type: string
           heroPrompt:
             type: string
+          conceptPrompt1:
+            type: string
+          conceptPrompt2:
+            type: string
         required:
           - slug
           - title
@@ -123,11 +124,13 @@ inputs:
           - narrator
           - details
           - heroPrompt
+          - conceptPrompt1
+          - conceptPrompt2
   required:
     - ixens
 jobs:
   - name: images
-    description: Generate one hero image per Ixen.
+    description: Generate the hero and supporting concept images for each Ixen.
     steps:
       - name: hero-${{ self.ixen.slug }}
         description: Generate the hero image for one Ixen topic.
@@ -137,7 +140,7 @@ jobs:
         task:
           type: model_method
           modelType: "@alvagante/content-image"
-          modelName: '${{ "image-" + self.ixen.slug }}'
+          modelName: '${{ "image-" + self.ixen.slug + "-hero" }}'
           methodName: generate
           inputs:
             apiKey: ${{ vault.get(openai-keys, api-key) }}
@@ -153,21 +156,69 @@ jobs:
         dependsOn: []
         weight: 0
         allowFailure: false
-    dependsOn: []
-    weight: 0
-  - name: music
-    description: Generate one music track per Ixen.
-    steps:
-      - name: track-${{ self.ixen.slug }}
-        description: Generate the background track for one Ixen topic.
+      - name: concept-1-${{ self.ixen.slug }}
+        description: Generate the first supporting concept image for one Ixen topic.
         forEach:
           item: ixen
           in: ${{ inputs.ixens }}
         task:
           type: model_method
-          modelType: "@alvagante/content-music"
-          modelName: '${{ "music-" + self.ixen.slug }}'
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-1" }}'
           methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.conceptPrompt1 }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: concept-1.png
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-2-${{ self.ixen.slug }}
+        description: Generate the second supporting concept image for one Ixen topic.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-2" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.conceptPrompt2 }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: concept-2.png
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn: []
+    weight: 0
+  - name: music
+    description: Reuse existing soundtrack files when present, otherwise generate a fresh soundtrack.
+    steps:
+      - name: track-${{ self.ixen.slug }}
+        description: Prepare the soundtrack playlist for one Ixen topic.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens }}
+        task:
+          type: model_method
+          modelType: "@abnormalia/ixen-soundtrack"
+          modelName: '${{ "soundtrack-" + self.ixen.slug }}'
+          methodName: generateOrReuse
           inputs:
             apiKey: ${{ vault.get(onemin-keys, API_KEY) }}
             anthropicApiKey: ${{ vault.get(anthropic-keys, api-key) }}
@@ -178,7 +229,7 @@ jobs:
             instrumental: ${{ inputs.musicInstrumental }}
             model: ${{ inputs.musicModel }}
             sunoVersion: ${{ inputs.sunoVersion }}
-            lyricsOnly: ${{ inputs.musicLyricsOnly }}
+            lyricsFallback: '${{ size(data.listVersions("music-" + self.ixen.slug, "song")) > 0 ? data.latest("music-" + self.ixen.slug, "song").attributes.lyrics : "" }}'
             outputDir: ${{ "ixen/" + self.ixen.slug }}
         dependsOn: []
         weight: 0
@@ -208,14 +259,16 @@ jobs:
             mediaItems:
               - path: hero.png
                 prompt: ${{ self.ixen.heroPrompt }}
+              - path: concept-1.png
+                prompt: ${{ self.ixen.conceptPrompt1 }}
+              - path: concept-2.png
+                prompt: ${{ self.ixen.conceptPrompt2 }}
             skillLevel: ${{ inputs.skillLevel }}
             outputLength: ${{ inputs.outputLength }}
             model: ${{ inputs.ixenModel }}
             credits: ${{ inputs.credits }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
-            musicFilename: ${{ data.latest("music-" + self.ixen.slug, "song").attributes.filename }}
-            musicTitle: ${{ data.latest("music-" + self.ixen.slug, "song").attributes.title }}
-            musicLyrics: ${{ data.latest("music-" + self.ixen.slug, "song").attributes.lyrics }}
+            musicTracks: ${{ data.latest("soundtrack-" + self.ixen.slug, "playlist").attributes.tracks }}
         dependsOn: []
         weight: 0
         allowFailure: false

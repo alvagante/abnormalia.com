@@ -13,7 +13,6 @@ musicGenre: ambient
 musicMood: contemplative
 musicModel: suno-ttapi
 musicInstrumental: false
-musicLyricsOnly: false
 sunoVersion: chirp-v4-5
 ixens:
   - slug: xen-hypervisor
@@ -25,6 +24,14 @@ ixens:
       A Xen hypervisor as a stern geometric machine-intelligence suspended above
       three guest domains, technical diagram energy, memory maps, grant-table
       arrows, scheduler queues, white paper texture, precise linework.
+    conceptPrompt1: >-
+      Xen grant tables and event channels rendered as a precise white-paper
+      systems diagram, guest domains exchanging memory pages through explicit
+      capabilities, ixen-light technical illustration.
+    conceptPrompt2: >-
+      Xen scheduler queues and memory ballooning visualized as disciplined
+      resource choreography between dom0 and domU guests, crisp ixen-light
+      systems artwork.
     details: >-
       Treat the reader as a peer. Talk concretely about dom0, domU, grants,
       page sharing, schedulers, memory ballooning, and failure modes.
