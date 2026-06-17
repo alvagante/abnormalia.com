@@ -118,7 +118,7 @@ inputs:
           concepts:
             type: array
             minItems: 2
-            maxItems: 2
+            maxItems: 8
             items:
               type: object
               properties:
@@ -239,6 +239,150 @@ jobs:
             quality: ${{ inputs.imageQuality }}
             format: png
             filename: ${{ self.ixen.concepts[1].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-3-${{ self.ixen.slug }}
+        description: Generate the third supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 2) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-3" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[2].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[2].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-4-${{ self.ixen.slug }}
+        description: Generate the fourth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 3) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-4" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[3].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[3].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-5-${{ self.ixen.slug }}
+        description: Generate the fifth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 4) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-5" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[4].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[4].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-6-${{ self.ixen.slug }}
+        description: Generate the sixth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 5) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-6" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[5].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[5].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-7-${{ self.ixen.slug }}
+        description: Generate the seventh supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 6) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-7" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[6].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[6].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-8-${{ self.ixen.slug }}
+        description: Generate the eighth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 7) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-8" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[7].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[7].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
         dependsOn: []
         weight: 0

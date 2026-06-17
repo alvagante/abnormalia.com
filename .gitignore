@@ -20,3 +20,5 @@ _site/
 .sass-cache/
 .bundle/
 vendor/bundle/
+
+.DS_Store

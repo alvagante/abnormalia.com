@@ -318,7 +318,7 @@ async function listExistingAudioFiles(outputDir: string): Promise<string[]> {
 
   try {
     for await (const entry of Deno.readDir(outputDir)) {
-      if (!entry.isFile) {
+      if (!entry.isFile && !entry.isSymlink) {
         continue;
       }
       const ext = extname(entry.name).toLowerCase();
