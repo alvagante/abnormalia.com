@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Everything is in a Puppet catalog</title>
+<style>
+:root {
+  --ig-ink: #161616;
+  --ig-dim: #5f6368;
+  --ig-line: #d9d9d9;
+  --ig-red: #c00;
+  --ig-paper: #fff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ig-ink);
+  background: #f4f4f1;
+}
+main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+.ig-shell {
+  background: var(--ig-paper);
+  border: 1px solid var(--ig-line);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.08);
+}
+header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: start;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  border-bottom: 3px solid var(--ig-red);
+}
+h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 5vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.ig-meta {
+  color: var(--ig-dim);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  text-align: right;
+  white-space: nowrap;
+}
+.ig-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.65fr);
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: clamp(1rem, 3vw, 2rem);
+}
+figure { margin: 0; }
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--ig-line);
+}
+figcaption {
+  margin-top: 0.5rem;
+  color: var(--ig-dim);
+  font-size: 0.82rem;
+}
+.ig-copy {
+  border-left: 1px solid var(--ig-line);
+  padding-left: clamp(1rem, 2vw, 1.5rem);
+}
+.ig-topic {
+  margin: 0 0 1rem;
+  color: var(--ig-red);
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.ig-details {
+  margin: 0 0 1.2rem;
+  color: var(--ig-dim);
+  line-height: 1.5;
+}
+.ig-points {
+  margin: 0;
+  padding-left: 1.4rem;
+}
+.ig-points li {
+  margin: 0 0 0.85rem;
+  padding-left: 0.25rem;
+  line-height: 1.45;
+}
+footer {
+  padding: 0.8rem clamp(1rem, 3vw, 2rem) 1rem;
+  border-top: 1px solid var(--ig-line);
+  color: var(--ig-dim);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+}
+@media (max-width: 760px) {
+  header { grid-template-columns: 1fr; }
+  .ig-meta { text-align: left; white-space: normal; }
+  .ig-content { grid-template-columns: 1fr; }
+  .ig-copy { border-left: 0; border-top: 1px solid var(--ig-line); padding-left: 0; padding-top: 1rem; }
+}
+</style>
+</head>
+<body>
+<!-- @alvagante/content-infographic -->
+<main>
+  <article class="ig-shell">
+    <header>
+      <h1>Everything is in a Puppet catalog</h1>
+      <div class="ig-meta">2026-06-19<br>model: gpt-image-2</div>
+    </header>
+    <section class="ig-content">
+      <figure>
+        <img src="./everything-is-in-a-puppet-catalog-mqkqot8r.png" alt="Near-white technical zine aesthetic with black ink, one strong red accent (#cc0000), sparse 2005 web sensibility, philosophical but legible. Create a polished wide infographic visual for &quot;Everything is in a Puppet catalog&quot; about Life as a Puppet catalog. Context: Treat the reader as a peer with sysadmin depth but possibly new to Puppet's model. Give a complete picture of what a Puppet catalog is and how it comes to exist: the resource type system, the provider abstraction, manifest and module structure, the full compilation pipeline (node classification, fact injection, code evaluation, graph output), Facter and the fact trust boundary, relationship metaparameters and containment, dependency ordering and refresh signals, Hiera and data separation, the role/profile/module pattern, exported resources and PuppetDB, the agent run loop, idempotent convergence, drift, noop mode, and reporting. Narrate as the catalog itself — a compiled, agent-specific resource graph that embodies declared intent. Emphasise the declarative model and its consequences: ordering is explicit, convergence is automatic, and the catalog is not a script but a specification of desired state.. Key points to visualize: Resources and the type system; Manifests, classes, and modules; Catalog compilation; Facts and Facter; Ordering, relationships, and dependency edges; Hiera and data lookup; Exported resources and PuppetDB; The agent run cycle and idempotence. Use concise labels only; avoid paragraphs and tiny text. Leave the detailed explanatory copy to the surrounding HTML page.">
+        <figcaption>Life as a Puppet catalog</figcaption>
+      </figure>
+      <aside class="ig-copy">
+        <p class="ig-topic">Life as a Puppet catalog</p>
+        <p class="ig-details">Treat the reader as a peer with sysadmin depth but possibly new to Puppet's model. Give a complete picture of what a Puppet catalog is and how it comes to exist: the resource type system, the provider abstraction, manifest and module structure, the full compilation pipeline (node classification, fact injection, code evaluation, graph output), Facter and the fact trust boundary, relationship metaparameters and containment, dependency ordering and refresh signals, Hiera and data separation, the role/profile/module pattern, exported resources and PuppetDB, the agent run loop, idempotent convergence, drift, noop mode, and reporting. Narrate as the catalog itself — a compiled, agent-specific resource graph that embodies declared intent. Emphasise the declarative model and its consequences: ordering is explicit, convergence is automatic, and the catalog is not a script but a specification of desired state.</p>
+        <ol class="ig-points"><li>Resources and the type system</li><li>Manifests, classes, and modules</li><li>Catalog compilation</li><li>Facts and Facter</li><li>Ordering, relationships, and dependency edges</li><li>Hiera and data lookup</li><li>Exported resources and PuppetDB</li><li>The agent run cycle and idempotence</li></ol>
+      </aside>
+    </section>
+    <footer>ixen / wide / 1536x1024</footer>
+  </article>
+</main>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Object Model — Immutable Memories</title>
+<style>
+  :root {
+    --cs-hue-blue: #1a73e8;
+    --cs-hue-green: #1e8e3e;
+    --cs-hue-red: #d93025;
+    --cs-hue-purple: #7b1fa2;
+    --cs-hue-orange: #e37400;
+    --cs-hue-teal: #007b83;
+    --cs-bg: #fafafa;
+    --cs-surface: #ffffff;
+    --cs-text: #1f1f1f;
+    --cs-text-muted: #5f6368;
+    --cs-border: #e0e0e0;
+    --cs-code-bg: #f1f3f4;
+    --cs-header-bg: #1f1f1f;
+    --cs-header-text: #ffffff;
+    --cs-quickref-bg: #2d2d2d;
+    --cs-quickref-text: #f8f9fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    background: var(--cs-bg);
+    color: var(--cs-text);
+  }
+  .cs-page-header {
+    background: var(--cs-header-bg);
+    color: var(--cs-header-text);
+    padding: 18px 24px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cs-page-header h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .cs-page-meta {
+    font-size: 11px;
+    color: #9aa0a6;
+    display: flex;
+    gap: 16px;
+  }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 20px 40px;
+  }
+  /* Quick reference bar */
+  .cs-quickref {
+    background: var(--cs-quickref-bg);
+    color: var(--cs-quickref-text);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .cs-qr-label {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #9aa0a6;
+    white-space: nowrap;
+    padding-top: 2px;
+    min-width: 56px;
+  }
+  .cs-qr-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+  }
+  .cs-qr-item {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    font-size: 12px;
+  }
+  .cs-qr-item code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    color: #8ab4f8;
+    background: rgba(255,255,255,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .cs-qr-item span { color: #bdc1c6; }
+  /* Sections */
+  .cs-section {
+    background: var(--cs-surface);
+    border-radius: 6px;
+    border-left: 4px solid var(--cs-border);
+    margin-bottom: 12px;
+    padding: 12px 16px 14px;
+    break-inside: avoid;
+  }
+  .cs-section[data-color="blue"]   { border-left-color: var(--cs-hue-blue);   }
+  .cs-section[data-color="green"]  { border-left-color: var(--cs-hue-green);  }
+  .cs-section[data-color="red"]    { border-left-color: var(--cs-hue-red);    }
+  .cs-section[data-color="purple"] { border-left-color: var(--cs-hue-purple); }
+  .cs-section[data-color="orange"] { border-left-color: var(--cs-hue-orange); }
+  .cs-section[data-color="teal"]   { border-left-color: var(--cs-hue-teal);   }
+  .cs-section-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--cs-border);
+  }
+  .cs-section[data-color="blue"]   .cs-section-title { color: var(--cs-hue-blue);   }
+  .cs-section[data-color="green"]  .cs-section-title { color: var(--cs-hue-green);  }
+  .cs-section[data-color="red"]    .cs-section-title { color: var(--cs-hue-red);    }
+  .cs-section[data-color="purple"] .cs-section-title { color: var(--cs-hue-purple); }
+  .cs-section[data-color="orange"] .cs-section-title { color: var(--cs-hue-orange); }
+  .cs-section[data-color="teal"]   .cs-section-title { color: var(--cs-hue-teal);   }
+  .cs-section h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--cs-text-muted);
+    margin: 10px 0 6px;
+  }
+  .cs-section p { font-size: 12.5px; color: var(--cs-text-muted); margin: 6px 0; }
+  /* Items grid */
+  .cs-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 16px;
+  }
+  .cs-item {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 3px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 12px;
+  }
+  .cs-item:last-child { border-bottom: none; }
+  .cs-item-cmd {
+    flex: 0 0 auto;
+    min-width: 120px;
+    max-width: 200px;
+  }
+  .cs-item-cmd code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    background: var(--cs-code-bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    word-break: break-all;
+  }
+  .cs-item-desc { color: var(--cs-text-muted); flex: 1; }
+  /* Two-column grid */
+  .cs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 20px;
+    margin-top: 6px;
+  }
+  .cs-grid h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cs-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .cs-grid p, .cs-grid li { font-size: 12px; color: var(--cs-text-muted); margin: 4px 0; }
+  .cs-grid ul, .cs-grid ol { padding-left: 16px; }
+  /* Callouts */
+  .cs-callout {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin: 8px 0;
+  }
+  .cs-callout.tip     { background: #e8f5e9; color: #1e6823; }
+  .cs-callout.warning { background: #fff3e0; color: #7c4a03; }
+  .cs-callout.note    { background: #e8f0fe; color: #1a5276; }
+  .cs-callout-label {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  /* Tables */
+  .cs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  .cs-table th {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #f1f3f4;
+    text-align: left;
+    padding: 5px 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 2px solid var(--cs-border);
+  }
+  .cs-table td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+    color: var(--cs-text-muted);
+  }
+  .cs-table tr:last-child td { border-bottom: none; }
+  .cs-table code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    background: var(--cs-code-bg);
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+  /* Code block */
+  .cs-code {
+    background: var(--cs-code-bg);
+    border: 1px solid var(--cs-border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 8px 0;
+  }
+  /* Inline code in paragraphs */
+  p code, li code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    background: var(--cs-code-bg);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  /* Print */
+  @media print {
+    body { background: white; font-size: 11px; }
+    .cs-page-header { background: #1f1f1f !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    main { max-width: 100%; padding: 8px; }
+    .cs-quickref { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-section { break-inside: avoid; box-shadow: none; border: 1px solid #e0e0e0; }
+    .cs-callout.tip     { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-callout.warning { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-callout.note    { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<header class="cs-page-header">
+  <h1>The Object Model — Immutable Memories</h1>
+  <div class="cs-page-meta"><span>Life as a Git repository</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-19</span></div>
+</header>
+<main>
+<div class="cs-quickref">
+  <span class="cs-qr-label">Quick ref</span>
+  <div class="cs-qr-items">
+    <div class="cs-qr-item"><code>git cat-file -p &lt;oid&gt;</code> <span>inspect any object</span></div>
+    <div class="cs-qr-item"><code>git rev-parse HEAD</code> <span>resolve a name to an OID</span></div>
+    <div class="cs-qr-item"><code>git reflog</code> <span>recover "lost" commits</span></div>
+    <div class="cs-qr-item"><code>git switch -c topic</code> <span>create & move to branch</span></div>
+    <div class="cs-qr-item"><code>git restore --staged f</code> <span>unstage without losing work</span></div>
+    <div class="cs-qr-item"><code>git fetch && git rebase</code> <span>integrate after transport</span></div>
+    <div class="cs-qr-item"><code>git fsck --lost-found</code> <span>find dangling objects</span></div>
+  </div>
+</div>
+
+<section class="cs-section" data-color="blue">
+  <h2 class="cs-section-title">The Object Model — Immutable Memories</h2>
+  <p>Every state Git records is a content-addressed object whose name is the SHA-1/SHA-256 of its contents; change anything and you get a new object. The four types form a Merkle DAG.</p>
+  <table class="cs-table">
+    <thead><tr><th>Object</th><th>Contains</th><th>Inspect</th></tr></thead>
+    <tbody>
+      <tr><td><code>blob</code></td><td>raw file bytes (no name)</td><td><code>git cat-file -p &lt;oid&gt;</code></td></tr>
+      <tr><td><code>tree</code></td><td>names → modes → blob/tree OIDs (a directory)</td><td><code>git cat-file -p HEAD^{tree}</code></td></tr>
+      <tr><td><code>commit</code></td><td>tree + parents + author/committer + message</td><td><code>git cat-file -p HEAD</code></td></tr>
+      <tr><td><code>tag</code></td><td>annotated tag: target OID + tagger + message</td><td><code>git cat-file -p v1.0</code></td></tr>
+    </tbody>
+  </table>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git hash-object -w file</code></div>
+      <div class="cs-item-desc">Write a blob, return its OID — the lowest-level "save".</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git cat-file -t / -s &lt;oid&gt;</code></div>
+      <div class="cs-item-desc">Show an object's type and size.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git write-tree</code></div>
+      <div class="cs-item-desc">Snapshot the index into a tree object.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git commit-tree &lt;tree&gt; -p &lt;parent&gt;</code></div>
+      <div class="cs-item-desc">Forge a commit from a tree — porcelain's true core.</div>
+    </div>
+  </div>
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> A commit points to a full tree, not a diff. Diffs are computed on demand between two trees; history is a chain of complete snapshots.</div>
+</section>
+
+<section class="cs-section" data-color="green">
+  <h2 class="cs-section-title">Refs, HEAD & the Reflog — Pointers Into the Past</h2>
+  <p>Refs are mutable names holding an OID; they make the immutable graph navigable. HEAD is usually a symbolic ref pointing at your current branch.</p>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git update-ref refs/heads/x &lt;oid&gt;</code></div>
+      <div class="cs-item-desc">Move a ref directly — plumbing for branch movement.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git symbolic-ref HEAD refs/heads/main</code></div>
+      <div class="cs-item-desc">Make HEAD point at a branch instead of an OID.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git for-each-ref --sort=-committerdate</code></div>
+      <div class="cs-item-desc">Enumerate all refs with formatting.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git reflog show main</code></div>
+      <div class="cs-item-desc">Local diary of where a ref has pointed.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git rev-parse --symbolic-full-name @{u}</code></div>
+      <div class="cs-item-desc">Resolve the upstream of the current branch.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git pack-refs --all</code></div>
+      <div class="cs-item-desc">Collapse loose refs into <code>.git/packed-refs</code>.</div>
+    </div>
+  </div>
+  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> Detached HEAD just means HEAD holds an OID directly. Your commits aren't lost — <code>git reflog</code> remembers them until they expire (default 90 days).</div>
+</section>
+
+<section class="cs-section" data-color="red">
+  <h2 class="cs-section-title">Working Tree, Index & State Transitions</h2>
+  <p>Three trees: the <strong>working tree</strong> (files on disk), the <strong>index</strong> (staged next commit), and <strong>HEAD</strong> (last commit). Most commands move content between them.</p>
+  <div class="cs-grid">
+    <div>
+      <h3>Modern (intent-clear)</h3>
+      <p><code>git switch &lt;branch&gt;</code> changes branches; <code>git restore &lt;path&gt;</code> restores file contents. These split the overloaded <code>checkout</code>.</p>
+    </div>
+    <div>
+      <h3>Classic & plumbing</h3>
+      <p><code>git checkout</code> still does both. <code>git update-index --add</code> is the plumbing behind staging.</p>
+    </div>
+  </div>
+  <table class="cs-table">
+    <thead><tr><th>Command</th><th>HEAD</th><th>Index</th><th>Worktree</th></tr></thead>
+    <tbody>
+      <tr><td><code>reset --soft</code></td><td>moves</td><td>—</td><td>—</td></tr>
+      <tr><td><code>reset --mixed</code> (default)</td><td>moves</td><td>reset</td><td>—</td></tr>
+      <tr><td><code>reset --hard</code></td><td>moves</td><td>reset</td><td>reset</td></tr>
+      <tr><td><code>restore --staged</code></td><td>—</td><td>reset</td><td>—</td></tr>
+      <tr><td><code>restore</code></td><td>—</td><td>—</td><td>reset</td></tr>
+      <tr><td><code>commit --amend</code></td><td>replaces tip</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git stash push -u</code></div>
+      <div class="cs-item-desc">Shelve tracked + untracked changes as hidden commits.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git clean -fdn</code></div>
+      <div class="cs-item-desc">Dry-run removal of untracked files/dirs (drop <code>n</code> to execute).</div>
+    </div>
+  </div>
+  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> <code>reset --hard</code> and <code>clean -f</code> discard uncommitted work that no object references — the reflog cannot save what was never committed.</div>
+</section>
+
+<section class="cs-section" data-color="purple">
+  <h2 class="cs-section-title">Revision Selection & Pathspecs</h2>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>HEAD~3</code> / <code>HEAD^2</code></div>
+      <div class="cs-item-desc">Nth first-parent ancestor / second parent of a merge.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>main@{2.days.ago}</code></div>
+      <div class="cs-item-desc">Reflog-based time travel for a ref.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>A..B</code> / <code>A...B</code></div>
+      <div class="cs-item-desc">Reachable from B not A / symmetric difference.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>:/fix typo</code></div>
+      <div class="cs-item-desc">Newest commit whose message matches a regex.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>HEAD:path/file</code></div>
+      <div class="cs-item-desc">Blob at a path in a given revision.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>-- ':(exclude)*.log'</code></div>
+      <div class="cs-item-desc">Magic pathspec to exclude matches.</div>
+    </div>
+  </div>
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> <code>.gitignore</code> controls untracked files; <code>.gitattributes</code> controls how tracked files behave (eol, diff, filter, merge, export-ignore). Both are policy, not part of the object graph's content rules.</div>
+</section>
+
+<section class="cs-section" data-color="orange">
+  <h2 class="cs-section-title">Integration — Merge, Rebase, Cherry-pick</h2>
+  <p>Integration is separate from transport: these commands only rearrange the local graph by creating new objects and moving refs.</p>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git merge-base A B</code></div>
+      <div class="cs-item-desc">Best common ancestor — the basis of a three-way merge.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git merge --no-ff topic</code></div>
+      <div class="cs-
+</main>
+</body>
+</html>

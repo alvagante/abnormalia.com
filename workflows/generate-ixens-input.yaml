@@ -28,6 +28,8 @@ musicMood: contemplative
 musicModel: suno-ttapi
 musicInstrumental: false
 sunoVersion: chirp-v4-5
+infographicStyle: ixen
+infographicModel: gpt-image-2
 ixens:
   - slug: xen-hypervisor
     title: Being a Xen hypervisor

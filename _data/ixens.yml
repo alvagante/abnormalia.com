@@ -1,12 +1,12 @@
 - slug: xen-hypervisor
-  title: I Am the Thin Layer
-  date: 2026-06-16
-  description: The host narrates dom0, domU, schedulers, memory ballooning, and isolation.
-- slug: git-repository
-  title: commit
-  date: 2026-06-17
-  description: A repository narrates objects, refs, the index, merges, rebases, remotes, maintenance, and recovery.
-- slug: puppet-catalog
-  title: State
+  title: I am the space below
   date: 2026-06-19
-  description: The catalog speaks as pure intention — resources, edges, idempotence, and the difference between should be and is.
+  description: The host narrates Xen's domain model, CPU, memory, I/O, device isolation, migration, and failure boundaries.
+- slug: puppet-catalog
+  title: Desired State, Compiled
+  date: 2026-06-19
+  description: The catalog speaks about resources, edges, facts, and the quiet violence of convergence.
+- slug: git-repository
+  title: I am a Repository
+  date: 2026-06-19
+  description: A repository narrates objects, refs, the index, merges, rebases, remotes, maintenance, and recovery.

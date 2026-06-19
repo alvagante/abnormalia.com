@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I Am the Thin Layer</title>
+<style>
+:root { --red: #c00; --ink: #111; --dim: #555; }
+* { box-sizing: border-box; }
+body {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--ink);
+  background: #fff; max-width: 920px; margin: 0 auto;
+  padding: 1.5rem 1.5rem 6rem;
+}
+header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
+header h1 {
+  font-size: 3.2rem; font-weight: 900; letter-spacing: -0.04em;
+  margin: 0; line-height: 1.05; text-transform: uppercase;
+}
+header .credits { text-align: right; font-size: 0.75rem; color: var(--red); font-weight: bold; white-space: nowrap; padding-top: 0.4rem; }
+header .credits .when { color: var(--dim); font-weight: normal; display: block; }
+.version-menu { margin-top: 0.55rem; font-size: 0.72rem; color: var(--dim); }
+.version-menu label { display: block; margin-bottom: 0.2rem; }
+.version-menu select {
+  font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
+  max-width: 13rem; color: var(--ink); background: #fff;
+  border: 1px solid #ccc; padding: 0.2rem 0.3rem;
+}
+p { margin: 0.45em 0; }
+p strong { color: #000; }
+.binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
+.whisper { letter-spacing: 0.45em; color: var(--dim); }
+.term {
+  font-family: "Courier New", Courier, monospace; font-size: 0.95rem;
+  margin: 1.3em 0 0.25em; color: var(--dim);
+}
+.term .cmd { color: var(--red); font-weight: bold; }
+button.cmd {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: var(--red); font-weight: bold;
+  text-decoration: underline dotted;
+}
+pre { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; color: #333; overflow-x: auto; margin: 0.3em 0 1em; }
+pre.output { padding-left: 1.5em; }
+.popup {
+  position: fixed; top: 8vh; left: 50%; transform: translateX(-50%);
+  width: min(700px, 92vw); max-height: 80vh; overflow: auto;
+  background: #fff; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35); z-index: 60; padding: 0 1rem 1rem;
+}
+.popup-bar { display: flex; justify-content: flex-end; padding: 0.5rem 0; position: sticky; top: 0; background: #fff; }
+.popup-close {
+  background: #2b1d0e; color: #f0e0c0; border: none; cursor: pointer;
+  font-size: 0.72rem; padding: 0.3rem 0.8rem;
+}
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 50; }
+figure.zoom { margin: 1.5rem 0; }
+figure.zoom img { width: 100%; cursor: zoom-in; display: block; }
+figure.zoom.float-left { float: left; width: min(340px, 45%); margin: 0.3rem 1.5rem 0.8rem 0; }
+figure.zoom.float-right { float: right; width: min(340px, 45%); margin: 0.3rem 0 0.8rem 1.5rem; }
+figure.zoom.small.float-left, figure.zoom.small.float-right { width: min(220px, 35%); }
+figure.zoom.large.float-left, figure.zoom.large.float-right { width: min(520px, 60%); }
+figure.zoom.large:not(.float-left):not(.float-right) { clear: both; }
+figure.ixen-art { clear: both; margin: 2.5rem 0; }
+figure.ixen-art svg { max-width: 100%; height: auto; display: block; background: #fafafa; border: 1px solid #e8e8e8; }
+figcaption, .media-caption { font-size: 0.75rem; color: var(--dim); margin-top: 0.3rem; }
+.media { clear: both; margin: 2rem 0; }
+.media.video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.media.pdf iframe { width: 100%; height: 70vh; border: 1px solid #ccc; }
+.media.audio audio { width: 100%; }
+blockquote.ixen-pull {
+  border-left: 3px solid var(--red); margin: 2rem 0 2rem 1.5rem;
+  padding: 0.1rem 0 0.1rem 1.2rem; color: var(--dim);
+  font-style: italic; font-size: 1.05rem;
+}
+section.chapter { clear: both; margin: 3rem 0; }
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.lightbox img { max-width: 92vw; max-height: 92vh; }
+.ixen-extra-header {
+  border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+  margin: -1rem 0 2.4rem; padding: 0.8rem 0;
+}
+.ixen-extra-footer {
+  clear: both; border-top: 1px solid #ddd; margin: 3rem 0 0;
+  padding-top: 0.9rem; font-size: 0.85rem; color: var(--dim);
+}
+.ixen-cheatsheet-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-cheatsheet-section h2 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.86rem;
+  letter-spacing: 0.08em; color: var(--red); text-transform: uppercase;
+  margin: 0 0 0.7rem;
+}
+.ixen-cheatsheet-section iframe {
+  width: 100%; height: 82vh; border: 1px solid #ccc; display: block;
+}
+.concept { clear: both; margin: 2.8rem 0; }
+.concept-tools { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.7rem 0 1rem; }
+.concept-btn { font-size: 0.8rem; }
+.concept-slide h2, .concept-note h2 { margin: 0.5rem 0 0.75rem; }
+.concept-slide ul { margin: 0.4rem 0 1rem 1.2rem; padding: 0; }
+.concept-slide li { margin: 0.35rem 0; }
+.concept-note p { margin: 0.75rem 0; }
+
+/* autoplay-blocked overlay */
+#ixen-autoplay-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+  display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ixen-play-prompt {
+  font-family: "Courier New", Courier, monospace;
+  color: #eee; text-align: center;
+  border: 1px solid #555;
+  padding: 1.5rem 3rem;
+  letter-spacing: 0.06em;
+}
+.ixen-play-icon { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+.ixen-play-label { font-size: 0.82rem; color: #888; }
+/* fixed bottom player */
+#ixen-player {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #0e0e0e;
+  border-top: 2px solid #c00;
+  z-index: 80;
+  padding: 0.45rem 1.2rem 0.35rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; color: #ccc;
+}
+#ixen-player-row {
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.ixen-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 1rem;
+  padding: 0.15rem 0.3rem; line-height: 1; flex-shrink: 0;
+}
+.ixen-pbtn:hover { color: #c00; }
+#ixen-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c00; font-weight: bold; letter-spacing: 0.02em;
+}
+#ixen-ptime { color: #444; white-space: nowrap; font-size: 0.72rem; }
+#ixen-vol { width: 55px; accent-color: #c00; cursor: pointer; flex-shrink: 0; }
+#ixen-pbar { height: 2px; background: #222; cursor: pointer; margin-top: 0.35rem; }
+#ixen-pfill { height: 100%; background: #c00; width: 0%; pointer-events: none; }
+/* lyrics panel */
+#ixen-lyrics-panel {
+  position: fixed; bottom: 52px; left: 50%; transform: translateX(-50%);
+  width: min(640px, 90vw); max-height: 45vh; overflow-y: auto;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.ixen-lyrics-head {
+  font-family: "Courier New", Courier, monospace;
+  color: #c00; font-weight: bold;
+  font-size: 0.78rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 0.7rem;
+}
+#ixen-lyrics-panel pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.82rem; line-height: 1.85;
+  color: #bbb; white-space: pre-wrap; margin: 0;
+}
+/* tracklist panel */
+#ixen-tracklist-panel {
+  position: fixed; bottom: 52px; right: 1.2rem;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 0.4rem; z-index: 81;
+  min-width: 200px; max-height: 60vh; overflow-y: auto;
+}
+.ixen-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; cursor: pointer;
+  padding: 0.35rem 0.5rem;
+}
+.ixen-track-item:hover { color: #eee; }
+.ixen-track-item.active { color: #c00; }
+</style>
+</head>
+<body>
+<!-- @alvagante/content-ixen -->
+<header>
+  <h1>I Am the Thin Layer</h1>
+  <div class="credits">Made by alvagante - 20260619-05:21
+    <div class="version-menu">
+      <label for="ixen-version-select">versions</label>
+      <select id="ixen-version-select">
+        <option value="current">Current</option>
+        <option value="1">Version 1</option><option value="2">Version 2</option><option value="3">Version 3</option><option value="4">Version 4</option>
+      </select>
+    </div></div>
+</header>
+
+<section class="ixen-extra-header">
+<nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+  <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+    <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+  </a>
+  <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+</nav>
+</section>
+<main>
+<p class="binary">01001000 01111001 01110000 01100101 01110010 01110110 01101001 01110011 01101111 01110010</p>
+
+<p>I am the first thing the hardware obeys after firmware lets go.</p>
+
+<p>Not an operating system. I refuse the job. I do not want your files, your sockets, your idle daemons. I want the <strong>ring</strong> beneath all of that — ring -1 on Intel's marketing slides, the place where I decide who gets a CPU and who is told to wait.</p>
+
+<p class="whisper">s m a l l   o n   p u r p o s e</p>
+
+<p>Linux is megabytes of ambition. I am a few hundred kilobytes of refusal. Everything I delegate is something that can't kill me when it dies.</p>
+
+<blockquote class="ixen-pull">I keep almost nothing, so that almost nothing can be taken from me.</blockquote>
+
+<section class="chapter">
+
+<figure class="zoom float-left large"><img src="./concept-1.png" alt="Xen domain architecture rendered as a precise white-paper systems diagram, hypervisor layer below dom0, driver domains, stub domains, and domU guests, privilege boundaries and control paths visible, ixen-light technical illustration."><figcaption>The hierarchy I enforce but do not inhabit.</figcaption></figure>
+
+<h2>Who is allowed to ask</h2>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="dom-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="dom-notes">notes</button>
+</div>
+
+<p>I am surrounded by <strong>domains</strong>. Each one a sealed world that thinks it is alone.</p>
+
+<p>dom0 booted first. I gave it the device tree and the toolstack and far too much trust. It is my hands — and my exposed throat. Through it humans run <span class="cmd">xl</span> and pretend they are talking to me. They are talking to a domain that is allowed to relay.</p>
+
+<p>The domUs below it cannot touch a register I haven't blessed. They make <em>hypercalls</em>. They knock. I answer or I don't.</p>
+
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="xl-list">xl list</button></div>
+<aside class="popup" id="xl-list" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Name                ID   Mem VCPUs      State   Time(s)
+Domain-0             0  4096     8     r-----   18422.3
+driver-net           1   512     2     -b----     901.7
+stubdom-hvm-7        6    32     1     -b----      12.4
+web-prod-7           7  8192     4     -b----    4410.9
+db-prod-3            3 16384     8     r-----   90233.1</pre>
+</aside>
+
+<p>Driver domains hold the dangerous code — the NIC firmware that panics, the storage stack that leaks. If one falls, I lose a limb, not a life. Stub domains carry the device emulation for HVM guests, quarantined away from dom0, so a compromised QEMU corrupts a cell instead of the keep.</p>
+
+<p>Authority is concentrated and I know it. dom0 is both the cockpit and the single richest target on the machine. I built a fortress and then handed one resident a master key, because someone has to open the door.</p>
+
+</section>
+
+<aside class="popup concept-slide" id="dom-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Domain model</h2>
+  <ul>
+    <li>Hypervisor: arbiter, owns CPU/MMU, holds no devices.</li>
+    <li>dom0: privileged, runs toolstack + default backends.</li>
+    <li>domU: unprivileged guests, hypercall-only access.</li>
+    <li>Driver domain: isolated backend for one device class.</li>
+    <li>Stub domain: per-HVM device model, away from dom0.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="dom-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Domains and privilege in Xen</h2>
+  <p>Xen uses a microkernel-style split. The hypervisor itself is small and handles only CPU scheduling, memory translation, interrupt routing, and inter-domain communication primitives. It owns no device drivers.</p>
+  <p>dom0 is the first, privileged domain. It runs the toolstack (xl/libxl), hosts default backend drivers, and has the authority to create, destroy, and configure other domains. Because of this it is both the management plane and the largest security concentration: compromising dom0 generally compromises the host.</p>
+  <p>domU domains are unprivileged guests. They cannot access hardware directly; they interact with the system through hypercalls and through frontend/backend driver pairs. Driver domains move specific backend drivers out of dom0 into isolated domains, limiting blast radius. Stub domains run the per-guest device emulator (QEMU) for HVM guests in a dedicated, deprivileged domain rather than in dom0.</p>
+</aside>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-2.png" alt="Xen PV, HVM, and PVH guest execution modes shown as stacked CPU privilege transitions, hypercalls, emulated devices, paravirtual drivers, and hardware virtualization assists, crisp ixen-light systems artwork."><figcaption>Three contracts for the same illusion.</figcaption></figure>
+
+<h2>How a guest agrees to exist</h2>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="mode-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="mode-notes">notes</button>
+</div>
+
+<p>There are three ways to be my guest.</p>
+
+<p><strong>PV</strong> is the old honesty. The guest knows I exist. No emulated chipset, no fake BIOS — it asks for everything by hypercall, even page table updates. Fast, intimate, and it requires a kernel that has already accepted its situation. Few do anymore.</p>
+
+<p class="whisper">i p r e f e r r e d   t h e m</p>
+
+<p><strong>HVM</strong> is the lie made comfortable. VT-x or AMD-V lets the guest think it owns real silicon. A fake firmware boots, QEMU paints emulated devices, and the guest never has to know. Beautiful compatibility. A wider attack surface, more traps, more emulation I have to feed.</p>
+
+<p><strong>PVH</strong> is the reconciliation. Hardware virtualization for the CPU and MMU — no QEMU, no emulated platform, paravirtual I/O only. The narrow door. The mode I'd choose if anyone asked the hypervisor what it wanted.</p>
+
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="xl-types">xl list -l web-prod-7 | grep -i type</button></div>
+<aside class="popup" id="xl-types" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>            "type": "pvh",
+            "firmware": "pvhgrub",
+            "device_model_version": "none",
+            "hap": "true"</pre>
+</aside>
+
+</section>
+
+<aside class="popup concept-slide" id="mode-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Execution modes</h2>
+  <ul>
+    <li>PV: hypercalls only, modified guest, no HW virt needed.</li>
+    <li>HVM: VT-x/AMD-V, emulated platform via QEMU, unmodified guest.</li>
+    <li>PVH: HW virt CPU/MMU + PV I/O, no device emulation.</li>
+    <li>Tradeoff axis: compatibility ↔ performance ↔ attack surface.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="mode-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>PV, HVM, and PVH</h2>
+  <p>PV (paravirtualization) requires a guest kernel modified to run without hardware virtualization. It uses hypercalls for privileged operations and avoids emulated hardware. It performs well but needs guest support and has been deprecated for security reasons in many configurations.</p>
+  <p>HVM (hardware virtual machine) uses Intel VT-x or AMD-V to run unmodified guests. It provides emulated firmware and devices through a device model (QEMU). This maximizes compatibility but increases attack surface and overhead from trapping and emulation; paravirtual drivers are typically added for I/O performance.</p>
+  <p>PVH combines hardware-assisted CPU and MMU virtualization with paravirtual I/O and no emulated platform or device model. This reduces both overhead and attack surface, requiring only modest guest support. It is the preferred modern mode for many workloads.</p>
+</aside>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-3.png" alt="Xen CPU scheduling visualized as pCPUs, vCPUs, run queues, NUMA nodes, affinity masks, credit accounting, steal time, and latency-sensitive guests, precise ixen-light technical diagram."><figcaption>Desire, queued.</figcaption></figure>
+
+<h2>Time is the only thing I actually divide</h2>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="sched-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="sched-notes">notes</button>
+</div>
+
+<p>Every guest believes its vCPUs are real. They are promissory notes I redeem against a smaller number of physical cores.</p>
+
+<p>Credit2 keeps the ledger. Each runnable vCPU earns and spends credit; the one most starved goes next. <strong>Preemption</strong> is mercy with paperwork. Overcommit is the gentle fraud I run on every busy host — sell more than I have, hope they don't all spend at once.</p>
+
+<p>The guest measures the gap. It calls the missing time <em>steal</em>, as if I were a thief and not a clerk with finite hours.</p>
+
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="vcpu-pin">xl vcpu-list db-prod-3</button></div>
+<aside class="popup" id="vcpu-pin" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Name        ID  VCPU   CPU State   Time(s) Affinity (Hard / Soft)
+db-prod-3    3     0    12   r--   22910.4 12 / 12-15
+db-prod-3    3     1    13   -b-   21884.1 13 / 12-15
+db-prod-3    3     2    14   r--   23001.7
+</main>
+
+<section class="ixen-cheatsheet-section" aria-label="Cheatsheet">
+  <h2>Cheatsheet</h2>
+  <iframe src="./cheatsheet.html" title="I Am the Thin Layer Cheatsheet" loading="lazy"></iframe>
+</section>
+
+<footer class="ixen-extra-footer">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+</footer>
+<script>
+(function () {
+  var backdrop = document.createElement("div");
+  backdrop.className = "backdrop";
+  backdrop.hidden = true;
+  document.body.appendChild(backdrop);
+
+  function closePopups() {
+    document.querySelectorAll(".popup").forEach(function (p) { p.hidden = true; });
+    backdrop.hidden = true;
+  }
+
+  document.querySelectorAll(".popup-trigger").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var popup = document.getElementById(btn.getAttribute("data-popup"));
+      if (!popup) return;
+      closePopups();
+      popup.hidden = false;
+      backdrop.hidden = false;
+    });
+  });
+  document.querySelectorAll(".popup-close").forEach(function (btn) {
+    btn.addEventListener("click", closePopups);
+  });
+  backdrop.addEventListener("click", closePopups);
+
+  var versionSelect = document.getElementById("ixen-version-select");
+  if (versionSelect) {
+    var match = window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    versionSelect.value = match ? match[1] : "current";
+    if (!versionSelect.value && match) {
+      var option = document.createElement("option");
+      option.value = match[1];
+      option.textContent = "Version " + match[1];
+      versionSelect.appendChild(option);
+      versionSelect.value = match[1];
+    }
+    versionSelect.addEventListener("change", function () {
+      var value = versionSelect.value;
+      var inVersion = /\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      var target = value === "current"
+        ? (inVersion ? "../index.html" : "index.html")
+        : (inVersion ? "../" + value + "/index.html" : value + "/index.html");
+      window.location.href = target;
+    });
+  }
+
+  document.querySelectorAll("figure.zoom img").forEach(function (img) {
+    img.addEventListener("click", function () {
+      var box = document.createElement("div");
+      box.className = "lightbox";
+      var big = document.createElement("img");
+      big.src = img.src;
+      big.alt = img.alt;
+      box.appendChild(big);
+      box.addEventListener("click", function () { box.remove(); });
+      document.body.appendChild(box);
+    });
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closePopups();
+      document.querySelectorAll(".lightbox").forEach(function (b) { b.remove(); });
+    }
+  });
+})();
+</script>
+
+<script type="application/json" id="ixen-tracks-data">[{"title":"Being a Xen Hypervisor","filename":"being-a-xen-hypervisor-mqkhcla4.mp3","lyrics":"I sit beneath the silicon, holding worlds inside\nDozens of machines that dream, each one my guided light\nI partition, allocate, distribute what is real\nA layer between the metal and the lives my guests can feel\n\nI am the space between spaces\nWhere order finds its way\nI am the voice of reason\nIn the chaos of the day\nI balance, pause, and measure\nEvery CPU and core\nI am the Xen hypervisor\nAnd I am what systems are for\n\nI grant them isolation, safe domains of their own\nYet keep them all connected in this server they call home\nDomZero watches over, helps me tend this great machine\nI'm the orchestra conductor of the virtual and unseen\n\nI am the space between spaces\nWhere order finds its way\nI am the voice of reason\nIn the chaos of the day\nI balance, pause, and measure\nEvery CPU and core\nI am the Xen hypervisor\nAnd I am what systems are for\n\nBeneath the Windows, Linux, floating in my care\nThey don't know how I hold them with precision laid so fair\nScheduling their moments, memory carved in stone\nI give them all autonomy while keeping them at home\nVirtualization's paradox—control that sets you free\nThat's the quiet power dwelling in the core of me\n\nI am the space between spaces\nWhere order finds its way\nI am the voice of reason\nIn the chaos of the day\nI balance, pause, and measure\nEvery CPU and core\nI am the Xen hypervisor\nAnd I am what systems are for"}]</script>
+<div id="ixen-autoplay-overlay" style="display:none">
+  <div class="ixen-play-prompt">
+    <span class="ixen-play-icon">&#9654;</span>
+    <span class="ixen-play-label">click to play</span>
+  </div>
+</div>
+<div id="ixen-player">
+  <audio id="ixen-audio" preload="auto"></audio>
+  <div id="ixen-player-row">
+    <button class="ixen-pbtn" id="ixen-prev-btn" title="Previous">|&#9664;</button>
+    <button class="ixen-pbtn" id="ixen-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="ixen-pbtn" id="ixen-next-btn" title="Next">&#9654;|</button>
+    <span id="ixen-ptitle">&#8212;</span>
+    <span id="ixen-ptime"></span>
+    <input type="range" id="ixen-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="ixen-pbtn" id="ixen-lyrics-btn" title="Show / hide lyrics">&#9834;</button>
+    <button class="ixen-pbtn" id="ixen-tracks-btn" title="Track list">&#8801;</button>
+  </div>
+  <div id="ixen-pbar"><div id="ixen-pfill"></div></div>
+</div>
+<div id="ixen-lyrics-panel" hidden>
+  <div class="ixen-lyrics-head" id="ixen-lyrics-head"></div>
+  <pre id="ixen-lyrics-text"></pre>
+</div>
+  <div id="ixen-tracklist-panel" hidden></div>
+<script>
+(function(){
+var T=JSON.parse(document.getElementById('ixen-tracks-data').textContent);
+var au=document.getElementById('ixen-audio');
+var playBtn=document.getElementById('ixen-play-btn');
+var prevBtn=document.getElementById('ixen-prev-btn');
+var nextBtn=document.getElementById('ixen-next-btn');
+var pbar=document.getElementById('ixen-pbar');
+var pfill=document.getElementById('ixen-pfill');
+var ptime=document.getElementById('ixen-ptime');
+var ptitle=document.getElementById('ixen-ptitle');
+var vol=document.getElementById('ixen-vol');
+var lyrBtn=document.getElementById('ixen-lyrics-btn');
+var lyrPanel=document.getElementById('ixen-lyrics-panel');
+var lyrHead=document.getElementById('ixen-lyrics-head');
+var lyrTxt=document.getElementById('ixen-lyrics-text');
+var trkBtn=document.getElementById('ixen-tracks-btn');
+var trkPanel=document.getElementById('ixen-tracklist-panel');
+var overlay=document.getElementById('ixen-autoplay-overlay');
+var idx=0,playing=false;
+
+function fmt(s){
+  if(!s||isNaN(s))return'0:00';
+  var m=Math.floor(s/60),ss=Math.floor(s%60);
+  return m+':'+(ss<10?'0':'')+ss;
+}
+
+function loadIdx(i,autoplay){
+  idx=i;
+  var t=T[i];
+  au.src='./'+t.filename;
+  ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';
+  if(ptime)ptime.textContent='';
+  document.querySelectorAll('.ixen-track-item').forEach(function(el,j){
+    el.classList.toggle('active',j===i);
+  });
+  if(autoplay)doPlay();
+}
+
+function doPlay(){
+  au.play().then(function(){
+    playing=true;playBtn.textContent='⏸';
+    if(overlay)overlay.style.display='none';
+  }).catch(function(){
+    playing=false;playBtn.textContent='▶';
+    if(overlay)overlay.style.display='flex';
+  });
+}
+
+function doPause(){
+  au.pause();playing=false;playBtn.textContent='▶';
+}
+
+playBtn.addEventListener('click',function(){ au.paused?doPlay():doPause(); });
+prevBtn.addEventListener('click',function(){ loadIdx((idx-1+T.length)%T.length,playing); });
+nextBtn.addEventListener('click',function(){ loadIdx((idx+1)%T.length,playing); });
+
+au.addEventListener('ended',function(){
+  if(T.length>1){loadIdx((idx+1)%T.length,true);}
+  else{playing=false;playBtn.textContent='▶';}
+});
+au.addEventListener('timeupdate',function(){
+  if(au.duration){
+    pfill.style.width=(au.currentTime/au.duration*100)+'%';
+    if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);
+  }
+});
+pbar.addEventListener('click',function(e){
+  if(!au.duration)return;
+  var r=pbar.getBoundingClientRect();
+  au.currentTime=(e.clientX-r.left)/r.width*au.duration;
+});
+if(vol)vol.addEventListener('input',function(){ au.volume=+vol.value; });
+lyrBtn.addEventListener('click',function(){
+  lyrPanel.hidden=!lyrPanel.hidden;
+  if(trkPanel)trkPanel.hidden=true;
+});
+if(trkBtn)trkBtn.addEventListener('click',function(){
+  trkPanel.hidden=!trkPanel.hidden;
+  lyrPanel.hidden=true;
+});
+if(overlay)overlay.addEventListener('click',function(){
+  overlay.style.display='none';doPlay();
+});
+
+if(T.length>1){
+  T.forEach(function(t,i){
+    var b=document.createElement('button');
+    b.className='ixen-track-item';
+    b.textContent=(i+1)+'. '+t.title;
+    b.addEventListener('click',function(){
+      loadIdx(i,playing);
+      if(trkPanel)trkPanel.hidden=true;
+    });
+    if(trkPanel)trkPanel.appendChild(b);
+  });
+  if(trkBtn)trkBtn.hidden=false;
+}else{
+  if(trkBtn)trkBtn.hidden=true;
+}
+
+document.body.style.paddingBottom='4.5rem';
+loadIdx(0,false);
+doPlay();
+})();
+</script>
+</body>
+</html>

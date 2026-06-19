@@ -1,0 +1,11 @@
+type: '@alvagante/content-ixen'
+typeVersion: 2026.06.19.1
+id: 35052ed7-bc2d-45aa-bb69-2cc1001829be
+name: ixen-git-repository
+version: 1
+tags: {}
+globalArguments:
+  apiFormat: anthropic
+  apiKey: '${{ vault.get(anthropic-keys, api-key) }}'
+  baseUrl: 'https://api.anthropic.com'
+methods: {}

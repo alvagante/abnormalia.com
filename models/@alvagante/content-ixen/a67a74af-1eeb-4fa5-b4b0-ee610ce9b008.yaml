@@ -1,0 +1,11 @@
+type: '@alvagante/content-ixen'
+typeVersion: 2026.06.19.1
+id: a67a74af-1eeb-4fa5-b4b0-ee610ce9b008
+name: ixen-puppet-catalog
+version: 1
+tags: {}
+globalArguments:
+  apiFormat: anthropic
+  apiKey: '${{ vault.get(anthropic-keys, api-key) }}'
+  baseUrl: 'https://api.anthropic.com'
+methods: {}

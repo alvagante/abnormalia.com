@@ -132,6 +132,18 @@ inputs:
         - chirp-v4
         - chirp-v4-5
       default: chirp-v4-5
+    infographicStyle:
+      type: string
+      enum:
+        - clean
+        - technical
+        - ixen
+        - editorial
+        - blueprint
+      default: ixen
+    infographicModel:
+      type: string
+      default: gpt-image-2
     ixens:
       type: array
       minItems: 1
@@ -430,18 +442,18 @@ jobs:
           type: succeeded
     weight: 0
   - name: music
-    description: Reuse existing soundtrack files when present, otherwise generate a fresh soundtrack.
+    description: Generate a fresh soundtrack for each Ixen, capturing all track variants from a single provider call.
     steps:
       - name: track-${{ self.ixen.slug }}
-        description: Prepare the soundtrack playlist for one Ixen topic.
+        description: Generate the soundtrack playlist for one Ixen topic.
         forEach:
           item: ixen
           in: ${{ inputs.ixens }}
         task:
           type: model_method
-          modelType: "@abnormalia/ixen-soundtrack"
-          modelName: '${{ "soundtrack-" + self.ixen.slug }}'
-          methodName: generateOrReuse
+          modelType: "@alvagante/content-music"
+          modelName: '${{ "music-" + self.ixen.slug }}'
+          methodName: generatePlaylist
           inputs:
             apiKey: ${{ vault.get(onemin-keys, API_KEY) }}
             anthropicApiKey: ${{ vault.get(anthropic-keys, api-key) }}
@@ -452,7 +464,6 @@ jobs:
             instrumental: ${{ inputs.musicInstrumental }}
             model: ${{ inputs.musicModel }}
             sunoVersion: ${{ inputs.sunoVersion }}
-            lyricsFallback: '${{ size(data.listVersions("music-" + self.ixen.slug, "song")) > 0 ? data.latest("music-" + self.ixen.slug, "song").attributes.lyrics : "" }}'
             outputDir: ${{ "ixen/" + self.ixen.slug }}
         dependsOn: []
         weight: 0
@@ -496,8 +507,43 @@ jobs:
         condition:
           type: succeeded
     weight: 0
+  - name: infographic
+    description: Generate an infographic for each Ixen using its concepts as key points.
+    steps:
+      - name: infographic-${{ self.ixen.slug }}
+        description: Generate the infographic for one Ixen topic.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-infographic"
+          modelName: '${{ "infographic-" + self.ixen.slug }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            topic: ${{ self.ixen.topic }}
+            title: ${{ self.ixen.title }}
+            details: ${{ self.ixen.details }}
+            keyPoints: ${{ self.ixen.concepts.map(c, c.name) }}
+            style: ${{ inputs.infographicStyle }}
+            orientation: wide
+            model: ${{ inputs.infographicModel }}
+            background: opaque
+            quality: auto
+            format: png
+            htmlFilename: infographic.html
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: prepare
+        condition:
+          type: succeeded
+    weight: 0
   - name: page
-    description: Generate the narrated Ixen page once hero art and music are ready.
+    description: Generate the narrated Ixen page once hero art, music, cheatsheet and infographic are ready.
     steps:
       - name: ixen-${{ self.ixen.slug }}
         description: Generate the minisite for one Ixen topic.
@@ -526,9 +572,10 @@ jobs:
             headerContent: ${{ inputs.headerContent }}
             footerContent: ${{ inputs.footerContent }}
             cheatsheetPath: cheatsheet.html
+            infographicPath: infographic.html
             outputDir: ${{ "ixen/" + self.ixen.slug }}
             versionOutput: false
-            musicTracks: ${{ data.latest("soundtrack-" + self.ixen.slug, "playlist").attributes.tracks }}
+            musicTracks: ${{ data.latest("music-" + self.ixen.slug, "playlist").attributes.tracks }}
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -540,6 +587,9 @@ jobs:
         condition:
           type: succeeded
       - job: cheatsheets
+        condition:
+          type: succeeded
+      - job: infographic
         condition:
           type: succeeded
     weight: 0

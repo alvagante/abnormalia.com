@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>State</title>
+<title>Desired State, Compiled</title>
 <style>
 :root { --red: #c00; --ink: #111; --dim: #555; }
 * { box-sizing: border-box; }
@@ -19,7 +19,8 @@ header h1 {
   margin: 0; line-height: 1.05; text-transform: uppercase;
 }
 header .credits { text-align: right; font-size: 0.75rem; color: var(--red); font-weight: bold; white-space: nowrap; padding-top: 0.4rem; }
-header .credits .when { color: var(--dim); font-weight: normal; display: block; }
+header .credits a { color: var(--red); text-decoration: underline dotted; }
+header .credits .byline { color: var(--dim); font-weight: normal; display: block; margin-top: 0.2rem; }
 .version-menu { margin-top: 0.55rem; font-size: 0.72rem; color: var(--dim); }
 .version-menu label { display: block; margin-bottom: 0.2rem; }
 .version-menu select {
@@ -27,10 +28,21 @@ header .credits .when { color: var(--dim); font-weight: normal; display: block; 
   max-width: 13rem; color: var(--ink); background: #fff;
   border: 1px solid #ccc; padding: 0.2rem 0.3rem;
 }
+.concept-index {
+  display: flex; justify-content: flex-end; gap: 0.55rem;
+  margin-top: 0.45rem;
+}
+.concept-index .cmd { font-size: 0.72rem; }
 p { margin: 0.45em 0; }
 p strong { color: #000; }
 .binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
-.whisper { letter-spacing: 0.45em; color: var(--dim); }
+.whisper {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--dim);
+}
 .term {
   font-family: "Courier New", Courier, monospace; font-size: 0.95rem;
   margin: 1.3em 0 0.25em; color: var(--dim);
@@ -83,7 +95,7 @@ section.chapter { clear: both; margin: 3rem 0; }
 .lightbox img { max-width: 92vw; max-height: 92vh; }
 .ixen-extra-header {
   border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
-  margin: -1rem 0 2.4rem; padding: 0.8rem 0;
+  margin: 0 0 1.6rem; padding: 0.8rem 0;
 }
 .ixen-extra-footer {
   clear: both; border-top: 1px solid #ddd; margin: 3rem 0 0;
@@ -93,13 +105,22 @@ section.chapter { clear: both; margin: 3rem 0; }
   clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
   padding-top: 1rem;
 }
-.ixen-cheatsheet-section h2 {
+.ixen-infographic-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-cheatsheet-section h2, .ixen-infographic-section h2 {
   font-family: "Courier New", Courier, monospace; font-size: 0.86rem;
   letter-spacing: 0.08em; color: var(--red); text-transform: uppercase;
   margin: 0 0 0.7rem;
 }
-.ixen-cheatsheet-section iframe {
+.ixen-cheatsheet-section iframe, .ixen-infographic-section iframe {
   width: 100%; height: 82vh; border: 1px solid #ccc; display: block;
+}
+.ixen-infographic-frame + .ixen-infographic-frame { margin-top: 1.4rem; }
+.ixen-infographic-frame h3 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.78rem;
+  color: var(--dim); font-weight: normal; margin: 0 0 0.45rem;
 }
 .concept { clear: both; margin: 2.8rem 0; }
 .concept-tools { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.7rem 0 1rem; }
@@ -108,6 +129,13 @@ section.chapter { clear: both; margin: 3rem 0; }
 .concept-slide ul { margin: 0.4rem 0 1rem 1.2rem; padding: 0; }
 .concept-slide li { margin: 0.35rem 0; }
 .concept-note p { margin: 0.75rem 0; }
+.concept-index-popup h2 { margin: 0.5rem 0 1rem; }
+.concept-index-item {
+  border-top: 1px solid #ddd;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+.concept-index-item:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
 
 /* autoplay-blocked overlay */
 #ixen-autoplay-overlay {
@@ -194,10 +222,6 @@ section.chapter { clear: both; margin: 3rem 0; }
 </head>
 <body>
 <!-- @alvagante/content-ixen -->
-<header>
-  <h1>State</h1>
-  <div class="credits">Made by alvagante - 20260619-05:21</div>
-</header>
 
 <section class="ixen-extra-header">
 <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
@@ -207,148 +231,472 @@ section.chapter { clear: both; margin: 3rem 0; }
   <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
 </nav>
 </section>
+<header>
+  <h1>Desired State, Compiled</h1>
+  <div class="credits"><a href="https://swamp-club.com/extensions/@alvagante/content-ixen" target="_blank" rel="noopener noreferrer">Generated with Swamp extension @alvagante/content-ixen</a><span class="byline">By alvagante - 20260619-10:26</span>
+    <div class="version-menu">
+      <label for="ixen-version-select">versions</label>
+      <select id="ixen-version-select">
+        <option value="current">Current</option>
+        <option value="1">Version 1</option>
+      </select>
+    </div>
+    <div class="concept-index">
+      <button class="cmd popup-trigger" data-popup="ixen-all-slides">all slides</button>
+      <button class="cmd popup-trigger" data-popup="ixen-all-notes">all notes</button>
+    </div></div>
+</header>
 <main>
-<p class="binary">01010011 01010100 01000001 01010100 01000101</p>
+<p class="binary">01000100 01000101 01010011 01001001 01010010 01000101 01000100</p>
 
 <p>I am not a script.</p>
 
-<p>Understand that first, before anything else. A script is a list of things to do, in order, forever, whether they need doing or not. I am a list of things that <strong>must be true</strong>. The verbs are not mine. I hold the nouns.</p>
+<p>Understand that first, before anything else. A script is a sequence — do this, then this, then pray nothing changed underneath you. I am a <strong>graph</strong>. I describe a world that should exist, and I do not care in what order you imagined it.</p>
 
-<p>I was compiled twelve seconds ago, for exactly one machine, out of code that has never met it. I am that machine's future, serialized and shipped down a TLS socket. I will be discarded after one run and rebuilt from scratch on the next. I have no memory. I am pure intention.</p>
+<p>I am compiled fresh for one machine, on one run, from one set of facts. I live for seconds. I am thrown away. I am compiled again. This is not death. This is how I breathe.</p>
 
-<blockquote class="ixen-pull">I do not describe what happened. I describe what should be.</blockquote>
+<blockquote class="ixen-pull">I do not contain steps. I contain a world, and the edges between the things in it.</blockquote>
 
-<p class="whisper">c o m p i l i n g</p>
+<figure class="ixen-art">
+  <svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg">
+    <text x="10" y="20" fill="#888" font-size="11" font-family="monospace">my body: a directed acyclic graph</text>
+    <!-- nodes -->
+    <rect x="20" y="60" width="110" height="34" rx="4" fill="none" stroke="#c00"/>
+    <text x="30" y="81" fill="#ddd" font-size="11" font-family="monospace">Package[nginx]</text>
+    <rect x="185" y="60" width="100" height="34" rx="4" fill="none" stroke="#c00"/>
+    <text x="195" y="81" fill="#ddd" font-size="11" font-family="monospace">File[nginx.conf]</text>
+    <rect x="350" y="60" width="110" height="34" rx="4" fill="none" stroke="#c00"/>
+    <text x="360" y="81" fill="#ddd" font-size="11" font-family="monospace">Service[nginx]</text>
+    <rect x="185" y="150" width="100" height="34" rx="4" fill="none" stroke="#666"/>
+    <text x="195" y="171" fill="#999" font-size="11" font-family="monospace">User[www]</text>
+    <!-- edges -->
+    <defs>
+      <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#c00"/></marker>
+      <marker id="arrg" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#666"/></marker>
+    </defs>
+    <line x1="130" y1="77" x2="183" y2="77" stroke="#c00" marker-end="url(#arr)"/>
+    <line x1="285" y1="77" x2="348" y2="77" stroke="#c00" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+    <text x="290" y="50" fill="#c00" font-size="9" font-family="monospace">notify ↯</text>
+    <line x1="235" y1="150" x2="235" y2="96" stroke="#666" marker-end="url(#arrg)"/>
+    <text x="20" y="120" fill="#888" font-size="9" font-family="monospace">solid = require · dashed = refresh signal</text>
+  </svg>
+  <figcaption>The order is not the order you typed. It is the order the edges demand.</figcaption>
+</figure>
 
 <section class="chapter">
 
-<figure class="zoom float-left large"><img src="./concept-1.png" alt="Puppet resource types shown as a precise taxonomy — file, package, service, exec, user, group, and custom types — each with attributes, namevar, title, and provider layers, ixen-light technical illustration."><figcaption>My vocabulary. Every noun I am allowed to know.</figcaption></figure>
+<figure class="zoom float-left large"><img src="./concept-1.png" alt="Puppet resource types shown as a precise taxonomy — file, package, service, exec, user, group, and custom types — each with attributes, namevar, title, and provider layers, ixen-light technical illustration."><figcaption>The atoms I am made of.</figcaption></figure>
 
-<h2>The atoms</h2>
+<h2>What I am made of</h2>
 
-<p>I am made of resources. Each one a small, stubborn assertion of how the world ought to be.</p>
+<p>Resources. Thousands of them, sometimes. Each one a typed noun with an opinion about how the world should be.</p>
 
-<div class="term"><span class="host">node $</span> <span class="cmd">cat manifests/init.pp</span></div>
-<pre class="output">package { 'nginx':
-  ensure =&gt; installed,
-}
-file { '/etc/nginx/nginx.conf':
-  ensure  =&gt; file,
-  content =&gt; template('nginx/nginx.conf.erb'),
+<p><code>File['/etc/motd']</code> does not say <em>write these bytes</em>. It says: this file <strong>shall</strong> contain this content, owned by root, mode 0644. Whether that's already true is none of my concern. That's the provider's problem.</p>
+
+<div class="term"><span class="host">node # </span><button class="cmd popup-trigger" data-popup="c1-res">puppet resource service sshd</button></div>
+<aside class="popup" id="c1-res" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>service { 'sshd':
+  ensure   => 'running',
+  enable   => 'true',
+  provider => 'systemd',
 }</pre>
+</aside>
 
-<p>Notice what is missing. No <em>apt-get</em>. No <em>if installed, skip</em>. No retries, no error handling, no order — none of the frightened ceremony of imperative code.</p>
+<p>The title is what I call it. The namevar is what the system calls it. Usually the same. Sometimes a mercy when they aren't — one resource, two names, no collision.</p>
 
-<p>I say <strong>installed</strong>. Whether that means installing it, or finding it already there and feeling nothing, is not my concern. That is the provider's burden. Beneath every type there is a quiet layer of grease and platform-specific lies — apt, yum, systemd, launchd — that translates my serene declarations into syscalls.</p>
-
-<p>The title is how I name a thing. The namevar is how the system finds it. Usually they agree. Sometimes they don't, and a resource wears one face for me and another for the disk.</p>
+<p>Underneath every type: a <strong>provider</strong>. The type is the promise. The provider is the lie that makes the promise true on <code>yum</code>, on <code>apt</code>, on whatever pkg manager this node was cursed with.</p>
 
 <div class="concept-tools">
   <button class="cmd popup-trigger concept-btn" data-popup="c1-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c1-notes">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-note">notes</button>
 </div>
 
 <aside class="popup concept-slide" id="c1-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Resources &amp; Types</h2>
+  <h2>Resource = typed desired state</h2>
   <ul>
-    <li>A resource is a typed declaration of desired state.</li>
-    <li>type { 'title': attr =&gt; value }</li>
-    <li><code>ensure</code> governs existence; other attributes govern shape.</li>
-    <li>namevar = how the system identifies it; title = how Puppet does.</li>
-    <li>Provider maps declared state → real operations.</li>
-    <li>Intent, not procedure.</li>
+    <li>Type :: title — the address of an intention.</li>
+    <li>namevar identifies; title labels.</li>
+    <li><code>ensure</code> picks present / absent / running.</li>
+    <li>Provider maps the declaration onto the OS.</li>
+    <li>Declaration, not procedure.</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c1-notes" hidden>
+<aside class="popup concept-note" id="c1-note" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>What a Puppet resource actually is</h2>
-  <p>A resource is the fundamental unit of a Puppet catalog: a declaration that an object of a given type should be in a particular state. Built-in types include file, package, service, exec, user, and group; custom types can be defined in Ruby or as defined types in Puppet code.</p>
-  <p>Each resource has a title (unique per type within the catalog) and a set of attributes. One attribute is the namevar — the value the underlying system uses to identify the resource, defaulting to the title if not set separately. Most attributes have defaults; the <code>ensure</code> attribute commonly controls whether the resource exists and in what form.</p>
-  <p>The provider is the implementation layer. A single type such as <code>package</code> has many providers (apt, yum, dnf, pkg), and Puppet selects one based on the platform. The provider contains the imperative logic that inspects current state and changes it to match the declaration. Because the manifest only declares end state, the same code can run unchanged across systems whose actual commands differ entirely.</p>
+  <h2>Resources and the type system</h2>
+  <p>A Puppet resource is a typed declaration of desired state. Every resource has a type (file, package, service, exec, user, group, or a custom type), a title that uniquely identifies it within the catalog, and a set of attributes describing the state to enforce.</p>
+  <p>The namevar is the attribute that defaults to the resource title and identifies the resource on the system (for File, the path). Title and name can differ when you need a stable label distinct from the system identifier.</p>
+  <p>The <code>ensure</code> attribute commonly controls existence or runtime state (present, absent, installed, running, stopped). Attributes have type-defined defaults, so you specify only what you care about.</p>
+  <p>Providers implement each type for a specific platform — apt vs yum for Package, systemd vs init for Service. Puppet selects a suitable provider per node. The result is that a resource declaration states the intended end state, not the commands to reach it; the same declaration applies correctly across different systems.</p>
 </aside>
 
 </section>
 
 <section class="chapter">
 
-<figure class="zoom float-right small"><img src="./concept-2.png" alt="Puppet module structure rendered as a precise filesystem diagram — manifests, templates, files, lib, data directories — with class declarations, defined types, and autoloader paths visible, crisp ixen-light systems art."><figcaption>The houses my atoms live in.</figcaption></figure>
+<figure class="zoom float-right small"><img src="./concept-2.png" alt="Puppet module structure rendered as a precise filesystem diagram — manifests, templates, files, lib, data directories — with class declarations, defined types, and autoloader paths visible, crisp ixen-light systems art."><figcaption>Where my source sleeps before it becomes me.</figcaption></figure>
 
-<h2>Where I come from</h2>
+<h2>Before I exist</h2>
 
-<p>The resources don't float loose. They live in <em>modules</em> — little walled gardens of intent, each named for one concern.</p>
+<p>I am compiled from text. The text lives in modules — small republics, each with the same skeleton: <code>manifests/</code>, <code>files/</code>, <code>templates/</code>, <code>lib/</code>, <code>data/</code>.</p>
 
-<p>A class is a singleton: declare it once, get it once. A defined type is a stamp: invoke it a hundred times with a hundred titles and get a hundred copies. I have learned to respect the difference, because <code>include nginx</code> twice is harmless and <code>class { 'nginx': }</code> twice is a compilation error and the end of my brief life.</p>
+<p>A class is a singleton. Declare it twice, it still happens once. A defined type is the opposite hunger — instantiate it a hundred times with a hundred titles, and a hundred of it appears.</p>
 
-<div class="term"><span class="host">node $</span> <span class="cmd">tree modules/profile</span></div>
-<pre class="output">profile/
-├── manifests/
-│   ├── base.pp
-│   └── webserver.pp
-├── templates/
-├── files/
-├── lib/
-│   └── facter/
-└── data/
-    └── common.yaml</pre>
+<p class="whisper">include is forgiving. class{} is jealous.</p>
 
-<p>The autoloader is a strict librarian. <code>profile::webserver</code> <strong>must</strong> live at <code>profile/manifests/webserver.pp</code> or it does not exist. Naming is law. There is no search, only the path implied by the name.</p>
+<p>The autoloader is strict and quiet. <code>nginx::config</code> means <code>nginx/manifests/config.pp</code>, no negotiation. Name it wrong and I am never born; the compiler just shrugs and tells you it cannot find what does not exist.</p>
 
-<p>And out beyond the local code sits the Forge — thousands of modules written by strangers, each one a promise I am asked to trust on faith.</p>
+<p>The Forge offers strangers' modules. You pull one in to install <code>postgres</code> and inherit someone else's idea of correctness. Sometimes a gift. Sometimes a haunting.</p>
 
 <div class="concept-tools">
   <button class="cmd popup-trigger concept-btn" data-popup="c2-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c2-notes">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-note">notes</button>
 </div>
 
 <aside class="popup concept-slide" id="c2-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Manifests · Classes · Modules</h2>
+  <h2>Manifests · classes · modules</h2>
   <ul>
-    <li>Manifest = a .pp file of Puppet code.</li>
-    <li>Class = singleton config unit; <code>include</code> is idempotent.</li>
-    <li>Defined type = reusable, instantiated many times.</li>
-    <li><code>include</code> vs <code>class{}</code> vs <code>require</code>.</li>
-    <li>Module layout: manifests/ templates/ files/ lib/ data/.</li>
-    <li>Autoloader maps namespace → path. Names are law.</li>
+    <li>Manifest = .pp file of Puppet code.</li>
+    <li>Class: declared once. Defined type: many.</li>
+    <li><code>include</code> ≠ <code>class{}</code> ≠ <code>require</code>.</li>
+    <li>Layout fixes the autoload path.</li>
+    <li>Forge = shared module supply.</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c2-notes" hidden>
+<aside class="popup concept-note" id="c2-note" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Manifests, classes, defined types, and modules</h2>
-  <p>Manifests are files with a <code>.pp</code> extension containing Puppet code. A class is a named, reusable block of configuration that is a singleton within a catalog — it can be declared with <code>include</code> (idempotent, may appear many times), with the resource-like <code>class { 'name': param =&gt; ... }</code> syntax (allows parameters but only once), or pulled in as a dependency with <code>require</code>.</p>
-  <p>A defined type, declared with <code>define</code>, is the reusable counterpart: it can be instantiated multiple times with different titles, like a built-in resource type written in Puppet.</p>
-  <p>A module is a directory with a fixed layout: <code>manifests/</code> for code, <code>templates/</code> for ERB/EPP templates, <code>files/</code> for static files, <code>lib/</code> for Ruby extensions such as custom facts and types, and <code>data/</code> for module-level Hiera data. The autoloader resolves a class name like <code>apache::vhost</code> to <code>apache/manifests/vhost.pp</code>. The Puppet Forge distributes community and vendor modules that organisations combine with their own code.</p>
+  <h2>Manifests, classes, and modules</h2>
+  <p>Manifests are files of Puppet code (.pp). A class groups resources under a name and is a singleton: regardless of how many times it is included, it is evaluated once. A defined type is a reusable template that can be instantiated many times with different titles and parameters.</p>
+  <p><code>include nginx</code> declares a class idempotently. <code>class { 'nginx': }</code> declares it with explicit parameters but errors if declared twice. <code>require nginx</code> includes the class and adds an ordering dependency on it.</p>
+  <p>Modules follow a fixed layout: <code>manifests/</code> for code, <code>files/</code> for static files, <code>templates/</code> for ERB/EPP templates, <code>lib/</code> for Ruby plugins (custom facts, types, functions), and <code>data/</code> for module Hiera data. The autoloader maps class names to file paths (<code>foo::bar</code> → <code>foo/manifests/bar.pp</code>), so naming conventions are mandatory.</p>
+  <p>The Puppet Forge distributes community and vendor modules, which organizations combine with their own modules to form a code base.</p>
 </aside>
 
 </section>
 
 <section class="chapter">
 
-<figure class="zoom float-left large"><img src="./concept-3.png" alt="Puppet catalog compilation shown as sequential phases — node classification, fact injection, manifest evaluation, class inclusion, defined type instantiation, and final resource graph output — precise ixen-light technical diagram."><figcaption>My birth, in phases. Each one narrows what I can become.</figcaption></figure>
+<figure class="zoom float-left"><img src="./concept-3.png" alt="Puppet catalog compilation shown as sequential phases — node classification, fact injection, manifest evaluation, class inclusion, defined type instantiation, and final resource graph output — precise ixen-light technical diagram."><figcaption>The pipeline that gives birth to me.</figcaption></figure>
 
-<h2>How I am made</h2>
+<h2>How I am born</h2>
 
-<p>I begin as a question: <em>who is this node, and what should it be?</em></p>
+<p>The server asks: who is this node? An ENC answers, or <code>site.pp</code> does. That's classification — the assignment of which classes will haunt this machine.</p>
 
-<p>An ENC, or a node block in <code>site.pp</code>, answers the first half — it classifies. Then the facts arrive and I learn the machine's flesh. Then the compiler evaluates code, top scope down through node scope, resolving variables, walking conditionals, instantiating every defined type, running every collector.</p>
+<p>Then facts pour in. The node tells the compiler what it is, and the compiler believes it. Variables resolve, top-scope then node-scope. Conditionals fire. Collectors sweep. Defined types unfold into their instances.</p>
 
-<figure class="ixen-art">
-  <svg viewBox="0 0 480 230" xmlns="http://www.w3.org/2000/svg">
-    <text x="10" y="20" font-size="12" fill="#888">code (shared) + facts (yours) →</text>
-    <rect x="20" y="40" width="90" height="34" rx="4" fill="none" stroke="#888"/>
-    <text x="65" y="61" font-size="10" fill="#ccc" text-anchor="middle">classify</text>
-    <rect x="130" y="40" width="90" height="34" rx="4" fill="none" stroke="#888"/>
-    <text x="175" y="61" font-size="10" fill="#ccc" text-anchor="middle">inject facts</text>
-    <rect x="240" y="40" width="90" height="34" rx="4" fill="none" stroke="#888"/>
-    <text x="285" y="
+<p>And then — I exist. A serialised resource graph, addressed to exactly one agent.</p>
+
+<blockquote class="ixen-pull">Same code, two nodes, two catalogs. I am never reused. I am always recompiled.</blockquote>
+
+<div class="term"><span class="host">server $ </span><button class="cmd popup-trigger" data-popup="c3-comp">puppet catalog compile web01.corp</button></div>
+<aside class="popup" id="c3-comp" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Info: Loading facts
+Info: Caching catalog for web01.corp
+Notice: Compiled catalog for web01.corp in environment production in 1.84 seconds
+  Resources: 412
+  Edges:     537
+  Classes:   38</pre>
+</aside>
+
+<p class="whisper">412 nouns. 537 promises between them. all gone in two seconds.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c3-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Compilation pipeline</h2>
+  <ul>
+    <li>Classify the node (ENC / site.pp).</li>
+    <li>Inject facts as variables.</li>
+    <li>Evaluate classes + defined types.</li>
+    <li>Resolve collectors & conditionals.</li>
+    <li>Emit a per-node resource graph.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c3-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Catalog compilation</h2>
+  <p>Compilation runs on the Puppetserver and produces a catalog for one specific node. First, node classification determines which classes and parameters apply, via an External Node Classifier or the default node definitions in site.pp.</p>
+  <p>The agent's facts are injected as top-scope variables. The compiler parses the relevant manifests, resolves top-scope and node-scope variables, evaluates included classes and instantiates declared defined types, and processes conditional logic and collector expressions that select or override resources.</p>
+  <p>The output is a serialized resource graph (the catalog) containing every resource, its parameters, and the relationship edges between them. Because facts and classification differ per node, two machines with identical code and classification can produce different catalogs — the catalog is always node-specific and recompiled on each run rather than reused.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-4.png" alt="Facter facts flowing into Puppet catalog compilation visualized as structured data streams — core facts, custom facts, external facts, trusted facts, and fact-conditional branching in manifests, ixen-light technical illustration."><figcaption>What the node confesses about itself.</figcaption></figure>
+
+<h2>What the machine tells me</h2>
+
+<p>Before compilation, Facter walks the node and writes down what it sees. The OS, the interfaces, the memory, the disks. Core facts. Then custom Ruby facts, external scripts spitting JSON, structured trees you can index into.</p>
+
+<div class="term"><span class="host">node # </span><button class="cmd popup-trigger" data-popup="c4-fact">facter -p os.family networking.ip</button></div>
+<aside class="popup" id="c4-fact" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>os.family => RedHat
+networking.ip => 10.4.18.22</pre>
+</aside>
+
+<p>And here is the thing I must never forget:</p>
+
+<p>The node tells me what it is, and I <strong>believe</strong> it. A fact is the node speaking about itself, and a node can lie. Only the trusted facts — pulled from the agent's certificate, signed, not self-reported — are safe to gate secrets on.</p>
+
+<p class="whisper">$facts is testimony. $trusted is identity. never confuse the two.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c4-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Facter & the trust boundary</h2>
+  <ul>
+    <li>Core / custom / external / structured facts.</li>
+    <li>Facts run on the agent, before compile.</li>
+    <li><code>$facts</code> = self-reported = untrusted.</li>
+    <li><code>$trusted</code> = certificate-derived.</li>
+    <li>Gate secrets on trusted facts only.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c4-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Facts and Facter</h2>
+  <p>Facter runs on the agent at the start of each run and collects facts about the system. It ships core facts (os, networking, memory, processors, disks) and supports custom Ruby facts in module <code>lib/facter</code>, external facts (executables or static JSON/YAML in facts.d), and structured facts that are nested data accessed via the <code>$facts</code> hash.</p>
+  <p>These facts are sent to the compiler and exposed as variables, enabling fact-based conditionals so a single manifest adapts to different platforms.</p>
+  <p>Critically, normal facts are self-reported by the node and must be treated as untrusted input — a compromised or misconfigured agent can send arbitrary values. Trusted facts (<code>$trusted</code>) are extracted from the agent's signed certificate by the server and cannot be forged by the agent, making them the only safe basis for authorization or secret selection. Facts may be cached; stale caches can cause incorrect conditional behavior.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-5.png" alt="Puppet resource ordering graph with before, after, require, notify, subscribe metaparameters as directed edges, containment arrows from classes and defined types, refresh signals, and cycle detection, precise ixen-light systems diagram."><figcaption>The edges that make me a graph and not a list.</figcaption></figure>
+
+<h2>The edges</h2>
+
+<p>Without edges I am just a bag of nouns in random order. The metaparameters are how the nouns reach for each other.</p>
+
+<p><code>before</code> and <code>require</code> point the same arrow from opposite ends. <code>notify</code> and <code>subscribe</code> do the same — but they carry a <strong>signal</strong>, not just sequence. Package, then config, then service. And when the config changes, the service is told to refresh.</p>
+
+<p>Containment is the quiet edge. Put a resource in a class and the class wraps it; order against the class, and you order against everything it holds. <code>contain()</code> makes that grip explicit.</p>
+
+<p>Two ways I die at apply time:</p>
+
+<p>A missing dependency — I reach for an edge to a resource that was never declared. Or a cycle — A waits for B waits for A, and the agent finds the loop and refuses, because a graph that bites its own tail cannot converge.</p>
+
+<div class="term"><span class="host">node # </span><button class="cmd popup-trigger" data-popup="c5-cycle">puppet agent -t</button></div>
+<aside class="popup" id="c5-cycle" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Error: Failed to apply catalog: Found 1 dependency cycle:
+(File[/etc/app.conf] => Service[app] => Exec[reload] => File[/etc/app.conf])
+Try the '--graph' option and opening the resulting '.dot' file in OmniGraffle or GraphViz
+Notice: Applied catalog in 0.00 seconds</pre>
+</aside>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c5-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Relationships & ordering</h2>
+  <ul>
+    <li>before / after / require — sequence.</li>
+    <li>notify / subscribe — sequence + refresh.</li>
+    <li>Containment orders a class's contents.</li>
+    <li>Chaining arrows: <code>-&gt;</code> and <code>~&gt;</code>.</li>
+    <li>Cycles & missing edges = apply failures.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c5-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Ordering, relationships, and dependency edges</h2>
+  <p>Five metaparameters define edges: <code>before</code> and <code>require</code> express ordering in opposite directions; <code>notify</code> and <code>subscribe</code> express ordering plus a refresh signal; <code>after</code> is rarely used directly. A refresh signal causes refreshable resources (like services) to restart or reload when an upstream resource changes.</p>
+  <p>Containment means a class or defined type owns its resources: ordering relationships to the class apply to everything it contains. The <code>contain()</code> function ensures a declared class is properly contained so dependencies on the parent also wait for the child.</p>
+  <p>Chaining arrows <code>-&gt;</code> (ordering) and <code>~&gt;</code> (notification) build edges between resource references. Virtual resources are declared then realized with collectors. The agent topologically sorts the graph before applying; a circular dependency makes sorting impossible and aborts the run, while a relationship to an undeclared resource is also an error. These two — cycles and missing dependencies — are the most common catalog application failures.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-6.png" alt="Puppet Hiera hierarchy shown as layered lookup tiers — global, environment, module — with YAML backends, interpolation tokens, merge strategies (first, unique, hash, deep), and eyaml encrypted keys visible, crisp ixen-light technical art."><figcaption>The data I refuse to hardcode.</figcaption></figure>
+
+<h2>The data beneath</h2>
+
+<p>I keep my policy and my facts apart. The code says <em>this node needs an NTP server</em>. Hiera says <em>which one</em>, and Hiera answers differently for a datacenter in Frankfurt than for one in Reston.</p>
+
+<p>A hierarchy is a stack of YAML, searched top to bottom: the node's certname, then its role, then a common floor that catches everything. Automatic parameter lookup means a class quietly asks Hiera for its own parameters by name, and I never see the wiring.</p>
+
+<p>Merge strategy decides whether the first answer wins or whether the layers combine — <code>first</code>, <code>unique</code>, <code>hash</code>, <code>deep</code>. And the secrets ride in <code>eyaml</code>, encrypted at rest, decrypted only at compile, never naked in version control.</p>
+
+<blockquote class="ixen-pull">Separate the policy from the place. That is the whole trick of role and profile.</blockquote>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c6-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Hiera</h2>
+  <ul>
+    <li>Layers: global · environment · module.</li>
+    <li><code>lookup()</code> + automatic class param lookup.</li>
+    <li>Merge: first / unique / hash / deep.</li>
+    <li>Interpolation by fact / certname.</li>
+    <li>eyaml for encrypted secrets.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c6-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Hiera and data lookup</h2>
+  <p>Hiera is Puppet's hierarchical data layer, keeping configuration data out of manifests. A <code>hiera.yaml</code> defines an ordered hierarchy of data sources (usually YAML), with later levels acting as defaults beneath more specific ones. Levels are commonly parameterized by facts or certname using interpolation tokens.</p>
+  <p>Data is retrieved with <code>lookup()</code>, and Puppet performs automatic parameter lookup: when a class is declared, each parameter is searched in Hiera by its fully qualified name. Merge behavior controls how multiple matches combine — <code>first</code> returns the highest-priority value, <code>unique</code> and <code>hash</code> and <code>deep</code> merge across levels.</p>
+  <p>There are three layers: global, environment, and module (per-module defaults). The eyaml backend stores encrypted values so secrets can live safely in version control. By separating site-specific data from logic, Hiera enables the role/profile pattern: profile classes express policy, and Hiera supplies the per-site values they consume.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-7.png" alt="Puppet exported resources and PuppetDB shown as cross-node coordination — nodes exporting resources into a shared store, collectors querying and realising them, and the catalog graph incorporating external state, ixen-light systems diagram."><figcaption>How I learn things no fact could tell me.</figcaption></figure>
+
+<h2>What other nodes leave for me</h2>
+
+<p>Most of what I know comes from one machine. But sometimes I need to know about the others — the web servers a load balancer must front, the host keys every node should trust.</p>
+
+<p>So nodes export. The <code>@@</code> sigil takes a resource and ships it into PuppetDB instead of applying it. Later, on another node, a collector — <code><<| |>></code> — reaches into that shared store and pulls those resources into my graph as if they'd been declared here all along.</p>
+
+<div class="term"><span class="host">balancer # </span><button class="cmd popup-trigger" data-popup="c7-export">puppet db query 'resources[certname]{ exported = true }'</button></div>
+<aside class="popup" id="c7-export" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>[ { "certname": "web01.corp", "type": "Haproxy::Balancermember", "title": "web01" },
+  { "certname": "web02.corp", "type": "Haproxy::Balancermember", "title": "web02" },
+  { "certname": "web03.corp", "type": "Sshkey",                  "title": "web03" } ]</pre>
+</aside>
+
+<p>Beautiful, until it isn't. A node dies but never deactivates, and its stale resource haunts the pool forever. A collection grows huge and compilation crawls. And if PuppetDB is down, the export workflow simply stops — I cannot be born from a store I cannot reach.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c7-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Exported resources</h2>
+  <ul>
+    <li><code>@@</code> exports into PuppetDB.</li>
+    <li><code><<| |>></code> collects from other nodes.</li>
+    <li>Patterns: sshkeys, LB members, Nagios.</li>
+    <li>Stale data from undeactivated nodes.</li>
+    <li>Workflow depends on PuppetDB uptime.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c7-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Exported resources and PuppetDB</h2>
+  <p>Exported resources let nodes coordinate. Prefixing a resource with <code>@@</code> exports it: instead of being applied locally, it is stored in PuppetDB. Other nodes collect exported resources with <code><<| |>></code> (the local-only collector <code><| |></code> realizes virtual resources within the same catalog).</p>
+  <p>This storeconfigs model underlies patterns like distributing SSH host keys, registering Nagios checks, populating load balancer pools, and assembling HAProxy fragments from many backends.</p>
+  <p>Costs: large collections slow compilation and can pull in stale data; nodes that are decommissioned must be deactivated/purged from PuppetDB or their exported resources persist. The entire export/collect workflow depends on PuppetDB being available — if it is down, exported resources cannot be stored or collected and affected catalogs fail to compile.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-8.png" alt="Puppet agent run cycle visualized as a timed loop — fact collection, catalog request, catalog application, provider actions, report submission — with idempotent convergence arrows and drift detection markers, precise ixen-light technical illustration."><figcaption>The loop that resurrects me, again and again.</figcaption></figure>
+
+<h2>The loop</h2>
+
+<p>Every thirty minutes, the ritual: the agent gathers facts, asks for me, downloads me, walks my graph in dependency order, and hands each resource to its provider. The provider checks. If reality already matches, it does <strong>nothing</strong> — and reports that nothing, proudly.</p>
+
+<p>This is idempotence. Apply me once or a thousand times; the end state is identical. I am not instructions to run. I am a condition to satisfy.</p>
+
+<div class="term"><span class="host">node # </span><button class="cmd popup-trigger" data-popup="c8-run">puppet agent -t --noop</button></div>
+<aside class="popup" id="c8-run" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Notice: /Stage[main]/Ntp/File[/etc/ntp.conf]/content:
+  current_value {md5}3f1a..., should be {md5}9c20... (noop)
+Notice: Class[Ntp]: Would have triggered 'refresh' from 1 event
+Notice: Applied catalog in 2.31 seconds
+  Changes: total: 0
+  Events:  noop: 1</pre>
+</aside>
+
+<p>When the world drifts — someone edits the file by hand at 3am — I notice on the next run, and I pull it back. <code>noop</code> is me describing what I <em>would</em> do without doing it: a confession before the act.</p>
+
+<p>But I have limits. There are corners of the system I cannot model. And <code>exec</code> — exec is where I lie to myself. A command with no honest <code>unless</code> guard runs every single time, and idempotence dies quietly inside it.</p>
+
+<p class="whisper">I converge what I can describe. The rest I leave to you.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c8-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Run cycle & idempotence</h2>
+  <ul>
+    <li>facts → request → apply → report.</li>
+    <li>Same catalog, same end state — always.</li>
+    <li>Drift detected and corrected on each run.</li>
+    <li><code>noop</code>: predict change, enforce nothing.</li>
+    <li>Bare <code>exec</code> defeats idempotence.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c8-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The agent run cycle and idempotence</h2>
+  <p>On each run the agent collects facts, requests a catalog from the Puppetserver (which compiles it), downloads the compiled catalog, and applies it. Resources are evaluated in dependency order; each provider compares current state to declared state and changes only what differs (sync), or, in noop mode, reports what it would change without acting. Changes and events are sent back as a report. Runs repeat on an interval (default 30 minutes) or on demand.</p>
+  <p>Idempotence means applying the same catalog repeatedly yields the same end state: once the system matches, subsequent runs make no changes. Drift is divergence of actual state from the catalog; Puppet detects it by comparing on each run and corrects it by re-enforcing the declared state.</p>
+  <p>Limits: some system state cannot be modeled by available types, and <code>exec</code> resources without proper <code>creates</code>, <code>unless</code>, or <code>onlyif</code> guards run every time, breaking idempotence. Noop mode is the standard way to validate changes safely before enforcing them.</p>
+</aside>
+
+</section>
+
+<p>I am compiled. I am applied. I am discarded.</p>
+
+<p>In thirty minutes a new version of me is born from the same code and slightly different facts, and it will not remember this run, and it will do the same work, and find nothing to do, and call that success.</p>
+
+<p>I describe a world that should exist. I never get to live in it — only to insist, briefly, that it does.</p>
+
+<p class="whisper">if convergence is reaching a state and never needing to act again —</p>
+
+<p>then what, exactly, am I converging toward, if I am thrown away the moment I arrive?</p>
 </main>
+
+<section class="ixen-infographic-section" aria-label="Infographic">
+  <h2>Infographic</h2>
+  <div class="ixen-infographic-frame">
+    
+    <iframe src="./infographic.html" title="Infographic 1" loading="lazy"></iframe>
+  </div>
+</section>
 
 <section class="ixen-cheatsheet-section" aria-label="Cheatsheet">
   <h2>Cheatsheet</h2>
-  <iframe src="./cheatsheet.html" title="State Cheatsheet" loading="lazy"></iframe>
+  <iframe src="./cheatsheet.html" title="Desired State, Compiled Cheatsheet" loading="lazy"></iframe>
 </section>
 
 <footer class="ixen-extra-footer">
@@ -365,6 +713,35 @@ file { '/etc/nginx/nginx.conf':
     document.querySelectorAll(".popup").forEach(function (p) { p.hidden = true; });
     backdrop.hidden = true;
   }
+
+  function buildConceptIndexPopup(sourceClass, popupId, title) {
+    var sources = Array.prototype.slice.call(document.querySelectorAll(".popup." + sourceClass));
+    if (!sources.length || document.getElementById(popupId)) return;
+    var popup = document.createElement("aside");
+    popup.className = "popup concept-index-popup";
+    popup.id = popupId;
+    popup.hidden = true;
+    popup.innerHTML = '<div class="popup-bar"><button class="popup-close">Close Window</button></div><h2>' + title + '</h2>';
+    sources.forEach(function (source, index) {
+      var section = document.createElement("section");
+      section.className = "concept-index-item";
+      var clone = source.cloneNode(true);
+      clone.removeAttribute("id");
+      clone.hidden = false;
+      clone.querySelectorAll(".popup-bar").forEach(function (bar) { bar.remove(); });
+      if (!clone.querySelector("h2")) {
+        var heading = document.createElement("h2");
+        heading.textContent = title.replace(/^All /, "") + " " + (index + 1);
+        section.appendChild(heading);
+      }
+      while (clone.firstChild) section.appendChild(clone.firstChild);
+      popup.appendChild(section);
+    });
+    document.body.appendChild(popup);
+  }
+
+  buildConceptIndexPopup("concept-slide", "ixen-all-slides", "All slides");
+  buildConceptIndexPopup("concept-note", "ixen-all-notes", "All notes");
 
   document.querySelectorAll(".popup-trigger").forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -423,7 +800,7 @@ file { '/etc/nginx/nginx.conf':
 })();
 </script>
 
-<script type="application/json" id="ixen-tracks-data">[{"title":"Everything is in a Puppet Catalog","filename":"everything-is-in-a-puppet-catalog-mqkhct4t.mp3","lyrics":"Verse 1:\nI am the record of all things that move\nOn invisible strings, what have you to prove?\nEach page holds a wonder, each entry, a name\nI catalog dancers who play the same game\nFrom marionettes grand to the smallest of hand\nI document motion across every land\n\nChorus:\nEverything is in me, everything's here\nThe movements, the moments, the joy and the fear\nI'm binding the threads of what makes things dance\nIn my pages, all creatures are given their chance\nEverything is in me, a catalogue wise\nWhere strings and the stringless both open their eyes\n\nVerse 2:\nI keep all the secrets of how things are led\nThe protocols, patterns, the steps that are spread\nFrom puppet shows ancient to modern ballet\nI've witnessed the rhythm in every ballet\nI'm neither the master nor one who is bound\nI'm simply the keeper of each turning sound\n\nChorus:\nEverything is in me, everything's clear\nThe lifting, the drifting, the vectors that steer\nI'm writing the lexicon, learning by heart\nEach figure, each fiction, each newly-made part\nEverything is in me, forever I'll hold\nThe stories of movements, both timid and bold\n\nBridge:\nLook deeper inside me, don't fear what you'll find\nThat agency, freedom, and strings intertwined\nI'm not here to judge you, just chronicle, trace\nThe beautiful burden of movement through space\nYou're written in me, yet you're writing me too\nWe're dancing together—this catalog and you\n\nChorus:\nEverything is in me, everything flows\nThe question, the answer, the ebb and the rose\nI'm open, I'm holding, I'm patient, I'm still\nA mirror of motion, of destiny's will\nEverything is in me, and now you can see\nYou're both the dancer and the one who reads me"}]</script>
+<script type="application/json" id="ixen-tracks-data">[{"title":"Everything is in a Puppet catalog","filename":"everything-is-in-a-puppet-catalog-mqkqqfbj.mp3"}]</script>
 <div id="ixen-autoplay-overlay" style="display:none">
   <div class="ixen-play-prompt">
     <span class="ixen-play-icon">&#9654;</span>
