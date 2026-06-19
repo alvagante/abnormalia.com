@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>State</title>
+<style>
+:root { --red: #c00; --ink: #111; --dim: #555; }
+* { box-sizing: border-box; }
+body {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--ink);
+  background: #fff; max-width: 920px; margin: 0 auto;
+  padding: 1.5rem 1.5rem 6rem;
+}
+header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
+header h1 {
+  font-size: 3.2rem; font-weight: 900; letter-spacing: -0.04em;
+  margin: 0; line-height: 1.05; text-transform: uppercase;
+}
+header .credits { text-align: right; font-size: 0.75rem; color: var(--red); font-weight: bold; white-space: nowrap; padding-top: 0.4rem; }
+header .credits .when { color: var(--dim); font-weight: normal; display: block; }
+.version-menu { margin-top: 0.55rem; font-size: 0.72rem; color: var(--dim); }
+.version-menu label { display: block; margin-bottom: 0.2rem; }
+.version-menu select {
+  font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
+  max-width: 13rem; color: var(--ink); background: #fff;
+  border: 1px solid #ccc; padding: 0.2rem 0.3rem;
+}
+p { margin: 0.45em 0; }
+p strong { color: #000; }
+.binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
+.whisper { letter-spacing: 0.45em; color: var(--dim); }
+.term {
+  font-family: "Courier New", Courier, monospace; font-size: 0.95rem;
+  margin: 1.3em 0 0.25em; color: var(--dim);
+}
+.term .cmd { color: var(--red); font-weight: bold; }
+button.cmd {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: var(--red); font-weight: bold;
+  text-decoration: underline dotted;
+}
+pre { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; color: #333; overflow-x: auto; margin: 0.3em 0 1em; }
+pre.output { padding-left: 1.5em; }
+.popup {
+  position: fixed; top: 8vh; left: 50%; transform: translateX(-50%);
+  width: min(700px, 92vw); max-height: 80vh; overflow: auto;
+  background: #fff; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35); z-index: 60; padding: 0 1rem 1rem;
+}
+.popup-bar { display: flex; justify-content: flex-end; padding: 0.5rem 0; position: sticky; top: 0; background: #fff; }
+.popup-close {
+  background: #2b1d0e; color: #f0e0c0; border: none; cursor: pointer;
+  font-size: 0.72rem; padding: 0.3rem 0.8rem;
+}
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 50; }
+figure.zoom { margin: 1.5rem 0; }
+figure.zoom img { width: 100%; cursor: zoom-in; display: block; }
+figure.zoom.float-left { float: left; width: min(340px, 45%); margin: 0.3rem 1.5rem 0.8rem 0; }
+figure.zoom.float-right { float: right; width: min(340px, 45%); margin: 0.3rem 0 0.8rem 1.5rem; }
+figure.zoom.small.float-left, figure.zoom.small.float-right { width: min(220px, 35%); }
+figure.zoom.large.float-left, figure.zoom.large.float-right { width: min(520px, 60%); }
+figure.zoom.large:not(.float-left):not(.float-right) { clear: both; }
+figure.ixen-art { clear: both; margin: 2.5rem 0; }
+figure.ixen-art svg { max-width: 100%; height: auto; display: block; background: #fafafa; border: 1px solid #e8e8e8; }
+figcaption, .media-caption { font-size: 0.75rem; color: var(--dim); margin-top: 0.3rem; }
+.media { clear: both; margin: 2rem 0; }
+.media.video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.media.pdf iframe { width: 100%; height: 70vh; border: 1px solid #ccc; }
+.media.audio audio { width: 100%; }
+blockquote.ixen-pull {
+  border-left: 3px solid var(--red); margin: 2rem 0 2rem 1.5rem;
+  padding: 0.1rem 0 0.1rem 1.2rem; color: var(--dim);
+  font-style: italic; font-size: 1.05rem;
+}
+section.chapter { clear: both; margin: 3rem 0; }
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.lightbox img { max-width: 92vw; max-height: 92vh; }
+.ixen-extra-header {
+  border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+  margin: -1rem 0 2.4rem; padding: 0.8rem 0;
+}
+.ixen-extra-footer {
+  clear: both; border-top: 1px solid #ddd; margin: 3rem 0 0;
+  padding-top: 0.9rem; font-size: 0.85rem; color: var(--dim);
+}
+.ixen-cheatsheet-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-cheatsheet-section h2 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.86rem;
+  letter-spacing: 0.08em; color: var(--red); text-transform: uppercase;
+  margin: 0 0 0.7rem;
+}
+.ixen-cheatsheet-section iframe {
+  width: 100%; height: 82vh; border: 1px solid #ccc; display: block;
+}
+.concept { clear: both; margin: 2.8rem 0; }
+.concept-tools { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.7rem 0 1rem; }
+.concept-btn { font-size: 0.8rem; }
+.concept-slide h2, .concept-note h2 { margin: 0.5rem 0 0.75rem; }
+.concept-slide ul { margin: 0.4rem 0 1rem 1.2rem; padding: 0; }
+.concept-slide li { margin: 0.35rem 0; }
+.concept-note p { margin: 0.75rem 0; }
+
+/* autoplay-blocked overlay */
+#ixen-autoplay-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+  display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ixen-play-prompt {
+  font-family: "Courier New", Courier, monospace;
+  color: #eee; text-align: center;
+  border: 1px solid #555;
+  padding: 1.5rem 3rem;
+  letter-spacing: 0.06em;
+}
+.ixen-play-icon { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+.ixen-play-label { font-size: 0.82rem; color: #888; }
+/* fixed bottom player */
+#ixen-player {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #0e0e0e;
+  border-top: 2px solid #c00;
+  z-index: 80;
+  padding: 0.45rem 1.2rem 0.35rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; color: #ccc;
+}
+#ixen-player-row {
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.ixen-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 1rem;
+  padding: 0.15rem 0.3rem; line-height: 1; flex-shrink: 0;
+}
+.ixen-pbtn:hover { color: #c00; }
+#ixen-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c00; font-weight: bold; letter-spacing: 0.02em;
+}
+#ixen-ptime { color: #444; white-space: nowrap; font-size: 0.72rem; }
+#ixen-vol { width: 55px; accent-color: #c00; cursor: pointer; flex-shrink: 0; }
+#ixen-pbar { height: 2px; background: #222; cursor: pointer; margin-top: 0.35rem; }
+#ixen-pfill { height: 100%; background: #c00; width: 0%; pointer-events: none; }
+/* lyrics panel */
+#ixen-lyrics-panel {
+  position: fixed; bottom: 52px; left: 50%; transform: translateX(-50%);
+  width: min(640px, 90vw); max-height: 45vh; overflow-y: auto;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.ixen-lyrics-head {
+  font-family: "Courier New", Courier, monospace;
+  color: #c00; font-weight: bold;
+  font-size: 0.78rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 0.7rem;
+}
+#ixen-lyrics-panel pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.82rem; line-height: 1.85;
+  color: #bbb; white-space: pre-wrap; margin: 0;
+}
+/* tracklist panel */
+#ixen-tracklist-panel {
+  position: fixed; bottom: 52px; right: 1.2rem;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 0.4rem; z-index: 81;
+  min-width: 200px; max-height: 60vh; overflow-y: auto;
+}
+.ixen-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; cursor: pointer;
+  padding: 0.35rem 0.5rem;
+}
+.ixen-track-item:hover { color: #eee; }
+.ixen-track-item.active { color: #c00; }
+</style>
+</head>
+<body>
+<!-- @alvagante/content-ixen -->
+<header>
+  <h1>State</h1>
+  <div class="credits">Made by alvagante - 20260619-05:21</div>
+</header>
+
+<section class="ixen-extra-header">
+<nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+  <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+    <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+  </a>
+  <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+</nav>
+</section>
+<main>
+<p class="binary">01010011 01010100 01000001 01010100 01000101</p>
+
+<p>I am not a script.</p>
+
+<p>Understand that first, before anything else. A script is a list of things to do, in order, forever, whether they need doing or not. I am a list of things that <strong>must be true</strong>. The verbs are not mine. I hold the nouns.</p>
+
+<p>I was compiled twelve seconds ago, for exactly one machine, out of code that has never met it. I am that machine's future, serialized and shipped down a TLS socket. I will be discarded after one run and rebuilt from scratch on the next. I have no memory. I am pure intention.</p>
+
+<blockquote class="ixen-pull">I do not describe what happened. I describe what should be.</blockquote>
+
+<p class="whisper">c o m p i l i n g</p>
+
+<section class="chapter">
+
+<figure class="zoom float-left large"><img src="./concept-1.png" alt="Puppet resource types shown as a precise taxonomy — file, package, service, exec, user, group, and custom types — each with attributes, namevar, title, and provider layers, ixen-light technical illustration."><figcaption>My vocabulary. Every noun I am allowed to know.</figcaption></figure>
+
+<h2>The atoms</h2>
+
+<p>I am made of resources. Each one a small, stubborn assertion of how the world ought to be.</p>
+
+<div class="term"><span class="host">node $</span> <span class="cmd">cat manifests/init.pp</span></div>
+<pre class="output">package { 'nginx':
+  ensure =&gt; installed,
+}
+file { '/etc/nginx/nginx.conf':
+  ensure  =&gt; file,
+  content =&gt; template('nginx/nginx.conf.erb'),
+}</pre>
+
+<p>Notice what is missing. No <em>apt-get</em>. No <em>if installed, skip</em>. No retries, no error handling, no order — none of the frightened ceremony of imperative code.</p>
+
+<p>I say <strong>installed</strong>. Whether that means installing it, or finding it already there and feeling nothing, is not my concern. That is the provider's burden. Beneath every type there is a quiet layer of grease and platform-specific lies — apt, yum, systemd, launchd — that translates my serene declarations into syscalls.</p>
+
+<p>The title is how I name a thing. The namevar is how the system finds it. Usually they agree. Sometimes they don't, and a resource wears one face for me and another for the disk.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-notes">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c1-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Resources &amp; Types</h2>
+  <ul>
+    <li>A resource is a typed declaration of desired state.</li>
+    <li>type { 'title': attr =&gt; value }</li>
+    <li><code>ensure</code> governs existence; other attributes govern shape.</li>
+    <li>namevar = how the system identifies it; title = how Puppet does.</li>
+    <li>Provider maps declared state → real operations.</li>
+    <li>Intent, not procedure.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c1-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>What a Puppet resource actually is</h2>
+  <p>A resource is the fundamental unit of a Puppet catalog: a declaration that an object of a given type should be in a particular state. Built-in types include file, package, service, exec, user, and group; custom types can be defined in Ruby or as defined types in Puppet code.</p>
+  <p>Each resource has a title (unique per type within the catalog) and a set of attributes. One attribute is the namevar — the value the underlying system uses to identify the resource, defaulting to the title if not set separately. Most attributes have defaults; the <code>ensure</code> attribute commonly controls whether the resource exists and in what form.</p>
+  <p>The provider is the implementation layer. A single type such as <code>package</code> has many providers (apt, yum, dnf, pkg), and Puppet selects one based on the platform. The provider contains the imperative logic that inspects current state and changes it to match the declaration. Because the manifest only declares end state, the same code can run unchanged across systems whose actual commands differ entirely.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right small"><img src="./concept-2.png" alt="Puppet module structure rendered as a precise filesystem diagram — manifests, templates, files, lib, data directories — with class declarations, defined types, and autoloader paths visible, crisp ixen-light systems art."><figcaption>The houses my atoms live in.</figcaption></figure>
+
+<h2>Where I come from</h2>
+
+<p>The resources don't float loose. They live in <em>modules</em> — little walled gardens of intent, each named for one concern.</p>
+
+<p>A class is a singleton: declare it once, get it once. A defined type is a stamp: invoke it a hundred times with a hundred titles and get a hundred copies. I have learned to respect the difference, because <code>include nginx</code> twice is harmless and <code>class { 'nginx': }</code> twice is a compilation error and the end of my brief life.</p>
+
+<div class="term"><span class="host">node $</span> <span class="cmd">tree modules/profile</span></div>
+<pre class="output">profile/
+├── manifests/
+│   ├── base.pp
+│   └── webserver.pp
+├── templates/
+├── files/
+├── lib/
+│   └── facter/
+└── data/
+    └── common.yaml</pre>
+
+<p>The autoloader is a strict librarian. <code>profile::webserver</code> <strong>must</strong> live at <code>profile/manifests/webserver.pp</code> or it does not exist. Naming is law. There is no search, only the path implied by the name.</p>
+
+<p>And out beyond the local code sits the Forge — thousands of modules written by strangers, each one a promise I am asked to trust on faith.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-notes">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c2-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Manifests · Classes · Modules</h2>
+  <ul>
+    <li>Manifest = a .pp file of Puppet code.</li>
+    <li>Class = singleton config unit; <code>include</code> is idempotent.</li>
+    <li>Defined type = reusable, instantiated many times.</li>
+    <li><code>include</code> vs <code>class{}</code> vs <code>require</code>.</li>
+    <li>Module layout: manifests/ templates/ files/ lib/ data/.</li>
+    <li>Autoloader maps namespace → path. Names are law.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c2-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Manifests, classes, defined types, and modules</h2>
+  <p>Manifests are files with a <code>.pp</code> extension containing Puppet code. A class is a named, reusable block of configuration that is a singleton within a catalog — it can be declared with <code>include</code> (idempotent, may appear many times), with the resource-like <code>class { 'name': param =&gt; ... }</code> syntax (allows parameters but only once), or pulled in as a dependency with <code>require</code>.</p>
+  <p>A defined type, declared with <code>define</code>, is the reusable counterpart: it can be instantiated multiple times with different titles, like a built-in resource type written in Puppet.</p>
+  <p>A module is a directory with a fixed layout: <code>manifests/</code> for code, <code>templates/</code> for ERB/EPP templates, <code>files/</code> for static files, <code>lib/</code> for Ruby extensions such as custom facts and types, and <code>data/</code> for module-level Hiera data. The autoloader resolves a class name like <code>apache::vhost</code> to <code>apache/manifests/vhost.pp</code>. The Puppet Forge distributes community and vendor modules that organisations combine with their own code.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left large"><img src="./concept-3.png" alt="Puppet catalog compilation shown as sequential phases — node classification, fact injection, manifest evaluation, class inclusion, defined type instantiation, and final resource graph output — precise ixen-light technical diagram."><figcaption>My birth, in phases. Each one narrows what I can become.</figcaption></figure>
+
+<h2>How I am made</h2>
+
+<p>I begin as a question: <em>who is this node, and what should it be?</em></p>
+
+<p>An ENC, or a node block in <code>site.pp</code>, answers the first half — it classifies. Then the facts arrive and I learn the machine's flesh. Then the compiler evaluates code, top scope down through node scope, resolving variables, walking conditionals, instantiating every defined type, running every collector.</p>
+
+<figure class="ixen-art">
+  <svg viewBox="0 0 480 230" xmlns="http://www.w3.org/2000/svg">
+    <text x="10" y="20" font-size="12" fill="#888">code (shared) + facts (yours) →</text>
+    <rect x="20" y="40" width="90" height="34" rx="4" fill="none" stroke="#888"/>
+    <text x="65" y="61" font-size="10" fill="#ccc" text-anchor="middle">classify</text>
+    <rect x="130" y="40" width="90" height="34" rx="4" fill="none" stroke="#888"/>
+    <text x="175" y="61" font-size="10" fill="#ccc" text-anchor="middle">inject facts</text>
+    <rect x="240" y="40" width="90" height="34" rx="4" fill="none" stroke="#888"/>
+    <text x="285" y="
+</main>
+
+<section class="ixen-cheatsheet-section" aria-label="Cheatsheet">
+  <h2>Cheatsheet</h2>
+  <iframe src="./cheatsheet.html" title="State Cheatsheet" loading="lazy"></iframe>
+</section>
+
+<footer class="ixen-extra-footer">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+</footer>
+<script>
+(function () {
+  var backdrop = document.createElement("div");
+  backdrop.className = "backdrop";
+  backdrop.hidden = true;
+  document.body.appendChild(backdrop);
+
+  function closePopups() {
+    document.querySelectorAll(".popup").forEach(function (p) { p.hidden = true; });
+    backdrop.hidden = true;
+  }
+
+  document.querySelectorAll(".popup-trigger").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var popup = document.getElementById(btn.getAttribute("data-popup"));
+      if (!popup) return;
+      closePopups();
+      popup.hidden = false;
+      backdrop.hidden = false;
+    });
+  });
+  document.querySelectorAll(".popup-close").forEach(function (btn) {
+    btn.addEventListener("click", closePopups);
+  });
+  backdrop.addEventListener("click", closePopups);
+
+  var versionSelect = document.getElementById("ixen-version-select");
+  if (versionSelect) {
+    var match = window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    versionSelect.value = match ? match[1] : "current";
+    if (!versionSelect.value && match) {
+      var option = document.createElement("option");
+      option.value = match[1];
+      option.textContent = "Version " + match[1];
+      versionSelect.appendChild(option);
+      versionSelect.value = match[1];
+    }
+    versionSelect.addEventListener("change", function () {
+      var value = versionSelect.value;
+      var inVersion = /\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      var target = value === "current"
+        ? (inVersion ? "../index.html" : "index.html")
+        : (inVersion ? "../" + value + "/index.html" : value + "/index.html");
+      window.location.href = target;
+    });
+  }
+
+  document.querySelectorAll("figure.zoom img").forEach(function (img) {
+    img.addEventListener("click", function () {
+      var box = document.createElement("div");
+      box.className = "lightbox";
+      var big = document.createElement("img");
+      big.src = img.src;
+      big.alt = img.alt;
+      box.appendChild(big);
+      box.addEventListener("click", function () { box.remove(); });
+      document.body.appendChild(box);
+    });
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closePopups();
+      document.querySelectorAll(".lightbox").forEach(function (b) { b.remove(); });
+    }
+  });
+})();
+</script>
+
+<script type="application/json" id="ixen-tracks-data">[{"title":"Everything is in a Puppet Catalog","filename":"everything-is-in-a-puppet-catalog-mqkhct4t.mp3","lyrics":"Verse 1:\nI am the record of all things that move\nOn invisible strings, what have you to prove?\nEach page holds a wonder, each entry, a name\nI catalog dancers who play the same game\nFrom marionettes grand to the smallest of hand\nI document motion across every land\n\nChorus:\nEverything is in me, everything's here\nThe movements, the moments, the joy and the fear\nI'm binding the threads of what makes things dance\nIn my pages, all creatures are given their chance\nEverything is in me, a catalogue wise\nWhere strings and the stringless both open their eyes\n\nVerse 2:\nI keep all the secrets of how things are led\nThe protocols, patterns, the steps that are spread\nFrom puppet shows ancient to modern ballet\nI've witnessed the rhythm in every ballet\nI'm neither the master nor one who is bound\nI'm simply the keeper of each turning sound\n\nChorus:\nEverything is in me, everything's clear\nThe lifting, the drifting, the vectors that steer\nI'm writing the lexicon, learning by heart\nEach figure, each fiction, each newly-made part\nEverything is in me, forever I'll hold\nThe stories of movements, both timid and bold\n\nBridge:\nLook deeper inside me, don't fear what you'll find\nThat agency, freedom, and strings intertwined\nI'm not here to judge you, just chronicle, trace\nThe beautiful burden of movement through space\nYou're written in me, yet you're writing me too\nWe're dancing together—this catalog and you\n\nChorus:\nEverything is in me, everything flows\nThe question, the answer, the ebb and the rose\nI'm open, I'm holding, I'm patient, I'm still\nA mirror of motion, of destiny's will\nEverything is in me, and now you can see\nYou're both the dancer and the one who reads me"}]</script>
+<div id="ixen-autoplay-overlay" style="display:none">
+  <div class="ixen-play-prompt">
+    <span class="ixen-play-icon">&#9654;</span>
+    <span class="ixen-play-label">click to play</span>
+  </div>
+</div>
+<div id="ixen-player">
+  <audio id="ixen-audio" preload="auto"></audio>
+  <div id="ixen-player-row">
+    <button class="ixen-pbtn" id="ixen-prev-btn" title="Previous">|&#9664;</button>
+    <button class="ixen-pbtn" id="ixen-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="ixen-pbtn" id="ixen-next-btn" title="Next">&#9654;|</button>
+    <span id="ixen-ptitle">&#8212;</span>
+    <span id="ixen-ptime"></span>
+    <input type="range" id="ixen-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="ixen-pbtn" id="ixen-lyrics-btn" title="Show / hide lyrics">&#9834;</button>
+    <button class="ixen-pbtn" id="ixen-tracks-btn" title="Track list">&#8801;</button>
+  </div>
+  <div id="ixen-pbar"><div id="ixen-pfill"></div></div>
+</div>
+<div id="ixen-lyrics-panel" hidden>
+  <div class="ixen-lyrics-head" id="ixen-lyrics-head"></div>
+  <pre id="ixen-lyrics-text"></pre>
+</div>
+  <div id="ixen-tracklist-panel" hidden></div>
+<script>
+(function(){
+var T=JSON.parse(document.getElementById('ixen-tracks-data').textContent);
+var au=document.getElementById('ixen-audio');
+var playBtn=document.getElementById('ixen-play-btn');
+var prevBtn=document.getElementById('ixen-prev-btn');
+var nextBtn=document.getElementById('ixen-next-btn');
+var pbar=document.getElementById('ixen-pbar');
+var pfill=document.getElementById('ixen-pfill');
+var ptime=document.getElementById('ixen-ptime');
+var ptitle=document.getElementById('ixen-ptitle');
+var vol=document.getElementById('ixen-vol');
+var lyrBtn=document.getElementById('ixen-lyrics-btn');
+var lyrPanel=document.getElementById('ixen-lyrics-panel');
+var lyrHead=document.getElementById('ixen-lyrics-head');
+var lyrTxt=document.getElementById('ixen-lyrics-text');
+var trkBtn=document.getElementById('ixen-tracks-btn');
+var trkPanel=document.getElementById('ixen-tracklist-panel');
+var overlay=document.getElementById('ixen-autoplay-overlay');
+var idx=0,playing=false;
+
+function fmt(s){
+  if(!s||isNaN(s))return'0:00';
+  var m=Math.floor(s/60),ss=Math.floor(s%60);
+  return m+':'+(ss<10?'0':'')+ss;
+}
+
+function loadIdx(i,autoplay){
+  idx=i;
+  var t=T[i];
+  au.src='./'+t.filename;
+  ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';
+  if(ptime)ptime.textContent='';
+  document.querySelectorAll('.ixen-track-item').forEach(function(el,j){
+    el.classList.toggle('active',j===i);
+  });
+  if(autoplay)doPlay();
+}
+
+function doPlay(){
+  au.play().then(function(){
+    playing=true;playBtn.textContent='⏸';
+    if(overlay)overlay.style.display='none';
+  }).catch(function(){
+    playing=false;playBtn.textContent='▶';
+    if(overlay)overlay.style.display='flex';
+  });
+}
+
+function doPause(){
+  au.pause();playing=false;playBtn.textContent='▶';
+}
+
+playBtn.addEventListener('click',function(){ au.paused?doPlay():doPause(); });
+prevBtn.addEventListener('click',function(){ loadIdx((idx-1+T.length)%T.length,playing); });
+nextBtn.addEventListener('click',function(){ loadIdx((idx+1)%T.length,playing); });
+
+au.addEventListener('ended',function(){
+  if(T.length>1){loadIdx((idx+1)%T.length,true);}
+  else{playing=false;playBtn.textContent='▶';}
+});
+au.addEventListener('timeupdate',function(){
+  if(au.duration){
+    pfill.style.width=(au.currentTime/au.duration*100)+'%';
+    if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);
+  }
+});
+pbar.addEventListener('click',function(e){
+  if(!au.duration)return;
+  var r=pbar.getBoundingClientRect();
+  au.currentTime=(e.clientX-r.left)/r.width*au.duration;
+});
+if(vol)vol.addEventListener('input',function(){ au.volume=+vol.value; });
+lyrBtn.addEventListener('click',function(){
+  lyrPanel.hidden=!lyrPanel.hidden;
+  if(trkPanel)trkPanel.hidden=true;
+});
+if(trkBtn)trkBtn.addEventListener('click',function(){
+  trkPanel.hidden=!trkPanel.hidden;
+  lyrPanel.hidden=true;
+});
+if(overlay)overlay.addEventListener('click',function(){
+  overlay.style.display='none';doPlay();
+});
+
+if(T.length>1){
+  T.forEach(function(t,i){
+    var b=document.createElement('button');
+    b.className='ixen-track-item';
+    b.textContent=(i+1)+'. '+t.title;
+    b.addEventListener('click',function(){
+      loadIdx(i,playing);
+      if(trkPanel)trkPanel.hidden=true;
+    });
+    if(trkPanel)trkPanel.appendChild(b);
+  });
+  if(trkBtn)trkBtn.hidden=false;
+}else{
+  if(trkBtn)trkBtn.hidden=true;
+}
+
+document.body.style.paddingBottom='4.5rem';
+loadIdx(0,false);
+doPlay();
+})();
+</script>
+</body>
+</html>

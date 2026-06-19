@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Cast: Hypervisor and Domains</title>
+<title>Domain Topology</title>
 <style>
   :root {
     --cs-hue-blue: #1a73e8;
@@ -273,133 +273,167 @@
 </head>
 <body>
 <header class="cs-page-header">
-  <h1>The Cast: Hypervisor and Domains</h1>
-  <div class="cs-page-meta"><span>Life as a Xen hypervisor</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-17</span></div>
+  <h1>Domain Topology</h1>
+  <div class="cs-page-meta"><span>Life as a Xen hypervisor</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-19</span></div>
 </header>
 <main>
 <div class="cs-quickref">
   <span class="cs-qr-label">Quick ref</span>
   <div class="cs-qr-items">
     <div class="cs-qr-item"><code>xl list</code> <span>show running domains</span></div>
-    <div class="cs-qr-item"><code>xl create vm.cfg</code> <span>boot a domU</span></div>
-    <div class="cs-qr-item"><code>xl console dom</code> <span>attach to guest console</span></div>
-    <div class="cs-qr-item"><code>xl info</code> <span>host + hypervisor facts</span></div>
+    <div class="cs-qr-item"><code>xl create cfg</code> <span>start a domU</span></div>
+    <div class="cs-qr-item"><code>xl console N</code> <span>attach to domain console</span></div>
+    <div class="cs-qr-item"><code>xl info</code> <span>host/hypervisor summary</span></div>
+    <div class="cs-qr-item"><code>xenstore-ls</code> <span>dump xenstore tree</span></div>
+    <div class="cs-qr-item"><code>xl migrate D host</code> <span>live migrate domain</span></div>
     <div class="cs-qr-item"><code>xl dmesg</code> <span>hypervisor ring buffer</span></div>
-    <div class="cs-qr-item"><code>xl top</code> <span>live per-domain resource use</span></div>
-    <div class="cs-qr-item"><code>xl migrate dom host</code> <span>live migrate</span></div>
   </div>
 </div>
 
 <section class="cs-section" data-color="blue">
-  <h2 class="cs-section-title">The Cast: Hypervisor and Domains</h2>
+  <h2 class="cs-section-title">Domain Topology</h2>
+  <p>Xen is a Type-1 microkernel hypervisor: a thin privileged layer that owns CPU, memory and scheduling, while all rich device logic lives in guest domains.</p>
   <div class="cs-items">
     <div class="cs-item">
       <div class="cs-item-cmd"><code>Xen hypervisor</code></div>
-      <div class="cs-item-desc">Thin Type-1 layer owning CPU scheduling, memory translation, and event delivery; runs no drivers itself.</div>
+      <div class="cs-item-desc">Ring -1/EL2 layer; schedules vCPUs, partitions RAM, mediates grants and event channels — no device drivers.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>dom0</code></div>
-      <div class="cs-item-desc">First, privileged domain booted by Xen; hosts the toolstack, real device drivers, and backend halves.</div>
+      <div class="cs-item-desc">First, privileged guest started at boot; owns hardware, runs toolstack (<code>xl</code>/libxl) and backend drivers.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>domU</code></div>
-      <div class="cs-item-desc">Unprivileged guest with no direct hardware access; reaches devices via split drivers.</div>
+      <div class="cs-item-desc">Unprivileged guest; sees virtual devices only, reaches hardware via split drivers in a backend domain.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>driver domain</code></div>
-      <div class="cs-item-desc">Deprivileged domain owning a NIC/HBA via passthrough, exporting backends — shrinks dom0's attack surface.</div>
+      <div class="cs-item-desc">Deprivileged domain holding a real device (NIC/disk) so a dom0 driver crash can't sink the host.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>stub domain</code></div>
-      <div class="cs-item-desc">Per-HVM-guest sandbox running its QEMU device model, isolating emulation from dom0.</div>
+      <div class="cs-item-desc">Minimal per-guest domain running QEMU device emulation, isolating the HVM model out of dom0.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>toolstack (xl/libxl)</code></div>
-      <div class="cs-item-desc">User-space control plane in dom0 that issues hypercalls to build, pause, and destroy domains.</div>
+      <div class="cs-item-cmd"><code>xenstored / xenconsoled</code></div>
+      <div class="cs-item-desc">Dom0 daemons providing the config database and serial console multiplexing.</div>
     </div>
   </div>
-  <div class="cs-callout note"><span class="cs-callout-label">Note</span> "Disaggregation" splits dom0's roles across driver and stub domains so one compromised driver doesn't own the host.</div>
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> Disaggregation (driver + stub domains) shrinks dom0's trusted computing base; a compromised backend then only owns its slice of hardware.</div>
 </section>
 
 <section class="cs-section" data-color="green">
   <h2 class="cs-section-title">Execution Modes: PV / HVM / PVH</h2>
   <table class="cs-table">
-    <thead><tr><th>Mode</th><th>Hardware virt</th><th>Boot/privilege</th><th>I/O path</th></tr></thead>
+    <thead><tr><th>Mode</th><th>CPU virtualization</th><th>I/O path</th><th>Trade-off</th></tr></thead>
     <tbody>
-      <tr><td><code>PV</code></td><td>None — pure hypercalls</td><td>Xen-aware kernel, ring deprivileging</td><td>PV split drivers only</td></tr>
-      <tr><td><code>HVM</code></td><td>VT-x / AMD-V + EPT/NPT</td><td>Unmodified OS, emulated BIOS</td><td>QEMU emulation, optional PV drivers</td></tr>
-      <tr><td><code>PVH</code></td><td>VT-x / AMD-V + EPT/NPT</td><td>PV boot, no QEMU/firmware emulation</td><td>PV split drivers, hardware MMU</td></tr>
+      <tr><td><code>PV</code></td><td>Paravirtual; guest uses hypercalls, no VT-x needed</td><td>PV split drivers only</td><td>Needs Xen-aware kernel; weak isolation of page tables</td></tr>
+      <tr><td><code>HVM</code></td><td>Hardware VT-x/AMD-V + EPT/NPT; QEMU emulates platform</td><td>Emulated devices, PV drivers via PVHVM</td><td>Runs unmodified OS; emulation overhead</td></tr>
+      <tr><td><code>PVH</code></td><td>Hardware virt for CPU/MMU, no emulated platform</td><td>PV drivers + virtual local APIC</td><td>Lightweight modern default; needs PVH-capable kernel</td></tr>
     </tbody>
   </table>
-  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> PVH is the modern default: it keeps PV's lean device model while using hardware virtualization for memory and privilege, avoiding PV's costly pagetable hypercalls and HVM's QEMU overhead.</div>
+  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> Prefer PVH for new Linux/BSD guests: it drops QEMU's attack surface while keeping hardware-accelerated memory translation. Classic PV is largely legacy post-Meltdown.</div>
 </section>
 
 <section class="cs-section" data-color="red">
   <h2 class="cs-section-title">CPU Scheduling</h2>
+  <div class="cs-grid">
+    <div>
+      <h3>Schedulers</h3>
+      <p><code>credit2</code> is the default weighted fair-share scheduler; <code>null</code> statically pins vCPUs for latency-critical/NFV workloads; <code>rtds</code> offers a deadline-based real-time policy.</p>
+    </div>
+    <div>
+      <h3>Controls</h3>
+      <p>Tune per-domain <code>weight</code> and <code>cap</code>; bind vCPUs to pCPUs with affinity; isolate domains into <code>cpupools</code> each with its own scheduler.</p>
+    </div>
+  </div>
   <div class="cs-items">
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>credit2</code></div>
-      <div class="cs-item-desc">Default general-purpose scheduler; weight + cap based, latency-aware load balancing across pCPUs.</div>
+      <div class="cs-item-cmd"><code>xl sched-credit2 -d D -w 512</code></div>
+      <div class="cs-item-desc">Set scheduling weight for a domain.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>rtds</code></div>
-      <div class="cs-item-desc">Real-time deferrable-server scheduler with per-vCPU period/budget for latency guarantees.</div>
+      <div class="cs-item-cmd"><code>xl vcpu-pin D vcpu pcpu</code></div>
+      <div class="cs-item-desc">Hard-pin a vCPU to a physical CPU.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>null</code></div>
-      <div class="cs-item-desc">Static 1:1 vCPU-to-pCPU pinning with no overhead; ideal for dedicated/NFV workloads.</div>
+      <div class="cs-item-cmd"><code>xl cpupool-create</code></div>
+      <div class="cs-item-desc">Carve CPUs into an isolated pool with its own scheduler.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl vcpu-pin dom v pcpu</code></div>
-      <div class="cs-item-desc">Pin a vCPU to physical CPUs for cache locality or NUMA placement.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl sched-credit2 -d dom -w 512</code></div>
-      <div class="cs-item-desc">Set a domain's scheduling weight.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl cpupool-*</code></div>
-      <div class="cs-item-desc">Partition pCPUs into pools, each with its own scheduler instance.</div>
+      <div class="cs-item-cmd"><code>xl vcpu-list</code></div>
+      <div class="cs-item-desc">Show vCPU→pCPU placement and affinity masks.</div>
     </div>
   </div>
 </section>
 
 <section class="cs-section" data-color="purple">
-  <h2 class="cs-section-title">Memory: Translation &amp; Ballooning</h2>
-  <div class="cs-grid">
-    <div>
-      <h3>Address translation</h3>
-      <p>HVM/PVH use hardware EPT/NPT to map guest-physical to machine frames; classic PV guests use direct/shadow pagetables. The <code>P2M</code> and reverse <code>M2P</code> tables track guest↔machine frame relationships.</p>
-    </div>
-    <div>
-      <h3>Reclaiming memory</h3>
-      <p>The in-guest balloon driver inflates to return pages to Xen and deflates to take them back, enabling overcommit within <code>maxmem</code>. It is one tool among many — not the primary memory mechanism.</p>
-    </div>
-  </div>
+  <h2 class="cs-section-title">Memory: Translation & Ballooning</h2>
   <div class="cs-items">
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl mem-set dom 2048</code></div>
-      <div class="cs-item-desc">Balloon the domain's current target to 2 GiB.</div>
+      <div class="cs-item-cmd"><code>P2M / M2P tables</code></div>
+      <div class="cs-item-desc">Map guest pseudo-physical frames to machine frames and back; HVM/PVH use hardware EPT/NPT for this.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl mem-max dom 4096</code></div>
-      <div class="cs-item-desc">Set the hard ceiling the balloon can grow toward.</div>
+      <div class="cs-item-cmd"><code>balloon driver</code></div>
+      <div class="cs-item-desc">In-guest driver returns/claims pages so the host can overcommit between <code>maxmem</code> and current target.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>dom0_mem=4G,max:4G</code></div>
-      <div class="cs-item-desc">Boot arg pinning dom0 memory to avoid contention.</div>
+      <div class="cs-item-cmd"><code>xl mem-set D 2048</code></div>
+      <div class="cs-item-desc">Drive the balloon to resize a guest's live allocation.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>tmem / claims</code></div>
+      <div class="cs-item-desc">Transcendent memory and claim API reduce racey allocation failures under overcommit.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>xl mem-max D 4096</code></div>
+      <div class="cs-item-desc">Set the ceiling the balloon may inflate up to.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>NUMA affinity</code></div>
+      <div class="cs-item-desc">Xen places domain memory on the node matching its vCPU affinity to avoid cross-node penalties.</div>
     </div>
   </div>
-  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> Ballooning a guest below its working set triggers in-guest OOM kills, not graceful slowdown — set sane <code>maxmem</code> floors.</div>
+  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> Ballooning below the guest's working set triggers swapping inside the guest, not graceful shrink; never set the target under what the workload actually touches.</div>
 </section>
 
 <section class="cs-section" data-color="orange">
-  <h2 class="cs-section-title">I/O Plumbing: Split Drivers, Grants, Channels, Xenstore</h2>
+  <h2 class="cs-section-title">Split I/O: Grants, Event Channels, XenStore</h2>
+  <p>Virtual devices are a frontend/backend pair connected through three primitives that together replace emulated hardware.</p>
+  <div class="cs-grid">
+    <div>
+      <h3>Grant references</h3>
+      <p>A guest authorizes a specific backend to map or copy specific pages, enabling zero-copy I/O without exposing its whole address space.</p>
+    </div>
+    <div>
+      <h3>Event channels</h3>
+      <p>Lightweight virtual interrupts/IPIs that signal "ring has data" between front and back ends and deliver timer/IPI notifications.</p>
+    </div>
+  </div>
   <div class="cs-items">
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>netfront / blkfront</code></div>
-      <div class="cs-item-desc">Lightweight frontend drivers in domU that talk to backends over a shared ring.</div>
+      <div class="cs-item-cmd"><code>vif / netfront ↔ netback</code></div>
+      <div class="cs-item-desc">Networking split driver; ring buffers in granted pages carry packets.</div>
     </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>vbd / blkfront ↔ blkback</code></div>
+      <div class="cs-item-desc">Block storage split driver using indirect grant descriptors.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>xenstore-ls /local/domain/N</code></div>
+      <div class="cs-item-desc">Inspect a domain's device tree and negotiated state.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>xenstore-read path</code></div>
+      <div class="cs-item-desc">Read a key; backends/frontends rendezvous via the XenBus state machine here.</div>
+    </div>
+  </div>
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> XenStore is a small transactional key/value tree for configuration and connection setup — not a data path. Bulk I/O always flows through grant-mapped rings.</div>
+</section>
+
+<section class="cs-section" data-color="teal">
+  <h2 class="cs-section-title">PCI Passthrough & IOMMU Isolation</h2>
 </main>
 </body>
 </html>

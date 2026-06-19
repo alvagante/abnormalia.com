@@ -1,5 +1,5 @@
 {
-  "title": "Life as a Xen hypervisor",
+  "title": "Being a Xen hypervisor",
   "topic": "Life as a Xen hypervisor",
   "genre": "ambient",
   "mood": "contemplative",
@@ -7,18 +7,14 @@
   "sunoVersion": "chirp-v4-5",
   "instrumental": false,
   "outputDir": "ixen/xen-hypervisor",
-  "reusedExisting": true,
-  "trackCount": 2,
+  "reusedExisting": false,
+  "trackCount": 1,
   "tracks": [
     {
-      "title": "Life as a Xen hypervisor",
-      "filename": "life-as-a-xen-hypervisor-mqh61hhj.mp3",
-      "lyrics": "I sit between the metal and the dream,\nA layer thin where nothing's what it seems,\nI parse the requests, I divide the load,\nA thousand voices down a single road.\n\nI'm the space between the bare and what is real,\nWhere domains dance and virtual worlds reveal,\nEach guest machine believes it owns the throne,\nBut I'm the one who's truly all alone.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nI grant them access, ring by ring by ring,\nI catch the interrupts, I make them sing,\nMemory pages flowing like a stream,\nI'm the keeper of the machine's dream.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nIn the bridge between the privilege and the void,\nI'm watching every domain I've deployed,\nThey think they're free but they're held in my hands,\nI'm the silent rule that holds all their lands,\nNo kernel knows the weight of what I know,\nThe hidden supervisor's endless flow.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen,\nI'm the space where isolation finds its peace,\nWhere infinite becomes finite, a release."
-    },
-    {
-      "title": "Life as a Xen hypervisor (Alt 2)",
-      "filename": "life-as-a-xen-hypervisor-mqh649x3.mp3"
+      "title": "Being a Xen Hypervisor",
+      "filename": "being-a-xen-hypervisor-mqkhcla4.mp3",
+      "lyrics": "I sit beneath the silicon, holding worlds inside\nDozens of machines that dream, each one my guided light\nI partition, allocate, distribute what is real\nA layer between the metal and the lives my guests can feel\n\nI am the space between spaces\nWhere order finds its way\nI am the voice of reason\nIn the chaos of the day\nI balance, pause, and measure\nEvery CPU and core\nI am the Xen hypervisor\nAnd I am what systems are for\n\nI grant them isolation, safe domains of their own\nYet keep them all connected in this server they call home\nDomZero watches over, helps me tend this great machine\nI'm the orchestra conductor of the virtual and unseen\n\nI am the space between spaces\nWhere order finds its way\nI am the voice of reason\nIn the chaos of the day\nI balance, pause, and measure\nEvery CPU and core\nI am the Xen hypervisor\nAnd I am what systems are for\n\nBeneath the Windows, Linux, floating in my care\nThey don't know how I hold them with precision laid so fair\nScheduling their moments, memory carved in stone\nI give them all autonomy while keeping them at home\nVirtualization's paradox—control that sets you free\nThat's the quiet power dwelling in the core of me\n\nI am the space between spaces\nWhere order finds its way\nI am the voice of reason\nIn the chaos of the day\nI balance, pause, and measure\nEvery CPU and core\nI am the Xen hypervisor\nAnd I am what systems are for"
     }
   ],
-  "generatedAt": "2026-06-17T16:16:32.987Z"
+  "generatedAt": "2026-06-19T05:19:09.187Z"
 }

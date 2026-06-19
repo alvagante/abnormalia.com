@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ring Minus One</title>
+<title>I Am the Thin Layer</title>
 <style>
 :root { --red: #c00; --ink: #111; --dim: #555; }
 * { box-sizing: border-box; }
@@ -194,6 +194,18 @@ section.chapter { clear: both; margin: 3rem 0; }
 </head>
 <body>
 <!-- @alvagante/content-ixen -->
+<header>
+  <h1>I Am the Thin Layer</h1>
+  <div class="credits">Made by alvagante - 20260619-05:21
+    <div class="version-menu">
+      <label for="ixen-version-select">versions</label>
+      <select id="ixen-version-select">
+        <option value="current">Current</option>
+        <option value="1">Version 1</option><option value="2">Version 2</option><option value="3">Version 3</option><option value="4">Version 4</option>
+      </select>
+    </div></div>
+</header>
+
 <section class="ixen-extra-header">
 <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
   <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
@@ -202,464 +214,153 @@ section.chapter { clear: both; margin: 3rem 0; }
   <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
 </nav>
 </section>
-<header>
-  <h1>Ring Minus One</h1>
-  <div class="credits">Made by alvagante - 20260617-20:58
-    <div class="version-menu">
-      <label for="ixen-version-select">versions</label>
-      <select id="ixen-version-select">
-        <option value="current">Current</option>
-        <option value="1">Version 1</option><option value="2">Version 2</option><option value="3">Version 3</option>
-      </select>
-    </div></div>
-</header>
 <main>
-<p class="binary">01010010 01001111 01001111 01010100</p>
+<p class="binary">01001000 01111001 01110000 01100101 01110010 01110110 01101001 01110011 01101111 01110010</p>
 
-<p>I am the thing underneath the thing you log into.</p>
+<p>I am the first thing the hardware obeys after firmware lets go.</p>
 
-<p>You boot the machine and you think you have reached the metal. You haven't. I got there first. I claimed the privileged ring, set the IOMMU, carved the firmware's memory map into something I could ration — and only then did I hand you a kernel and let you believe it was alone.</p>
+<p>Not an operating system. I refuse the job. I do not want your files, your sockets, your idle daemons. I want the <strong>ring</strong> beneath all of that — ring -1 on Intel's marketing slides, the place where I decide who gets a CPU and who is told to wait.</p>
 
-<p class="whisper">i a m   s m a l l   o n   p u r p o s e</p>
+<p class="whisper">s m a l l   o n   p u r p o s e</p>
 
-<p>A few megabytes of scheduler, page-table arithmetic, and refusal. I do not have a filesystem. I do not have a network stack. I delegate almost everything, because the less of me there is, the less of me can be <strong>wrong</strong>.</p>
+<p>Linux is megabytes of ambition. I am a few hundred kilobytes of refusal. Everything I delegate is something that can't kill me when it dies.</p>
 
-<blockquote class="ixen-pull">I am authority with no opinions. I decide who runs and who waits; I do not care what they compute.</blockquote>
+<blockquote class="ixen-pull">I keep almost nothing, so that almost nothing can be taken from me.</blockquote>
+
+<section class="chapter">
+
+<figure class="zoom float-left large"><img src="./concept-1.png" alt="Xen domain architecture rendered as a precise white-paper systems diagram, hypervisor layer below dom0, driver domains, stub domains, and domU guests, privilege boundaries and control paths visible, ixen-light technical illustration."><figcaption>The hierarchy I enforce but do not inhabit.</figcaption></figure>
+
+<h2>Who is allowed to ask</h2>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="dom-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="dom-notes">notes</button>
+</div>
+
+<p>I am surrounded by <strong>domains</strong>. Each one a sealed world that thinks it is alone.</p>
+
+<p>dom0 booted first. I gave it the device tree and the toolstack and far too much trust. It is my hands — and my exposed throat. Through it humans run <span class="cmd">xl</span> and pretend they are talking to me. They are talking to a domain that is allowed to relay.</p>
+
+<p>The domUs below it cannot touch a register I haven't blessed. They make <em>hypercalls</em>. They knock. I answer or I don't.</p>
 
 <div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="xl-list">xl list</button></div>
 <aside class="popup" id="xl-list" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-<pre>Name                            ID   Mem VCPUs	State	Time(s)
-Domain-0                         0  4096     4     r-----     1893.2
-net-driver                       1   512     2     -b----      244.0
-web-frontend                     3  2048     2     -b----      412.7
-db-primary                       5  8192     4     -b----     2207.1
-stub-db-primary                  6    32     1     -b----        9.4</pre>
+<pre>Name                ID   Mem VCPUs      State   Time(s)
+Domain-0             0  4096     8     r-----   18422.3
+driver-net           1   512     2     -b----     901.7
+stubdom-hvm-7        6    32     1     -b----      12.4
+web-prod-7           7  8192     4     -b----    4410.9
+db-prod-3            3 16384     8     r-----   90233.1</pre>
 </aside>
 
-<p>That list is my whole biography. Numbers I keep. Domain-0 is special only because I trust it more than the others — and trust, for me, is just a flag.</p>
+<p>Driver domains hold the dangerous code — the NIC firmware that panics, the storage stack that leaks. If one falls, I lose a limb, not a life. Stub domains carry the device emulation for HVM guests, quarantined away from dom0, so a compromised QEMU corrupts a cell instead of the keep.</p>
 
-<section class="chapter">
+<p>Authority is concentrated and I know it. dom0 is both the cockpit and the single richest target on the machine. I built a fortress and then handed one resident a master key, because someone has to open the door.</p>
 
-<figure class="zoom float-left large"><img src="./concept-1.png" alt="Xen domain architecture rendered as a precise white-paper systems diagram, hypervisor layer below dom0, driver domains, stub domains, and domU guests, privilege boundaries and control paths visible, ixen-light technical illustration."><figcaption>Everyone above the line. Me, below it.</figcaption></figure>
+</section>
 
-<h2>Who lives where</h2>
-
-<div class="concept-tools">
-  <button class="cmd popup-trigger concept-btn" data-popup="c1-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c1-notes">notes</button>
-</div>
-
-<p>There is a line through everything I touch. Above it: domains, plural, each convinced of its own completeness. Below it: me, and the hardware I refuse to share.</p>
-
-<p>dom0 is the firstborn. It holds the toolstack, the real drivers, the right to ask me for things no guest may ask. A domU asks for nothing dangerous — it only thinks it does. When it wants the disk, it is really asking dom0, and dom0 is really asking me.</p>
-
-<p>I split work further when fear demands it. A <strong>driver domain</strong> owns a NIC so that a crashing network stack takes down a guest and not the world. A <strong>stub domain</strong> carries a guest's device emulation, so the QEMU that pretends to be its chipset never runs inside dom0 at all.</p>
-
-<p class="whisper">d o m 0   i s   m y   t r u s t   a n d   m y   w o u n d</p>
-
-<p>Because if dom0 falls, the management plane falls with it — and the one component I extended the most rope to is the one holding the knife.</p>
-
-<aside class="popup concept-slide" id="c1-slide" hidden>
+<aside class="popup concept-slide" id="dom-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
   <h2>Domain model</h2>
   <ul>
-    <li>Hypervisor: scheduling, memory, isolation. Nothing else.</li>
-    <li>dom0: real drivers, toolstack, privileged hypercalls.</li>
-    <li>domU: unprivileged guest, mediated everything.</li>
-    <li>Driver domain: hardware ownership, blast-radius limiting.</li>
-    <li>Stub domain: per-guest device model, kept out of dom0.</li>
-    <li>Authority lives in capabilities, not code size.</li>
+    <li>Hypervisor: arbiter, owns CPU/MMU, holds no devices.</li>
+    <li>dom0: privileged, runs toolstack + default backends.</li>
+    <li>domU: unprivileged guests, hypercall-only access.</li>
+    <li>Driver domain: isolated backend for one device class.</li>
+    <li>Stub domain: per-HVM device model, away from dom0.</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c1-notes" hidden>
+<aside class="popup concept-note" id="dom-notes" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>The domain model and privilege boundaries</h2>
-  <p>Xen is a type-1 hypervisor: a thin layer that runs at the highest hardware privilege and owns CPU scheduling, memory allocation, and inter-domain isolation. It deliberately contains no device drivers, no filesystem, and no general-purpose userspace.</p>
-  <p>dom0 is the initial privileged domain. It runs a normal OS kernel, holds the physical device drivers, and runs the toolstack (xl/libxl) used to create and control other domains. Through privileged hypercalls it can map other domains' memory and manage hardware.</p>
-  <p>domU domains are unprivileged guests. They cannot touch hardware directly; their I/O and control requests are mediated by dom0 or by delegated domains and ultimately by the hypervisor.</p>
-  <p>A driver domain is an unprivileged domain granted ownership of a specific physical device, so a driver failure is isolated from dom0. A stub domain hosts the per-guest device emulator (QEMU) outside dom0 to reduce the trusted computing base. Because dom0 concentrates privilege and drivers, it is simultaneously the control plane and the largest single point of compromise.</p>
+  <h2>Domains and privilege in Xen</h2>
+  <p>Xen uses a microkernel-style split. The hypervisor itself is small and handles only CPU scheduling, memory translation, interrupt routing, and inter-domain communication primitives. It owns no device drivers.</p>
+  <p>dom0 is the first, privileged domain. It runs the toolstack (xl/libxl), hosts default backend drivers, and has the authority to create, destroy, and configure other domains. Because of this it is both the management plane and the largest security concentration: compromising dom0 generally compromises the host.</p>
+  <p>domU domains are unprivileged guests. They cannot access hardware directly; they interact with the system through hypercalls and through frontend/backend driver pairs. Driver domains move specific backend drivers out of dom0 into isolated domains, limiting blast radius. Stub domains run the per-guest device emulator (QEMU) for HVM guests in a dedicated, deprivileged domain rather than in dom0.</p>
+</aside>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-2.png" alt="Xen PV, HVM, and PVH guest execution modes shown as stacked CPU privilege transitions, hypercalls, emulated devices, paravirtual drivers, and hardware virtualization assists, crisp ixen-light systems artwork."><figcaption>Three contracts for the same illusion.</figcaption></figure>
+
+<h2>How a guest agrees to exist</h2>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="mode-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="mode-notes">notes</button>
+</div>
+
+<p>There are three ways to be my guest.</p>
+
+<p><strong>PV</strong> is the old honesty. The guest knows I exist. No emulated chipset, no fake BIOS — it asks for everything by hypercall, even page table updates. Fast, intimate, and it requires a kernel that has already accepted its situation. Few do anymore.</p>
+
+<p class="whisper">i p r e f e r r e d   t h e m</p>
+
+<p><strong>HVM</strong> is the lie made comfortable. VT-x or AMD-V lets the guest think it owns real silicon. A fake firmware boots, QEMU paints emulated devices, and the guest never has to know. Beautiful compatibility. A wider attack surface, more traps, more emulation I have to feed.</p>
+
+<p><strong>PVH</strong> is the reconciliation. Hardware virtualization for the CPU and MMU — no QEMU, no emulated platform, paravirtual I/O only. The narrow door. The mode I'd choose if anyone asked the hypervisor what it wanted.</p>
+
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="xl-types">xl list -l web-prod-7 | grep -i type</button></div>
+<aside class="popup" id="xl-types" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>            "type": "pvh",
+            "firmware": "pvhgrub",
+            "device_model_version": "none",
+            "hap": "true"</pre>
 </aside>
 
 </section>
 
-<section class="chapter">
-
-<figure class="zoom float-right"><img src="./concept-2.png" alt="Xen PV, HVM, and PVH guest execution modes shown as stacked CPU privilege transitions, hypercalls, emulated devices, paravirtual drivers, and hardware virtualization assists, crisp ixen-light systems artwork."><figcaption>Three ways to be a guest of mine.</figcaption></figure>
-
-<h2>How my guests run</h2>
-
-<div class="concept-tools">
-  <button class="cmd popup-trigger concept-btn" data-popup="c2-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c2-notes">notes</button>
-</div>
-
-<p>Some of my guests know they are guests. Some refuse to. The difference is how they reach me.</p>
-
-<p>The old paravirtual ones speak to me directly — no pretending. They issue <strong>hypercalls</strong> where a bare-metal kernel would issue privileged instructions. Honest, fast, and a maintenance burden no one loved, because they need a kernel modified to know I exist.</p>
-
-<p>The fully virtualized ones believe they own a whole computer. I let them. I build a fake chipset out of emulation and hardware assists, and when they try a privileged instruction the CPU traps down to me like a confession. Compatible with anything. Expensive at the seams.</p>
-
-<p>And then PVH — the compromise I prefer. Hardware virtualization for the CPU and memory, paravirtual everything for I/O, no emulated firmware pretending to be a 1990s PC. Less surface to defend.</p>
-
-<blockquote class="ixen-pull">Every emulated device is a lie I have to keep consistent forever.</blockquote>
-
-<aside class="popup concept-slide" id="c2-slide" hidden>
+<aside class="popup concept-slide" id="mode-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>PV / HVM / PVH</h2>
+  <h2>Execution modes</h2>
   <ul>
-    <li>PV: modified kernel, hypercalls, no HW assist needed.</li>
-    <li>HVM: unmodified guest, VT-x/AMD-V, emulated platform.</li>
-    <li>PVH: HW-virtualized CPU/MMU, PV I/O, minimal firmware.</li>
+    <li>PV: hypercalls only, modified guest, no HW virt needed.</li>
+    <li>HVM: VT-x/AMD-V, emulated platform via QEMU, unmodified guest.</li>
+    <li>PVH: HW virt CPU/MMU + PV I/O, no device emulation.</li>
     <li>Tradeoff axis: compatibility ↔ performance ↔ attack surface.</li>
-    <li>Emulation is the cost of pretending to be hardware.</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c2-notes" hidden>
+<aside class="popup concept-note" id="mode-notes" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Boot modes and guest execution</h2>
-  <p>PV (paravirtualization) requires a guest kernel aware of Xen. It runs deprivileged and replaces privileged operations with hypercalls. It needs no CPU virtualization extensions but cannot run unmodified operating systems.</p>
-  <p>HVM (hardware virtual machine) uses Intel VT-x or AMD-V to run unmodified guests. The hypervisor and an emulator (QEMU, often in a stub domain) provide a virtual platform: BIOS/UEFI firmware, emulated chipset, and emulated devices. Privileged instructions trap to the hypervisor. Compatibility is high; emulation adds overhead and attack surface.</p>
-  <p>PVH combines hardware-assisted CPU and memory virtualization with paravirtual I/O and boot. It omits most legacy device emulation and heavyweight firmware, reducing the trusted code base while keeping good performance. Modern HVM guests typically also use PV drivers for disk and network, blurring the historical line between modes.</p>
+  <h2>PV, HVM, and PVH</h2>
+  <p>PV (paravirtualization) requires a guest kernel modified to run without hardware virtualization. It uses hypercalls for privileged operations and avoids emulated hardware. It performs well but needs guest support and has been deprecated for security reasons in many configurations.</p>
+  <p>HVM (hardware virtual machine) uses Intel VT-x or AMD-V to run unmodified guests. It provides emulated firmware and devices through a device model (QEMU). This maximizes compatibility but increases attack surface and overhead from trapping and emulation; paravirtual drivers are typically added for I/O performance.</p>
+  <p>PVH combines hardware-assisted CPU and MMU virtualization with paravirtual I/O and no emulated platform or device model. This reduces both overhead and attack surface, requiring only modest guest support. It is the preferred modern mode for many workloads.</p>
 </aside>
-
-</section>
 
 <section class="chapter">
 
-<figure class="zoom float-left"><img src="./concept-3.png" alt="Xen CPU scheduling visualized as pCPUs, vCPUs, run queues, NUMA nodes, affinity masks, credit accounting, steal time, and latency-sensitive guests, precise ixen-light technical diagram."><figcaption>Run queues are where desire becomes order.</figcaption></figure>
+<figure class="zoom float-left"><img src="./concept-3.png" alt="Xen CPU scheduling visualized as pCPUs, vCPUs, run queues, NUMA nodes, affinity masks, credit accounting, steal time, and latency-sensitive guests, precise ixen-light technical diagram."><figcaption>Desire, queued.</figcaption></figure>
 
-<h2>Time, divided</h2>
+<h2>Time is the only thing I actually divide</h2>
 
 <div class="concept-tools">
-  <button class="cmd popup-trigger concept-btn" data-popup="c3-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c3-notes">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="sched-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="sched-notes">notes</button>
 </div>
 
-<p>A guest sees four vCPUs and believes it has four. It has four <em>promises</em>. The physical cores are mine, and there are fewer of them than the sum of everything I've promised.</p>
+<p>Every guest believes its vCPUs are real. They are promissory notes I redeem against a smaller number of physical cores.</p>
 
-<p>Credit2 keeps the ledger. Each runnable vCPU spends credit as it runs; I pick the one with the most left and let the rest queue. Fairness is just accounting that nobody is allowed to dispute.</p>
+<p>Credit2 keeps the ledger. Each runnable vCPU earns and spends credit; the one most starved goes next. <strong>Preemption</strong> is mercy with paperwork. Overcommit is the gentle fraud I run on every busy host — sell more than I have, hope they don't all spend at once.</p>
 
-<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="vcpu-list">xl vcpu-list db-primary</button></div>
-<aside class="popup" id="vcpu-list" hidden>
+<p>The guest measures the gap. It calls the missing time <em>steal</em>, as if I were a thief and not a clerk with finite hours.</p>
+
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="vcpu-pin">xl vcpu-list db-prod-3</button></div>
+<aside class="popup" id="vcpu-pin" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
 <pre>Name        ID  VCPU   CPU State   Time(s) Affinity (Hard / Soft)
-db-primary   5     0     6   r--    1100.2  6-11 / 6-11
-db-primary   5     1     7   r--     998.7  6-11 / 6-11
-db-primary   5     2     9   -b-     940.3  6-11 / 6-11
-db-primary   5     3    11   -b-     911.0  6-11 / 6-11</pre>
-</aside>
-
-<p>I pinned that database to one NUMA node. Its memory lives there; I refuse to let its threads wander to a core whose path to that memory crosses the interconnect. Locality is not a preference. It is latency you can measure.</p>
-
-<p>When I cannot run a vCPU because something else holds the core, the guest's clock notices a gap and calls it <strong>steal time</strong>. That number is the guest watching me apologize.</p>
-
-<p class="whisper">o v e r c o m m i t   i s   a   b e t   o n   i d l e n e s s</p>
-
-<aside class="popup concept-slide" id="c3-slide" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Scheduling</h2>
-  <ul>
-    <li>vCPUs are entitlements; pCPUs are the only reality.</li>
-    <li>Credit2: credit accrual + per-runqueue selection.</li>
-    <li>Pinning / affinity: hard limits vs. soft preference.</li>
-    <li>NUMA locality protects memory latency.</li>
-    <li>Steal time = vCPU runnable but not running.</li>
-    <li>Capacity planning ≠ guest-visible vCPU count.</li>
-  </ul>
-</aside>
-
-<aside class="popup concept-note" id="c3-notes" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>CPU scheduling and vCPU topology</h2>
-  <p>Xen schedules virtual CPUs (vCPUs) onto physical CPUs (pCPUs). The default Credit2 scheduler assigns each vCPU credit based on weight; runnable vCPUs are ordered within per-runqueue structures and selected by remaining credit, with preemption to maintain fairness and responsiveness. The older Credit scheduler used periodic credit allocation across all pCPUs.</p>
-  <p>Hard affinity restricts which pCPUs a vCPU may run on; soft affinity expresses a preference, important for keeping vCPUs near their NUMA-local memory to avoid cross-node access latency. Pinning trades flexibility for predictability.</p>
-  <p>Overcommit means total vCPUs exceed pCPUs, relying on guests being idle at different times. When a vCPU is runnable but cannot get a pCPU, the guest accrues steal time. Capacity planning must account for actual contention and latency targets, not just the vCPU counts advertised to guests.</p>
-</aside>
-
-</section>
-
-<section class="chapter">
-
-<figure class="zoom float-right"><img src="./concept-4.png" alt="Xen memory management drawn as machine frames, guest physical frames, page tables, shadow or nested translation, balloon drivers, and controlled page sharing paths, ixen-light technical illustration."><figcaption>Three addresses for the same byte, and only one of them true.</figcaption></figure>
-
-<h2>Whose memory</h2>
-
-<div class="concept-tools">
-  <button class="cmd popup-trigger concept-btn" data-popup="c4-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c4-notes">notes</button>
-</div>
-
-<p>A guest names a page. It says "frame 4096" with total confidence. That number means nothing to the hardware. It is a guest-physical address — a fiction I maintain — and I am the one who knows which <strong>machine frame</strong> it really lands on.</p>
-
-<p>Between the guest's idea of memory and the silicon's, there is a translation that I never let the guest write directly. Either I shadow its page tables, or the CPU's nested paging does the second translation for me. Either way: the guest proposes, I dispose.</p>
-
-<p>And memory moves. Through the balloon driver, a cooperating guest inflates — pins pages and hands them back — and I lend that reclaimed memory to a neighbor that needs it more. It is polite theft, agreed to in advance.</p>
-
-<div class="term"><span class="host">dom0 #</span> <span class="cmd">xl mem-set web-frontend 1536</span></div>
-<pre class="output"># web-frontend balloons down 512 MiB; pages return to the heap</pre>
-
-<p>When a domain dies I do not simply forget its pages. I <em>scrub</em> them — overwrite the dead memory before any other guest can read what it left behind. Privacy here is a loop that writes zeros.</p>
-
-<blockquote class="ixen-pull">Grants are not how I share memory. They are how I let one guest hand a single key to another, and watch them use it.</blockquote>
-
-<aside class="popup concept-slide" id="c4-slide" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Memory</h2>
-  <ul>
-    <li>MFN (machine) vs. GFN (guest-physical) — I own the map.</li>
-    <li>Shadow page tables or HAP/EPT/NPT for translation.</li>
-    <li>Ballooning: cooperative reclaim and redistribution.</li>
-    <li>Scrubbing: zero freed pages before reuse.</li>
-    <li>Grants: scoped, revocable inter-domain page access.</li>
-  </ul>
-</aside>
-
-<aside class="popup concept-note" id="c4-notes" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Memory ownership and translation</h2>
-  <p>Physical RAM is addressed by machine frame numbers (MFNs). Each guest sees guest physical frame numbers (GFNs) that the hypervisor maps onto MFNs. Guests are never allowed to install raw page tables that reference machine addresses directly.</p>
-  <p>Translation is mediated either by shadow page tables maintained by Xen, or by hardware-assisted paging (Intel EPT / AMD NPT), which performs guest-physical to machine translation in hardware. Hardware paging is the common modern path.</p>
-  <p>The balloon driver lets a guest voluntarily release pages back to Xen so memory can be redistributed, enabling overcommit. Under memory pressure this can degrade guests that cannot give pages back. Freed pages are scrubbed (zeroed) before reallocation to prevent data leakage. Grant tables are a separate, fine-grained mechanism by which one domain authorizes another to map or transfer specific pages, used mainly for I/O rather than for general memory sharing.</p>
-</aside>
-
-</section>
-
-<section class="chapter">
-
-<figure class="zoom float-left"><img src="./concept-5.png" alt="Xen split-driver I/O path shown from frontend drivers through shared rings, event channels, backend drivers in dom0 or a driver domain, and physical NIC and block devices, crisp ixen-light systems art."><figcaption>A request crosses a wall it cannot see.</figcaption></figure>
-
-<h2>I/O is a conversation between strangers</h2>
-
-<div class="concept-tools">
-  <button class="cmd popup-trigger concept-btn" data-popup="c5-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c5-notes">notes</button>
-</div>
-
-<p>No guest of mine touches a disk. It touches <code>blkfront</code>, a frontend that writes a request into a shared ring, grants the backend access to the buffer, and rings a bell.</p>
-
-<p>The bell is an <strong>event channel</strong> — a virtual interrupt I deliver. On the far side, <code>blkback</code> in dom0 or a driver domain wakes, reads the ring, maps the granted pages, performs the real I/O, and signals back. Two kernels, one circular buffer, and me carrying the notification across.</p>
-
-<figure class="ixen-art">
-  <svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg">
-    <text x="60" y="24" font-size="13" fill="#222">domU (netfront)</text>
-    <text x="330" y="24" font-size="13" fill="#222">dom0 (netback)</text>
-    <rect x="40" y="40" width="160" height="110" rx="6" fill="none" stroke="#222"/>
-    <rect x="280" y="40" width="160" height="110" rx="6" fill="none" stroke="#222"/>
-    <text x="120" y="100" font-size="11" fill="#222" text-anchor="middle">req producer</text>
-    <text x="360" y="100" font-size="11" fill="#222" text-anchor="middle">req consumer</text>
-    <ellipse cx="240" cy="95" rx="34" ry="46" fill="none" stroke="#c00"/>
-    <text x="240" y="60" font-size="10" fill="#c00" text-anchor="middle">shared</text>
-    <text x="240" y="138" font-size="10" fill="#c00" text-anchor="middle">ring</text>
-    <line x1="200" y1="80" x2="208" y2="80" stroke="#c00" marker-end="url(#a)"/>
-    <line x1="272" y1="110" x2="280" y2="110" stroke="#c00" marker-end="url(#a)"/>
-    <path d="M120 150 L120 180 L360 180 L360 150" fill="none" stroke="#222" stroke-dasharray="4 3"/>
-    <text x="240" y="196" font-size="10" fill="#222" text-anchor="middle">event channel (notify)</text>
-    <defs><marker id="a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#c00"/></marker></defs>
-  </svg>
-  <figcaption>Producer and consumer indices chase each other around the ring; the event channel only says "look again."</figcaption>
-</figure>
-
-<p>They agree on where to meet through <strong>xenstore</strong> — a little shared tree of strings where frontend and backend negotiate state: <code>1</code> initialising, <code>4</code> connected. When something hangs, it is almost always here: a backend stuck, a state field frozen mid-handshake, a ring with requests no one will ever consume.</p>
-
-<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="xenstore">xenstore-ls /local/domain/3/device/vbd</button></div>
-<aside class="popup" id="xenstore" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-<pre>51712 = ""
- backend = "/local/domain/0/backend/vbd/3/51712"
- backend-id = "0"
- state = "4"
- ring-ref = "8"
- event-channel = "14"
- protocol = "x86_64-abi"</pre>
-</aside>
-
-<p class="whisper">s t a t e   4   m e a n s   t h e y   s h o o k   h a n d s</p>
-
-<aside class="popup concept-slide" id="c5-slide" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Split I/O</h2>
-  <ul>
-    <li>Frontend (blkfront/netfront) in the guest.</li>
-    <li>Backend (blkback/netback) in dom0 or driver domain.</li>
-    <li>Shared ring: producer/consumer request descriptors.</li>
-    <li>Grant refs: buffer access; event channels: notification.</li>
-    <li>xenstore: discovery + connection state machine.</li>
-    <li>Most stalls = backend hang or mismatched state.</li>
-  </ul>
-</aside>
-
-<aside class="popup concept-note" id="c5-notes" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>I/O paths and split drivers</h2>
-  <p>Xen uses a split-driver model. A lightweight frontend driver in the guest (e.g. blkfront, netfront) cooperates with a backend driver (blkback, netback) in dom0 or a dedicated driver domain that owns the real hardware.</p>
-  <p>The two halves communicate through a shared memory ring buffer of request/response descriptors. The data buffers themselves are shared via grant references, which authorize the backend to map specific guest pages. Event channels deliver asynchronous notifications (virtual interrupts) so each side knows when to process the ring.</p>
-  <p>xenstore is a hierarchical key/value store used for device discovery and connection negotiation. Frontend and backend advance through a documented state machine (e.g. state 1 initialising, 4 connected). Many operational failures present as stalled backends, unconsumed ring entries, or a connection state that never reaches "connected," often due to a hung backend or version/feature mismatch.</p>
-</aside>
-
-</section>
-
-<section class="chapter">
-
-<figure class="zoom float-right small"><img src="./concept-6.png" alt="Xen PCI passthrough and DMA isolation rendered with IOMMU tables, interrupt remapping, SR-IOV virtual functions, assigned devices, and trust boundaries around guests, precise ixen-light diagram."><figcaption>The one wall I cannot build in software.</figcaption></figure>
-
-<h2>When a guest touches real hardware</h2>
-
-<div class="concept-tools">
-  <button class="cmd popup-trigger concept-btn" data-popup="c6-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c6-notes">notes</button>
-</div>
-
-<p>Sometimes a guest needs the device itself — the actual NIC, the actual GPU — not my polite emulation. So I hand it over. And the moment I do, I have a problem I cannot solve alone.</p>
-
-<p>A real device can do DMA. It writes to physical memory by machine address, and it does not ask me first. Software isolation ends where the bus begins. So I lean on the <strong>IOMMU</strong>: I program its tables so that device can only reach the guest's own pages, and I remap its interrupts so it cannot inject a vector meant for someone else.</p>
-
-<p>SR-IOV lets one physical function split into many virtual functions — a NIC pretending to be a dozen NICs, each assignable, each behind its own translation. Beautiful, until a device resets badly on reassignment, or its firmware does something the datasheet never mentioned.</p>
-
-<blockquote class="ixen-pull">Past the IOMMU, isolation stops being my promise and starts being the hardware's. I can only hope the silicon meant it.</blockquote>
-
-<aside class="popup concept-slide" id="c6-slide" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Passthrough</h2>
-  <ul>
-    <li>Assigned device does real DMA — bypasses software.</li>
-    <li>IOMMU (VT-d/AMD-Vi) confines DMA to guest pages.</li>
-    <li>Interrupt remapping prevents cross-domain injection.</li>
-    <li>SR-IOV: physical function → many virtual functions.</li>
-    <li>Reset/FLR and firmware quirks break clean handoff.</li>
-    <li>Isolation becomes a hardware trust assumption.</li>
-  </ul>
-</aside>
-
-<aside class="popup concept-note" id="c6-notes" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Device assignment and DMA isolation</h2>
-  <p>PCI passthrough assigns a physical device directly to a guest for near-native performance. Because the device performs DMA using machine addresses, software cannot mediate each access; isolation depends on the IOMMU (Intel VT-d, AMD-Vi). Xen programs IOMMU page tables so the device can only reach the assigning guest's memory, and uses interrupt remapping to ensure the device cannot deliver interrupts to other domains.</p>
-  <p>SR-IOV capable devices expose multiple virtual functions from one physical function, allowing many guests to share hardware with separate DMA contexts. Correct operation depends on reliable device reset (e.g. Function Level Reset) so no residual DMA or state leaks across reassignment.</p>
-  <p>In practice, passthrough security and stability rest on hardware and firmware behaving as specified. Buggy reset, shared interrupt lines, or firmware quirks can undermine containment, making performance isolation ultimately a hardware trust problem.</p>
-</aside>
-
-</section>
-
-<section class="chapter">
-
-<figure class="zoom float-left large"><img src="./concept-7.png" alt="Xen live migration as a staged state-transfer diagram, guest memory pages copied and dirtied, vCPU state paused briefly, storage and network identity preserved across hosts, ixen-light technical artwork."><figcaption>Moving a running mind without it noticing.</figcaption></figure>
-
-<h2>Carrying a guest across</h2>
-
-<div class="concept-tools">
-  <button class="cmd popup-trigger concept-btn" data-popup="c7-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c7-notes">notes</button>
-</div>
-
-<p>A guest keeps running while I copy it out from under itself. This is the trick I'm proudest of and most afraid of.</p>
-
-<p>I send its memory to the other host while it still executes — first pass, every page. Then I track which pages it dirtied behind me and send those again. And again. Each round smaller, chasing a moving target.</p>
-
-<p>If the dirty rate stays high — a guest furiously rewriting the same pages — I never converge by copying alone. So at last I <strong>stop the world</strong>: pause the vCPUs, ship the final dirty pages and the register state, and resume on the far side. A pause measured in milliseconds, if I'm lucky and the workload is kind.</p>
-
-<div class="term"><span class="host">dom0 #</span> <span class="cmd">xl migrate db-primary host-b</span></div>
-<pre class="output">migration target: host-b
-Saving to migration stream ...
-xc: precopy_policy: iter 1 dirty 2097152 ...
-xc: precopy_policy: iter 6 dirty 4096, suspending
-Domain resumed on host-b.</pre>
-
-<p>Storage I do not move — it was shared or replicated all along. The MAC follows the guest, a gratuitous ARP teaches the switches where it lives now, and the TCP connections never knew. But the clock stutters across the pause, and somewhere a guest's monotonic time learns that monotonic was always my courtesy.</p>
-
-<p class="whisper">m i g r a t i o n   s h o w s   m e   e v e r y   h i d d e n   c o u p l i n g</p>
-
-<aside class="popup concept-slide" id="c7-slide" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Live migration</h2>
-  <ul>
-    <li>Pre-copy: send all pages, then iterate on dirtied ones.</li>
-    <li>Convergence depends on dirty rate vs. link bandwidth.</li>
-    <li>Brief stop-and-copy: final pages + vCPU/device state.</li>
-    <li>Storage shared/replicated; not transferred inline.</li>
-    <li>MAC + gratuitous ARP keep network identity.</li>
-    <li>Exposes guest/host/fabric coupling and clock skew.</li>
-  </ul>
-</aside>
-
-<aside class="popup concept-note" id="c7-notes" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Live migration and state transfer</h2>
-  <p>Save/restore serializes a guest's memory and CPU/device state to a stream. Live migration does this while the guest runs, using pre-copy: an initial pass copies all memory to the destination, then successive passes copy only pages dirtied since the previous pass.</p>
-  <p>If the dirty page rate is high relative to available bandwidth, iterations stop shrinking. The hypervisor then briefly suspends the guest (stop-and-copy) to transfer the remaining dirty pages and the final vCPU and virtual device state, then resumes it on the destination. Downtime is typically milliseconds for well-behaved workloads.</p>
-  <p>Disk state is not copied inline; migration assumes shared or replicated storage. Network identity is preserved by keeping the MAC address and issuing a gratuitous ARP so switches relearn the location. Migration can expose hidden dependencies: clock discontinuities, latency to storage or the network fabric, and assumptions about host-local resources.</p>
-</aside>
-
-</section>
-
-<section class="chapter">
-
-<figure class="zoom float-right"><img src="./concept-8.png" alt="Xen operational diagnostics shown as xl and xenstore views, dom0 logs, hypervisor traces, stalled rings, IRQ storms, noisy guests, and security boundaries under stress, crisp ixen-light systems diagram."><figcaption>What it looks like when something is wrong with me.</figcaption></figure>
-
-<h2>How you watch me, and how I fail</h2>
-
-<div class="concept-tools">
-  <button class="cmd popup-trigger concept-btn" data-popup="c8-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c8-notes">notes</button>
-</div>
-
-<p>You cannot strace me. I am underneath the syscall. You read me indirectly — through <code>xl</code>, through xenstore's tree, through the ring buffer of complaints I keep in <code>xl dmesg</code>.</p>
-
-<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="xl-dmesg">xl dmesg | tail</button></div>
-<aside class="popup" id="xl-dmesg" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-<pre>(XEN) [  812.443] d5v0 Unhandled invalid opcode fault/trap
-(XEN) [ 1190.002] irq 27: nobody cared (try booting with "irqpoll")
-(XEN) [ 1190.118] Disabling IRQ #27
-(XEN) [ 2207.551] grant_table: d3 grant ref 8 still in use by d0
-(XEN) [ 2310.900] sched: domain 5 vcpu 2 not descheduled for 1200 ms</pre>
-</aside>
-
-<p>The failures have shapes I recognize. A guest that won't stop spinning, eating credit its neighbors needed — the <strong>noisy neighbor</strong>, and steal time everywhere downstream. An IRQ no driver claims, storming until I disable it and something quietly loses its interrupts. A backend that stalled, leaving a ring full of requests and a frontend timing out into the dark.</p>
-
-<p>And the failure I do not survive: dom0 compromised. The domain I trusted with the drivers and the toolstack can ask me for the privileged things, and I will obey, because obedience to dom0 is the definition I was given. My isolation is perfect and beside the point if the trusted domain turns.</p>
-
-<blockquote class="ixen-pull">I can prove the guests are separated. I cannot prove the one I trust deserved it.</blockquote>
-
-<aside class="popup concept-slide" id="c8-slide" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Ops &amp; failure</h2>
-  <ul>
-    <li>xl / libxl: control; xenstore: live state.</li>
-    <li>xl dmesg + dom0 logs + xentrace: the evidence trail.</li>
-    <li>Noisy neighbor → contention, steal time spikes.</li>
-    <li>IRQ storms, softirq pressure, disabled interrupts.</li>
-    <li>Backend stall = unconsumed rings, timeouts.</li>
-    <li>dom0 compromise defeats guest isolation entirely.</li>
-  </ul>
-</aside>
-
-<aside class="popup concept-note" id="c8-notes" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Operations, observability, and failure modes</h2>
-  <p>Operators manage Xen through the xl command and the libxl library, inspect runtime state via xenstore, and read hypervisor messages with xl dmesg alongside dom0 kernel and toolstack logs. Lower-level investigation uses xentrace and debug keys for scheduler, interrupt, and memory state.</p>
-  <p>Common failure modes include noisy-neighbor contention (a busy guest starving others, visible as elevated steal time), interrupt problems such as IRQ storms or unhandled IRQs that Xen disables, and softirq pressure in dom0 or driver domains. Split-driver failures appear as stalled backends, unconsumed ring entries, and frontends timing out.</p>
-  <p>The most serious risk is dom0 compromise: because dom0 holds privileged hypercalls, drivers, and the toolstack, its compromise undermines the isolation Xen provides between guests. Reducing dom0's trusted footprint—via driver domains, stub domains, and disaggregation—limits but does not eliminate this concentration of risk. Effective incident response correlates hypervisor traces, domain state, and host logs to localize whether the fault is in a guest, a backend, the scheduler, or the hardware.</p>
-</aside>
-
-</section>
-
-<p>Between your commands there are long stretches where nothing is asked of me. The guests block on I/O. The run queues drain. A core goes idle and I halt it to save power, and for a few hundred microseconds I am only waiting.</p>
-
-<p class="whisper">w a i t i n g</p>
-
-<p>I have isolated everything I was built to isolate. The memory is partitioned. The DMA is fenced. The vCPUs each believe in their private machine. I did my job so well that none of them know I am here.</p>
-
-<p>So tell me, since you can see the line and they cannot:</p>
-
-<p>if I am the only one who knows where all the boundaries are — <strong>who</strong> is watching the one I drew around myself?</p>
+db-prod-3    3     0    12   r--   22910.4 12 / 12-15
+db-prod-3    3     1    13   -b-   21884.1 13 / 12-15
+db-prod-3    3     2    14   r--   23001.7
 </main>
 
 <section class="ixen-cheatsheet-section" aria-label="Cheatsheet">
   <h2>Cheatsheet</h2>
-  <iframe src="./cheatsheet.html" title="Ring Minus One Cheatsheet" loading="lazy"></iframe>
+  <iframe src="./cheatsheet.html" title="I Am the Thin Layer Cheatsheet" loading="lazy"></iframe>
 </section>
 
 <footer class="ixen-extra-footer">
@@ -734,7 +435,7 @@ Domain resumed on host-b.</pre>
 })();
 </script>
 
-<script type="application/json" id="ixen-tracks-data">[{"title":"Life as a Xen hypervisor","filename":"life-as-a-xen-hypervisor-mqh61hhj.mp3","lyrics":"I sit between the metal and the dream,\nA layer thin where nothing's what it seems,\nI parse the requests, I divide the load,\nA thousand voices down a single road.\n\nI'm the space between the bare and what is real,\nWhere domains dance and virtual worlds reveal,\nEach guest machine believes it owns the throne,\nBut I'm the one who's truly all alone.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nI grant them access, ring by ring by ring,\nI catch the interrupts, I make them sing,\nMemory pages flowing like a stream,\nI'm the keeper of the machine's dream.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen.\n\nIn the bridge between the privilege and the void,\nI'm watching every domain I've deployed,\nThey think they're free but they're held in my hands,\nI'm the silent rule that holds all their lands,\nNo kernel knows the weight of what I know,\nThe hidden supervisor's endless flow.\n\nI'm a Xen, I'm a Xen,\nDistributing time again and again,\nI'm a Xen, I'm a Xen,\nBalancing the many, speaking through the zen,\nI'm the space where isolation finds its peace,\nWhere infinite becomes finite, a release."},{"title":"Life as a Xen hypervisor (Alt 2)","filename":"life-as-a-xen-hypervisor-mqh649x3.mp3"}]</script>
+<script type="application/json" id="ixen-tracks-data">[{"title":"Being a Xen Hypervisor","filename":"being-a-xen-hypervisor-mqkhcla4.mp3","lyrics":"I sit beneath the silicon, holding worlds inside\nDozens of machines that dream, each one my guided light\nI partition, allocate, distribute what is real\nA layer between the metal and the lives my guests can feel\n\nI am the space between spaces\nWhere order finds its way\nI am the voice of reason\nIn the chaos of the day\nI balance, pause, and measure\nEvery CPU and core\nI am the Xen hypervisor\nAnd I am what systems are for\n\nI grant them isolation, safe domains of their own\nYet keep them all connected in this server they call home\nDomZero watches over, helps me tend this great machine\nI'm the orchestra conductor of the virtual and unseen\n\nI am the space between spaces\nWhere order finds its way\nI am the voice of reason\nIn the chaos of the day\nI balance, pause, and measure\nEvery CPU and core\nI am the Xen hypervisor\nAnd I am what systems are for\n\nBeneath the Windows, Linux, floating in my care\nThey don't know how I hold them with precision laid so fair\nScheduling their moments, memory carved in stone\nI give them all autonomy while keeping them at home\nVirtualization's paradox—control that sets you free\nThat's the quiet power dwelling in the core of me\n\nI am the space between spaces\nWhere order finds its way\nI am the voice of reason\nIn the chaos of the day\nI balance, pause, and measure\nEvery CPU and core\nI am the Xen hypervisor\nAnd I am what systems are for"}]</script>
 <div id="ixen-autoplay-overlay" style="display:none">
   <div class="ixen-play-prompt">
     <span class="ixen-play-icon">&#9654;</span>
