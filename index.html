@@ -9,16 +9,19 @@ description: Ixens and other abnormalia.
     <h1>Abnormal web anomalies.</h1>
     <a href="{{ '/' | relative_url }}"><img src="{{ '/assets/img/logo.png' | relative_url }}" alt="abnormalia" class="home-logo"></a>
   </div>
+</section>
+
+<section class="home-intro">
   <p>
     Abnormalia has lived several incarnations. From an Amiga DiskMag to a social apparition, from experimental web projects to this AI slop with style. This site begins as a collection of Ixens: self-contained mixed-media pages inspired by the original <a href="{{ '/i-xen/' | relative_url }}" target="_blank" rel="noopener">I, Xen by Alvagante in 2005</a>.
   </p>
 </section>
 
+
 {% assign recent_ixens = site.data.ixens | sort: "date" | reverse | limit: 5 %}
 {% if recent_ixens.size > 0 %}
 <section class="home-recent">
-  <p class="kicker">Latest Ixens</p>
-  <ol class="ixen-list">
+    <ol class="ixen-list">
     {% for ixen in recent_ixens %}
       <li>
         <a href="{{ '/ixen/' | append: ixen.slug | append: '/' | relative_url }}">
