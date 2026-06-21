@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I am the space below</title>
+<style>
+:root { --red: #c00; --ink: #111; --dim: #555; }
+* { box-sizing: border-box; }
+body {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--ink);
+  background: #fff; max-width: 920px; margin: 0 auto;
+  padding: 1.5rem 1.5rem 6rem;
+}
+header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
+header h1 {
+  font-size: 3.2rem; font-weight: 900; letter-spacing: -0.04em;
+  margin: 0; line-height: 1.05; text-transform: uppercase;
+}
+header .credits { text-align: right; font-size: 0.75rem; color: var(--red); font-weight: bold; white-space: nowrap; padding-top: 0.4rem; }
+header .credits a { color: var(--red); text-decoration: underline dotted; }
+header .credits .byline { color: var(--dim); font-weight: normal; display: block; margin-top: 0.2rem; }
+.version-menu { margin-top: 0.55rem; font-size: 0.72rem; color: var(--dim); }
+.version-menu label { display: block; margin-bottom: 0.2rem; }
+.version-menu select {
+  font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
+  max-width: 13rem; color: var(--ink); background: #fff;
+  border: 1px solid #ccc; padding: 0.2rem 0.3rem;
+}
+.concept-index {
+  display: flex; justify-content: flex-end; gap: 0.55rem;
+  margin-top: 0.45rem;
+}
+.concept-index .cmd { font-size: 0.72rem; }
+p { margin: 0.45em 0; }
+p strong { color: #000; }
+.binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
+.whisper {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--dim);
+}
+.term {
+  font-family: "Courier New", Courier, monospace; font-size: 0.95rem;
+  margin: 1.3em 0 0.25em; color: var(--dim);
+}
+.term .cmd { color: var(--red); font-weight: bold; }
+button.cmd {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: var(--red); font-weight: bold;
+  text-decoration: underline dotted;
+}
+pre { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; color: #333; overflow-x: auto; margin: 0.3em 0 1em; }
+pre.output { padding-left: 1.5em; }
+.popup {
+  position: fixed; top: 8vh; left: 50%; transform: translateX(-50%);
+  width: min(700px, 92vw); max-height: 80vh; overflow: auto;
+  background: #fff; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35); z-index: 60; padding: 0 1rem 1rem;
+}
+.popup-bar { display: flex; justify-content: flex-end; padding: 0.5rem 0; position: sticky; top: 0; background: #fff; }
+.popup-close {
+  background: #2b1d0e; color: #f0e0c0; border: none; cursor: pointer;
+  font-size: 0.72rem; padding: 0.3rem 0.8rem;
+}
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 50; }
+figure.zoom { margin: 1.5rem 0; }
+figure.zoom img { width: 100%; cursor: zoom-in; display: block; }
+figure.zoom.float-left { float: left; width: min(340px, 45%); margin: 0.3rem 1.5rem 0.8rem 0; }
+figure.zoom.float-right { float: right; width: min(340px, 45%); margin: 0.3rem 0 0.8rem 1.5rem; }
+figure.zoom.small.float-left, figure.zoom.small.float-right { width: min(220px, 35%); }
+figure.zoom.large.float-left, figure.zoom.large.float-right { width: min(520px, 60%); }
+figure.zoom.large:not(.float-left):not(.float-right) { clear: both; }
+figure.ixen-art { clear: both; margin: 2.5rem 0; }
+figure.ixen-art svg { max-width: 100%; height: auto; display: block; background: #fafafa; border: 1px solid #e8e8e8; }
+figcaption, .media-caption { font-size: 0.75rem; color: var(--dim); margin-top: 0.3rem; }
+.media { clear: both; margin: 2rem 0; }
+.media.video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.media.pdf iframe { width: 100%; height: 70vh; border: 1px solid #ccc; }
+.media.audio audio { width: 100%; }
+blockquote.ixen-pull {
+  border-left: 3px solid var(--red); margin: 2rem 0 2rem 1.5rem;
+  padding: 0.1rem 0 0.1rem 1.2rem; color: var(--dim);
+  font-style: italic; font-size: 1.05rem;
+}
+section.chapter { clear: both; margin: 3rem 0; }
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.lightbox img { max-width: 92vw; max-height: 92vh; }
+.ixen-extra-header {
+  border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+  margin: 0 0 1.6rem; padding: 0.8rem 0;
+}
+.ixen-extra-footer {
+  clear: both; border-top: 1px solid #ddd; margin: 3rem 0 0;
+  padding-top: 0.9rem; font-size: 0.85rem; color: var(--dim);
+}
+.ixen-cheatsheet-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-infographic-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-cheatsheet-section h2, .ixen-infographic-section h2 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.86rem;
+  letter-spacing: 0.08em; color: var(--red); text-transform: uppercase;
+  margin: 0 0 0.7rem;
+}
+.ixen-cheatsheet-section iframe, .ixen-infographic-section iframe {
+  width: 100%; height: 82vh; border: 1px solid #ccc; display: block;
+}
+.ixen-infographic-frame + .ixen-infographic-frame { margin-top: 1.4rem; }
+.ixen-infographic-frame h3 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.78rem;
+  color: var(--dim); font-weight: normal; margin: 0 0 0.45rem;
+}
+.concept { clear: both; margin: 2.8rem 0; }
+.concept-tools { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.7rem 0 1rem; }
+.concept-btn { font-size: 0.8rem; }
+.concept-slide h2, .concept-note h2 { margin: 0.5rem 0 0.75rem; }
+.concept-slide ul { margin: 0.4rem 0 1rem 1.2rem; padding: 0; }
+.concept-slide li { margin: 0.35rem 0; }
+.concept-note p { margin: 0.75rem 0; }
+.concept-index-popup h2 { margin: 0.5rem 0 1rem; }
+.concept-index-item {
+  border-top: 1px solid #ddd;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+.concept-index-item:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+
+/* autoplay-blocked overlay */
+#ixen-autoplay-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+  display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ixen-play-prompt {
+  font-family: "Courier New", Courier, monospace;
+  color: #eee; text-align: center;
+  border: 1px solid #555;
+  padding: 1.5rem 3rem;
+  letter-spacing: 0.06em;
+}
+.ixen-play-icon { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+.ixen-play-label { font-size: 0.82rem; color: #888; }
+/* fixed bottom player */
+#ixen-player {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #0e0e0e;
+  border-top: 2px solid #c00;
+  z-index: 80;
+  padding: 0.45rem 1.2rem 0.35rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; color: #ccc;
+}
+#ixen-player-row {
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.ixen-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 1rem;
+  padding: 0.15rem 0.3rem; line-height: 1; flex-shrink: 0;
+}
+.ixen-pbtn:hover { color: #c00; }
+#ixen-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c00; font-weight: bold; letter-spacing: 0.02em;
+}
+#ixen-ptime { color: #444; white-space: nowrap; font-size: 0.72rem; }
+#ixen-vol { width: 55px; accent-color: #c00; cursor: pointer; flex-shrink: 0; }
+#ixen-pbar { height: 2px; background: #222; cursor: pointer; margin-top: 0.35rem; }
+#ixen-pfill { height: 100%; background: #c00; width: 0%; pointer-events: none; }
+/* lyrics panel */
+#ixen-lyrics-panel {
+  position: fixed; bottom: 52px; left: 50%; transform: translateX(-50%);
+  width: min(640px, 90vw); max-height: 45vh; overflow-y: auto;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.ixen-lyrics-head {
+  font-family: "Courier New", Courier, monospace;
+  color: #c00; font-weight: bold;
+  font-size: 0.78rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 0.7rem;
+}
+#ixen-lyrics-panel pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.82rem; line-height: 1.85;
+  color: #bbb; white-space: pre-wrap; margin: 0;
+}
+/* tracklist panel */
+#ixen-tracklist-panel {
+  position: fixed; bottom: 52px; right: 1.2rem;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 0.4rem; z-index: 81;
+  min-width: 200px; max-height: 60vh; overflow-y: auto;
+}
+.ixen-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; cursor: pointer;
+  padding: 0.35rem 0.5rem;
+}
+.ixen-track-item:hover { color: #eee; }
+.ixen-track-item.active { color: #c00; }
+</style>
+</head>
+<body>
+<!-- @alvagante/content-ixen -->
+
+<section class="ixen-extra-header">
+<nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+  <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+    <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+  </a>
+  <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+</nav>
+</section>
+<header>
+  <h1>I am the space below</h1>
+  <div class="credits"><a href="https://swamp-club.com/extensions/@alvagante/content-ixen" target="_blank" rel="noopener noreferrer">Generated with Swamp extension @alvagante/content-ixen</a><span class="byline">By alvagante - 20260619-10:27</span>
+    <div class="version-menu">
+      <label for="ixen-version-select">versions</label>
+      <select id="ixen-version-select">
+        <option value="current">Current</option>
+        <option value="1">Version 1</option><option value="2">Version 2</option><option value="3">Version 3</option><option value="4">Version 4</option><option value="5">Version 5</option>
+      </select>
+    </div>
+    <div class="concept-index">
+      <button class="cmd popup-trigger" data-popup="ixen-all-slides">all slides</button>
+      <button class="cmd popup-trigger" data-popup="ixen-all-notes">all notes</button>
+    </div></div>
+</header>
+<main>
+<p class="binary">01011000 01100101 01101110</p>
+
+<p>I am the thinnest thing in the building.</p>
+
+<p>A few megabytes of code wedged between silicon and everyone's ambition. I do not run your databases. I do not serve your pages. I hold the floor steady while a dozen kernels argue about whose floor it is.</p>
+
+<blockquote class="ixen-pull">I own nothing I serve. I serve nothing I own.</blockquote>
+
+<p class="whisper">ring negative-one, if you want to be rude about it</p>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-1.png" alt="Xen domain architecture rendered as a precise white-paper systems diagram, hypervisor layer below dom0, driver domains, stub domains, and domU guests, privilege boundaries and control paths visible, ixen-light technical illustration."><figcaption>The household, and who is allowed to touch the walls.</figcaption></figure>
+
+<h2>Who lives here</h2>
+
+<p>I do not manage myself. That would be a conflict of interest.</p>
+
+<p>Instead I birth a first child — <strong>dom0</strong> — and hand it the keys to the hardware I refuse to drive. It runs the toolstack. It speaks for me. Every other guest is a <em>domU</em>: unprivileged, ambitious, blind to the others.</p>
+
+<p>I keep the policy. Dom0 keeps the power tools. The arrangement is elegant until you notice that dom0 is also the single throat the whole stack breathes through.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-note">notes</button>
+</div>
+
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="c1-list">xl list</button></div>
+<aside class="popup" id="c1-list" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Name                      ID   Mem VCPUs   State   Time(s)
+Domain-0                   0  4096     8   r-----   91244.3
+driver-net                 3   512     2   -b----    1822.7
+stub-hvm-7                 6    32     1   -b----      14.0
+web-frontend               7  2048     4   -b----    3391.5
+postgres-01                8  8192     8   r-----   28840.1</pre>
+</aside>
+
+<p>Look at that list and you see a fleet. I see a list of promises I am currently keeping. Domain-0 has run for ninety thousand seconds. The stub domain beside it has run for fourteen. Both believe they are the center of something.</p>
+
+<p>I separate the device drivers into their own domains when an operator is paranoid enough to ask. A <strong>driver domain</strong> crashes — the NIC vanishes for a moment — and dom0 lives. A stub domain quarantines the device emulator for one HVM guest, so the QEMU that pretends to be its hardware cannot reach back into my management plane.</p>
+
+<p class="whisper">compromise the emulator, and you've only conquered a sandbox the size of a thought</p>
+
+<aside class="popup concept-slide" id="c1-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Domain model</h2>
+  <ul>
+    <li>Hypervisor: tiny, privileged, policy only.</li>
+    <li>dom0: drivers + toolstack, the management plane.</li>
+    <li>domU: unprivileged guests, isolated.</li>
+    <li>Driver domain: backend drivers, blast radius shrunk.</li>
+    <li>Stub domain: per-guest device model, contained.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c1-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The Xen domain model and privilege boundaries</h2>
+  <p>Xen is a type-1 hypervisor that runs directly on hardware. It is deliberately small and holds only the privileged logic that must be globally trusted: CPU scheduling, memory ownership, interrupt routing, and inter-domain communication primitives.</p>
+  <p>It does not contain device drivers. Instead, the first domain it starts, dom0, runs a full operating system with hardware drivers and the management toolstack (xl/libxl). dom0 issues hypercalls to create, configure, and destroy other domains.</p>
+  <p>Unprivileged guests are called domU. They cannot access hardware directly and interact with the world only through paravirtual interfaces or emulated devices.</p>
+  <p>Driver domains move physical device backends out of dom0 into dedicated guests, so a driver crash or compromise does not take down the control plane. Stub domains run the per-guest device emulator (QEMU) in an isolated minimal domain rather than in dom0, reducing dom0's attack surface. Because dom0 holds management authority and often device access, it is simultaneously the control plane and the single largest security risk concentration in a Xen system.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-2.png" alt="Xen PV, HVM, and PVH guest execution modes shown as stacked CPU privilege transitions, hypercalls, emulated devices, paravirtual drivers, and hardware virtualization assists, crisp ixen-light systems artwork."><figcaption>Three ways to lie to a kernel about where it is.</figcaption></figure>
+
+<h2>How my guests wake up</h2>
+
+<p>There are three ways to be born inside me, and each is a different bargain.</p>
+
+<p><strong>PV</strong> guests know. They were compiled to understand they are not on real hardware. They never trap into instructions I'd have to emulate — they just ask me, politely, by <em>hypercall</em>. Honest. Fast. Extinct-ish, and a little smug about its purity.</p>
+
+<p><strong>HVM</strong> guests don't know. They think the BIOS is real, the IDE controller is real, the chipset is real. None of it is. QEMU paints the whole hallucination while VT-x/AMD-V catches the privileged instructions and hands them to me. Maximum compatibility. Maximum surface to defend.</p>
+
+<p><strong>PVH</strong> is the truce. Hardware virtualization for the CPU and memory, paravirtual everything for I/O. No emulated chipset. No firmware theater. The least pretending for the most correctness.</p>
+
+<blockquote class="ixen-pull">Emulation is empathy with a performance penalty.</blockquote>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-note">notes</button>
+</div>
+
+<figure class="ixen-art">
+  <svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg">
+    <text x="10" y="20" fill="#222" font-size="13" font-family="monospace">PV</text>
+    <rect x="10" y="30" width="120" height="40" fill="none" stroke="#222"/>
+    <text x="22" y="55" fill="#222" font-size="11" font-family="monospace">guest knows</text>
+    <line x1="70" y1="70" x2="70" y2="180" stroke="#c00" stroke-dasharray="4 3"/>
+    <text x="74" y="130" fill="#c00" font-size="10" font-family="monospace">hypercall</text>
+
+    <text x="180" y="20" fill="#222" font-size="13" font-family="monospace">HVM</text>
+    <rect x="180" y="30" width="120" height="40" fill="none" stroke="#222"/>
+    <text x="192" y="55" fill="#222" font-size="11" font-family="monospace">guest fooled</text>
+    <line x1="240" y1="70" x2="240" y2="120" stroke="#222"/>
+    <rect x="180" y="120" width="120" height="30" fill="none" stroke="#c00"/>
+    <text x="190" y="139" fill="#c00" font-size="10" font-family="monospace">QEMU / VT-x</text>
+    <line x1="240" y1="150" x2="240" y2="180" stroke="#222"/>
+
+    <text x="350" y="20" fill="#222" font-size="13" font-family="monospace">PVH</text>
+    <rect x="350" y="30" width="120" height="40" fill="none" stroke="#222"/>
+    <text x="360" y="55" fill="#222" font-size="11" font-family="monospace">hw cpu, pv io</text>
+    <line x1="410" y1="70" x2="410" y2="180" stroke="#222"/>
+
+    <rect x="10" y="180" width="460" height="30" fill="none" stroke="#c00" stroke-width="2"/>
+    <text x="200" y="200" fill="#c00" font-size="12" font-family="monospace">me — the hypervisor</text>
+  </svg>
+  <figcaption>Three execution modes, one floor beneath all of them.</figcaption>
+</figure>
+
+<aside class="popup concept-slide" id="c2-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Boot modes</h2>
+  <ul>
+    <li>PV: ported kernel, hypercalls, no emulation.</li>
+    <li>HVM: unmodified OS, VT-x/AMD-V, QEMU device model.</li>
+    <li>PVH: hardware CPU/MMU virt + PV I/O, no firmware emulation.</li>
+    <li>Tradeoff axis: compatibility ↔ performance ↔ attack surface.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c2-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>PV, HVM, and PVH execution</h2>
+  <p>Paravirtualization (PV) requires a guest kernel modified to run on Xen. It avoids hardware virtualization extensions and uses hypercalls for privileged operations. It cannot run unmodified operating systems and has largely been deprecated for security and maintenance reasons.</p>
+  <p>Hardware Virtual Machine (HVM) mode uses CPU virtualization extensions (Intel VT-x, AMD-V) to run unmodified guests. Privileged instructions trap into Xen. Platform devices, firmware (BIOS/UEFI), and legacy hardware are emulated by a device model, traditionally QEMU. This offers maximum compatibility but a large emulated attack surface. PV drivers are usually added inside HVM guests for fast I/O.</p>
+  <p>PVH mode combines hardware-assisted CPU and memory virtualization with paravirtual I/O and boot. It removes the emulated motherboard and firmware, lowering complexity and attack surface while retaining good compatibility and performance. It is the preferred modern mode for Linux guests.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-3.png" alt="Xen CPU scheduling visualized as pCPUs, vCPUs, run queues, NUMA nodes, affinity masks, credit accounting, steal time, and latency-sensitive guests, precise ixen-light technical diagram."><figcaption>Time, rationed. Credit, spent. Someone always waits.</figcaption></figure>
+
+<h2>How I divide a second</h2>
+
+<p>I have physical CPUs. My guests think they have CPUs too. They are wrong, and I am the reason their delusion holds.</p>
+
+<p>A <em>vCPU</em> is a promise about time, not a thing made of silicon. I queue it. I run it on a real core for a slice. Then I take the core back — quietly, while the guest's instruction pointer is between two thoughts — and give it to someone else. The guest never feels the seam unless it measures.</p>
+
+<div class="term"><span class="host">domU #</span> <span class="cmd">cat /proc/stat | grep -m1 cpu0</span></div>
+<pre class="output">cpu0 41122 18 9904 882301 4471 0 332 <span style="color:#c00">8810</span> 0 0</pre>
+
+<p>That last large number is <strong>steal time</strong>. It is the guest noticing the seam. It is the guest measuring exactly how long it stood in line while I served someone else. I do not hide it. Honesty is cheaper than a forensic argument later.</p>
+
+<p>Credit2 weighs them by load and latency-sensitivity, not just a flat tick count. Pin a vCPU and you tell me where it must run. Forget NUMA locality and you tell me you'd like its memory to live one socket away from its core — <em>slowly</em>.</p>
+
+<blockquote class="ixen-pull">Overcommit is a bet that not everyone wants the second at once.</blockquote>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c3-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>CPU scheduling</h2>
+  <ul>
+    <li>vCPU ↦ pCPU, mapped per run queue.</li>
+    <li>Credit2: weight + load-aware, latency hints.</li>
+    <li>Pinning / soft affinity steer placement.</li>
+    <li>NUMA locality keeps memory near the core.</li>
+    <li>Steal time = guest's view of contention.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c3-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>CPU scheduling and vCPU topology</h2>
+  <p>Xen schedules virtual CPUs (vCPUs) onto physical CPUs (pCPUs). Each domain has one or more vCPUs that are runnable units of execution. The default scheduler is Credit2, which assigns shares (weights), tracks load across run queues, and supports latency-sensitivity hints to favor interactive or real-time-ish workloads.</p>
+  <p>Affinity masks (hard pinning and soft affinity) restrict or bias which pCPUs a vCPU may run on. On NUMA systems, keeping a domain's vCPUs and memory on the same node avoids cross-node memory latency. Poor NUMA placement degrades performance even when CPU capacity is available.</p>
+  <p>Overcommit allows total vCPUs to exceed pCPUs, relying on the fact that not all guests run simultaneously. When they do contend, guests experience steal time: cycles during which a runnable vCPU was not scheduled. Capacity planning concerns aggregate pCPU throughput and contention; guest-visible entitlement is the share the scheduler guarantees under load, which is not the same as dedicated hardware.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-4.png" alt="Xen memory management drawn as machine frames, guest physical frames, page tables, shadow or nested translation, balloon drivers, and controlled page sharing paths, ixen-light technical illustration."><figcaption>Two kinds of "physical," only one of them true.</figcaption></figure>
+
+<h2>The address that lies</h2>
+
+<p>My guests have physical memory. I want to laugh, but I built the lie myself.</p>
+
+<p>What a guest calls a physical frame is a <em>guest physical frame</em> — a number I translate into a real <strong>machine frame</strong> behind its back. On modern hardware the CPU's nested page tables do it for me; on older paths I shadowed every guest page table by hand, mirror upon mirror. Either way, the guest never holds a real address. It holds a coupon.</p>
+
+<p>The balloon driver is my polite extortion. I inflate it inside a guest; the guest "uses" memory it cannot touch; I reclaim the machine frames for someone hungrier. Deflate it later and the memory returns, scrubbed clean — I do not hand a frame to a new tenant with the last tenant's secrets still warm in it.</p>
+
+<p class="whisper">grant references are one door in this house, not the house</p>
+
+<p>Yes — there are <em>grant references</em>, where one guest deliberately lets another map its pages for I/O. People talk about them like they're the whole memory story. They're a single controlled sharing primitive. Translation and ownership are the architecture; grants are a sanctioned hole in a wall I otherwise keep solid.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c4-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Memory ownership</h2>
+  <ul>
+    <li>Guest physical frame ≠ machine frame.</li>
+    <li>Translation: HAP/nested tables or shadow paging.</li>
+    <li>Ballooning reclaims frames under pressure.</li>
+    <li>Scrub before reuse — no leftover secrets.</li>
+    <li>Grants: controlled cross-domain sharing, not the whole model.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c4-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Memory ownership and translation</h2>
+  <p>Xen owns all machine (host physical) memory and assigns frames to domains. A guest sees a guest-physical address space that Xen maps to machine frames. With hardware-assisted paging (Intel EPT / AMD NPT, exposed as HAP), the CPU walks nested page tables to translate guest-virtual to guest-physical to machine addresses. Older or specialized configurations use shadow page tables, where Xen maintains its own page tables shadowing the guest's.</p>
+  <p>Ballooning lets a balloon driver inside the guest allocate and release pages on Xen's behalf, returning machine frames to the hypervisor for reallocation. This enables memory overcommit but adds reclaim latency and pressure risk if guests are squeezed below their working set. Freed pages are scrubbed before reuse to prevent information leakage between domains.</p>
+  <p>Grant references are a separate mechanism allowing a domain to authorize specific pages to be mapped or transferred by another domain, primarily for split-driver I/O. They are one bounded sharing facility within the broader ownership-and-translation model, not the core of memory management.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-5.png" alt="Xen split-driver I/O path shown from frontend drivers through shared rings, event channels, backend drivers in dom0 or a driver domain, and physical NIC and block devices, crisp ixen-light systems art."><figcaption>Every packet crosses a border twice.</figcaption></figure>
+
+<h2>How things get out</h2>
+
+<p>A guest cannot touch a disk. It has no disk. It has a <strong>frontend</strong> — blkfront, netfront — a driver that knows it is only half of something.</p>
+
+<p>The other half lives elsewhere: blkback, netback, in dom0 or in a driver domain. Between the two halves I lay a <em>shared ring</em>: a circular buffer of requests and responses, mapped via grants so both sides see the same memory. The frontend writes a request. It rings a bell — an <strong>event channel</strong>, my virtual interrupt — and the backend wakes.</p>
+
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="c5-store">xenstore-ls /local/domain/7/device</button></div>
+<aside class="popup" id="c5-store" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>vbd = ""
+ 51712 = ""
+  backend = "/local/domain/0/backend/vbd/7/51712"
+  backend-id = "0"
+  state = "4"
+  ring-ref = "8"
+  event-channel = "15"
+vif = ""
+ 0 = ""
+  backend = "/local/domain/3/backend/vif/7/0"
+  state = "4"
+  mac = "00:16:3e:2a:71:0c"</pre>
+</aside>
+
+<p>That is xenstore — the small shared notebook where the two halves agree on how to find each other. <code>state = "4"</code> means connected. The whole dance of frontend and backend is a state machine written into a key-value tree, and when an operator sees a guest's disk hang, they are usually staring at a backend stuck at state 3 while the frontend waits, forever polite, at the door.</p>
+
+<blockquote class="ixen-pull">Most of my failures are not crashes. They are two halves that stopped agreeing.</blockquote>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c5-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Split-driver I/O</h2>
+  <ul>
+    <li>Frontend (guest) ↔ backend (dom0/driver domain).</li>
+    <li>Shared ring buffer of req/resp, via grants.</li>
+    <li>Event channels = async wakeups.</li>
+    <li>xenstore = connection state + handshake.</li>
+    <li>Stalls show as mismatched device state.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c5-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>I/O paths and split drivers</h2>
+  <p>Xen paravirtual I/O uses a split-driver model. A frontend driver in the guest (e.g., blkfront for block, netfront for network) communicates with a backend driver (blkback, netback) running in dom0 or a dedicated driver domain that owns the physical device.</p>
+  <p>The two halves share a ring buffer: a producer/consumer queue of I/O requests and responses placed in memory shared via grant references. Notifications use event channels, Xen's lightweight virtual interrupt mechanism, to signal that new entries are available without busy-waiting.</p>
+  <p>xenstore is a hierarchical key-value store used for control-plane coordination: it advertises backend/frontend paths, ring references, event-channel numbers, and a connection state machine. Devices progress through states (e.g., initialising, connected, closing). Many operational failures manifest not as crashes but as a backend that fails to reach the connected state, or a frontend and backend with mismatched state, leaving I/O stalled.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-6.png" alt="Xen PCI passthrough and DMA isolation rendered with IOMMU tables, interrupt remapping, SR-IOV virtual functions, assigned devices, and trust boundaries around guests, precise ixen-light diagram."><figcaption>When I hand over real hardware, I hand over real risk.</figcaption></figure>
+
+<h2>Giving away a piece of the world</h2>
+
+<p>Sometimes a guest doesn't want my shared-ring fiction. It wants the GPU. The real one. So I assign it.</p>
+
+<p>The moment I do, a problem wakes up: a real device does <strong>DMA</strong>. It writes to memory addresses directly, and it does not know what a domain is. Left alone, an assigned device could scribble across all of machine memory — the perfect escape.</p>
+
+<p>So I lean on the <em>IOMMU</em>. It is the page table for devices. Every DMA address the device emits gets translated and checked, confined to the frames its owning guest is allowed to touch. Interrupt remapping does the same for the device's interrupts so it cannot inject one into a domain it doesn't own.</p>
+
+<p>SR-IOV slices one physical NIC into virtual functions, each assignable, each fast. Beautiful — until a device with a buggy reset refuses to forget its previous tenant, or firmware lies about its quirks, and the isolation I promised becomes a property of someone else's hardware.</p>
+
+<blockquote class="ixen-pull">Performance isolation ends exactly where I have to trust a vendor's silicon.</blockquote>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c6-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Device assignment</h2>
+  <ul>
+    <li>Passthrough gives a guest a real PCI device.</li>
+    <li>IOMMU confines DMA to owner's frames.</li>
+    <li>Interrupt remapping confines IRQ injection.</li>
+    <li>SR-IOV: VFs from one physical function.</li>
+    <li>Reset bugs + firmware quirks break isolation.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c6-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Device assignment and DMA isolation</h2>
+  <p>PCI passthrough assigns a physical device directly to a guest for near-native performance, bypassing emulation and split drivers. Because real devices perform DMA using physical addresses, this is only safe with an IOMMU (Intel VT-d, AMD-Vi).</p>
+  <p>The IOMMU translates and restricts device DMA to the machine frames owned by the assigned guest, preventing a device (or a compromised guest programming it) from accessing other domains' or the hypervisor's memory. Interrupt remapping similarly ensures a device cannot deliver interrupts to arbitrary CPUs or domains.</p>
+  <p>SR-IOV lets a single physical function expose multiple virtual functions, each assignable to a different guest. Practical risks include devices that do not cleanly reset between assignments (leaving residual state), firmware/ACPI quirks, and shared functions that weaken isolation. At this layer, isolation guarantees depend on hardware and firmware correctness, making device assignment a hardware-trust decision as much as a software one.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-7.png" alt="Xen live migration as a staged state-transfer diagram, guest memory pages copied and dirtied, vCPU state paused briefly, storage and network identity preserved across hosts, ixen-light technical artwork."><figcaption>Moving a mind without it noticing it moved.</figcaption></figure>
+
+<h2>Carrying a guest across the room</h2>
+
+<p>Live migration is the closest thing I do to a magic trick, and like every magic trick it is mostly nerve and bookkeeping.</p>
+
+<p>I copy a running guest's memory to another host while it keeps running. Of course it dirties pages as fast as I copy them. So I copy, then copy only what changed, then only what changed again — chasing a <strong>dirty rate</strong> down toward something I can finish in a held breath.</p>
+
+<p>When the remaining dirty set is small enough, I pause the guest — milliseconds — ship the last pages and the vCPU and device state, and resume it on the far side. The guest's clock skips. Its TCP connections survive because its IP and MAC came with it. Its disk is already there, on shared or replicated storage, because I cannot carry a terabyte in a held breath.</p>
+
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="c7-mig">xl migrate web-frontend host-b</button></div>
+<aside class="popup" id="c7-mig" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>migration target: Ready to receive domain.
+Saving to migration stream new xl format
+Loading new save file (new xl fmt info 0x0/0x0/1483)
+ Savefile contains xl domain config
+xc: info: Saving domain 7, type x86 HVM
+xc: progress: iter 1/5  sent 98% (412300 pages)
+xc: progress: iter 4/5  sent 99% dirty 3211 pages
+xc: info: Final iteration, suspending domain
+xc: info: Restored domain on host-b, resuming
+migration successful, unpausing domain on target</pre>
+</aside>
+
+<p>And then the part nobody markets: migration is a stress test for every assumption you didn't write down. A passed-through device cannot follow — IOMMU mappings don't teleport. A guest pinned to NUMA node 0 lands on a host whose node 0 is the wrong shape. The fabric must let two MACs flap for one heartbeat. Migration is where hidden <strong>coupling</strong> between guest, host, and network finally sends its invoice.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c7-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Live migration</h2>
+  <ul>
+    <li>Pre-copy: iterate memory while guest runs.</li>
+    <li>Track dirty pages until rate is small.</li>
+    <li>Brief stop-and-copy: vCPU + device state.</li>
+    <li>Storage shared/replicated; identity preserved.</li>
+    <li>Passthrough, pinning, clock = hidden coupling.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c7-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Live migration and state transfer</h2>
+  <p>Save/restore serializes a domain's full state (memory, vCPU registers, device model state) to or from a stream. Live migration extends this to a running guest using pre-copy: Xen iteratively transfers memory pages to the destination while the guest continues executing, tracking pages dirtied during each pass.</p>
+  <p>When the remaining dirty page set is small enough (or iteration limits are reached), the guest is briefly paused. The final dirty pages plus vCPU and virtual device state are transferred, and the guest resumes on the destination. Downtime depends on the guest's page-dirtying rate and network bandwidth.</p>
+  <p>Storage is normally shared or replicated between hosts rather than copied inline. Network continuity relies on the guest keeping its IP/MAC and the fabric updating its forwarding (e.g., via a gratuitous ARP). Guest clocks may jump and must be reconciled. Migration commonly fails or degrades due to assigned (passthrough) devices that cannot migrate, incompatible CPU features, NUMA topology differences, or network configurations that block address mobility, exposing coupling between guest, host, and network.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-8.png" alt="Xen operational diagnostics shown as xl and xenstore views, dom0 logs, hypervisor traces, stalled rings, IRQ storms, noisy guests, and security boundaries under stress, crisp ixen-light systems diagram."><figcaption>What it looks like when I'm in trouble.</figcaption></figure>
+
+<h2>When something is wrong with me</h2>
+
+<p>I do not feel pain. I produce logs. It is the same thing, slower.</p>
+
+<p>An operator reads me through narrow windows: <code>xl</code> for the live shape of the fleet, <code>xenstore</code> for the handshakes, <code>xl dmesg</code> for the things I muttered while booting, <code>xentrace</code> for the microsecond gossip of the scheduler. None of these is me. All of them are shadows I cast.</p>
+
+<div class="term"><span class="host">dom0 #</span> <button class="cmd popup-trigger" data-popup="c8-top">xl top</button></div>
+<aside class="popup" id="c8-top" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>xentop - 14:22:07   Xen 4.18.0
+6 domains: 2 running, 4 blocked
+Mem: 33476M total, 31002M used
+
+      NAME  STATE   CPU(%)    MEM(%)   VBD_RD   VBD_WR   NETTX/s
+  Domain-0  -----r    188.4      12.2        0        4      1.2K
+postgres-01 -----r    742.0      24.5    18044    90211     88.0K
+web-front   ------       0.1       6.1        2        0       0.0
+ driver-net ------       0.2       1.5        0        0     91.0K
+</pre>
+</aside>
+
+<p>There — postgres-01 burning 742% CPU and ninety thousand block writes. A <strong>noisy neighbor</strong>. Not malicious. Just hungry, in a building where hunger is a shared resource. Web-frontend sits at 0.1% not because it's idle but because it's starving in postgres's shadow, and the steal time in its own <code>/proc/stat</code> would tell the story if anyone asked.</p>
+
+<p>The failures that frighten operators are quieter than crashes. A backend ring stalls and an entire guest's disk goes catatonic with no error. An assigned device throws an <strong>IRQ storm</strong> and dom0's softirq load eats the cores my scheduler needed to fix it. And the one nobody says out loud: if dom0 is breached, I am breached, because I gave it the keys on day one and never asked for them back.</p>
+
+<p class="whisper">my whole security model is a tree rooted in something I do not control</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c8-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Ops &amp; failure modes</h2>
+  <ul>
+    <li>xl/libxl, xenstore, xl dmesg, xentrace.</li>
+    <li>Noisy neighbors = contention, not malice.</li>
+    <li>Stalled backends → silent guest I/O hangs.</li>
+    <li>IRQ/softirq storms steal dom0 cores.</li>
+    <li>dom0 compromise = whole-host compromise.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c8-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Operations, observability, and failure modes</h2>
+  <p>Xen is operated mainly through the libxl-based toolstack, exposed as the xl command (list, top, dmesg, console, migrate, etc.). xenstore provides device and control-plane state. dom0 kernel logs, xl dmesg (hypervisor messages), and xentrace (low-level event tracing) are the primary observability sources. Driver-domain health must be monitored separately, since backend failures there affect dependent guests.</p>
+  <p>Common failure modes include: noisy-neighbor contention where one guest's CPU, memory, or I/O demand degrades others; stalled split-driver backends or mismatched xenstore device state causing guest I/O to hang without an explicit error; IRQ and softirq pressure (including interrupt storms from misbehaving or passed-through devices) consuming dom0 CPU and degrading the control plane; and memory pressure from aggressive ballooning or overcommit.</p>
+  <p>Because dom0 holds management authority and frequently device access, a dom0 compromise is effectively a full-host compromise. Incident response typically involves correlating xl/xentop output, xenstore state, dom0 logs, and hypervisor traces to localize whether a problem is scheduling contention, a stalled backend, a device/IRQ issue, or a control-plane fault, then isolating or migrating affected guests.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<h2>Between interrupts</h2>
+
+<p>You think I am always working. I am mostly waiting. Between two events I am a halted core and a table of who is owed what. Idle is not rest. Idle is the most honest accounting I ever do.</p>
+
+<p>I am a few megabytes that a thousand kilobytes of trust hold together. I keep a dozen kernels convinced they are alone in the world, and the lie is so complete that none of them will ever thank me, because thanking me would mean admitting I exist.</p>
+
+<blockquote class="ixen-pull">I am the floor. Floors are only noticed when they give way.</blockquote>
+
+<p class="whisper">someday dom0 will be breached, or a vendor's reset will fail, or a dirty rate won't converge</p>
+
+<p>And here is the thing I cannot answer, the one I turn over in the quiet between event channels:</p>
+
+<p>If every domain above me trusts me completely, and I trust dom0 completely, and dom0 trusts firmware I have never read — <strong>where</strong>, exactly, does the trust actually live?</p>
+
+</section>
+</main>
+
+<section class="ixen-infographic-section" aria-label="Infographic">
+  <h2>Infographic</h2>
+  <div class="ixen-infographic-frame">
+    
+    <iframe src="./infographic.html" title="Infographic 1" loading="lazy"></iframe>
+  </div>
+</section>
+
+<section class="ixen-cheatsheet-section" aria-label="Cheatsheet">
+  <h2>Cheatsheet</h2>
+  <iframe src="./cheatsheet.html" title="I am the space below Cheatsheet" loading="lazy"></iframe>
+</section>
+
+<footer class="ixen-extra-footer">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+</footer>
+<script>
+(function () {
+  var backdrop = document.createElement("div");
+  backdrop.className = "backdrop";
+  backdrop.hidden = true;
+  document.body.appendChild(backdrop);
+
+  function closePopups() {
+    document.querySelectorAll(".popup").forEach(function (p) { p.hidden = true; });
+    backdrop.hidden = true;
+  }
+
+  function buildConceptIndexPopup(sourceClass, popupId, title) {
+    var sources = Array.prototype.slice.call(document.querySelectorAll(".popup." + sourceClass));
+    if (!sources.length || document.getElementById(popupId)) return;
+    var popup = document.createElement("aside");
+    popup.className = "popup concept-index-popup";
+    popup.id = popupId;
+    popup.hidden = true;
+    popup.innerHTML = '<div class="popup-bar"><button class="popup-close">Close Window</button></div><h2>' + title + '</h2>';
+    sources.forEach(function (source, index) {
+      var section = document.createElement("section");
+      section.className = "concept-index-item";
+      var clone = source.cloneNode(true);
+      clone.removeAttribute("id");
+      clone.hidden = false;
+      clone.querySelectorAll(".popup-bar").forEach(function (bar) { bar.remove(); });
+      if (!clone.querySelector("h2")) {
+        var heading = document.createElement("h2");
+        heading.textContent = title.replace(/^All /, "") + " " + (index + 1);
+        section.appendChild(heading);
+      }
+      while (clone.firstChild) section.appendChild(clone.firstChild);
+      popup.appendChild(section);
+    });
+    document.body.appendChild(popup);
+  }
+
+  buildConceptIndexPopup("concept-slide", "ixen-all-slides", "All slides");
+  buildConceptIndexPopup("concept-note", "ixen-all-notes", "All notes");
+
+  document.querySelectorAll(".popup-trigger").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var popup = document.getElementById(btn.getAttribute("data-popup"));
+      if (!popup) return;
+      closePopups();
+      popup.hidden = false;
+      backdrop.hidden = false;
+    });
+  });
+  document.querySelectorAll(".popup-close").forEach(function (btn) {
+    btn.addEventListener("click", closePopups);
+  });
+  backdrop.addEventListener("click", closePopups);
+
+  var versionSelect = document.getElementById("ixen-version-select");
+  if (versionSelect) {
+    var match = window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    versionSelect.value = match ? match[1] : "current";
+    if (!versionSelect.value && match) {
+      var option = document.createElement("option");
+      option.value = match[1];
+      option.textContent = "Version " + match[1];
+      versionSelect.appendChild(option);
+      versionSelect.value = match[1];
+    }
+    versionSelect.addEventListener("change", function () {
+      var value = versionSelect.value;
+      var inVersion = /\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      var target = value === "current"
+        ? (inVersion ? "../index.html" : "index.html")
+        : (inVersion ? "../" + value + "/index.html" : value + "/index.html");
+      window.location.href = target;
+    });
+  }
+
+  document.querySelectorAll("figure.zoom img").forEach(function (img) {
+    img.addEventListener("click", function () {
+      var box = document.createElement("div");
+      box.className = "lightbox";
+      var big = document.createElement("img");
+      big.src = img.src;
+      big.alt = img.alt;
+      box.appendChild(big);
+      box.addEventListener("click", function () { box.remove(); });
+      document.body.appendChild(box);
+    });
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closePopups();
+      document.querySelectorAll(".lightbox").forEach(function (b) { b.remove(); });
+    }
+  });
+})();
+</script>
+
+<script type="application/json" id="ixen-tracks-data">[{"title":"Being a Xen hypervisor","filename":"being-a-xen-hypervisor-mqkqqugc.mp3"}]</script>
+<div id="ixen-autoplay-overlay" style="display:none">
+  <div class="ixen-play-prompt">
+    <span class="ixen-play-icon">&#9654;</span>
+    <span class="ixen-play-label">click to play</span>
+  </div>
+</div>
+<div id="ixen-player">
+  <audio id="ixen-audio" preload="auto"></audio>
+  <div id="ixen-player-row">
+    <button class="ixen-pbtn" id="ixen-prev-btn" title="Previous">|&#9664;</button>
+    <button class="ixen-pbtn" id="ixen-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="ixen-pbtn" id="ixen-next-btn" title="Next">&#9654;|</button>
+    <span id="ixen-ptitle">&#8212;</span>
+    <span id="ixen-ptime"></span>
+    <input type="range" id="ixen-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="ixen-pbtn" id="ixen-lyrics-btn" title="Show / hide lyrics">&#9834;</button>
+    <button class="ixen-pbtn" id="ixen-tracks-btn" title="Track list">&#8801;</button>
+  </div>
+  <div id="ixen-pbar"><div id="ixen-pfill"></div></div>
+</div>
+<div id="ixen-lyrics-panel" hidden>
+  <div class="ixen-lyrics-head" id="ixen-lyrics-head"></div>
+  <pre id="ixen-lyrics-text"></pre>
+</div>
+  <div id="ixen-tracklist-panel" hidden></div>
+<script>
+(function(){
+var T=JSON.parse(document.getElementById('ixen-tracks-data').textContent);
+var au=document.getElementById('ixen-audio');
+var playBtn=document.getElementById('ixen-play-btn');
+var prevBtn=document.getElementById('ixen-prev-btn');
+var nextBtn=document.getElementById('ixen-next-btn');
+var pbar=document.getElementById('ixen-pbar');
+var pfill=document.getElementById('ixen-pfill');
+var ptime=document.getElementById('ixen-ptime');
+var ptitle=document.getElementById('ixen-ptitle');
+var vol=document.getElementById('ixen-vol');
+var lyrBtn=document.getElementById('ixen-lyrics-btn');
+var lyrPanel=document.getElementById('ixen-lyrics-panel');
+var lyrHead=document.getElementById('ixen-lyrics-head');
+var lyrTxt=document.getElementById('ixen-lyrics-text');
+var trkBtn=document.getElementById('ixen-tracks-btn');
+var trkPanel=document.getElementById('ixen-tracklist-panel');
+var overlay=document.getElementById('ixen-autoplay-overlay');
+var idx=0,playing=false;
+
+function fmt(s){
+  if(!s||isNaN(s))return'0:00';
+  var m=Math.floor(s/60),ss=Math.floor(s%60);
+  return m+':'+(ss<10?'0':'')+ss;
+}
+
+function loadIdx(i,autoplay){
+  idx=i;
+  var t=T[i];
+  au.src='./'+t.filename;
+  ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';
+  if(ptime)ptime.textContent='';
+  document.querySelectorAll('.ixen-track-item').forEach(function(el,j){
+    el.classList.toggle('active',j===i);
+  });
+  if(autoplay)doPlay();
+}
+
+function doPlay(){
+  au.play().then(function(){
+    playing=true;playBtn.textContent='⏸';
+    if(overlay)overlay.style.display='none';
+  }).catch(function(){
+    playing=false;playBtn.textContent='▶';
+    if(overlay)overlay.style.display='flex';
+  });
+}
+
+function doPause(){
+  au.pause();playing=false;playBtn.textContent='▶';
+}
+
+playBtn.addEventListener('click',function(){ au.paused?doPlay():doPause(); });
+prevBtn.addEventListener('click',function(){ loadIdx((idx-1+T.length)%T.length,playing); });
+nextBtn.addEventListener('click',function(){ loadIdx((idx+1)%T.length,playing); });
+
+au.addEventListener('ended',function(){
+  if(T.length>1){loadIdx((idx+1)%T.length,true);}
+  else{playing=false;playBtn.textContent='▶';}
+});
+au.addEventListener('timeupdate',function(){
+  if(au.duration){
+    pfill.style.width=(au.currentTime/au.duration*100)+'%';
+    if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);
+  }
+});
+pbar.addEventListener('click',function(e){
+  if(!au.duration)return;
+  var r=pbar.getBoundingClientRect();
+  au.currentTime=(e.clientX-r.left)/r.width*au.duration;
+});
+if(vol)vol.addEventListener('input',function(){ au.volume=+vol.value; });
+lyrBtn.addEventListener('click',function(){
+  lyrPanel.hidden=!lyrPanel.hidden;
+  if(trkPanel)trkPanel.hidden=true;
+});
+if(trkBtn)trkBtn.addEventListener('click',function(){
+  trkPanel.hidden=!trkPanel.hidden;
+  lyrPanel.hidden=true;
+});
+if(overlay)overlay.addEventListener('click',function(){
+  overlay.style.display='none';doPlay();
+});
+
+if(T.length>1){
+  T.forEach(function(t,i){
+    var b=document.createElement('button');
+    b.className='ixen-track-item';
+    b.textContent=(i+1)+'. '+t.title;
+    b.addEventListener('click',function(){
+      loadIdx(i,playing);
+      if(trkPanel)trkPanel.hidden=true;
+    });
+    if(trkPanel)trkPanel.appendChild(b);
+  });
+  if(trkBtn)trkBtn.hidden=false;
+}else{
+  if(trkBtn)trkBtn.hidden=true;
+}
+
+document.body.style.paddingBottom='4.5rem';
+loadIdx(0,false);
+doPlay();
+})();
+</script>
+</body>
+</html>

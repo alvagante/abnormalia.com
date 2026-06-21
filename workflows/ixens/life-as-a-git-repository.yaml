@@ -1,7 +1,7 @@
 ixenApiFormat: anthropic
 ixenBaseUrl: https://api.anthropic.com
 skillLevel: intermediate
-outputLength: short
+outputLength: long
 ixenModel: claude-opus-4-8
 ixenPersona: abnormalia
 credits: alvagante
@@ -68,9 +68,10 @@ ixens:
       - name: Refs, HEAD, reflogs, and revision language
         imageFilename: concept-3.png
         imagePrompt: >-
-          Git refs visualized as movable labels over a commit DAG, with HEAD,
-          symbolic refs, packed refs, namespaces, tags, reflogs, revision ranges,
-          and ancestry selectors, precise ixen-light technical diagram.
+          Clean technical diagram of Git references as movable branch and tag
+          labels over a commit DAG, with symbolic refs, packed refs, namespaces,
+          reflogs, revision ranges, and ancestry selectors, precise ixen-light
+          systems illustration.
         details: >-
           Cover branches, tags, remote-tracking refs, symbolic HEAD, detached
           HEAD, packed refs, reflogs, namespaces, rev-parse style revision

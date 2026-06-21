@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Immutable Object Model</title>
+<title>The Object Model — immutable, content-addressed</title>
 <style>
   :root {
     --cs-hue-blue: #1a73e8;
@@ -273,164 +273,153 @@
 </head>
 <body>
 <header class="cs-page-header">
-  <h1>The Immutable Object Model</h1>
-  <div class="cs-page-meta"><span>Life as a Git repository</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-19</span></div>
+  <h1>The Object Model — immutable, content-addressed</h1>
+  <div class="cs-page-meta"><span>Life as a Git repository</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-21</span></div>
 </header>
 <main>
 <div class="cs-quickref">
   <span class="cs-qr-label">Quick ref</span>
   <div class="cs-qr-items">
-    <div class="cs-qr-item"><code>git cat-file -p &lt;oid&gt;</code> <span>print any object</span></div>
-    <div class="cs-qr-item"><code>git rev-parse HEAD</code> <span>resolve ref to OID</span></div>
-    <div class="cs-qr-item"><code>git reflog</code> <span>find lost commits</span></div>
-    <div class="cs-qr-item"><code>git for-each-ref</code> <span>list all refs</span></div>
-    <div class="cs-qr-item"><code>git fsck --lost-found</code> <span>recover dangling objects</span></div>
-    <div class="cs-qr-item"><code>git push origin HEAD:branch</code> <span>move a remote ref</span></div>
+    <div class="cs-qr-item"><code>git cat-file -p &lt;oid&gt;</code> <span>pretty-print any object</span></div>
+    <div class="cs-qr-item"><code>git rev-parse HEAD</code> <span>resolve a revision to its OID</span></div>
+    <div class="cs-qr-item"><code>git reflog</code> <span>recover "lost" commits</span></div>
+    <div class="cs-qr-item"><code>git switch -c name</code> <span>create + move to a branch</span></div>
+    <div class="cs-qr-item"><code>git restore --staged .</code> <span>unstage everything</span></div>
+    <div class="cs-qr-item"><code>git fsck --lost-found</code> <span>find dangling objects</span></div>
+    <div class="cs-qr-item"><code>git push origin HEAD:main</code> <span>explicit refspec push</span></div>
   </div>
 </div>
 
 <section class="cs-section" data-color="blue">
-  <h2 class="cs-section-title">The Immutable Object Model</h2>
-  <p>Git is a content-addressable store: four object types keyed by the SHA-1/SHA-256 hash of their contents. Identical content yields identical OIDs; changing anything mints a new object.</p>
+  <h2 class="cs-section-title">The Object Model — immutable, content-addressed</h2>
+  <p>Every value in a repo is one of four object types, named by the hash of its contents. Identical content yields one object; rewriting content yields a <em>new</em> object and never mutates the old.</p>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>blob</code></div>
+      <div class="cs-item-desc">Raw file bytes — no name, no mode, no history.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>tree</code></div>
+      <div class="cs-item-desc">A directory: list of (mode, name, oid) pointing at blobs/trees.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>commit</code></div>
+      <div class="cs-item-desc">A snapshot: one root tree, zero+ parents, author/committer, message.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>tag</code></div>
+      <div class="cs-item-desc">Annotated tag object: target oid, tagger, message, optional signature.</div>
+    </div>
+  </div>
   <table class="cs-table">
-    <thead><tr><th>Object</th><th>Contains</th><th>Points to</th></tr></thead>
+    <thead><tr><th>Concept</th><th>Meaning</th></tr></thead>
     <tbody>
-      <tr><td><code>blob</code></td><td>raw file bytes (no name)</td><td>nothing</td></tr>
-      <tr><td><code>tree</code></td><td>names, modes, OIDs</td><td>blobs &amp; subtrees</td></tr>
-      <tr><td><code>commit</code></td><td>tree, parents, author, message</td><td>one tree + parent commits</td></tr>
-      <tr><td><code>tag</code></td><td>target OID, tagger, message</td><td>any object (annotated tags)</td></tr>
+      <tr><td><code>OID</code></td><td>SHA-1 (or SHA-256) of <code>type + size + \0 + content</code></td></tr>
+      <tr><td>Loose object</td><td>One zlib-deflated file under <code>.git/objects/ab/cdef…</code></td></tr>
+      <tr><td>Packfile</td><td>Many objects in one <code>.pack</code>, delta-compressed, with a <code>.idx</code></td></tr>
+      <tr><td>Commit DAG</td><td>Directed acyclic graph formed by parent links</td></tr>
+      <tr><td>Reachability</td><td>An object lives if a ref can reach it through the DAG</td></tr>
     </tbody>
   </table>
-  <div class="cs-callout note"><span class="cs-callout-label">Note</span> Commits form a DAG via parent links; a merge commit has two or more parents. A branch is just a moving pointer to a commit; "history" is everything reachable from it.</div>
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> Commits store full snapshots, not diffs. The "diff" you see is computed on demand by comparing two trees; delta compression in packfiles is a storage detail, unrelated to commit semantics.</div>
 </section>
 
 <section class="cs-section" data-color="green">
-  <h2 class="cs-section-title">Plumbing Beneath the Porcelain</h2>
+  <h2 class="cs-section-title">Plumbing — building objects by hand</h2>
+  <p>Porcelain commands are scripts over these primitives. Knowing them demystifies everything else.</p>
   <div class="cs-items">
     <div class="cs-item">
       <div class="cs-item-cmd"><code>git hash-object -w file</code></div>
-      <div class="cs-item-desc">Hash content and write a loose blob into the object store.</div>
+      <div class="cs-item-desc">Write a blob from a file, print its OID.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>git cat-file -t|-s|-p &lt;oid&gt;</code></div>
-      <div class="cs-item-desc">Show an object's type, size, or pretty-printed content.</div>
+      <div class="cs-item-cmd"><code>git cat-file -t/-s/-p &lt;oid&gt;</code></div>
+      <div class="cs-item-desc">Show an object's type / size / contents.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>git update-index --add file</code></div>
-      <div class="cs-item-desc">Stage content into the index (the proposed next tree).</div>
+      <div class="cs-item-desc">Stage a path into the index by hand.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>git write-tree</code></div>
-      <div class="cs-item-desc">Snapshot the index into a tree object, returning its OID.</div>
+      <div class="cs-item-desc">Snapshot the current index into a tree object.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>git commit-tree &lt;tree&gt; -p &lt;parent&gt;</code></div>
-      <div class="cs-item-desc">Wrap a tree in a commit; the raw building block of <code>git commit</code>.</div>
+      <div class="cs-item-cmd"><code>git commit-tree &lt;tree&gt; -p &lt;parent&gt; -m msg</code></div>
+      <div class="cs-item-desc">Forge a commit pointing at a tree; prints new OID.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>git update-ref refs/heads/x &lt;oid&gt;</code></div>
-      <div class="cs-item-desc">Move a ref to a commit — separate step from creating the object.</div>
+      <div class="cs-item-desc">Point a ref at a commit — the move that "publishes" work.</div>
     </div>
   </div>
-  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> Porcelain = plumbing pipeline: <code>commit</code> ≈ <code>write-tree</code> → <code>commit-tree</code> → <code>update-ref</code>. Knowing this makes recovery and scripting trivial.</div>
+  <pre class="cs-code"><code>blob=$(git hash-object -w hello.txt)
+git update-index --add --cacheinfo 100644,$blob,hello.txt
+tree=$(git write-tree)
+commit=$(git commit-tree $tree -m "by hand")
+git update-ref refs/heads/main $commit</code></pre>
+  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> The whole of <code>git commit</code> is just these five steps. Creating objects and moving refs are <em>separate</em> acts — that separation is the key to recovery.</div>
 </section>
 
-<section class="cs-section" data-color="purple">
-  <h2 class="cs-section-title">Refs, HEAD &amp; Reflogs</h2>
+<section class="cs-section" data-color="red">
+  <h2 class="cs-section-title">The Three Trees — HEAD, index, working tree</h2>
   <div class="cs-grid">
     <div>
-      <h3>Ref anatomy</h3>
-      <p>Refs are files under <code>.git/refs/</code> (or packed in <code>packed-refs</code>) holding an OID. <code>HEAD</code> is a symbolic ref pointing at the current branch; detached HEAD points straight at a commit.</p>
+      <h3>What each is</h3>
+      <p><strong>HEAD</strong> is the last committed tree (usually via a branch). The <strong>index</strong> is the staged next commit. The <strong>working tree</strong> is your editable files.</p>
     </div>
     <div>
-      <h3>The reflog</h3>
-      <p>Every ref movement is logged locally in <code>.git/logs/</code>. <code>HEAD@{2}</code> or <code>main@{yesterday}</code> reaches prior positions — your undo history and primary recovery tool.</p>
+      <h3>Modern verbs</h3>
+      <p><code>switch</code> changes branches; <code>restore</code> moves file content between the three trees. They split the old overloaded <code>checkout</code>.</p>
     </div>
   </div>
-  <div class="cs-items">
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>git symbolic-ref HEAD</code></div>
-      <div class="cs-item-desc">Show which branch HEAD currently follows.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>git for-each-ref --sort=-committerdate</code></div>
-      <div class="cs-item-desc">Enumerate refs with custom formatting and ordering.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>git reflog expire --expire=now --all</code></div>
-      <div class="cs-item-desc">Drop reflog entries — accelerates "forgetting" before gc.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>git pack-refs --all</code></div>
-      <div class="cs-item-desc">Collapse loose refs into <code>packed-refs</code>.</div>
-    </div>
-  </div>
-</section>
-
-<section class="cs-section" data-color="orange">
-  <h2 class="cs-section-title">Working Tree, Index &amp; State Movement</h2>
-  <p>Three trees: the <strong>working tree</strong> (files on disk), the <strong>index</strong> (staging area), and <strong>HEAD</strong> (last commit). Commands differ in which they touch.</p>
   <table class="cs-table">
-    <thead><tr><th>Command</th><th>Moves HEAD</th><th>Touches index / worktree</th></tr></thead>
+    <thead><tr><th>Command</th><th>HEAD</th><th>Index</th><th>Worktree</th></tr></thead>
     <tbody>
-      <tr><td><code>git reset --soft</code></td><td>yes</td><td>neither</td></tr>
-      <tr><td><code>git reset --mixed</code></td><td>yes</td><td>index only (default)</td></tr>
-      <tr><td><code>git reset --hard</code></td><td>yes</td><td>index + worktree</td></tr>
-      <tr><td><code>git restore --staged f</code></td><td>no</td><td>index only</td></tr>
-      <tr><td><code>git restore f</code></td><td>no</td><td>worktree only</td></tr>
-      <tr><td><code>git switch &lt;branch&gt;</code></td><td>moves HEAD ref</td><td>updates worktree</td></tr>
+      <tr><td><code>git reset --soft &lt;c&gt;</code></td><td>moves</td><td>—</td><td>—</td></tr>
+      <tr><td><code>git reset --mixed &lt;c&gt;</code></td><td>moves</td><td>reset</td><td>—</td></tr>
+      <tr><td><code>git reset --hard &lt;c&gt;</code></td><td>moves</td><td>reset</td><td>reset</td></tr>
+      <tr><td><code>git restore --staged f</code></td><td>—</td><td>reset</td><td>—</td></tr>
+      <tr><td><code>git restore f</code></td><td>—</td><td>—</td><td>reset</td></tr>
+      <tr><td><code>git checkout &lt;c&gt; -- f</code></td><td>—</td><td>set</td><td>set</td></tr>
     </tbody>
   </table>
   <div class="cs-items">
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>git switch -c feature</code></div>
-      <div class="cs-item-desc">Create and check out a branch (modern <code>checkout -b</code>).</div>
+      <div class="cs-item-cmd"><code>git commit --amend</code></div>
+      <div class="cs-item-desc">Replace the tip commit with a new object — old one becomes unreferenced.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>git stash push -m "wip"</code></div>
-      <div class="cs-item-desc">Park dirty changes as commits under <code>refs/stash</code>.</div>
+      <div class="cs-item-cmd"><code>git stash push -u</code></div>
+      <div class="cs-item-desc">Shelve worktree + index (incl. untracked) as hidden commits.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>git clean -fdx</code></div>
-      <div class="cs-item-desc">Delete untracked files/dirs, including ignored ones — irreversible.</div>
+      <div class="cs-item-desc">Delete untracked files/dirs, including ignored — irreversible.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>git switch -c feat origin/main</code></div>
+      <div class="cs-item-desc">New branch tracking a remote start point.</div>
     </div>
   </div>
-  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> <code>reset --hard</code> and <code>clean</code> destroy uncommitted work that was never an object — the reflog cannot save what was never committed.</div>
+  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> <code>reset --hard</code> and <code>clean -fdx</code> overwrite uncommitted work that was never turned into objects. Only committed/stashed state is recoverable via reflog.</div>
 </section>
 
-<section class="cs-section" data-color="teal">
-  <h2 class="cs-section-title">Revision Selection, Pathspecs &amp; Attributes</h2>
+<section class="cs-section" data-color="purple">
+  <h2 class="cs-section-title">Refs, Reflogs & Reachability</h2>
+  <p>Refs are mutable pointers into the immutable graph: a file under <code>.git/refs/</code> or a line in <code>packed-refs</code> holding one OID. HEAD is usually a <em>symbolic</em> ref pointing at a branch.</p>
   <div class="cs-items">
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>HEAD~3</code> / <code>HEAD^2</code></div>
-      <div class="cs-item-desc">First-parent ancestor / second parent of a merge.</div>
+      <div class="cs-item-cmd"><code>git for-each-ref --sort=-committerdate</code></div>
+      <div class="cs-item-desc">Script-friendly listing of all refs and their targets.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>main..feature</code></div>
-      <div class="cs-item-desc">Commits reachable from feature but not main.</div>
+      <div class="cs-item-cmd"><code>git symbolic-ref HEAD</code></div>
+      <div class="cs-item-desc">Show what branch HEAD points to (detached if not a ref).</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>main...feature</code></div>
-      <div class="cs-item-desc">Symmetric difference; with <code>--left-right</code> shows sides.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>:(exclude)*.test.js</code></div>
-      <div class="cs-item-desc">Magic pathspec to exclude paths from an operation.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>.gitignore</code> / <code>.gitattributes</code></div>
-      <div class="cs-item-desc">Per-path ignore rules and behaviors (eol, diff, filter, merge).</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>git check-ignore -v file</code></div>
-      <div class="cs-item-desc">Show which ignore rule matched a path.</div>
-    </div>
-  </div>
-</section>
-
-<section class="cs-section" data-color="red">
-  <h2 class="cs-section-title">Integration: Merge, Rebase &amp; Conflicts</h2>
-  <p>Integration is separate from transport — these only rearrange the local DAG. Rewriting always mints <em>new</em> commits; originals linger until gc
+      <div class="cs-item-cmd"><code>git reflog show main</code></div>
+      <div class="cs-item-desc">Local history of where a ref has pointed — your undo
 </main>
 </body>
 </html>

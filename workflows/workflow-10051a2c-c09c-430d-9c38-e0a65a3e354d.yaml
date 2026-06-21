@@ -478,7 +478,7 @@ jobs:
         description: Generate the soundtrack playlist for one Ixen topic, unless it already has enough MP3s.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, data.latest("tracks-" + ixen.slug, "versionedTrackCount").attributes.trackCount < inputs.musicSkipThreshold) }}
+          in: ${{ inputs.ixens.filter(ixen, data.latest("tracks-" + ixen.slug, "count").attributes.trackCount < inputs.musicSkipThreshold) }}
         task:
           type: model_method
           modelType: "@alvagante/content-music"
@@ -633,7 +633,7 @@ jobs:
             includeBeginnerGuide: ${{ inputs.includeBeginnerGuide }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
             versionOutput: false
-            musicTracks: ${{ data.latest("tracks-" + self.ixen.slug, "allTracks").attributes.tracks }}
+            musicTracks: ${{ data.latest("tracks-" + self.ixen.slug, "tracks").attributes.tracks }}
         dependsOn: []
         weight: 0
         allowFailure: false

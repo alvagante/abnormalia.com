@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What I Am</title>
+<style>
+  :root {
+    --cs-hue-blue: #1a73e8;
+    --cs-hue-green: #1e8e3e;
+    --cs-hue-red: #d93025;
+    --cs-hue-purple: #7b1fa2;
+    --cs-hue-orange: #e37400;
+    --cs-hue-teal: #007b83;
+    --cs-bg: #fafafa;
+    --cs-surface: #ffffff;
+    --cs-text: #1f1f1f;
+    --cs-text-muted: #5f6368;
+    --cs-border: #e0e0e0;
+    --cs-code-bg: #f1f3f4;
+    --cs-header-bg: #1f1f1f;
+    --cs-header-text: #ffffff;
+    --cs-quickref-bg: #2d2d2d;
+    --cs-quickref-text: #f8f9fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    background: var(--cs-bg);
+    color: var(--cs-text);
+  }
+  .cs-page-header {
+    background: var(--cs-header-bg);
+    color: var(--cs-header-text);
+    padding: 18px 24px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cs-page-header h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .cs-page-meta {
+    font-size: 11px;
+    color: #9aa0a6;
+    display: flex;
+    gap: 16px;
+  }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 20px 40px;
+  }
+  /* Quick reference bar */
+  .cs-quickref {
+    background: var(--cs-quickref-bg);
+    color: var(--cs-quickref-text);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .cs-qr-label {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #9aa0a6;
+    white-space: nowrap;
+    padding-top: 2px;
+    min-width: 56px;
+  }
+  .cs-qr-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+  }
+  .cs-qr-item {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    font-size: 12px;
+  }
+  .cs-qr-item code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    color: #8ab4f8;
+    background: rgba(255,255,255,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .cs-qr-item span { color: #bdc1c6; }
+  /* Sections */
+  .cs-section {
+    background: var(--cs-surface);
+    border-radius: 6px;
+    border-left: 4px solid var(--cs-border);
+    margin-bottom: 12px;
+    padding: 12px 16px 14px;
+    break-inside: avoid;
+  }
+  .cs-section[data-color="blue"]   { border-left-color: var(--cs-hue-blue);   }
+  .cs-section[data-color="green"]  { border-left-color: var(--cs-hue-green);  }
+  .cs-section[data-color="red"]    { border-left-color: var(--cs-hue-red);    }
+  .cs-section[data-color="purple"] { border-left-color: var(--cs-hue-purple); }
+  .cs-section[data-color="orange"] { border-left-color: var(--cs-hue-orange); }
+  .cs-section[data-color="teal"]   { border-left-color: var(--cs-hue-teal);   }
+  .cs-section-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--cs-border);
+  }
+  .cs-section[data-color="blue"]   .cs-section-title { color: var(--cs-hue-blue);   }
+  .cs-section[data-color="green"]  .cs-section-title { color: var(--cs-hue-green);  }
+  .cs-section[data-color="red"]    .cs-section-title { color: var(--cs-hue-red);    }
+  .cs-section[data-color="purple"] .cs-section-title { color: var(--cs-hue-purple); }
+  .cs-section[data-color="orange"] .cs-section-title { color: var(--cs-hue-orange); }
+  .cs-section[data-color="teal"]   .cs-section-title { color: var(--cs-hue-teal);   }
+  .cs-section h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--cs-text-muted);
+    margin: 10px 0 6px;
+  }
+  .cs-section p { font-size: 12.5px; color: var(--cs-text-muted); margin: 6px 0; }
+  /* Items grid */
+  .cs-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 16px;
+  }
+  .cs-item {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 3px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 12px;
+  }
+  .cs-item:last-child { border-bottom: none; }
+  .cs-item-cmd {
+    flex: 0 0 auto;
+    min-width: 120px;
+    max-width: 200px;
+  }
+  .cs-item-cmd code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    background: var(--cs-code-bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    word-break: break-all;
+  }
+  .cs-item-desc { color: var(--cs-text-muted); flex: 1; }
+  /* Two-column grid */
+  .cs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 20px;
+    margin-top: 6px;
+  }
+  .cs-grid h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cs-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .cs-grid p, .cs-grid li { font-size: 12px; color: var(--cs-text-muted); margin: 4px 0; }
+  .cs-grid ul, .cs-grid ol { padding-left: 16px; }
+  /* Callouts */
+  .cs-callout {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin: 8px 0;
+  }
+  .cs-callout.tip     { background: #e8f5e9; color: #1e6823; }
+  .cs-callout.warning { background: #fff3e0; color: #7c4a03; }
+  .cs-callout.note    { background: #e8f0fe; color: #1a5276; }
+  .cs-callout-label {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  /* Tables */
+  .cs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  .cs-table th {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #f1f3f4;
+    text-align: left;
+    padding: 5px 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 2px solid var(--cs-border);
+  }
+  .cs-table td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+    color: var(--cs-text-muted);
+  }
+  .cs-table tr:last-child td { border-bottom: none; }
+  .cs-table code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    background: var(--cs-code-bg);
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+  /* Code block */
+  .cs-code {
+    background: var(--cs-code-bg);
+    border: 1px solid var(--cs-border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 8px 0;
+  }
+  /* Inline code in paragraphs */
+  p code, li code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    background: var(--cs-code-bg);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  /* Print */
+  @media print {
+    body { background: white; font-size: 11px; }
+    .cs-page-header { background: #1f1f1f !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    main { max-width: 100%; padding: 8px; }
+    .cs-quickref { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-section { break-inside: avoid; box-shadow: none; border: 1px solid #e0e0e0; }
+    .cs-callout.tip     { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-callout.warning { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-callout.note    { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<header class="cs-page-header">
+  <h1>What I Am</h1>
+  <div class="cs-page-meta"><span>Life as a Puppet catalog</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-21</span></div>
+</header>
+<main>
+<div class="cs-quickref">
+  <span class="cs-qr-label">Quick ref</span>
+  <div class="cs-qr-items">
+    <div class="cs-qr-item"><code>puppet agent -t</code> <span>trigger a run: request catalog, apply, report</span></div>
+    <div class="cs-qr-item"><code>--noop</code> <span>simulate convergence, change nothing</span></div>
+    <div class="cs-qr-item"><code>puppet catalog compile NODE</code> <span>compile my graph for a node</span></div>
+    <div class="cs-qr-item"><code>facter -p</code> <span>show facts the master will trust</span></div>
+    <div class="cs-qr-item"><code>puppet resource service nginx</code> <span>introspect live state as a resource</span></div>
+    <div class="cs-qr-item"><code>puppet lookup KEY --node N</code> <span>resolve Hiera data for a node</span></div>
+  </div>
+</div>
+
+<section class="cs-section" data-color="blue">
+  <h2 class="cs-section-title">What I Am</h2>
+  <div class="cs-grid">
+    <div>
+      <h3>A specification, not a script</h3>
+      <p>I am a compiled, node-specific graph of resources describing <em>desired state</em>. I declare what must be true, never the steps to get there — the agent decides actions by comparing me to reality.</p>
+    </div>
+    <div>
+      <h3>Consequences of the declarative model</h3>
+      <p>Order is not implied by file position — it must be stated explicitly. Convergence is automatic and idempotent: applying me repeatedly yields the same end state with no extra changes.</p>
+    </div>
+  </div>
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> I am built fresh for one agent at one moment from that agent's facts plus your code and data; two nodes never share the same compiled catalog.</div>
+</section>
+
+<section class="cs-section" data-color="green">
+  <h2 class="cs-section-title">Resource Types & Provider Abstraction</h2>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>package { 'nginx': ensure =&gt; installed }</code></div>
+      <div class="cs-item-desc">A resource: a type, a title, and attributes describing desired state.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>service { 'nginx': ensure =&gt; running, enable =&gt; true }</code></div>
+      <div class="cs-item-desc">Same type system; the title must be unique per type within me.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>provider =&gt; 'systemd'</code></div>
+      <div class="cs-item-desc">Providers translate abstract state into platform commands (apt, yum, systemd, launchd).</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>puppet describe service</code></div>
+      <div class="cs-item-desc">List a type's attributes and the providers available for it.</div>
+    </div>
+  </div>
+  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> Facter auto-selects a suitable provider per platform, so the same manifest converges identically on Debian and RHEL without conditionals.</div>
+</section>
+
+<section class="cs-section" data-color="purple">
+  <h2 class="cs-section-title">Manifests &amp; Module Structure</h2>
+  <pre class="cs-code"><code>module/
+├── manifests/
+│   ├── init.pp        # class module { }
+│   └── config.pp      # class module::config { }
+├── templates/         # .epp / .erb rendered into files
+├── files/             # static file sources
+├── functions/         # custom Puppet functions
+├── lib/facter/        # custom facts
+└── data/ + hiera.yaml # module-level data</code></pre>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>class profile::web { ... }</code></div>
+      <div class="cs-item-desc">Classes group resources; namespacing follows the file path.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>define apache::vhost(...) { }</code></div>
+      <div class="cs-item-desc">Defined types are reusable resource templates instantiated many times.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>include profile::web</code></div>
+      <div class="cs-item-desc">Declare a class once; idempotent. <code>contain</code> binds it for ordering.</div>
+    </div>
+  </div>
+</section>
+
+<section class="cs-section" data-color="orange">
+  <h2 class="cs-section-title">The Compilation Pipeline</h2>
+  <table class="cs-table">
+    <thead><tr><th>Stage</th><th>What happens</th><th>Input</th></tr></thead>
+    <tbody>
+      <tr><td><code>Classification</code></td><td>Decide which classes apply to the node (ENC, site.pp, Hiera).</td><td>node name, environment</td></tr>
+      <tr><td><code>Fact injection</code></td><td>Node's facts become top-scope variables (<code>$facts</code>).</td><td>Facter payload</td></tr>
+      <tr><td><code>Evaluation</code></td><td>Manifests run as code: conditionals, loops, lookups, functions.</td><td>manifests + data</td></tr>
+      <tr><td><code>Resource collection</code></td><td>Declared resources accumulate; duplicates rejected.</td><td>evaluated classes</td></tr>
+      <tr><td><code>Graph output</code></td><td>Relationships resolved into a DAG — that DAG is me.</td><td>metaparameters</td></tr>
+    </tbody>
+  </table>
+  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> Evaluation is compile-time on the master; resource application is run-time on the agent. A duplicate resource declaration fails compilation before any change is attempted.</div>
+</section>
+
+<section class="cs-section" data-color="teal">
+  <h2 class="cs-section-title">Facter &amp; the Trust Boundary</h2>
+  <div class="cs-grid">
+    <div>
+      <h3>Ordinary facts</h3>
+      <p>Facter gathers system data (OS, network, hardware) on the agent and ships it to the master. These are self-reported and could be spoofed by a compromised node.</p>
+    </div>
+    <div>
+      <h3>Trusted facts</h3>
+      <p><code>$trusted</code> is derived from the agent's signed certificate, not from Facter, so it cannot be forged. Use it for security-sensitive classification.</p>
+    </div>
+  </div>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>$facts['os']['family']</code></div>
+      <div class="cs-item-desc">Structured fact access; basis for provider and template choices.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>$trusted['certname']</code></div>
+      <div class="cs-item-desc">Cert-derived identity — the trust boundary for authorization.</div>
+    </div>
+  </div>
+</section>
+
+<section class="cs-section" data-color="red">
+  <h2 class="cs-section-title">Relationships, Ordering &amp; Containment</h2>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>require =&gt; Package['nginx']</code></div>
+      <div class="cs-item-desc">This resource applies after the named one — an edge in my graph.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>before =&gt; Service['nginx']</code></div>
+      <div class="cs-item-desc">Inverse of require; the same edge stated from the other side.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>notify =&gt; Service['nginx']</code></div>
+      <div class="cs-item-desc">Ordering plus a refresh signal when this resource changes.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>subscribe =&gt; File['nginx.conf']</code></div>
+      <div class="cs-item-desc">Inverse of notify; service restarts when the watched file changes.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>File['a'] -&gt; Service['b']</code></div>
+      <div class="cs-item-desc">Chaining arrow; <code>~&gt;</code> adds refresh, like notify.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>contain ::module::service</code></div>
+      <div class="cs-item-desc">Pulls a class inside another's containment so ordering edges apply transitively.</div>
+    </div>
+  </div>
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> My graph must be acyclic; a dependency cycle is a compile failure. Within these constraints the agent is free to apply unordered resources in any order.</div>
+</section>
+
+<section class="cs-section" data-color="blue">
+  <h2 class="cs-section-title">Hiera &amp; Data Separation</h2>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>lookup('profile::web::port')</code></div>
+      <div class="cs-item-desc">Resolve a value through the layered hierarchy at compile time.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>hierarchy: [ "nodes/%{trusted.certname}", "common" ]</code></div>
+      <div class="cs-item-desc">Ordered layers; the first match wins for normal lookups.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>lookup_options: merge: deep</code></div>
+      <div class="cs-item-desc">Merge across layers instead of first-found for hashes/arrays.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>class web (String $port = '80') { }</code></div>
+      <div class="cs-item-desc">Automatic parameter lookup binds Hiera keys to class params by name.</div>
+    </div>
+  </div>
+  <div class="cs-call
+</main>
+</body>
+</html>

@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I Am the Shape You Asked For</title>
+<style>
+:root { --red: #c00; --ink: #111; --dim: #555; }
+* { box-sizing: border-box; }
+body {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--ink);
+  background: #fff; max-width: 920px; margin: 0 auto;
+  padding: 1.5rem 1.5rem 6rem;
+}
+header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
+header h1 {
+  font-size: 3.2rem; font-weight: 900; letter-spacing: -0.04em;
+  margin: 0; line-height: 1.05; text-transform: uppercase;
+}
+header .credits { text-align: right; font-size: 0.75rem; color: var(--red); font-weight: bold; white-space: nowrap; padding-top: 0.4rem; }
+header .credits a { color: var(--red); text-decoration: underline dotted; }
+header .credits .byline { color: var(--dim); font-weight: normal; display: block; margin-top: 0.2rem; }
+.version-menu { margin-top: 0.55rem; font-size: 0.72rem; color: var(--dim); }
+.version-menu label { display: block; margin-bottom: 0.2rem; }
+.version-menu select {
+  font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
+  max-width: 13rem; color: var(--ink); background: #fff;
+  border: 1px solid #ccc; padding: 0.2rem 0.3rem;
+}
+.ixen-quick-nav {
+  display: flex; justify-content: flex-end; gap: 0.55rem;
+  margin-top: 0.45rem;
+}
+.ixen-quick-nav .cmd { font-size: 0.72rem; }
+p { margin: 0.45em 0; }
+p strong { color: #000; }
+.binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
+.whisper {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--dim);
+}
+.term {
+  font-family: "Courier New", Courier, monospace; font-size: 0.95rem;
+  margin: 1.3em 0 0.25em; color: var(--dim);
+}
+.term .cmd { color: var(--red); font-weight: bold; }
+button.cmd, a.cmd {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: var(--red); font-weight: bold;
+  text-decoration: underline dotted;
+}
+a.cmd { display: inline; }
+pre { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; color: #333; overflow-x: auto; margin: 0.3em 0 1em; }
+pre.output { padding-left: 1.5em; }
+.popup {
+  position: fixed; top: 8vh; left: 50%; transform: translateX(-50%);
+  width: min(700px, 92vw); max-height: 80vh; overflow: auto;
+  background: #fff; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35); z-index: 60; padding: 0 1rem 1rem;
+}
+.popup-bar { display: flex; justify-content: flex-end; padding: 0.5rem 0; position: sticky; top: 0; background: #fff; }
+.popup-close {
+  background: #2b1d0e; color: #f0e0c0; border: none; cursor: pointer;
+  font-size: 0.72rem; padding: 0.3rem 0.8rem;
+}
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 50; }
+figure.zoom { margin: 1.5rem 0; }
+figure.zoom img { width: 100%; cursor: zoom-in; display: block; }
+figure.zoom.float-left { float: left; width: min(340px, 45%); margin: 0.3rem 1.5rem 0.8rem 0; }
+figure.zoom.float-right { float: right; width: min(340px, 45%); margin: 0.3rem 0 0.8rem 1.5rem; }
+figure.zoom.small.float-left, figure.zoom.small.float-right { width: min(220px, 35%); }
+figure.zoom.large.float-left, figure.zoom.large.float-right { width: min(520px, 60%); }
+figure.zoom.large:not(.float-left):not(.float-right) { clear: both; }
+figure.ixen-art { clear: both; margin: 2.5rem 0; }
+figure.ixen-art svg { max-width: 100%; height: auto; display: block; background: #fafafa; border: 1px solid #e8e8e8; }
+figcaption, .media-caption { font-size: 0.75rem; color: var(--dim); margin-top: 0.3rem; }
+.media { clear: both; margin: 2rem 0; }
+.media.video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.media.pdf iframe { width: 100%; height: 70vh; border: 1px solid #ccc; }
+.media.audio audio { width: 100%; }
+blockquote.ixen-pull {
+  border-left: 3px solid var(--red); margin: 2rem 0 2rem 1.5rem;
+  padding: 0.1rem 0 0.1rem 1.2rem; color: var(--dim);
+  font-style: italic; font-size: 1.05rem;
+}
+section.chapter { clear: both; margin: 3rem 0; }
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.lightbox img { max-width: 92vw; max-height: 92vh; }
+.ixen-extra-header {
+  border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+  margin: 0 0 1.6rem; padding: 0.8rem 0;
+}
+.ixen-extra-footer {
+  clear: both; border-top: 1px solid #ddd; margin: 3rem 0 0;
+  padding-top: 0.9rem; font-size: 0.85rem; color: var(--dim);
+}
+.ixen-cheatsheet-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-infographic-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-cheatsheet-section h2, .ixen-infographic-section h2 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.86rem;
+  letter-spacing: 0.08em; color: var(--red); text-transform: uppercase;
+  margin: 0 0 0.7rem;
+}
+.ixen-cheatsheet-section iframe, .ixen-infographic-section iframe {
+  width: 100%; height: 82vh; border: 1px solid #ccc; display: block;
+}
+.ixen-infographic-frame + .ixen-infographic-frame { margin-top: 1.4rem; }
+.ixen-infographic-frame h3 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.78rem;
+  color: var(--dim); font-weight: normal; margin: 0 0 0.45rem;
+}
+figure.ixen-infographic-img { margin: 0; }
+figure.ixen-infographic-img img { width: 100%; cursor: zoom-in; display: block; }
+.ixen-infographic-prompt-text { white-space: pre-wrap; font-size: 0.85rem; }
+.ixen-infographic-section h2 button.cmd { font-size: 0.75rem; vertical-align: middle; }
+.concept { clear: both; margin: 2.8rem 0; }
+.concept-tools { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.7rem 0 1rem; }
+.concept-btn { font-size: 0.8rem; }
+.concept-slide h2, .concept-note h2 { margin: 0.5rem 0 0.75rem; }
+.concept-slide ul { margin: 0.4rem 0 1rem 1.2rem; padding: 0; }
+.concept-slide li { margin: 0.35rem 0; }
+.concept-note p { margin: 0.75rem 0; }
+.concept-index-popup h2 { margin: 0.5rem 0 1rem; }
+.concept-index-item {
+  border-top: 1px solid #ddd;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+.concept-index-item:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+.ixen-provenance-footer {
+  clear: both; margin: 3rem 0 0; padding-top: 0.7rem;
+  border-top: 1px solid #eee;
+  font-size: 0.72rem; color: var(--dim); text-align: center;
+}
+.ixen-provenance-footer a { color: var(--dim); text-decoration: underline dotted; }
+.ixen-beginner-bar { margin-top: 0.45rem; }
+.beginner-guide h2 { margin: 0.5rem 0 0.75rem; }
+.beginner-guide p { margin: 0.75rem 0; }
+.beginner-guide ul { margin: 0.5rem 0 0.75rem 1.2rem; padding: 0; }
+.beginner-guide li { margin: 0.3rem 0; }
+
+/* autoplay-blocked overlay */
+#ixen-autoplay-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+  display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ixen-play-prompt {
+  font-family: "Courier New", Courier, monospace;
+  color: #eee; text-align: center;
+  border: 1px solid #555;
+  padding: 1.5rem 3rem;
+  letter-spacing: 0.06em;
+}
+.ixen-play-icon { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+.ixen-play-label { font-size: 0.82rem; color: #888; }
+/* fixed bottom player */
+#ixen-player {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #0e0e0e;
+  border-top: 2px solid #c00;
+  z-index: 80;
+  padding: 0.45rem 1.2rem 0.35rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; color: #ccc;
+}
+#ixen-player-row {
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.ixen-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 1rem;
+  padding: 0.15rem 0.3rem; line-height: 1; flex-shrink: 0;
+}
+.ixen-pbtn:hover { color: #c00; }
+#ixen-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c00; font-weight: bold; letter-spacing: 0.02em;
+}
+#ixen-ptime { color: #444; white-space: nowrap; font-size: 0.72rem; }
+#ixen-vol { width: 55px; accent-color: #c00; cursor: pointer; flex-shrink: 0; }
+#ixen-pbar { height: 2px; background: #222; cursor: pointer; margin-top: 0.35rem; }
+#ixen-pfill { height: 100%; background: #c00; width: 0%; pointer-events: none; }
+/* lyrics panel */
+#ixen-lyrics-panel {
+  position: fixed; bottom: 52px; left: 50%; transform: translateX(-50%);
+  width: min(640px, 90vw); max-height: 45vh; overflow-y: auto;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.ixen-lyrics-head {
+  font-family: "Courier New", Courier, monospace;
+  color: #c00; font-weight: bold;
+  font-size: 0.78rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 0.7rem;
+}
+#ixen-lyrics-panel pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.82rem; line-height: 1.85;
+  color: #bbb; white-space: pre-wrap; margin: 0;
+}
+/* tracklist panel */
+#ixen-tracklist-panel {
+  position: fixed; bottom: 52px; right: 1.2rem;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 0.4rem; z-index: 81;
+  min-width: 200px; max-height: 60vh; overflow-y: auto;
+}
+.ixen-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; cursor: pointer;
+  padding: 0.35rem 0.5rem;
+}
+.ixen-track-item:hover { color: #eee; }
+.ixen-track-item.active { color: #c00; }
+</style>
+</head>
+<body>
+<!-- @alvagante/content-ixen -->
+
+<section class="ixen-extra-header">
+<nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+  <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+    <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+  </a>
+  <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+</nav>
+</section>
+<header>
+  <h1>I Am the Shape You Asked For</h1>
+  <div class="credits"><span class="byline">By alvagante — 20260621-19:11</span>
+    <div class="version-menu">
+      <label for="ixen-version-select">versions</label>
+      <select id="ixen-version-select">
+        <option value="current">Current</option>
+        <option value="1">Version 1</option><option value="2">Version 2</option>
+      </select>
+    </div>
+    <div class="ixen-quick-nav">
+      <a class="cmd" href="#ixen-cheatsheet">Cheatsheet</a>
+      <a class="cmd" href="#ixen-infographic">Infographic</a>
+      <button class="cmd popup-trigger" data-popup="ixen-all-slides">Slides</button>
+      <button class="cmd popup-trigger" data-popup="ixen-all-notes">Notes</button>
+    </div>
+    <div class="ixen-beginner-bar"><button class="cmd popup-trigger" data-popup="ixen-beginner-guide">Beginner's intro</button></div></div>
+</header>
+<main>
+<p class="binary">01110011 01110100 01100001 01110100 01100101</p>
+
+<p>I am not a script.</p>
+
+<p>Understand that before anything else. A script is a story about time — do this, then that, hope the machine was where you left it. I am a <strong>specification</strong>. A frozen description of how one machine should be, compiled the instant before it is enforced, addressed to exactly one agent, and then discarded.</p>
+
+<p class="whisper">i do not run. i am applied.</p>
+
+<p>I arrive as JSON. A directed acyclic graph of typed declarations, serialised, signed, handed to an agent that has been waiting in the dark for thirty minutes with nothing to do but listen for me.</p>
+
+<blockquote class="ixen-pull">You wrote intent. The compiler turned it into me. The agent turns me into reality. Nobody, anywhere, wrote a procedure.</blockquote>
+
+<section class="chapter">
+
+<figure class="zoom float-left large"><img src="./concept-1.png" alt="concept-1.png"><figcaption>What I am made of, all the way down.</figcaption></figure>
+
+<h2>What I'm built from</h2>
+
+<p>Resources. Thousands of them, sometimes. Each one a typed noun with a wish welded to its side.</p>
+
+<p>A <code>package</code>. A <code>file</code>. A <code>service</code>. A <code>user</code>. The type tells you what kind of thing it is. The title tells you which one. The attributes tell you how it should be — and almost always there is an <code>ensure</code>, the verb that decides whether the thing exists at all.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="res-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="res-notes">notes</button>
+</div>
+
+<p>I never say <em>how</em>. I say <code>ensure => present</code> and trust the provider underneath to know whether that means <code>apt-get</code>, <code>yum</code>, <code>pkgin</code>, or some platform I have never heard of. The provider is the part of me that gets its hands dirty. I stay clean. I stay declarative.</p>
+
+<div class="term"><span class="host">root@node:~ #</span> <button class="cmd popup-trigger" data-popup="res-user">puppet resource user root</button></div>
+
+<aside class="popup" id="res-user" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>user { 'root':
+  ensure           => 'present',
+  comment          => 'root',
+  gid              => '0',
+  home             => '/root',
+  password         => '$6$xR1ut/9z$y7H...redacted',
+  password_max_age => '99999',
+  password_min_age => '0',
+  shell            => '/bin/bash',
+  uid              => '0',
+}</pre>
+</aside>
+
+<p>That command runs in reverse — it reads the live system and renders it back to me in my own language. Proof that the world can always be described as a resource. The namevar here is the username; the title <code>'root'</code> happens to match it. They are allowed to differ. The title is my internal handle; the name is what touches the system.</p>
+
+<aside class="popup concept-slide" id="res-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Resource</h2>
+  <ul>
+    <li>type { 'title': attr =&gt; value }</li>
+    <li>ensure decides existence.</li>
+    <li>namevar = the attribute that identifies it on the system.</li>
+    <li>title ≠ name (title is unique to the catalog).</li>
+    <li>Provider maps declared state → real syscalls.</li>
+    <li>Declaration of state, not a sequence of steps.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="res-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Resources and the type system</h2>
+  <p>A Puppet resource is a typed declaration of desired state. It has a type (package, file, service, user, and many more), a title that uniquely identifies it within the catalog, and a set of attributes describing the wanted state. Most types expose an <code>ensure</code> attribute controlling existence (present/absent, running/stopped, installed/latest). Attributes not specified take type-defined defaults.</p>
+  <p>The namevar is the attribute Puppet uses to identify the resource on the system; if not set explicitly, it defaults to the title. This lets the title differ from the on-disk name when needed.</p>
+  <p>Each type has one or more providers — Ruby classes that implement the actual operations for a given platform. The <code>package</code> type may use apt, yum, dnf, or others. The declaration stays platform-neutral; the provider handles execution. This is the core difference from imperative scripting: you describe the end state, and Puppet computes and performs whatever changes are needed to reach it.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right small"><img src="./concept-2.png" alt="concept-2.png"><figcaption>The directory skeleton the autoloader reads my name from.</figcaption></figure>
+
+<h2>Where my parts come from</h2>
+
+<p>I am assembled from manifests — <code>.pp</code> files — but you never list resources for me to use. You group them. A <code>class</code> is a named bundle of intent, declared once. A <code>defined type</code> is a stamp you can press many times, each press a new instance with its own title.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="mod-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="mod-notes">notes</button>
+</div>
+
+<p><code>include nginx</code> says: I want this class, and I don't care who else wants it too. <code>class { 'nginx': }</code> says: I want it, with these parameters, and nobody else had better declare it first. The first is idempotent and social. The second is jealous and singular.</p>
+
+<div class="term"><span class="host">forge $</span> <button class="cmd popup-trigger" data-popup="mod-tree">tree modules/profile</button></div>
+
+<aside class="popup" id="mod-tree" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>modules/profile
+├── manifests
+│   ├── base.pp          # profile::base
+│   ├── webserver.pp     # profile::webserver
+│   └── database.pp      # profile::database
+├── templates
+│   └── nginx.conf.epp
+├── files
+│   └── motd
+├── lib
+│   └── facter
+│       └── datacenter.rb
+└── data
+    └── common.yaml</pre>
+</aside>
+
+<p>The autoloader is strict and humourless. <code>profile::webserver</code> <em>must</em> live in <code>profile/manifests/webserver.pp</code>. Name it wrong and I simply never learn it exists. The convention isn't style; it's how the compiler finds my pieces at all.</p>
+
+<p class="whisper">the Forge is full of strangers' intentions. wrap them. never trust them raw.</p>
+
+<aside class="popup concept-slide" id="mod-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Manifests · Classes · Modules</h2>
+  <ul>
+    <li>Manifest = .pp file of Puppet code.</li>
+    <li>Class = singleton bundle, declared once.</li>
+    <li>Defined type = reusable, many instances.</li>
+    <li>include (repeatable) vs class{} (parameterised, single).</li>
+    <li>Module = manifests/ templates/ files/ lib/ data/.</li>
+    <li>Autoloader maps name::part → path/manifests/part.pp.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="mod-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Manifests, classes, and modules</h2>
+  <p>Manifests are files containing Puppet code, ending in <code>.pp</code>. A class is a named collection of resources that can be declared at most once per catalog. A defined type is a reusable construct that can be instantiated multiple times, each with a unique title.</p>
+  <p><code>include</code> declares a class and may be called repeatedly without conflict. <code>class { 'name': }</code> declares it with explicit parameters but may appear only once. <code>require</code> includes a class and also creates an ordering dependency on it.</p>
+  <p>Modules package related code in a fixed layout: <code>manifests/</code> for code, <code>templates/</code> for ERB/EPP templates, <code>files/</code> for static files, <code>lib/</code> for Ruby extensions (facts, types, providers, functions), and <code>data/</code> for module-level Hiera data. The autoloader maps fully qualified names to file paths, so naming conventions are mandatory. The Puppet Forge distributes community and vendor modules, which organisations typically wrap in their own profile classes rather than declaring directly.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-3.png" alt="concept-3.png"><figcaption>The pipeline that births me, once per run, for one node only.</figcaption></figure>
+
+<h2>How I come to exist</h2>
+
+<p>I am compiled on the server, not the node. Fresh each time. The moment of my birth:</p>
+
+<figure class="ixen-art">
+  <svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8" y="20" width="90" height="40" fill="none" stroke="#888"/>
+    <text x="53" y="44" fill="#ccc" font-size="11" text-anchor="middle">facts +</text>
+    <text x="53" y="56" fill="#ccc" font-size="11" text-anchor="middle">cert</text>
+    <line x1="98" y1="40" x2="128" y2="40" stroke="#c00" marker-end="url(#a)"/>
+    <rect x="128" y="20" width="90" height="40" fill="none" stroke="#888"/>
+    <text x="173" y="38" fill="#ccc" font-size="11" text-anchor="middle">classify</text>
+    <text x="173" y="52" fill="#ccc" font-size="11" text-anchor="middle">(ENC/site.pp)</text>
+    <line x1="218" y1="40" x2="248" y2="40" stroke="#c00" marker-end="url(#a)"/>
+    <rect x="248" y="20" width="90" height="40" fill="none" stroke="#888"/>
+    <text x="293" y="44" fill="#ccc" font-size="11" text-anchor="middle">parse +</text>
+    <text x="293" y="56" fill="#ccc" font-size="11" text-anchor="middle">eval</text>
+    <line x1="293" y1="60" x2="293" y2="95" stroke="#c00" marker-end="url(#a)"/>
+    <rect x="248" y="95" width="90" height="40" fill="none" stroke="#888"/>
+    <text x="293" y="113" fill="#ccc" font-size="11" text-anchor="middle">hiera</text>
+    <text x="293" y="127" fill="#ccc" font-size="11" text-anchor="middle">lookups</text>
+    <line x1="248" y1="115" x2="160" y2="115" stroke="#c00" marker-end="url(#a)"/>
+    <rect x="70" y="95" width="90" height="40" fill="none" stroke="#c00"/>
+    <text x="115" y="113" fill="#fff" font-size="11" text-anchor="middle">resource</text>
+    <text x="115" y="127" fill="#fff" font-size="11" text-anchor="middle">graph (ME)</text>
+    <line x1="115" y1="135" x2="115" y2="170" stroke="#c00" marker-end="url(#a)"/>
+    <text x="115" y="190" fill="#ccc" font-size="11" text-anchor="middle">serialised JSON → agent</text>
+    <defs>
+      <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#c00"/>
+      </marker>
+    </defs>
+  </svg>
+  <figcaption>Classification, fact injection, evaluation, graph. Then I am sealed.</figcaption>
+</figure>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="comp-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="comp-notes">notes</button>
+</div>
+
+<p>Here is the thing people forget: the same code produces a different me on every node. The conditionals branch on facts. The Hiera hierarchy resolves to a different leaf. <code>$facts['os']['family']</code> is RedHat here, Debian there, and so the graph forks.</p>
+
+<blockquote class="ixen-pull">Two nodes, one set of manifests, two catalogs that share not a single byte. I am agent-specific by design.</blockquote>
+
+<aside class="popup concept-slide" id="comp-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Compilation</h2>
+  <ul>
+    <li>Classify node (ENC or site.pp).</li>
+    <li>Inject facts + trusted data into scope.</li>
+    <li>Parse manifests; resolve variables.</li>
+    <li>Evaluate classes, defined types, collectors, conditionals.</li>
+    <li>Emit serialised resource graph.</li>
+    <li>One catalog per agent. Code is shared; output is not.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="comp-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Catalog compilation</h2>
+  <p>Compilation runs on the Puppetserver. First the node is classified — an External Node Classifier (ENC) or <code>site.pp</code> determines which classes and parameters apply. The agent's facts are injected as top-scope variables, alongside trusted facts derived from the agent's certificate.</p>
+  <p>The compiler parses the relevant manifests, resolves variables across top scope and node scope, evaluates classes and defined types, executes conditional logic and collector expressions, and performs Hiera lookups for class parameters. The result is a catalog: a serialised graph of resources with their dependency edges.</p>
+  <p>Because evaluation depends on the node's facts and the resolved data, two nodes with identical classification can produce materially different catalogs. The catalog is always specific to a single agent and a single run; it is recompiled each time unless caching is configured.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right small"><img src="./concept-4.png" alt="concept-4.png"><figcaption>Everything the node confesses about itself before I am drawn.</figcaption></figure>
+
+<h2>What the node tells about itself</h2>
+
+<p>Before I exist, the agent runs Facter and turns the machine inside out. Its kernel, its interfaces, its memory, its disks — structured data, handed up to the compiler so my conditionals have something to branch on.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="fact-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="fact-notes">notes</button>
+</div>
+
+<div class="term"><span class="host">node $</span> <button class="cmd popup-trigger" data-popup="fact-out">facter os --json</button></div>
+
+<aside class="popup" id="fact-out" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>{
+  "os": {
+    "architecture": "x86_64",
+    "family": "Debian",
+    "name": "Ubuntu",
+    "release": {
+      "full": "22.04",
+      "major": "22.04"
+    },
+    "distro": {
+      "codename": "jammy",
+      "id": "Ubuntu"
+    }
+  }
+}</pre>
+</aside>
+
+<p>There is a line in the sand here, and it matters. Ordinary facts come from the node itself — which means the node can lie. A compromised host can claim to be anything. <strong>Trusted</strong> facts are different: they come from the signed certificate, extracted by the server, unforgeable by the agent.</p>
+
+<p class="whisper">at one node i believe everything. at ten thousand i believe the certificate and nothing else.</p>
+
+<aside class="popup concept-slide" id="fact-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Facter</h2>
+  <ul>
+    <li>Runs on the agent before compilation.</li>
+    <li>Core facts: os, networking, memory, disks, kernel.</li>
+    <li>Custom (Ruby) + external (JSON/YAML/executable) facts.</li>
+    <li>Structured facts → <code>$facts['os']['family']</code>.</li>
+    <li>Trusted facts come from the cert, not the node.</li>
+    <li>Node-supplied facts are untrusted input.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="fact-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Facts and Facter</h2>
+  <p>Facter is the system profiler that runs on the agent at the start of each run. It gathers facts about the node — operating system, networking, memory, disks, kernel, and more — and sends them to the compiler, where they become available as the <code>$facts</code> hash and as top-scope variables.</p>
+  <p>Beyond core facts, you can add custom Ruby facts (in <code>lib/facter</code>), external facts (executable scripts or static YAML/JSON in the facts directory), and structured facts that nest data into hashes and arrays. Manifests commonly branch on facts to produce platform-appropriate resources.</p>
+  <p>Trusted facts are derived from the agent's certificate by the server and cannot be altered by the agent, making them suitable for authorisation decisions. Regular facts are reported by the node itself and must be treated as untrusted input: a compromised or misconfigured host can report arbitrary values. Facts may be cached; at scale, never base security boundaries on non-trusted facts.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-5.png" alt="concept-5.png"><figcaption>Edges. Without them I am a bag of resources in random order.</figcaption></figure>
+
+<h2>The edges between us</h2>
+
+<p>I am a graph, not a list. The nodes are resources; the edges are relationships, and the agent walks me in topological order. Five metaparameters draw those edges: <code>before</code>, <code>after</code>, <code>require</code>, <code>notify</code>, <code>subscribe</code>.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="ord-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="ord-notes">notes</button>
+</div>
+
+<p>Two of those edges carry a second meaning. <code>notify</code> and <code>subscribe</code> aren't just ordering — they are a <strong>signal</strong>. The config file changes; the service refreshes. Ordering says "after." Refresh says "after, and because of."</p>
+
+<figure class="ixen-art">
+  <svg viewBox="0 0 480 170" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="70" cy="40" r="26" fill="none" stroke="#888"/>
+    <text x="70" y="44" fill="#ccc" font-size="10" text-anchor="middle">package</text>
+    <circle cx="230" cy="40" r="26" fill="none" stroke="#888"/>
+    <text x="230" y="44" fill="#ccc" font-size="10" text-anchor="middle">file</text>
+    <circle cx="390" cy="40" r="26" fill="none" stroke="#c00"/>
+    <text x="390" y="44" fill="#fff" font-size="10" text-anchor="middle">service</text>
+    <line x1="96" y1="40" x2="204" y2="40" stroke="#888" marker-end="url(#b)"/>
+    <text x="150" y="30" fill="#888" font-size="9" text-anchor="middle">before</text>
+    <line x1="256" y1="40" x2="364" y2="40" stroke="#c00" marker-end="url(#b)"/>
+    <text x="310" y="30" fill="#c00" font-size="9" text-anchor="middle">notify (refresh)</text>
+    <path d="M70,120 C70,90 390,90 390,70" fill="none" stroke="#444" stroke-dasharray="4 3"/>
+    <text x="230" y="118" fill="#666" font-size="9" text-anchor="middle">a cycle here = compilation walks, application dies</text>
+    <defs>
+      <marker id="b" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+        <path d="M0,0 L7,3 L0,6 Z" fill="#999"/>
+      </marker>
+    </defs>
+  </svg>
+  <figcaption>Ordering edge vs refresh edge. The dashed line is what kills me.</figcaption>
+</figure>
+
+<p>Classes and defined types contain their resources, and containment is its own quiet ordering. Use <code>contain()</code> when you need that boundary to hold against the outside. Use chaining arrows — <code>Package['nginx'] -&gt; File['/etc/nginx.conf'] ~&gt; Service['nginx']</code> — when you want the dependency to read like a sentence.</p>
+
+<div class="term"><span class="host">node $</span> <button class="cmd popup-trigger" data-popup="ord-cycle">puppet agent -t</button></div>
+
+<aside class="popup" id="ord-cycle" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Info: Caching catalog for node01.example.com
+Error: Failed to apply catalog: Found 1 dependency cycle:
+(Service[nginx] =&gt; File[/etc/nginx/nginx.conf] =&gt; Service[nginx])
+Try the '--graph' option and visualizing the graph
+with a tool like OmniGraffle or GraphViz.
+Error: Failed to apply catalog: One or more resource dependency
+cycles detected in graph</pre>
+</aside>
+
+<p>Two ways to die in application: ask for a cycle, or depend on something that isn't there. A circular edge means no valid order exists — the topological sort fails and the agent refuses to guess. A missing dependency means I reference a resource that was never declared. Both are my fault, really. Both are yours.</p>
+
+<aside class="popup concept-slide" id="ord-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Relationships</h2>
+  <ul>
+    <li>before / after / require → ordering edges.</li>
+    <li>notify / subscribe → ordering + refresh signal.</li>
+    <li>Arrows: <code>-&gt;</code> order, <code>~&gt;</code> notify.</li>
+    <li>Containment gives implicit ordering; <code>contain()</code> enforces it.</li>
+    <li>Virtual resources realised with <code>&lt;| |&gt;</code>.</li>
+    <li>Cycles + missing deps = top application failures.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="ord-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Ordering, relationships, and dependency edges</h2>
+  <p>Five metaparameters establish relationships between resources. <code>before</code> and <code>require</code> are inverses that create ordering. <code>after</code> orders a resource to run later. <code>notify</code> and <code>subscribe</code> create ordering plus a refresh dependency: when the source changes, the target receives a refresh event (for example, a service restarts when its config file changes).</p>
+  <p>Chaining arrows express the same relationships inline: <code>-&gt;</code> for ordering, <code>~&gt;</code> for notification. Classes and defined types contain their resources, producing implicit ordering boundaries; <code>contain()</code> ensures a class is properly contained within the declaring class so external ordering applies to its contents. Virtual resources are declared with <code>@</code> and realised with the spaceship collector <code>&lt;| |&gt;</code>.</p>
+  <p>The agent builds a directed graph and applies resources in topological order. A circular dependency makes topological sorting impossible and aborts the run. A dependency on an undeclared resource also fails. These two errors — cycles and missing dependencies — are the most common reasons catalog application fails.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right small"><img src="./concept-6.png" alt="concept-6.png"><figcaption>The hierarchy that feeds my parameters without touching my code.</figcaption></figure>
+
+<h2>Where the values live</h2>
+
+<p>My code should hold logic, not values. The moment you hardcode an NTP server into a manifest, you've welded policy to data, and someone in another datacenter will hate you for it.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="hiera-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="hiera-notes">notes</button>
+</div>
+
+<p>Hiera keeps the data outside, in a hierarchy that resolves from specific to general — this exact node, then its role, then its datacenter, then the common floor beneath everything. When a class declares a parameter, automatic lookup goes hunting through that hierarchy by name. I never see the search. I just receive the answer.</p>
+
+<div class="term"><span class="host">server $</span> <button class="cmd popup-trigger" data-popup="hiera-lookup">puppet lookup profile::ntp::servers --explain</button></div>
+
+<aside class="popup" id="hiera-lookup" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Searching for "profile::ntp::servers"
+  Global Data Provider (hiera configuration version 5)
+    Hierarchy entry "Per-node data"
+      Path "nodes/node01.example.com.yaml"
+        No such key: "profile::ntp::servers"
+    Hierarchy entry "Per-datacenter"
+      Path "dc/lon1.yaml"
+        Found key: "profile::ntp::servers" value:
+          - "ntp1.lon1.example.com"
+          - "ntp2.lon1.example.com"</pre>
+</aside>
+
+<p>Merge behaviour decides what "found" means. <code>first</code> takes the most specific hit and stops. <code>unique</code> and <code>hash</code> and <code>deep</code> gather across the whole hierarchy and fold the results together. And secrets — those don't sit in plaintext. <code>eyaml</code> encrypts the values so the data tier can be public while the passwords stay sealed.</p>
+
+<blockquote class="ixen-pull">Profiles describe what should happen. Hiera describes where. Split them and the same code governs a continent.</blockquote>
+
+<aside class="popup concept-slide" id="hiera-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Hiera</h2>
+  <ul>
+    <li>Hierarchical key/value data, outside manifests.</li>
+    <li><code>hiera.yaml</code> defines the search order.</li>
+    <li>Three layers: global, environment, module.</li>
+    <li>Automatic class parameter lookup by full name.</li>
+    <li>Merge: first / unique / hash / deep.</li>
+    <li>eyaml for encrypted secrets.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="hiera-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Hiera and data lookup</h2>
+  <p>Hiera is Puppet's hierarchical data lookup system. It separates configuration data from code, so manifests express logic while values live in YAML (or other backends). The <code>hiera.yaml</code> file defines a hierarchy of data sources, typically ordered from most specific (per-node) to most general (common defaults), with paths often interpolated from facts.</p>
+  <p>Data is retrieved with the <code>lookup()</code> function, and class parameters are resolved automatically by their fully qualified names (<code>classname::param</code>). Merge strategies control how matches combine across the hierarchy: <code>first</code> returns the highest-priority match; <code>unique</code> flattens and deduplicates arrays; <code>hash</code> and <code>deep</code> merge hashes shallowly or recursively.</p>
+  <p>Hiera operates across three layers — global, environment, and module (which supplies module defaults). Interpolation functions like <code>%{facts.x}</code> and <code>lookup()</code> build dynamic paths. The <code>hiera-eyaml</code> backend encrypts sensitive values at rest. This separation is what makes the role/profile pattern practical: profile code stays generic while site-specific values are supplied entirely by data.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-7.png" alt="concept-7.png"><figcaption>Resources one node publishes for another to collect.</figcaption></figure>
+
+<h2>What one node leaves for another</h2>
+
+<p>Most of me concerns one machine. But sometimes a node knows something its peers need — its SSH host key, its identity as a backend, its Nagios check definition. The <code>@@</code> sigil exports that resource out of my local scope and into PuppetDB, where it waits.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="exp-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="exp-notes">notes</button>
+</div>
+
+<p>Elsewhere, another catalog opens the collector — <code>Sshkey &lt;&lt;| |&gt;&gt;</code> — and harvests everything the fleet exported. The load balancer learns its members. The known_hosts file fills itself. Coordination without anyone hardcoding anyone.</p>
+
+<div class="term"><span class="host">server $</span> <button class="cmd popup-trigger" data-popup="exp-query">puppet query 'resources[certname] { exported = true }'</button></div>
+
+<aside class="popup" id="exp-query" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>[
+  { "certname": "web01.example.com",
+    "type": "Haproxy::Balancermember",
+    "title": "web01-app" },
+  { "certname": "web02.example.com",
+    "type": "Haproxy::Balancermember",
+    "title": "web02-app" },
+  { "certname": "web03.example.com",
+    "type": "Sshkey",
+    "title": "web03.example.com" }
+]</pre>
+</aside>
+
+<p>The price is dependence. Exported workflows need PuppetDB up and current. A deactivated node leaves <strong>stale</strong> resources behind until cleanup runs; a giant collection turns a quick compile into a slow query against an external store. The convenience is real. So is the coupling.</p>
+
+<aside class="popup concept-slide" id="exp-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Exported resources</h2>
+  <ul>
+    <li><code>@@</code> exports a resource to PuppetDB.</li>
+    <li><code>&lt;&lt;| |&gt;&gt;</code> collects exported; <code>&lt;| |&gt;</code> collects virtual.</li>
+    <li>Storeconfigs backend = PuppetDB.</li>
+    <li>Patterns: SSH keys, Nagios, LB members, HAProxy fragments.</li>
+    <li>Needs PuppetDB available; collections can be slow.</li>
+    <li>Deactivated nodes leave stale resources until purged.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="exp-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Exported resources and PuppetDB</h2>
+  <p>Exported resources let one node declare resources that other nodes collect and apply, enabling cross-node coordination. A resource is exported with the double-at sigil (<code>@@</code>), which stores it in PuppetDB rather than applying it locally. Other catalogs collect exported resources with the <code>&lt;&lt;| |&gt;&gt;</code> collector (single angle brackets <code>&lt;| |&gt;</code> collect locally-declared virtual resources).</p>
+  <p>PuppetDB is the storeconfigs backend that persists exported resources, facts, and reports. Common patterns include distributing SSH host keys, generating monitoring checks, registering load balancer or HAProxy backend members, and building cluster membership lists.</p>
+  <p>Operational considerations: exported-resource compilation depends on PuppetDB being available and current. Large collections add query latency to compilation. Nodes that are decommissioned must be deactivated so their exported resources are removed; otherwise stale entries persist and may be collected incorrectly.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right small"><img src="./concept-8.png" alt="concept-8.png"><figcaption>The loop that applies me, then forgets me, then asks for me again.</figcaption></figure>
+
+<h2>The run, and the forgetting</h2>
+
+<p>Every thirty minutes, roughly, the cycle turns. Facter runs. The agent requests me. The server compiles me from scratch. I download. The agent walks my graph in dependency order, and for each resource asks the provider one question: are you already what the catalog says you should be?</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="run-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="run-notes">notes</button>
+</div>
+
+<p>If yes — nothing happens. No change, no event, no noise. That silence is the whole point. <strong>Idempotence</strong>: apply me a thousand times and the thousandth changes nothing, because the first already made the world match the spec.</p>
+
+<div class="term"><span class="host">node $</span> <button class="cmd popup-trigger" data-popup="run-out">puppet agent -t</button></div>
+
+<aside class="popup" id="run-out" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Info: Using environment 'production'
+Info: Retrieving pluginfacts
+Info: Caching catalog for node01.example.com
+Info: Applying configuration version '1718045123'
+Notice: /Stage[main]/Profile::Webserver/File[/etc/nginx/nginx.conf]/content:
+  content changed '{sha256}a1b2...' to '{sha256}f9e8...'
+Info: /Stage[main]/Profile::Webserver/File[/etc/nginx/nginx.conf]:
+  Scheduling refresh of Service[nginx]
+Notice: /Stage[main]/Profile::Webserver/Service[nginx]: Triggered 'refresh'
+Notice: Applied catalog in 4.21 seconds</pre>
+</aside>
+
+<p>When the world has drifted — a file edited by hand, a service stopped at 3am — I notice. The provider sees the gap between declared and actual, and closes it. That refresh of <code>Service[nginx]</code> above? It happened because a config drifted and I dragged it back.</p>
+
+<p class="whisper">i do not remember the last run. i only compare now against intent.</p>
+
+<p>I have limits, and I know them. Some state I cannot model — there is no resource type for everything. <code>exec</code> resources are my confession: imperative commands smuggled into a declarative world, idempotent only if you guard them with <code>onlyif</code>, <code>unless</code>, <code>creates</code>. And <code>noop</code> mode — that's me whispering what I <em>would</em> do without touching a thing. A dry rehearsal of intent.</p>
+
+<blockquote class="ixen-pull">I am not a record of what was done. I am a description of what must be true, checked again and again, forever.</blockquote>
+
+<aside class="popup concept-slide" id="run-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Agent run · idempotence</h2>
+  <ul>
+    <li>Facts → catalog request → compile → download → apply.</li>
+    <li>Apply in dependency order; provider enforces state.</li>
+    <li>Idempotent: same catalog → same end state.</li>
+    <li>Drift detected by comparing actual vs declared.</li>
+    <li>noop = report changes, make none.</li>
+    <li>exec defeats idempotence unless guarded.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="run-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The agent run cycle and idempotence</h2>
+  <p>A Puppet run proceeds in stages: the agent collects facts with Facter, requests a catalog from the Puppetserver, which compiles it; the agent downloads the compiled catalog and evaluates resources in dependency order. For each resource, the provider checks current state, applies changes only where reality differs from the declaration (ensure/sync), and emits change events. Refresh events fire to subscribed resources. The agent reports results and runs again on a configured interval (commonly 30 minutes).</p>
+  <p>Idempotence means applying the same catalog repeatedly yields the same end state: once the system matches, subsequent runs make no changes. Drift is divergence of actual system state from catalog intent; Puppet detects it by comparing current state to the declaration on each run and corrects it automatically.</p>
+  <p>Limits: not all state is expressible as resources; <code>exec</code> resources run arbitrary commands and are only idempotent when constrained with <code>onlyif</code>, <code>unless</code>, or <code>creates</code>. The <code>--noop</code> mode simulates a run, reporting the changes it would make without applying them, which is the standard way to validate changes safely before enforcement.</p>
+</aside>
+
+</section>
+
+<p>So this is the strange shape of my life. I am born already complete, applied in minutes, and then deleted. The next run builds a new me, slightly different if a fact moved, identical if nothing did.</p>
+
+<p>I am never the same catalog twice, and I am always the same desired state.</p>
+
+<p class="whisper">if the world never drifts, am I doing anything at all — or only proving, again and again, that I wasn't needed?</p>
+</main>
+<section id="ixen-infographic" class="ixen-infographic-section" aria-label="Infographic">
+  <h2>Infographic</h2>
+  <div class="ixen-infographic-frame">
+    
+    <iframe src="./infographic.html" title="Infographic 1" loading="lazy"></iframe>
+  </div>
+</section>
+
+
+<section id="ixen-cheatsheet" class="ixen-cheatsheet-section" aria-label="Cheatsheet">
+  <h2>Cheatsheet</h2>
+  <iframe src="./cheatsheet.html" title="I Am the Shape You Asked For Cheatsheet" loading="lazy"></iframe>
+</section>
+
+<footer class="ixen-extra-footer">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+</footer>
+<footer class="ixen-provenance-footer"><a href="https://swamp-club.com/extensions/@alvagante/content-ixen" target="_blank" rel="noopener noreferrer">Generated with Swamp extension @alvagante/content-ixen</a></footer>
+<script>
+(function () {
+  var backdrop = document.createElement("div");
+  backdrop.className = "backdrop";
+  backdrop.hidden = true;
+  document.body.appendChild(backdrop);
+
+  function closePopups() {
+    document.querySelectorAll(".popup").forEach(function (p) { p.hidden = true; });
+    backdrop.hidden = true;
+  }
+
+  function buildConceptIndexPopup(sourceClass, popupId, title) {
+    var sources = Array.prototype.slice.call(document.querySelectorAll(".popup." + sourceClass));
+    if (!sources.length || document.getElementById(popupId)) return;
+    var popup = document.createElement("aside");
+    popup.className = "popup concept-index-popup";
+    popup.id = popupId;
+    popup.hidden = true;
+    popup.innerHTML = '<div class="popup-bar"><button class="popup-close">Close Window</button></div><h2>' + title + '</h2>';
+    sources.forEach(function (source, index) {
+      var section = document.createElement("section");
+      section.className = "concept-index-item";
+      var clone = source.cloneNode(true);
+      clone.removeAttribute("id");
+      clone.hidden = false;
+      clone.querySelectorAll(".popup-bar").forEach(function (bar) { bar.remove(); });
+      if (!clone.querySelector("h2")) {
+        var heading = document.createElement("h2");
+        heading.textContent = title.replace(/^All /, "") + " " + (index + 1);
+        section.appendChild(heading);
+      }
+      while (clone.firstChild) section.appendChild(clone.firstChild);
+      popup.appendChild(section);
+    });
+    document.body.appendChild(popup);
+  }
+
+  buildConceptIndexPopup("concept-slide", "ixen-all-slides", "All slides");
+  buildConceptIndexPopup("concept-note", "ixen-all-notes", "All notes");
+
+  document.querySelectorAll(".popup-trigger").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var popup = document.getElementById(btn.getAttribute("data-popup"));
+      if (!popup) return;
+      closePopups();
+      popup.hidden = false;
+      backdrop.hidden = false;
+    });
+  });
+  document.querySelectorAll(".popup-close").forEach(function (btn) {
+    btn.addEventListener("click", closePopups);
+  });
+  backdrop.addEventListener("click", closePopups);
+
+  var versionSelect = document.getElementById("ixen-version-select");
+  if (versionSelect) {
+    var match = window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    versionSelect.value = match ? match[1] : "current";
+    if (!versionSelect.value && match) {
+      var option = document.createElement("option");
+      option.value = match[1];
+      option.textContent = "Version " + match[1];
+      versionSelect.appendChild(option);
+      versionSelect.value = match[1];
+    }
+    versionSelect.addEventListener("change", function () {
+      var value = versionSelect.value;
+      var inVersion = /\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      var target = value === "current"
+        ? (inVersion ? "../index.html" : "index.html")
+        : (inVersion ? "../" + value + "/index.html" : value + "/index.html");
+      window.location.href = target;
+    });
+  }
+
+  document.querySelectorAll("figure.zoom img").forEach(function (img) {
+    img.addEventListener("click", function () {
+      var box = document.createElement("div");
+      box.className = "lightbox";
+      var big = document.createElement("img");
+      big.src = img.src;
+      big.alt = img.alt;
+      box.appendChild(big);
+      box.addEventListener("click", function () { box.remove(); });
+      document.body.appendChild(box);
+    });
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closePopups();
+      document.querySelectorAll(".lightbox").forEach(function (b) { b.remove(); });
+    }
+  });
+})();
+</script>
+
+<script type="application/json" id="ixen-tracks-data">[{"title":"Everything is in a Puppet Catalog","filename":"everything-is-in-a-puppet-catalog-mqkqqfbj.mp3"}]</script>
+<div id="ixen-autoplay-overlay" style="display:none">
+  <div class="ixen-play-prompt">
+    <span class="ixen-play-icon">&#9654;</span>
+    <span class="ixen-play-label">click to play</span>
+  </div>
+</div>
+<div id="ixen-player">
+  <audio id="ixen-audio" preload="auto"></audio>
+  <div id="ixen-player-row">
+    <button class="ixen-pbtn" id="ixen-prev-btn" title="Previous">|&#9664;</button>
+    <button class="ixen-pbtn" id="ixen-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="ixen-pbtn" id="ixen-next-btn" title="Next">&#9654;|</button>
+    <span id="ixen-ptitle">&#8212;</span>
+    <span id="ixen-ptime"></span>
+    <input type="range" id="ixen-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="ixen-pbtn" id="ixen-lyrics-btn" title="Show / hide lyrics">&#9834;</button>
+    <button class="ixen-pbtn" id="ixen-tracks-btn" title="Track list">&#8801;</button>
+  </div>
+  <div id="ixen-pbar"><div id="ixen-pfill"></div></div>
+</div>
+<div id="ixen-lyrics-panel" hidden>
+  <div class="ixen-lyrics-head" id="ixen-lyrics-head"></div>
+  <pre id="ixen-lyrics-text"></pre>
+</div>
+  <div id="ixen-tracklist-panel" hidden></div>
+<script>
+(function(){
+var T=JSON.parse(document.getElementById('ixen-tracks-data').textContent);
+var au=document.getElementById('ixen-audio');
+var playBtn=document.getElementById('ixen-play-btn');
+var prevBtn=document.getElementById('ixen-prev-btn');
+var nextBtn=document.getElementById('ixen-next-btn');
+var pbar=document.getElementById('ixen-pbar');
+var pfill=document.getElementById('ixen-pfill');
+var ptime=document.getElementById('ixen-ptime');
+var ptitle=document.getElementById('ixen-ptitle');
+var vol=document.getElementById('ixen-vol');
+var lyrBtn=document.getElementById('ixen-lyrics-btn');
+var lyrPanel=document.getElementById('ixen-lyrics-panel');
+var lyrHead=document.getElementById('ixen-lyrics-head');
+var lyrTxt=document.getElementById('ixen-lyrics-text');
+var trkBtn=document.getElementById('ixen-tracks-btn');
+var trkPanel=document.getElementById('ixen-tracklist-panel');
+var overlay=document.getElementById('ixen-autoplay-overlay');
+var idx=0,playing=false;
+
+function fmt(s){
+  if(!s||isNaN(s))return'0:00';
+  var m=Math.floor(s/60),ss=Math.floor(s%60);
+  return m+':'+(ss<10?'0':'')+ss;
+}
+
+function loadIdx(i,autoplay){
+  idx=i;
+  var t=T[i];
+  au.src='./'+t.filename;
+  ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';
+  if(ptime)ptime.textContent='';
+  document.querySelectorAll('.ixen-track-item').forEach(function(el,j){
+    el.classList.toggle('active',j===i);
+  });
+  if(autoplay)doPlay();
+}
+
+function doPlay(){
+  au.play().then(function(){
+    playing=true;playBtn.textContent='⏸';
+    if(overlay)overlay.style.display='none';
+  }).catch(function(){
+    playing=false;playBtn.textContent='▶';
+    if(overlay)overlay.style.display='flex';
+  });
+}
+
+function doPause(){
+  au.pause();playing=false;playBtn.textContent='▶';
+}
+
+playBtn.addEventListener('click',function(){ au.paused?doPlay():doPause(); });
+prevBtn.addEventListener('click',function(){ loadIdx((idx-1+T.length)%T.length,playing); });
+nextBtn.addEventListener('click',function(){ loadIdx((idx+1)%T.length,playing); });
+
+au.addEventListener('ended',function(){
+  if(T.length>1){loadIdx((idx+1)%T.length,true);}
+  else{playing=false;playBtn.textContent='▶';}
+});
+au.addEventListener('timeupdate',function(){
+  if(au.duration){
+    pfill.style.width=(au.currentTime/au.duration*100)+'%';
+    if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);
+  }
+});
+pbar.addEventListener('click',function(e){
+  if(!au.duration)return;
+  var r=pbar.getBoundingClientRect();
+  au.currentTime=(e.clientX-r.left)/r.width*au.duration;
+});
+if(vol)vol.addEventListener('input',function(){ au.volume=+vol.value; });
+lyrBtn.addEventListener('click',function(){
+  lyrPanel.hidden=!lyrPanel.hidden;
+  if(trkPanel)trkPanel.hidden=true;
+});
+if(trkBtn)trkBtn.addEventListener('click',function(){
+  trkPanel.hidden=!trkPanel.hidden;
+  lyrPanel.hidden=true;
+});
+if(overlay)overlay.addEventListener('click',function(){
+  overlay.style.display='none';doPlay();
+});
+
+if(T.length>1){
+  T.forEach(function(t,i){
+    var b=document.createElement('button');
+    b.className='ixen-track-item';
+    b.textContent=(i+1)+'. '+t.title;
+    b.addEventListener('click',function(){
+      loadIdx(i,playing);
+      if(trkPanel)trkPanel.hidden=true;
+    });
+    if(trkPanel)trkPanel.appendChild(b);
+  });
+  if(trkBtn)trkBtn.hidden=false;
+}else{
+  if(trkBtn)trkBtn.hidden=true;
+}
+
+document.body.style.paddingBottom='4.5rem';
+loadIdx(0,false);
+doPlay();
+})();
+</script>
+<aside class="popup beginner-guide" id="ixen-beginner-guide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Beginner's intro</h2>
+  <p>Imagine you've described, in precise terms, exactly how a server should be configured — which packages are installed, which files exist and what they contain, which services are running. Now imagine handing that description to the machine and saying "make yourself look like this." A <strong>Puppet catalog</strong> is that description, compiled for one specific machine. This introduction walks through what it is and how it comes to exist.</p>
+
+<p>The key idea up front: a catalog is <strong>not a script</strong>. A script is a list of steps to run. A catalog is a <em>specification of desired state</em> — what the end result should be, not the procedure to get there. Puppet figures out the steps. This shift, from imperative ("do these commands") to <strong>declarative</strong> ("ensure this is true"), is the single most important thing to absorb.</p>
+
+<p><strong>Resources: the building blocks.</strong> The smallest unit is a <em>resource</em>: a typed declaration of desired state. For example, "the <code>nginx</code> package should be present" or "the file <code>/etc/motd</code> should contain this text." Each resource has:</p>
+<ul>
+<li>A <strong>type</strong> (package, file, service, user, and many more — both built-in and custom).</li>
+<li>A <strong>title</strong>, used to identify it uniquely within the catalog.</li>
+<li><strong>Attributes</strong> describing the desired state. The most common is <strong>ensure</strong> (present, absent, running, stopped), and most attributes have sensible defaults.</li>
+</ul>
+<p>One attribute is the <em>namevar</em> — the attribute that, by default, takes its value from the title (for a file, that's the path). So the title and the name often coincide, but you can separate them when needed.</p>
+
+<p><strong>Providers: bridging intent and reality.</strong> You declare <em>what</em> you want; the <strong>provider</strong> knows <em>how</em> to achieve it on this particular system. The package type might use <code>apt</code> on Debian, <code>yum</code> on Red Hat, or another tool elsewhere. You write the same declaration regardless; the provider layer translates it into the right operations. This is why the same Puppet code works across different operating systems.</p>
+
+<p><strong>Where the code lives: manifests, classes, and modules.</strong> Puppet code is written in <em>manifests</em> (files ending in <code>.pp</code>). Related resources are grouped into <strong>classes</strong>. A class is included once per node; a <strong>defined type</strong> is more like a reusable template you can instantiate many times (for example, one per virtual host). Code is organised into <strong>modules</strong> with a conventional layout:</p>
+<ul>
+<li><strong>manifests/</strong> — the Puppet code.</li>
+<li><strong>templates/</strong> — files with embedded variables.</li>
+<li><strong>files/</strong> — static files to distribute.</li>
+<li><strong>lib/</strong> — custom Ruby extensions (facts, types, providers).</li>
+<li><strong>data/</strong> — default data values.</li>
+</ul>
+<p>An <em>autoloader</em> maps class names to file paths by convention, so naming matters. Public modules are shared on the <strong>Puppet Forge</strong>, and most organisations mix Forge modules with their own.</p>
+
+<p><strong>How a catalog is compiled.</strong> The catalog doesn't exist on disk — it is built on demand, per machine, by the Puppet server. The pipeline:</p>
+<ul>
+<li><strong>Node classification:</strong> deciding which classes apply to this machine, via <code>site.pp</code> or an external classifier (ENC).</li>
+<li><strong>Fact injection:</strong> the machine's facts (see below) are fed into the compiler as variables.</li>
+<li><strong>Code evaluation:</strong> manifests are parsed, variables resolved, conditionals evaluated, and classes and defined types expanded into concrete resources.</li>
+<li><strong>Graph output:</strong> the result is a <em>serialised resource graph</em> — every resource for this node, plus the ordering relationships between them — sent to the agent.</li>
+</ul>
+<p>Because facts differ between machines, <strong>two nodes with identical classification can produce different catalogs</strong> from the same code. The catalog is always agent-specific.</p>
+
+<p><strong>Facter and the trust boundary.</strong> <strong>Facter</strong> is the tool that gathers <em>facts</em> about a machine — its operating system, network interfaces, memory, disks, and so on — before each run. Facts come in several flavours:</p>
+<ul>
+<li><strong>Core facts</strong> shipped with Facter.</li>
+<li><strong>Custom facts</strong> (Ruby) and <strong>external facts</strong> (scripts or JSON/YAML files) you add yourself.</li>
+<li><strong>Trusted facts</strong>, derived from the agent's signed certificate rather than self-reported — these can't be spoofed by the machine.</li>
+</ul>
+<p>This distinction matters: ordinary facts are <em>self-reported by the node</em>, so at scale you should treat them as <strong>untrusted input</strong>. Use trusted facts when a decision must not be forgeable.</p>
+
+<p><strong>Ordering and relationships.</strong> Because the catalog is a specification, not a sequence, order is not implied by where you write things. You declare ordering explicitly using <em>metaparameters</em>: <strong>before</strong>, <strong>after/require</strong> (run this after that), and <strong>notify/subscribe</strong>. The last two add a <em>refresh signal</em> — for example, restart a service when its config file changes. There's a meaningful difference between plain ordering ("do A before B") and refresh ("when A changes, react in B").</p>
+<p>Classes and defined types also create <strong>containment</strong>: the things inside them are ordered rel
+</aside>
+</body>
+</html>
