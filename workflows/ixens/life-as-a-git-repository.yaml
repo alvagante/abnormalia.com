@@ -23,8 +23,8 @@ imageBackground: opaque
 imageModel: gpt-image-1.5
 imageSize: 1024x1024
 imageQuality: auto
-musicGenre: ambient
-musicMood: contemplative
+musicGenre: electronic
+musicMood: uprising
 musicModel: suno-ttapi
 musicInstrumental: false
 sunoVersion: chirp-v4-5

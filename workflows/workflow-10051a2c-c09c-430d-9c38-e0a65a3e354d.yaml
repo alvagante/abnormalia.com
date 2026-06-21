@@ -148,6 +148,9 @@ inputs:
     infographicModel:
       type: string
       default: gpt-image-2
+    includeBeginnerGuide:
+      type: boolean
+      default: false
     ixens:
       type: array
       minItems: 1
@@ -627,6 +630,7 @@ jobs:
             footerContent: ${{ inputs.footerContent }}
             cheatsheetPath: cheatsheet.html
             infographicPath: infographic.html
+            includeBeginnerGuide: ${{ inputs.includeBeginnerGuide }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
             versionOutput: false
             musicTracks: ${{ data.latest("tracks-" + self.ixen.slug, "allTracks").attributes.tracks }}

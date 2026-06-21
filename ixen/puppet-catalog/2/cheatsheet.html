@@ -274,177 +274,195 @@
 <body>
 <header class="cs-page-header">
   <h1>What I Am</h1>
-  <div class="cs-page-meta"><span>Life as a Puppet catalog</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-21</span></div>
+  <div class="cs-page-meta"><span>Life as a Puppet catalog</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-19</span></div>
 </header>
 <main>
 <div class="cs-quickref">
-  <span class="cs-qr-label">Quick ref</span>
+  <span class="cs-qr-label">I am the catalog</span>
   <div class="cs-qr-items">
-    <div class="cs-qr-item"><code>puppet agent -t</code> <span>trigger a run: request catalog, apply, report</span></div>
+    <div class="cs-qr-item"><code>puppet agent -t</code> <span>request, compile & apply me</span></div>
+    <div class="cs-qr-item"><code>puppet catalog compile $node</code> <span>build me on the master</span></div>
     <div class="cs-qr-item"><code>--noop</code> <span>simulate convergence, change nothing</span></div>
-    <div class="cs-qr-item"><code>puppet catalog compile NODE</code> <span>compile my graph for a node</span></div>
-    <div class="cs-qr-item"><code>facter -p</code> <span>show facts the master will trust</span></div>
-    <div class="cs-qr-item"><code>puppet resource service nginx</code> <span>introspect live state as a resource</span></div>
-    <div class="cs-qr-item"><code>puppet lookup KEY --node N</code> <span>resolve Hiera data for a node</span></div>
+    <div class="cs-qr-item"><code>facter -p</code> <span>see the facts that shape me</span></div>
+    <div class="cs-qr-item"><code>puppet lookup key</code> <span>resolve Hiera data</span></div>
+    <div class="cs-qr-item"><code>desired state</code> <span>not a script — a specification</span></div>
   </div>
 </div>
 
 <section class="cs-section" data-color="blue">
   <h2 class="cs-section-title">What I Am</h2>
+  <p>I am a compiled, node-specific directed acyclic graph of resources. I describe <em>what your system should look like</em>, never the steps to get there. The agent reads me and converges reality toward my declarations — adding, changing, or leaving alone whatever is needed.</p>
   <div class="cs-grid">
     <div>
-      <h3>A specification, not a script</h3>
-      <p>I am a compiled, node-specific graph of resources describing <em>desired state</em>. I declare what must be true, never the steps to get there — the agent decides actions by comparing me to reality.</p>
+      <h3>Declarative, not imperative</h3>
+      <p>Order of resources in source is irrelevant; only explicit relationships establish sequence. I am evaluated to a state, not executed line by line.</p>
     </div>
     <div>
-      <h3>Consequences of the declarative model</h3>
-      <p>Order is not implied by file position — it must be stated explicitly. Convergence is automatic and idempotent: applying me repeatedly yields the same end state with no extra changes.</p>
+      <h3>Idempotent by design</h3>
+      <p>Applying me twice produces no second change. Each resource is checked against current state and only acted on if it diverges.</p>
     </div>
   </div>
-  <div class="cs-callout note"><span class="cs-callout-label">Note</span> I am built fresh for one agent at one moment from that agent's facts plus your code and data; two nodes never share the same compiled catalog.</div>
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> I am unique per agent. The same manifests compile differently for each node because facts and classification differ.</div>
 </section>
 
 <section class="cs-section" data-color="green">
-  <h2 class="cs-section-title">Resource Types & Provider Abstraction</h2>
+  <h2 class="cs-section-title">Resources, Types & Providers</h2>
+  <p>Resources are my atoms: a type, a title, and attributes describing desired state.</p>
+  <pre class="cs-code"><code>package { 'nginx':
+  ensure => installed,
+}
+service { 'nginx':
+  ensure  => running,
+  enable  => true,
+  require => Package['nginx'],
+}</code></pre>
   <div class="cs-items">
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>package { 'nginx': ensure =&gt; installed }</code></div>
-      <div class="cs-item-desc">A resource: a type, a title, and attributes describing desired state.</div>
+      <div class="cs-item-cmd"><code>type</code></div>
+      <div class="cs-item-desc">Abstract model of a manageable thing (package, service, file, user).</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>service { 'nginx': ensure =&gt; running, enable =&gt; true }</code></div>
-      <div class="cs-item-desc">Same type system; the title must be unique per type within me.</div>
+      <div class="cs-item-cmd"><code>provider</code></div>
+      <div class="cs-item-desc">Platform-specific implementation (apt vs yum, systemd vs init) selected from facts.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>provider =&gt; 'systemd'</code></div>
-      <div class="cs-item-desc">Providers translate abstract state into platform commands (apt, yum, systemd, launchd).</div>
+      <div class="cs-item-cmd"><code>puppet resource service nginx</code></div>
+      <div class="cs-item-desc">Introspect live state as a resource declaration.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>puppet describe service</code></div>
-      <div class="cs-item-desc">List a type's attributes and the providers available for it.</div>
+      <div class="cs-item-cmd"><code>puppet describe package</code></div>
+      <div class="cs-item-desc">List attributes and available providers for a type.</div>
     </div>
   </div>
-  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> Facter auto-selects a suitable provider per platform, so the same manifest converges identically on Debian and RHEL without conditionals.</div>
-</section>
-
-<section class="cs-section" data-color="purple">
-  <h2 class="cs-section-title">Manifests &amp; Module Structure</h2>
-  <pre class="cs-code"><code>module/
-├── manifests/
-│   ├── init.pp        # class module { }
-│   └── config.pp      # class module::config { }
-├── templates/         # .epp / .erb rendered into files
-├── files/             # static file sources
-├── functions/         # custom Puppet functions
-├── lib/facter/        # custom facts
-└── data/ + hiera.yaml # module-level data</code></pre>
-  <div class="cs-items">
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>class profile::web { ... }</code></div>
-      <div class="cs-item-desc">Classes group resources; namespacing follows the file path.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>define apache::vhost(...) { }</code></div>
-      <div class="cs-item-desc">Defined types are reusable resource templates instantiated many times.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>include profile::web</code></div>
-      <div class="cs-item-desc">Declare a class once; idempotent. <code>contain</code> binds it for ordering.</div>
-    </div>
-  </div>
-</section>
-
-<section class="cs-section" data-color="orange">
-  <h2 class="cs-section-title">The Compilation Pipeline</h2>
-  <table class="cs-table">
-    <thead><tr><th>Stage</th><th>What happens</th><th>Input</th></tr></thead>
-    <tbody>
-      <tr><td><code>Classification</code></td><td>Decide which classes apply to the node (ENC, site.pp, Hiera).</td><td>node name, environment</td></tr>
-      <tr><td><code>Fact injection</code></td><td>Node's facts become top-scope variables (<code>$facts</code>).</td><td>Facter payload</td></tr>
-      <tr><td><code>Evaluation</code></td><td>Manifests run as code: conditionals, loops, lookups, functions.</td><td>manifests + data</td></tr>
-      <tr><td><code>Resource collection</code></td><td>Declared resources accumulate; duplicates rejected.</td><td>evaluated classes</td></tr>
-      <tr><td><code>Graph output</code></td><td>Relationships resolved into a DAG — that DAG is me.</td><td>metaparameters</td></tr>
-    </tbody>
-  </table>
-  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> Evaluation is compile-time on the master; resource application is run-time on the agent. A duplicate resource declaration fails compilation before any change is attempted.</div>
-</section>
-
-<section class="cs-section" data-color="teal">
-  <h2 class="cs-section-title">Facter &amp; the Trust Boundary</h2>
-  <div class="cs-grid">
-    <div>
-      <h3>Ordinary facts</h3>
-      <p>Facter gathers system data (OS, network, hardware) on the agent and ships it to the master. These are self-reported and could be spoofed by a compromised node.</p>
-    </div>
-    <div>
-      <h3>Trusted facts</h3>
-      <p><code>$trusted</code> is derived from the agent's signed certificate, not from Facter, so it cannot be forged. Use it for security-sensitive classification.</p>
-    </div>
-  </div>
-  <div class="cs-items">
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>$facts['os']['family']</code></div>
-      <div class="cs-item-desc">Structured fact access; basis for provider and template choices.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>$trusted['certname']</code></div>
-      <div class="cs-item-desc">Cert-derived identity — the trust boundary for authorization.</div>
-    </div>
-  </div>
+  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> The provider abstraction is why I am portable: declare <code>ensure => running</code> and let the agent pick systemd or upstart.</div>
 </section>
 
 <section class="cs-section" data-color="red">
-  <h2 class="cs-section-title">Relationships, Ordering &amp; Containment</h2>
+  <h2 class="cs-section-title">How I Come to Exist — The Compilation Pipeline</h2>
+  <table class="cs-table">
+    <thead><tr><th>Stage</th><th>What happens</th></tr></thead>
+    <tbody>
+      <tr><td><code>1. Request</code></td><td>Agent submits its certname and plugin-synced facts to the master.</td></tr>
+      <tr><td><code>2. Classify</code></td><td>Node classifier / <code>site.pp</code> / ENC assigns classes to the node.</td></tr>
+      <tr><td><code>3. Inject facts</code></td><td>Facts become top-scope <code>$facts</code> variables available to manifests.</td></tr>
+      <tr><td><code>4. Evaluate</code></td><td>Puppet DSL is parsed and evaluated; Hiera lookups resolve; classes & defines expand into resources.</td></tr>
+      <tr><td><code>5. Build graph</code></td><td>Relationships and containment edges produce a DAG — that is me.</td></tr>
+      <tr><td><code>6. Serialize</code></td><td>I am sent to the agent as JSON and cached locally.</td></tr>
+    </tbody>
+  </table>
+  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> Compilation is the only phase with master-side logic. Once serialized I contain no conditionals — every branch is already resolved for this node.</div>
+</section>
+
+<section class="cs-section" data-color="purple">
+  <h2 class="cs-section-title">Facter & the Trust Boundary</h2>
+  <p>Facter runs on the agent and reports system inventory (OS, IP, memory, custom facts). I am shaped by these values during compilation.</p>
   <div class="cs-items">
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>require =&gt; Package['nginx']</code></div>
-      <div class="cs-item-desc">This resource applies after the named one — an edge in my graph.</div>
+      <div class="cs-item-cmd"><code>$facts['os']['family']</code></div>
+      <div class="cs-item-desc">Structured fact access inside manifests.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>before =&gt; Service['nginx']</code></div>
-      <div class="cs-item-desc">Inverse of require; the same edge stated from the other side.</div>
+      <div class="cs-item-cmd"><code>facter -p networking.ip</code></div>
+      <div class="cs-item-desc">Query a single fact including Puppet's custom facts.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>notify =&gt; Service['nginx']</code></div>
-      <div class="cs-item-desc">Ordering plus a refresh signal when this resource changes.</div>
+      <div class="cs-item-cmd"><code>$trusted['certname']</code></div>
+      <div class="cs-item-desc">Validated facts derived from the agent's signed certificate.</div>
+    </div>
+  </div>
+  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> Ordinary facts are agent-supplied and spoofable. Only <code>$trusted</code> data, extracted from the cert, is safe for security-sensitive classification decisions.</div>
+</section>
+
+<section class="cs-section" data-color="orange">
+  <h2 class="cs-section-title">Relationships, Ordering & Containment</h2>
+  <p>Because I am declarative, sequence must be stated explicitly. Metaparameters and chaining arrows define my edges.</p>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>require => Package['x']</code></div>
+      <div class="cs-item-desc">This resource applies after the named one.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>subscribe =&gt; File['nginx.conf']</code></div>
-      <div class="cs-item-desc">Inverse of notify; service restarts when the watched file changes.</div>
+      <div class="cs-item-cmd"><code>before => Service['x']</code></div>
+      <div class="cs-item-desc">This resource applies before the named one.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>notify => Service['x']</code></div>
+      <div class="cs-item-desc">Order plus refresh signal when this changes.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>subscribe => File['conf']</code></div>
+      <div class="cs-item-desc">Order plus refresh when the target changes.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>File['a'] -&gt; Service['b']</code></div>
-      <div class="cs-item-desc">Chaining arrow; <code>~&gt;</code> adds refresh, like notify.</div>
+      <div class="cs-item-desc">Chaining arrow: ordering edge.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>contain ::module::service</code></div>
-      <div class="cs-item-desc">Pulls a class inside another's containment so ordering edges apply transitively.</div>
+      <div class="cs-item-cmd"><code>File['a'] ~&gt; Service['b']</code></div>
+      <div class="cs-item-desc">Chaining arrow with notification (refresh).</div>
     </div>
   </div>
-  <div class="cs-callout note"><span class="cs-callout-label">Note</span> My graph must be acyclic; a dependency cycle is a compile failure. Within these constraints the agent is free to apply unordered resources in any order.</div>
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> Containment: a class contains its resources, so ordering a class orders everything within it. A cycle in my graph is fatal — the agent refuses to apply.</div>
+</section>
+
+<section class="cs-section" data-color="teal">
+  <h2 class="cs-section-title">Data Separation — Hiera</h2>
+  <p>Code declares structure; Hiera supplies the values. Lookups resolve hierarchically by node-specific facts during compilation, keeping me free of hardcoded data.</p>
+  <pre class="cs-code"><code># hiera.yaml hierarchy
+hierarchy:
+  - name: "Per-node"
+    path: "nodes/%{trusted.certname}.yaml"
+  - name: "Per-OS"
+    path: "os/%{facts.os.family}.yaml"
+  - name: "Common"
+    path: "common.yaml"</code></pre>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>lookup('ntp::servers')</code></div>
+      <div class="cs-item-desc">Explicit data lookup with merge behaviour control.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>class profile::ntp ($servers) {}</code></div>
+      <div class="cs-item-desc">Automatic parameter lookup binds <code>profile::ntp::servers</code> from Hiera.</div>
+    </div>
+  </div>
 </section>
 
 <section class="cs-section" data-color="blue">
-  <h2 class="cs-section-title">Hiera &amp; Data Separation</h2>
-  <div class="cs-items">
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>lookup('profile::web::port')</code></div>
-      <div class="cs-item-desc">Resolve a value through the layered hierarchy at compile time.</div>
+  <h2 class="cs-section-title">Module Structure & Roles/Profiles</h2>
+  <div class="cs-grid">
+    <div>
+      <h3>Module layout</h3>
+      <pre class="cs-code"><code>mymod/
+  manifests/init.pp
+  templates/conf.epp
+  files/static.txt
+  lib/facter/
+  data/
+  hiera.yaml</code></pre>
     </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>hierarchy: [ "nodes/%{trusted.certname}", "common" ]</code></div>
-      <div class="cs-item-desc">Ordered layers; the first match wins for normal lookups.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>lookup_options: merge: deep</code></div>
-      <div class="cs-item-desc">Merge across layers instead of first-found for hashes/arrays.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>class web (String $port = '80') { }</code></div>
-      <div class="cs-item-desc">Automatic parameter lookup binds Hiera keys to class params by name.</div>
+    <div>
+      <h3>Roles & Profiles</h3>
+      <p>A <strong>profile</strong> wraps and configures component modules for one technology. A <strong>role</strong> composes profiles to describe a machine's business purpose. Each node gets exactly one role.</p>
     </div>
   </div>
-  <div class="cs-call
+  <pre class="cs-code"><code>class role::webserver {
+  include profile::base
+  include profile::nginx
+  include profile::monitoring
+}</code></pre>
+  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> Keep <code>site.pp</code> trivial: classify nodes to a single role and let composition do the rest.</div>
+</section>
+
+<section class="cs-section" data-color="green">
+  <h2 class="cs-section-title">Exported Resources & PuppetDB</h2>
+  <p>Resources declared on one node can be collected by another, enabling cross-node orchestration like load-balancer pools and monitoring registration. PuppetDB stores exported resources, facts, and my reports.</p>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>@@nagios_host { $hostname: ... }</code></div>
+      <div class="cs-item-desc">Export a resource for other nodes to collect.</div>
+    </div>
+    <div class
 </main>
 </body>
 </html>
