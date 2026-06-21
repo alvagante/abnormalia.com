@@ -124,6 +124,10 @@ inputs:
     musicInstrumental:
       type: boolean
       default: false
+    musicSkipThreshold:
+      type: integer
+      default: 5
+      description: Skip music generation for an ixen when this many MP3 files already exist across all versions.
     sunoVersion:
       type: string
       enum:
@@ -216,6 +220,29 @@ jobs:
         weight: 0
         allowFailure: false
     dependsOn: []
+    weight: 0
+  - name: count-tracks
+    description: Count existing MP3 files per ixen to decide whether to skip music generation.
+    steps:
+      - name: count-${{ self.ixen.slug }}
+        description: Count MP3 files in versioned subdirectories for one ixen.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens }}
+        task:
+          type: model_method
+          modelType: "@alvagante/ixen-tracks"
+          modelName: '${{ "tracks-" + self.ixen.slug }}'
+          methodName: countVersionedTracks
+          inputs:
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: prepare
+        condition:
+          type: succeeded
     weight: 0
   - name: images
     description: Generate the hero and supporting concept images for each Ixen.
@@ -442,13 +469,13 @@ jobs:
           type: succeeded
     weight: 0
   - name: music
-    description: Generate a fresh soundtrack for each Ixen, capturing all track variants from a single provider call.
+    description: Generate a fresh soundtrack for each Ixen that does not yet have enough tracks.
     steps:
       - name: track-${{ self.ixen.slug }}
-        description: Generate the soundtrack playlist for one Ixen topic.
+        description: Generate the soundtrack playlist for one Ixen topic, unless it already has enough MP3s.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens }}
+          in: ${{ inputs.ixens.filter(ixen, data.latest("tracks-" + ixen.slug, "versionedTrackCount").attributes.trackCount < inputs.musicSkipThreshold) }}
         task:
           type: model_method
           modelType: "@alvagante/content-music"
@@ -470,6 +497,33 @@ jobs:
         allowFailure: false
     dependsOn:
       - job: prepare
+        condition:
+          type: succeeded
+      - job: count-tracks
+        condition:
+          type: succeeded
+    weight: 0
+  - name: build-manifest
+    description: Collect all MP3 tracks across versioned subdirs and the current run into a single ordered list per ixen.
+    steps:
+      - name: manifest-${{ self.ixen.slug }}
+        description: Build the complete track manifest for one ixen, merging historical and new tracks.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens }}
+        task:
+          type: model_method
+          modelType: "@alvagante/ixen-tracks"
+          modelName: '${{ "tracks-" + self.ixen.slug }}'
+          methodName: build
+          inputs:
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            newTracks: ${{ data.latest("music-" + self.ixen.slug, "playlist").attributes.tracks }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: music
         condition:
           type: succeeded
     weight: 0
@@ -575,7 +629,7 @@ jobs:
             infographicPath: infographic.html
             outputDir: ${{ "ixen/" + self.ixen.slug }}
             versionOutput: false
-            musicTracks: ${{ data.latest("music-" + self.ixen.slug, "playlist").attributes.tracks }}
+            musicTracks: ${{ data.latest("tracks-" + self.ixen.slug, "allTracks").attributes.tracks }}
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -583,7 +637,7 @@ jobs:
       - job: images
         condition:
           type: succeeded
-      - job: music
+      - job: build-manifest
         condition:
           type: succeeded
       - job: cheatsheets

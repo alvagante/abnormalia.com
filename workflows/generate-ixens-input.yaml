@@ -27,6 +27,7 @@ musicGenre: ambient
 musicMood: contemplative
 musicModel: suno-ttapi
 musicInstrumental: false
+musicSkipThreshold: 5
 sunoVersion: chirp-v4-5
 infographicStyle: ixen
 infographicModel: gpt-image-2
