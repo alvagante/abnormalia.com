@@ -23,7 +23,7 @@ imageBackground: opaque
 imageModel: gpt-image-1.5
 imageSize: 1024x1024
 imageQuality: auto
-musicGenre: electronic
+musicGenre: classic rock
 musicMood: uprising
 musicModel: suno-ttapi
 musicInstrumental: false

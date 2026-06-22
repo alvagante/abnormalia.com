@@ -23,8 +23,8 @@ imageBackground: opaque
 imageModel: gpt-image-1.5
 imageSize: 1024x1024
 imageQuality: auto
-musicGenre: electronic
-musicMood: uprising
+musicGenre: electronic, country, piano
+musicMood: uprising, contemplative, nostalgic
 musicModel: suno-ttapi
 musicInstrumental: false
 sunoVersion: chirp-v4-5

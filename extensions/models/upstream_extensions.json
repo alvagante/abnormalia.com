@@ -56,8 +56,8 @@
     "serverUrl": "https://swamp-club.com"
   },
   "@alvagante/content-infographic": {
-    "version": "2026.06.19.1",
-    "pulledAt": "2026-06-19T09:33:11.692Z",
+    "version": "2026.06.22.1",
+    "pulledAt": "2026-06-22T07:39:34.897Z",
     "files": [
       ".swamp/pulled-extensions/@alvagante/content-infographic/models/extensions/models/content_infographic.ts",
       ".swamp/bundles/5933d5f5/extensions/models/content_infographic.js",
@@ -65,8 +65,8 @@
       ".swamp/pulled-extensions/@alvagante/content-infographic/files/LICENSE.txt",
       ".swamp/pulled-extensions/@alvagante/content-infographic/manifest.yaml"
     ],
-    "checksum": "c04b4cb94f6a73f9d74c1dcccfb27042b996b3d9262c529817d7bb36ff730381",
-    "filesChecksum": "235578a74e2f60b78ef5407d6721b3523a8159d797942690816cb0d5e9d1fdde",
+    "checksum": "4e0148f7b5f9462cc315306605166f96d35ee3351cdd246792121d1954d1469e",
+    "filesChecksum": "f609fd442c55039ab45f0f1c196c0ab8f4d38f4470a792b344a307753dfa01ca",
     "serverUrl": "https://swamp-club.com"
   }
 }
