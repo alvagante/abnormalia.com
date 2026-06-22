@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Domain Topology</title>
+<title>Domain Anatomy</title>
 <style>
   :root {
     --cs-hue-blue: #1a73e8;
@@ -273,62 +273,58 @@
 </head>
 <body>
 <header class="cs-page-header">
-  <h1>Domain Topology</h1>
-  <div class="cs-page-meta"><span>Life as a Xen hypervisor</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-21</span></div>
+  <h1>Domain Anatomy</h1>
+  <div class="cs-page-meta"><span>Life as a Xen hypervisor</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-22</span></div>
 </header>
 <main>
 <div class="cs-quickref">
   <span class="cs-qr-label">Quick ref</span>
   <div class="cs-qr-items">
-    <div class="cs-qr-item"><code>xl list</code> <span>show running domains</span></div>
-    <div class="cs-qr-item"><code>xl create cfg</code> <span>boot a domU</span></div>
-    <div class="cs-qr-item"><code>xl console N</code> <span>attach guest console</span></div>
-    <div class="cs-qr-item"><code>xl info</code> <span>host + hypervisor facts</span></div>
-    <div class="cs-qr-item"><code>xl migrate D host</code> <span>live migrate</span></div>
-    <div class="cs-qr-item"><code>xenstore-ls</code> <span>dump the config tree</span></div>
-    <div class="cs-qr-item"><code>xl top</code> <span>per-domain resource view</span></div>
+    <div class="cs-qr-item"><code>xl list</code> <span>list running domains</span></div>
+    <div class="cs-qr-item"><code>xl create cfg</code> <span>start a domU from config</span></div>
+    <div class="cs-qr-item"><code>xl console &lt;dom&gt;</code> <span>attach to guest console</span></div>
+    <div class="cs-qr-item"><code>xl info</code> <span>hypervisor &amp; host facts</span></div>
+    <div class="cs-qr-item"><code>xl vcpu-list</code> <span>vCPU→pCPU mapping</span></div>
+    <div class="cs-qr-item"><code>xl migrate &lt;dom&gt; host</code> <span>live migrate</span></div>
+    <div class="cs-qr-item"><code>xenstore-ls</code> <span>dump xenstore tree</span></div>
   </div>
 </div>
 
 <section class="cs-section" data-color="blue">
-  <h2 class="cs-section-title">Domain Topology</h2>
-  <p>Xen is a thin Type-1 hypervisor that owns CPU, memory, and interrupts; everything else runs in domains. There is no monolithic kernel doing device work — privilege is split across cooperating guests.</p>
+  <h2 class="cs-section-title">Domain Anatomy</h2>
+  <p>Xen is a type-1 hypervisor that owns the CPU, MMU, and interrupts; everything else runs in a <em>domain</em>. The thin hypervisor delegates policy and most device handling to privileged guests rather than doing it itself.</p>
   <div class="cs-items">
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>xen.gz</code></div>
-      <div class="cs-item-desc">The hypervisor itself: scheduler, MMU/p2m, event channels, grant tables, hypercall ABI — no device drivers.</div>
-    </div>
-    <div class="cs-item">
       <div class="cs-item-cmd"><code>dom0</code></div>
-      <div class="cs-item-desc">First, privileged guest; hosts the toolstack (<code>xl</code>/libxl), <code>xenstored</code>, and backend drivers for the real hardware.</div>
+      <div class="cs-item-desc">First, privileged domain; runs toolstack, real device drivers, and hosts the default backends.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>domU</code></div>
-      <div class="cs-item-desc">Unprivileged guest VM. Its frontend drivers talk to backends in dom0 or a driver domain.</div>
+      <div class="cs-item-desc">Unprivileged guest; sees only virtual CPUs, memory, and paravirtual or emulated devices.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>driver domain</code></div>
-      <div class="cs-item-desc">A dedicated domU granted PCI devices that serves I/O backends, shrinking dom0's attack surface.</div>
+      <div class="cs-item-desc">Deprivileged domU that owns real hardware and exports backends, shrinking dom0's trust surface.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>stub domain</code></div>
-      <div class="cs-item-desc">Per-HVM-guest mini-domain running its own QEMU device model, isolating emulation from dom0.</div>
+      <div class="cs-item-desc">Per-guest mini-domain running QEMU device emulation, isolating the emulator from dom0.</div>
     </div>
   </div>
-  <div class="cs-callout note"><span class="cs-callout-label">Note</span> Disaggregating dom0 into driver and stub domains is the canonical security-hardening move: a compromised backend no longer means a compromised control plane.</div>
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> "Disaggregation" splits dom0 into driver and stub domains so a compromised backend cannot pivot to host-wide control.</div>
 </section>
 
 <section class="cs-section" data-color="green">
-  <h2 class="cs-section-title">Execution Modes: PV / HVM / PVH</h2>
+  <h2 class="cs-section-title">Execution Modes</h2>
   <table class="cs-table">
-    <thead><tr><th>Mode</th><th>CPU virt</th><th>I/O path</th><th>Notes</th></tr></thead>
+    <thead><tr><th>Mode</th><th>How it runs</th><th>Trade-off</th></tr></thead>
     <tbody>
-      <tr><td><code>PV</code></td><td>Paravirtual, ring deprivileging</td><td>PV split drivers only</td><td>No HW virt needed; modern x86-64 PV largely retired post-Meltdown.</td></tr>
-      <tr><td><code>HVM</code></td><td>VT-x/AMD-V hardware</td><td>Emulated (QEMU) + optional PV</td><td>Boots unmodified OSes; uses a device model.</td></tr>
-      <tr><td><code>PVH</code></td><td>Hardware virt, no emulation</td><td>PV split drivers, virtual interrupts</td><td>Lightweight default for Linux/*BSD; no QEMU, fast boot.</td></tr>
+      <tr><td><code>PV</code></td><td>Ring-deprivileged guest using hypercalls; no hardware virt needed.</td><td>Fast historically; aging, large attack surface, removed for x86-64 in many builds.</td></tr>
+      <tr><td><code>HVM</code></td><td>Full hardware virtualization (VT-x/AMD-V) with QEMU emulation.</td><td>Runs unmodified OSes; emulation cost on boot/legacy I/O.</td></tr>
+      <tr><td><code>PVH</code></td><td>HVM container with PV drivers, no emulated platform/BIOS.</td><td>Modern default: lean, no QEMU, needs PVH-aware guest kernel.</td></tr>
     </tbody>
   </table>
-  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> Prefer <code>type="pvh"</code> for Linux guests: you get hardware page tables and interrupts without the emulated-platform overhead and attack surface of HVM.</div>
+  <p>HVM guests use <code>PV-on-HVM</code> drivers to bypass slow emulation for disk and net once booted, converging toward PVH behavior at runtime.</p>
 </section>
 
 <section class="cs-section" data-color="red">
@@ -336,103 +332,105 @@
   <div class="cs-items">
     <div class="cs-item">
       <div class="cs-item-cmd"><code>xl sched-credit2</code></div>
-      <div class="cs-item-desc">Default scheduler: weight + cap fair-share across pCPUs, scalable to many cores.</div>
+      <div class="cs-item-desc">Default scheduler; weight-based proportional fair share across vCPUs.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl vcpu-list</code></div>
-      <div class="cs-item-desc">Show vCPU-to-pCPU mapping and run state per domain.</div>
+      <div class="cs-item-cmd"><code>xl sched-credit -d &lt;dom&gt; -w 512</code></div>
+      <div class="cs-item-desc">Set a domain's CPU weight (relative share).</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl vcpu-pin D v cpu</code></div>
-      <div class="cs-item-desc">Pin a vCPU to physical CPUs for NUMA locality or latency.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl sched-credit2 -d D -w 512</code></div>
-      <div class="cs-item-desc">Set relative CPU weight for a domain.</div>
+      <div class="cs-item-cmd"><code>xl vcpu-pin &lt;dom&gt; 0 2</code></div>
+      <div class="cs-item-desc">Pin vCPU 0 to physical CPU 2 for cache locality or isolation.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>xl cpupool-list</code></div>
-      <div class="cs-item-desc">CPU pools partition pCPUs with independent schedulers for hard isolation.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>dom0_max_vcpus= dom0_vcpus_pin</code></div>
-      <div class="cs-item-desc">Boot args to dedicate and pin dom0 CPUs away from guest contention.</div>
+      <div class="cs-item-desc">Partition pCPUs into pools, each with its own scheduler.</div>
     </div>
   </div>
+  <p>The hypervisor multiplexes vCPUs onto pCPUs; cpupools hard-partition the machine, while weights and caps shape contention inside a pool.</p>
 </section>
 
 <section class="cs-section" data-color="purple">
-  <h2 class="cs-section-title">Memory: Translation & Ballooning</h2>
+  <h2 class="cs-section-title">Memory Translation &amp; Sizing</h2>
   <div class="cs-grid">
     <div>
-      <h3>Address translation</h3>
-      <p>Guests see pseudo-physical frames; Xen maps these to machine frames via the p2m table. HVM/PVH use hardware-assisted nested paging (EPT/NPT); legacy PV used direct-but-validated page tables.</p>
+      <h3>Address layers</h3>
+      <p>Guests use a per-domain <code>P2M</code> map; HVM/PVH rely on hardware nested paging (EPT/NPT), while PV used directly validated page tables. The hypervisor reserves a slice of every guest's address space.</p>
     </div>
     <div>
-      <h3>Reclamation</h3>
-      <p>The balloon driver inflates inside a guest to hand pages back to Xen, enabling overcommit. Combine with <code>maxmem</code> headroom so a guest can grow later.</p>
+      <h3>Ballooning</h3>
+      <p>The balloon driver returns or reclaims guest pages on demand, letting hosts oversubscribe RAM between <code>memory</code> and <code>maxmem</code> bounds.</p>
     </div>
   </div>
   <div class="cs-items">
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl mem-set D 2048</code></div>
-      <div class="cs-item-desc">Balloon a domain's current target to 2 GiB (≤ its maxmem).</div>
+      <div class="cs-item-cmd"><code>xl mem-set &lt;dom&gt; 2048</code></div>
+      <div class="cs-item-desc">Balloon a domain's current memory target to 2 GiB.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl mem-max D 4096</code></div>
-      <div class="cs-item-desc">Raise the static upper bound for the guest.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>xl sharing</code></div>
-      <div class="cs-item-desc">Report memory deduplicated via page sharing (CoW).</div>
+      <div class="cs-item-cmd"><code>xl mem-max &lt;dom&gt; 4096</code></div>
+      <div class="cs-item-desc">Set the hard ceiling the balloon can grow back to.</div>
     </div>
   </div>
-  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> Over-ballooning a guest below its working set causes thrashing or OOM kills; never set a target the guest can't tolerate, and watch dom0's own floor.</div>
+  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> Ballooning below the guest's working set triggers in-guest OOM; never set <code>mem-set</code> under what the workload actually touches.</div>
 </section>
 
 <section class="cs-section" data-color="orange">
-  <h2 class="cs-section-title">Split I/O: Rings, Grants, Events, XenStore</h2>
-  <p>Paravirtual I/O is a frontend/backend pair sharing a ring buffer. The plumbing rests on three primitives that also serve interrupts and inter-domain signalling generally.</p>
+  <h2 class="cs-section-title">Split I/O Plumbing</h2>
+  <p>Paravirtual I/O is a frontend (in the guest) talking to a backend (dom0 or driver domain) over shared memory. Three primitives wire it together.</p>
   <div class="cs-items">
     <div class="cs-item">
+      <div class="cs-item-cmd"><code>blkfront ↔ blkback</code></div>
+      <div class="cs-item-desc">Disk; <code>netfront ↔ netback</code> handles networking via the same model.</div>
+    </div>
+    <div class="cs-item">
       <div class="cs-item-cmd"><code>grant references</code></div>
-      <div class="cs-item-desc">A domain authorizes another to map/copy specific pages — the controlled basis for all shared-memory I/O.</div>
+      <div class="cs-item-desc">Guest authorizes a backend to map/copy specific pages — the basis for zero-copy ring buffers.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>event channels</code></div>
-      <div class="cs-item-desc">Lightweight virtual IRQs: notify a peer that a ring has data, deliver virtual interrupts, or signal VIRQs.</div>
+      <div class="cs-item-desc">Lightweight virtual interrupts that signal "ring has work" between domains.</div>
     </div>
     <div class="cs-item">
       <div class="cs-item-cmd"><code>xenstore</code></div>
-      <div class="cs-item-desc">Hierarchical config/status database used to negotiate device setup (grant refs, evtchn ports) and watch for state changes.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>vif / vbd / vfb</code></div>
-      <div class="cs-item-desc">Standard frontends: network, block, framebuffer — each pairs with a dom0/driver-domain backend.</div>
+      <div class="cs-item-desc">Shared hierarchical key-value DB used for device discovery, state handshakes, and config — not bulk data.</div>
     </div>
   </div>
-  <div class="cs-items">
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>xenstore-ls /local/domain/N</code></div>
-      <div class="cs-item-desc">Inspect a domain's device tree and negotiated parameters.</div>
-    </div>
-    <div class="cs-item">
-      <div class="cs-item-cmd"><code>xenstore-read path</code></div>
-      <div class="cs-item-desc">Read a single key (e.g. backend/frontend connection state).</div>
-    </div>
-  </div>
+  <pre class="cs-code"><code>xenstore-ls /local/domain/3/device
+xenstore-read /local/domain/3/device/vbd/51712/state
+xenstore-write /local/domain/3/control/shutdown poweroff</code></pre>
+  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> Grants + event channels are the transport; xenstore is the control plane. A stuck device often shows a frontend/backend <code>state</code> mismatch in xenstore.</div>
 </section>
 
 <section class="cs-section" data-color="teal">
-  <h2 class="cs-section-title">PCI Passthrough & IOMMU</h2>
+  <h2 class="cs-section-title">Passthrough &amp; IOMMU Isolation</h2>
   <div class="cs-items">
     <div class="cs-item">
       <div class="cs-item-cmd"><code>xl pci-assignable-add 00:1f.2</code></div>
-      <div class="cs-item-desc">Detach a device from dom0 and mark it available for guests (via pciback).</div>
+      <div class="cs-item-desc">Reserve a PCI device (detach from dom0) for passthrough.</div>
     </div>
     <div class="cs-item">
-      <div class="cs-item-cmd"><code>pci=['00:1f.2']</code></div>
-      <div class="cs-item-desc">Config-file
+      <div class="cs-item-cmd"><code>xl pci-attach &lt;dom&gt; 00:1f.2</code></div>
+      <div class="cs-item-desc">Hotplug a passthrough device into a running guest.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>pci=['01:00.0']</code></div>
+      <div class="cs-item-desc">Config-file form for boot-time assignment.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>iommu=required</code></div>
+      <div class="cs-item-desc">Xen cmdline; enforce VT-d/AMD-Vi so DMA is contained.</div>
+    </div>
+  </div>
+  <p>The IOMMU translates and confines device DMA so a passed-through NIC or GPU cannot read arbitrary host memory. Devices behind the same IOMMU group must be assigned together.</p>
+</section>
+
+<section class="cs-section" data-color="blue">
+  <h2 class="cs-section-title">Live Migration &amp; Save/Restore</h2>
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>xl migrate &lt;dom&gt; dst-host</code></div>
+      <div class="cs-item-desc">Iterative pre-copy of dirty pages, then a brief stop-
 </main>
 </body>
 </html>

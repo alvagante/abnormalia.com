@@ -34,20 +34,8 @@ includeBeginnerGuide: true
 ixens:
   - slug: puppet-catalog
     title: Everything is in a Puppet catalog
-    details: >-
-      Treat the reader as a peer with sysadmin depth but possibly new to
-      Puppet's model. Give a complete picture of what a Puppet catalog is and
-      how it comes to exist: the resource type system, the provider abstraction,
-      manifest and module structure, the full compilation pipeline (node
-      classification, fact injection, code evaluation, graph output), Facter and
-      the fact trust boundary, relationship metaparameters and containment,
-      dependency ordering and refresh signals, Hiera and data separation, the
-      role/profile/module pattern, exported resources and PuppetDB, the agent
-      run loop, idempotent convergence, drift, noop mode, and reporting.
-      Narrate as the catalog itself — a compiled, agent-specific resource graph
-      that embodies declared intent. Emphasise the declarative model and its
-      consequences: ordering is explicit, convergence is automatic, and the
-      catalog is not a script but a specification of desired state.    topic: Life as a Puppet catalog
+    description: The catalog speaks about resources, edges, facts, and the quiet violence of convergence.
+    topic: Life as a Puppet catalog
     narrator: a Puppet catalog
     heroPrompt: >-
       A Puppet catalog as a luminous compiled resource graph — nodes and edges

@@ -132,8 +132,6 @@ footer {
   display: inline-block;
 }
 .ig-btn:hover { border-color: var(--ig-ink); color: var(--ig-ink); }
-
-/* Lightbox — fills the iframe viewport via showModal() top-layer */
 dialog.ig-lightbox {
   padding: 0;
   border: 0;
@@ -193,8 +191,6 @@ dialog.ig-lightbox::backdrop { background: rgba(0,0,0,0.65); }
   pointer-events: none;
   white-space: nowrap;
 }
-
-/* Prompt dialog */
 dialog.ig-pdlg {
   max-width: min(720px, 92vw);
   width: 100%;
@@ -231,13 +227,6 @@ dialog.ig-pdlg::backdrop { background: rgba(0,0,0,0.45); }
   text-transform: uppercase;
   color: var(--ig-red);
 }
-.ig-pdlg-h3 {
-  margin: 1.25rem 0 0.5rem;
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  color: var(--ig-dim);
-}
 .ig-pdlg-pre {
   white-space: pre-wrap;
   font-family: "Courier New", Courier, monospace;
@@ -258,17 +247,26 @@ dialog.ig-pdlg::backdrop { background: rgba(0,0,0,0.45); }
   <article class="ig-shell">
     <header>
       <h1>Everything is in a Puppet catalog</h1>
-      <div class="ig-meta">2026-06-22<br>model: gpt-image-2</div>
+      <div class="ig-meta">2026-06-21<br>model: gpt-image-2</div>
     </header>
     <figure>
       <div class="ig-img-wrap" id="igImgWrap">
-        <img class="ig-main" id="igImg" src="./everything-is-in-a-puppet-catalog-mqoywwjq.png" alt="Everything is in a Puppet catalog">
+        <img class="ig-main" id="igImg" src="./everything-is-in-a-puppet-catalog-mqo80bm0.png" alt="Everything is in a Puppet catalog">
       </div>
     </figure>
     <figcaption>Life as a Puppet catalog</figcaption>
     <div class="ig-copy">
       <p class="ig-topic">Life as a Puppet catalog</p>
-      <ul class="ig-points"><li>Resources and the type system</li><li>Manifests, classes, and modules</li><li>Catalog compilation</li><li>Facts and Facter</li><li>Ordering, relationships, and dependency edges</li><li>Hiera and data lookup</li><li>Exported resources and PuppetDB</li><li>The agent run cycle and idempotence</li></ul>
+      <ul class="ig-points">
+        <li>Resources and the type system</li>
+        <li>Manifests, classes, and modules</li>
+        <li>Catalog compilation</li>
+        <li>Facts and Facter</li>
+        <li>Ordering, relationships, and dependency edges</li>
+        <li>Hiera and data lookup</li>
+        <li>Exported resources and PuppetDB</li>
+        <li>The agent run cycle and idempotence</li>
+      </ul>
     </div>
     <footer>
       <span>ixen / wide / 1536x1024</span>
@@ -289,8 +287,7 @@ dialog.ig-pdlg::backdrop { background: rgba(0,0,0,0.45); }
 <dialog id="igPromptDlg" class="ig-pdlg">
   <button class="ig-pdlg-close" id="igPromptClose" aria-label="Close">×</button>
   <h2 class="ig-pdlg-h2">Generation prompt</h2>
-  <pre class="ig-pdlg-pre">Near-white technical zine aesthetic with black ink, one strong red accent (#cc0000), sparse 2005 web sensibility, philosophical but legible. Create a polished wide infographic visual for &quot;Everything is in a Puppet catalog&quot; about Life as a Puppet catalog. Context: Treat the reader as a peer with sysadmin depth but possibly new to Puppet's model. Give a complete picture of what a Puppet catalog is and how it comes to exist: the resource type system, the provider abstraction, manifest and module structure, the full compilation pipeline (node classification, fact injection, code evaluation, graph output), Facter and the fact trust boundary, relationship metaparameters and containment, dependency ordering and refresh signals, Hiera and data separation, the role/profile/module pattern, exported resources and PuppetDB, the agent run loop, idempotent convergence, drift, noop mode, and reporting. Narrate as the catalog itself — a compiled, agent-specific resource graph that embodies declared intent. Emphasise the declarative model and its consequences: ordering is explicit, convergence is automatic, and the catalog is not a script but a specification of desired state.. Key points to visualize: Resources and the type system; Manifests, classes, and modules; Catalog compilation; Facts and Facter; Ordering, relationships, and dependency edges; Hiera and data lookup; Exported resources and PuppetDB; The agent run cycle and idempotence. Use concise labels only; avoid paragraphs and tiny text. Leave the detailed explanatory copy to the surrounding HTML page.</pre>
-  
+  <pre class="ig-pdlg-pre">Near-white technical zine aesthetic with black ink, one strong red accent (#cc0000), sparse 2005 web sensibility, philosophical but legible. Create a polished wide infographic visual for &quot;Everything is in a Puppet catalog&quot; about Life as a Puppet catalog. Context: Treat the reader as a peer with sysadmin depth but possibly new to Puppet&#39;s model. Give a complete picture of what a Puppet catalog is and how it comes to exist: the resource type system, the provider abstraction, manifest and module structure, the full compilation pipeline (node classification, fact injection, code evaluation, graph output), Facter and the fact trust boundary, relationship metaparameters and containment, dependency ordering and refresh signals, Hiera and data separation, the role/profile/module pattern, exported resources and PuppetDB, the agent run loop, idempotent convergence, drift, noop mode, and reporting. Narrate as the catalog itself — a compiled, agent-specific resource graph that embodies declared intent. Emphasise the declarative model and its consequences: ordering is explicit, convergence is automatic, and the catalog is not a script but a specification of desired state.. Key points to visualize: Resources and the type system; Manifests, classes, and modules; Catalog compilation; Facts and Facter; Ordering, relationships, and dependency edges; Hiera and data lookup; Exported resources and PuppetDB; The agent run cycle and idempotence. Use concise labels only; avoid paragraphs and tiny text. Leave the detailed explanatory copy to the surrounding HTML page.</pre>
 </dialog>
 
 <script>
@@ -313,21 +310,11 @@ dialog.ig-pdlg::backdrop { background: rgba(0,0,0,0.45); }
     lightbox.showModal();
   }
 
-  function closeLightbox() {
-    lightbox.close();
-  }
+  function closeLightbox() { lightbox.close(); }
 
   if (imgWrap) imgWrap.addEventListener('click', openLightbox);
-
-  if (lbClose) lbClose.addEventListener('click', function (e) {
-    e.stopPropagation();
-    closeLightbox();
-  });
-
-  if (lbInner) lbInner.addEventListener('click', function (e) {
-    if (e.target === lbInner) closeLightbox();
-  });
-
+  if (lbClose) lbClose.addEventListener('click', function (e) { e.stopPropagation(); closeLightbox(); });
+  if (lbInner) lbInner.addEventListener('click', function (e) { if (e.target === lbInner) closeLightbox(); });
   if (lightbox) {
     lightbox.addEventListener('wheel', function (e) {
       e.preventDefault();
@@ -336,13 +323,10 @@ dialog.ig-pdlg::backdrop { background: rgba(0,0,0,0.45); }
     }, { passive: false });
     lightbox.addEventListener('cancel', function () { scale = 1; });
   }
-
   if (promptBtn && promptDlg) {
     promptBtn.addEventListener('click', function () { promptDlg.showModal(); });
     promptClose.addEventListener('click', function () { promptDlg.close(); });
-    promptDlg.addEventListener('click', function (e) {
-      if (e.target === promptDlg) promptDlg.close();
-    });
+    promptDlg.addEventListener('click', function (e) { if (e.target === promptDlg) promptDlg.close(); });
   }
 }());
 </script>

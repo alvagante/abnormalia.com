@@ -132,6 +132,8 @@ footer {
   display: inline-block;
 }
 .ig-btn:hover { border-color: var(--ig-ink); color: var(--ig-ink); }
+
+/* Lightbox — fills the iframe viewport via showModal() top-layer */
 dialog.ig-lightbox {
   padding: 0;
   border: 0;
@@ -191,6 +193,8 @@ dialog.ig-lightbox::backdrop { background: rgba(0,0,0,0.65); }
   pointer-events: none;
   white-space: nowrap;
 }
+
+/* Prompt dialog */
 dialog.ig-pdlg {
   max-width: min(720px, 92vw);
   width: 100%;
@@ -227,6 +231,13 @@ dialog.ig-pdlg::backdrop { background: rgba(0,0,0,0.45); }
   text-transform: uppercase;
   color: var(--ig-red);
 }
+.ig-pdlg-h3 {
+  margin: 1.25rem 0 0.5rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--ig-dim);
+}
 .ig-pdlg-pre {
   white-space: pre-wrap;
   font-family: "Courier New", Courier, monospace;
@@ -247,26 +258,17 @@ dialog.ig-pdlg::backdrop { background: rgba(0,0,0,0.45); }
   <article class="ig-shell">
     <header>
       <h1>Being a Xen hypervisor</h1>
-      <div class="ig-meta">2026-06-21<br>model: gpt-image-2</div>
+      <div class="ig-meta">2026-06-22<br>model: gpt-image-2</div>
     </header>
     <figure>
       <div class="ig-img-wrap" id="igImgWrap">
-        <img class="ig-main" id="igImg" src="./being-a-xen-hypervisor-mqo88yh2.png" alt="Being a Xen hypervisor">
+        <img class="ig-main" id="igImg" src="./being-a-xen-hypervisor-mqoyp6s5.png" alt="Being a Xen hypervisor">
       </div>
     </figure>
     <figcaption>Life as a Xen hypervisor</figcaption>
     <div class="ig-copy">
       <p class="ig-topic">Life as a Xen hypervisor</p>
-      <ul class="ig-points">
-        <li>Domain model and privilege boundaries</li>
-        <li>Boot modes and guest execution</li>
-        <li>CPU scheduling and vCPU topology</li>
-        <li>Memory ownership and translation</li>
-        <li>I/O paths and split drivers</li>
-        <li>Device assignment and DMA isolation</li>
-        <li>Live migration and state transfer</li>
-        <li>Operations, observability, and failure modes</li>
-      </ul>
+      <ul class="ig-points"><li>Domain model and privilege boundaries</li><li>Boot modes and guest execution</li><li>CPU scheduling and vCPU topology</li><li>Memory ownership and translation</li><li>I/O paths and split drivers</li><li>Device assignment and DMA isolation</li><li>Live migration and state transfer</li><li>Operations, observability, and failure modes</li></ul>
     </div>
     <footer>
       <span>ixen / wide / 1536x1024</span>
@@ -288,6 +290,7 @@ dialog.ig-pdlg::backdrop { background: rgba(0,0,0,0.45); }
   <button class="ig-pdlg-close" id="igPromptClose" aria-label="Close">×</button>
   <h2 class="ig-pdlg-h2">Generation prompt</h2>
   <pre class="ig-pdlg-pre">Near-white technical zine aesthetic with black ink, one strong red accent (#cc0000), sparse 2005 web sensibility, philosophical but legible. Create a polished wide infographic visual for &quot;Being a Xen hypervisor&quot; about Life as a Xen hypervisor. Context: Treat the reader as a peer. Give a full Xen overview: hypervisor versus dom0, domU, driver and stub domains, PV/HVM/PVH execution, CPU scheduling, memory translation and ballooning, I/O split drivers, grant references and event channels, xenstore, PCI passthrough, IOMMU isolation, live migration, observability, security boundaries, and operational failure modes. Do not over-center grants or ballooning; present them as parts of the larger architecture.. Key points to visualize: Domain model and privilege boundaries; Boot modes and guest execution; CPU scheduling and vCPU topology; Memory ownership and translation; I/O paths and split drivers; Device assignment and DMA isolation; Live migration and state transfer; Operations, observability, and failure modes. Use concise labels only; avoid paragraphs and tiny text. Leave the detailed explanatory copy to the surrounding HTML page.</pre>
+  
 </dialog>
 
 <script>
@@ -310,11 +313,21 @@ dialog.ig-pdlg::backdrop { background: rgba(0,0,0,0.45); }
     lightbox.showModal();
   }
 
-  function closeLightbox() { lightbox.close(); }
+  function closeLightbox() {
+    lightbox.close();
+  }
 
   if (imgWrap) imgWrap.addEventListener('click', openLightbox);
-  if (lbClose) lbClose.addEventListener('click', function (e) { e.stopPropagation(); closeLightbox(); });
-  if (lbInner) lbInner.addEventListener('click', function (e) { if (e.target === lbInner) closeLightbox(); });
+
+  if (lbClose) lbClose.addEventListener('click', function (e) {
+    e.stopPropagation();
+    closeLightbox();
+  });
+
+  if (lbInner) lbInner.addEventListener('click', function (e) {
+    if (e.target === lbInner) closeLightbox();
+  });
+
   if (lightbox) {
     lightbox.addEventListener('wheel', function (e) {
       e.preventDefault();
@@ -323,10 +336,13 @@ dialog.ig-pdlg::backdrop { background: rgba(0,0,0,0.45); }
     }, { passive: false });
     lightbox.addEventListener('cancel', function () { scale = 1; });
   }
+
   if (promptBtn && promptDlg) {
     promptBtn.addEventListener('click', function () { promptDlg.showModal(); });
     promptClose.addEventListener('click', function () { promptDlg.close(); });
-    promptDlg.addEventListener('click', function (e) { if (e.target === promptDlg) promptDlg.close(); });
+    promptDlg.addEventListener('click', function (e) {
+      if (e.target === promptDlg) promptDlg.close();
+    });
   }
 }());
 </script>
