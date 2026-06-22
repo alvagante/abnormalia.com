@@ -174,20 +174,20 @@ export const model = {
 
         await writeManifest(args.outputDir, manifest);
 
-        // Build final list: versioned (oldest first) then root-level (newest)
+        // Build final list: root-level (current) first, then versioned (oldest first)
         const tracks: MusicTrack[] = [];
-        for (const { relPath, basename } of versionedMp3s) {
-          const meta = manifest[basename];
-          tracks.push({
-            filename: relPath,
-            title: meta?.title ?? titleFromFilename(basename),
-            ...(meta?.lyrics ? { lyrics: meta.lyrics } : {}),
-          });
-        }
         for (const basename of rootMp3s) {
           const meta = manifest[basename];
           tracks.push({
             filename: basename,
+            title: meta?.title ?? titleFromFilename(basename),
+            ...(meta?.lyrics ? { lyrics: meta.lyrics } : {}),
+          });
+        }
+        for (const { relPath, basename } of versionedMp3s) {
+          const meta = manifest[basename];
+          tracks.push({
+            filename: relPath,
             title: meta?.title ?? titleFromFilename(basename),
             ...(meta?.lyrics ? { lyrics: meta.lyrics } : {}),
           });
