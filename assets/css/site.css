@@ -103,7 +103,7 @@ a:hover {
 }
 
 .kicker {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.15rem;
   color: var(--accent-dark);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   font-size: 0.8rem;

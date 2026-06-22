@@ -651,4 +651,28 @@ jobs:
         condition:
           type: succeeded
     weight: 0
+  - name: register
+    description: Update _data/ixens.yml with the generated title and date for each Ixen so the home page and archive reflect the new content.
+    steps:
+      - name: register-ixens
+        description: Upsert all Ixens from this run into the Jekyll data registry in a single atomic write.
+        task:
+          type: model_method
+          modelType: "@alvagante/ixen-registry"
+          modelName: ixen-registry
+          methodName: sync
+          inputs:
+            registryPath: _data/ixens.yml
+            slugs: ${{ inputs.ixens.map(ixen, ixen.slug) }}
+            titles: ${{ inputs.ixens.map(ixen, data.latest("ixen-" + ixen.slug, "page").attributes.title) }}
+            dates: ${{ inputs.ixens.map(ixen, data.latest("ixen-" + ixen.slug, "page").attributes.generatedAt) }}
+            descriptions: ${{ inputs.ixens.map(ixen, ixen.description) }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: page
+        condition:
+          type: succeeded
+    weight: 0
 version: 1
