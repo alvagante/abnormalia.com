@@ -1,0 +1,201 @@
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: intermediate
+outputLength: long
+ixenModel: claude-opus-4-8
+ixenPersona: abnormalia
+credits: alvagante
+versionOutput: true
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+      <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+    </a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: |-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+cheatsheetVerbosity: standard
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+imageStyle: ixen-dark
+imageBackground: opaque
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: auto
+musicGenre: electronic, post-punk, piano
+musicMood: nostalgic, irregular, contemplative
+musicModel: suno-ttapi
+musicInstrumental: false
+sunoVersion: chirp-v4-5
+infographicStyle: ixen
+infographicModel: gpt-image-2
+includeBeginnerGuide: true
+ixens:
+  - slug: abnormalia
+    title: Life as Abnormalia
+    description: >-
+      Abnormalia narrates its own mutations: Amiga diskmag, handmade web,
+      social ghost, I-Xen ancestor, and generated ixens.
+    topic: Life as Abnormalia
+    narrator: Abnormalia
+    heroPrompt: >-
+      Abnormalia as a layered media fossil: an Amiga floppy diskmag, postal
+      envelopes, a 2004 handmade web table layout, abnominio issue portals,
+      the 2005 I-Xen hypertext, a login-gated social trace, and a modern swamp
+      CLI pipeline generating text, images, music, and static HTML, precise
+      ixen-dark technical zine aesthetic with black ink, red accents, and
+      archival fragments.
+    concepts:
+      - name: Amiga diskmag origin
+        imageFilename: concept-1.png
+        cardFilename: concept-1-card.png
+        imagePrompt: >-
+          Early 1990s Amiga diskmag scene shown as floppy disks, postal mail,
+          pixel typography, Italian demoscene notes, and a small group called
+          Abnormalia assembling issue one, archival ixen-dark illustration.
+        details: >-
+          Cover the earliest known form: Abnormalia as the group dedicated to
+          releasing the Amiga diskmagazine Abnormalia. Use the Demozoo indexed
+          facts carefully: Abnormalia was tied to Italian writer Macno after
+          Grace and Scene Lyrics, and Abnormalia 1 is listed as a diskmag
+          released in December 1992. Do not invent article titles, staff lists,
+          or issue contents beyond the evidence.
+      - name: Scene distribution and BBS traces
+        imageFilename: concept-2.png
+        cardFilename: concept-2-card.png
+        imagePrompt: >-
+          Abnormalia moving through demoscene distribution channels: Amiga
+          disks, BBS listings, upload queues, ANSI-like terminal fragments, and
+          BBStro-era promotional traces, crisp archival systems diagram.
+        details: >-
+          Explain the scene-era distribution mood: small groups, magazines,
+          BBSes, intros, aliases, and partial indexes as the archive that
+          remains. Mention the indexed Demozoo search trace for Abnormalia BBS
+          and BBStro promotion in 1996 only as a trace, not as a complete
+          history.
+      - name: Handmade abnormalia.com
+        imageFilename: concept-3.png
+        cardFilename: concept-3-card.png
+        imagePrompt: >-
+          The archived 2004 abnormalia.com homepage rendered as handmade web
+          archaeology: table layout, small Verdana text, image map energy,
+          newsletter form, abnominio links 0 through 5 and 900, strange Italian
+          microcopy, ixen-dark web fossil.
+        details: >-
+          Cover the May 21, 2004 Wayback capture of abnormalia.com: title
+          "Abnormalia. Un nome. Pochi fatti."; description "Luogo anomalo di
+          anomini in rete. Notizie, racconti, storie, satira, grafica,
+          praticamente di tutto. Per niente."; links to abnominio 0, 1, 2, 3,
+          4, 5, and 900; a small mailing-list form asking for "Una tua e-mail"
+          to "@bnolistarti". Preserve the handmade, irregular, anti-polished
+          web feeling.
+      - name: Abnominio language
+        imageFilename: concept-4.png
+        cardFilename: concept-4-card.png
+        imagePrompt: >-
+          Abnormalia's mutated vocabulary as typographic specimens: abnominio,
+          anomini, abnomini, abmorto, regolaria varia, Buco Nero, Sinaptium,
+          Pasticche Net, handmade Italian web text fragments pinned like
+          insects in an archive.
+        details: >-
+          Treat the words as part of the project identity: anomini, abnomini,
+          abnominio, abmorto, regolaria varia, Buco Nero, Sinaptium, Pasticche
+          Net, "javate del secolo scorso", and "il passato rimane". Explain
+          how the site made a language for itself rather than merely publishing
+          content.
+      - name: I-Xen as ancestor
+        imageFilename: concept-5.png
+        cardFilename: concept-5-card.png
+        imagePrompt: >-
+          I-Xen 2005 shown as a hybrid tutorial and interactive short story:
+          Xen domains, Suse 9.3, old XHTML layers, OpenSkills logo, Tatlin
+          graphics, and a half-born fun project becoming a future ixen ancestor.
+        details: >-
+          Cover the local i-xen page as a 2005 OpenSkills tutorial and "I,
+          System" short story for Xen on Suse 9.3, text by al and graphics by
+          tatlin. Emphasize its self-description: version 0.1, graphical
+          madness, first chapter of an interactive story for Xen configuration
+          and understanding, or "just another half born fun project." Tie it to
+          today's Ixens as an ancestor in form, not as the same technology.
+      - name: Social apparition
+        imageFilename: concept-6.png
+        cardFilename: concept-6-card.png
+        imagePrompt: >-
+          A later social-media apparition of Abnormalia: a Facebook vanity URL
+          as a locked door, login prompt, absent posts, a handle named
+          abnominio, and the archive logic of what cannot be publicly fetched.
+        details: >-
+          Cover the later social trace at facebook.com/abnominio as a public
+          pointer rather than a content source: current anonymous access only
+          exposes a login/not-found shell. Narrate it as sporadic, evasive,
+          mostly absent, matching the existing about page. Do not fabricate
+          posts, dates, followers, or activity.
+      - name: Current static site and pipeline
+        imageFilename: concept-7.png
+        cardFilename: concept-7-card.png
+        imagePrompt: >-
+          The current abnormalia.com as a static Jekyll site and swamp pipeline:
+          YAML inputs, model methods, Claude prose, OpenAI images, Suno music,
+          generated standalone ixen HTML, GitHub Pages, Cloudflare, and an
+          archive page listing sealed worlds.
+        details: >-
+          Cover the present repository shape: abnormalia.com is a Jekyll static
+          site on GitHub Pages behind Cloudflare. Ixens are standalone generated
+          HTML pages under ixen/<slug>/, registered by _data/ixens.yml, produced
+          by the generate-ixens swamp workflow from YAML inputs, with prose by
+          Claude, images by OpenAI, music by Suno, and assembly by swamp
+          extensions.
+      - name: Refusal to settle
+        imageFilename: concept-8.png
+        cardFilename: concept-8-card.png
+        imagePrompt: >-
+          Abnormalia's continuity across incompatible media: floppy, BBS,
+          handmade HTML, social absence, hypertext tutorial, generated ixen,
+          all connected by a red thread labelled refusal to settle, restrained
+          technical zine illustration.
+        details: >-
+          Synthesize the throughline from the existing about page: several
+          incarnations, each stranger than the one before; not a single medium
+          but a refusal to settle. Include the site's self-aware stance toward
+          generated media: "AI slop with style. Own the slop. Transcend it - or
+          don't." Keep the tone sharp, peer-level, unsentimental, and abnormal.
+    details: >-
+      Treat the reader as a peer. Write a first-person about page narrated by
+      Abnormalia itself, not by a marketing site. The voice is fragmented,
+      elliptical, handmade, and suspicious of continuity. It should feel like
+      recovered marginalia, not a polished institutional history: short
+      paragraphs, abrupt cuts, fragments that are allowed to stand alone,
+      occasional one-line whispers, and sudden precise facts embedded inside
+      strange prose. Keep the Italian web-era mutations as living vocabulary:
+      abnominio, anomini, abnomini, abmorto, regolaria varia. Do not overexplain
+      them. Let them remain partly opaque.
+      Use an anti-smooth rhythm: sentence shards, lists that do not quite become
+      lists, old-web dry humour, technical precision, self-mockery, and refusal.
+      Avoid corporate origin-story language, sentimental nostalgia, generic
+      "creative community" phrasing, and tidy hero narratives. The texture is
+      diskmag + BBS + handmade table layout + abandoned social handle + CLI
+      pipeline. Strange, but not random. Literate, but not well-behaved.
+      The story should move through these evidenced layers: an early 1990s Amiga
+      diskmagazine/group in the Italian demoscene; the indexed Demozoo fact that
+      Abnormalia was dedicated to releasing the Amiga diskmagazine Abnormalia,
+      connected to Italian writer Macno after Grace and Scene Lyrics, with
+      Abnormalia 1 listed as a December 1992 diskmag; partial BBS/BBStro traces
+      from 1996; the archived abnormalia.com homepage captured on May 21, 2004,
+      titled "Abnormalia. Un nome. Pochi fatti." and described as "Luogo anomalo
+      di anomini in rete. Notizie, racconti, storie, satira, grafica,
+      praticamente di tutto. Per niente."; the abnominio 0, 1, 2, 3, 4, 5, and
+      900 portals with their mutated language; the 2005 I-Xen page, a Xen on
+      Suse 9.3 tutorial and "I, System" short story with text by al and graphics
+      by tatlin; the later social trace at facebook.com/abnominio, which should
+      be treated only as a login-gated or publicly inaccessible social
+      apparition; and the current static Jekyll site that hosts generated Ixens
+      made by a swamp workflow.
+      Do not invent precise facts not present in the sources. Make the prose
+      archival, weird, technical, and self-aware: from floppy to handmade web to
+      social absence to generated mixed-media pages. Use the existing site
+      stance: several incarnations, "then nothing", "the work is the attempt",
+      and "AI slop with style. Own the slop. Transcend it - or don't."
+      Sources consulted for the generation brief: https://demozoo.org/groups/64257/,
+      https://web.archive.org/web/20040521224525/http://www.abnormalia.com/,
+      https://www.facebook.com/abnominio, local about.html, and local i-xen/.
