@@ -1,7 +1,7 @@
 {
   "@alvagante/content-ixen": {
-    "version": "2026.06.22.1",
-    "pulledAt": "2026-06-22T08:36:21.056Z",
+    "version": "2026.06.21.3",
+    "pulledAt": "2026-06-21T19:52:03.070Z",
     "files": [
       ".swamp/pulled-extensions/@alvagante/content-ixen/models/extensions/models/content_ixen.ts",
       ".swamp/bundles/af59c063/extensions/models/content_ixen.js",
@@ -9,8 +9,8 @@
       ".swamp/pulled-extensions/@alvagante/content-ixen/files/LICENSE.txt",
       ".swamp/pulled-extensions/@alvagante/content-ixen/manifest.yaml"
     ],
-    "checksum": "a0c38fe5e8d5f1080ccb973754f499f2656d6ad95ff4692d979ffd9897c76cf5",
-    "filesChecksum": "84091e73b6fc0525c46bdd78f3ade08e5d563df46127abcb1fe09012cb3d6a19",
+    "checksum": "74536b45b8c35237c9eea1ff107379d490aa77232c3419497f72275f42450dc9",
+    "filesChecksum": "be3dfdf44ec9091729f41de3d76b7b5d2c4c661df472cafdb36b3c68b02ccdc6",
     "serverUrl": "https://swamp-club.com"
   },
   "@alvagante/content-music": {
