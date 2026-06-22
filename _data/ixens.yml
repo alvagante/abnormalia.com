@@ -1,12 +1,12 @@
 - slug: xen-hypervisor
-  title: I am the space below
-  date: 2026-06-19
+  title: Below the Operating System
+  date: '2026-06-22'
   description: The host narrates Xen's domain model, CPU, memory, I/O, device isolation, migration, and failure boundaries.
 - slug: puppet-catalog
-  title: Desired State, Compiled
-  date: 2026-06-19
+  title: Desired State
+  date: '2026-06-22'
   description: The catalog speaks about resources, edges, facts, and the quiet violence of convergence.
 - slug: git-repository
-  title: I am a Repository
-  date: 2026-06-19
+  title: Reachable Until I'm Not
+  date: '2026-06-22'
   description: A repository narrates objects, refs, the index, merges, rebases, remotes, maintenance, and recovery.

@@ -45,6 +45,7 @@ ixens:
     concepts:
       - name: Domain model and privilege boundaries
         imageFilename: concept-1.png
+        cardFilename: concept-1-card.png
         imagePrompt: >-
           Xen domain architecture rendered as a precise white-paper systems
           diagram, hypervisor layer below dom0, driver domains, stub domains,
@@ -57,6 +58,7 @@ ixens:
           management plane and a risk concentration.
       - name: Boot modes and guest execution
         imageFilename: concept-2.png
+        cardFilename: concept-2-card.png
         imagePrompt: >-
           Xen PV, HVM, and PVH guest execution modes shown as stacked CPU
           privilege transitions, hypercalls, emulated devices, paravirtual
@@ -68,6 +70,7 @@ ixens:
           between hardware compatibility, performance, and attack surface.
       - name: CPU scheduling and vCPU topology
         imageFilename: concept-3.png
+        cardFilename: concept-3-card.png
         imagePrompt: >-
           Xen CPU scheduling visualized as pCPUs, vCPUs, run queues, NUMA nodes,
           affinity masks, credit accounting, steal time, and latency-sensitive
@@ -78,6 +81,7 @@ ixens:
           and how capacity planning differs from guest-visible entitlement.
       - name: Memory ownership and translation
         imageFilename: concept-4.png
+        cardFilename: concept-4-card.png
         imagePrompt: >-
           Xen memory management drawn as machine frames, guest physical frames,
           page tables, shadow or nested translation, balloon drivers, and
@@ -89,6 +93,7 @@ ixens:
           sharing mechanism rather than the whole story.
       - name: I/O paths and split drivers
         imageFilename: concept-5.png
+        cardFilename: concept-5-card.png
         imagePrompt: >-
           Xen split-driver I/O path shown from frontend drivers through shared
           rings, event channels, backend drivers in dom0 or a driver domain, and
@@ -100,6 +105,7 @@ ixens:
           mismatched device state.
       - name: Device assignment and DMA isolation
         imageFilename: concept-6.png
+        cardFilename: concept-6-card.png
         imagePrompt: >-
           Xen PCI passthrough and DMA isolation rendered with IOMMU tables,
           interrupt remapping, SR-IOV virtual functions, assigned devices, and
@@ -110,6 +116,7 @@ ixens:
           performance isolation becomes a hardware trust problem.
       - name: Live migration and state transfer
         imageFilename: concept-7.png
+        cardFilename: concept-7-card.png
         imagePrompt: >-
           Xen live migration as a staged state-transfer diagram, guest memory
           pages copied and dirtied, vCPU state paused briefly, storage and
@@ -121,6 +128,7 @@ ixens:
           coupling between guest, host, and fabric.
       - name: Operations, observability, and failure modes
         imageFilename: concept-8.png
+        cardFilename: concept-8-card.png
         imagePrompt: >-
           Xen operational diagnostics shown as xl and xenstore views, dom0 logs,
           hypervisor traces, stalled rings, IRQ storms, noisy guests, and

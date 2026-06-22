@@ -45,6 +45,7 @@ ixens:
     concepts:
       - name: Object model and content identity
         imageFilename: concept-1.png
+        cardFilename: concept-1-card.png
         imagePrompt: >-
           Git blobs, trees, commits, tags, object IDs, loose objects, packfiles,
           and delta chains displayed as a forensic storage cross-section,
@@ -57,6 +58,7 @@ ixens:
           versions.
       - name: Working tree, index, and commit construction
         imageFilename: concept-2.png
+        cardFilename: concept-2-card.png
         imagePrompt: >-
           Git working tree, index, and commit creation rendered as three
           synchronized filesystem layers with staged hunks, pathspec filters,
@@ -68,6 +70,7 @@ ixens:
           index is both a staging area and a merge-resolution data structure.
       - name: Refs, HEAD, reflogs, and revision language
         imageFilename: concept-3.png
+        cardFilename: concept-3-card.png
         imagePrompt: >-
           Clean technical diagram of Git references as movable branch and tag
           labels over a commit DAG, with symbolic refs, packed refs, namespaces,
@@ -80,6 +83,7 @@ ixens:
           difference between moving a name and changing the objects it names.
       - name: Branching, merging, and conflict logic
         imageFilename: concept-4.png
+        cardFilename: concept-4-card.png
         imagePrompt: >-
           Git branch and merge logic shown as a commit DAG with merge bases,
           recursive and ort merge machinery, fast-forward updates, conflict
@@ -93,6 +97,7 @@ ixens:
           sides' ancestry.
       - name: Rebases, cherry-picks, and history rewriting
         imageFilename: concept-5.png
+        cardFilename: concept-5-card.png
         imagePrompt: >-
           Git rebase and cherry-pick rendered as commits being replayed onto a
           new base, old objects becoming unreachable but visible in reflogs,
@@ -105,6 +110,7 @@ ixens:
           of replaying patches into new commits instead of editing old objects.
       - name: Remotes, transport, and synchronization
         imageFilename: concept-6.png
+        cardFilename: concept-6-card.png
         imagePrompt: >-
           Git remotes shown as repositories exchanging object graphs through
           fetch, push, pull, refspecs, remote-tracking branches, shallow and
@@ -118,6 +124,7 @@ ixens:
           history.
       - name: Collaboration workflows and release motion
         imageFilename: concept-7.png
+        cardFilename: concept-7-card.png
         imagePrompt: >-
           Git collaboration workflows drawn as parallel lanes for trunk-based
           development, feature branches, protected branches, stacked changes,
@@ -131,6 +138,7 @@ ixens:
           when linear history helps or harms operations.
       - name: Maintenance, recovery, and advanced repository shapes
         imageFilename: concept-8.png
+        cardFilename: concept-8-card.png
         imagePrompt: >-
           Git repository maintenance and recovery shown with gc, maintenance,
           fsck, prune, repack, commit-graph files, multi-pack indexes, worktrees,

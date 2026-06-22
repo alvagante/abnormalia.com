@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delayed Forgetting</title>
+<style>
+:root { --red: #c00; --ink: #111; --dim: #555; }
+* { box-sizing: border-box; }
+body {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--ink);
+  background: #fff; max-width: 920px; margin: 0 auto;
+  padding: 1.5rem 1.5rem 6rem;
+}
+header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
+header h1 {
+  font-size: 3.2rem; font-weight: 900; letter-spacing: -0.04em;
+  margin: 0; line-height: 1.05; text-transform: uppercase;
+}
+header .credits { text-align: right; font-size: 0.75rem; color: var(--red); font-weight: bold; white-space: nowrap; padding-top: 0.4rem; }
+header .credits a { color: var(--red); text-decoration: underline dotted; }
+header .credits .byline { color: var(--dim); font-weight: normal; display: block; margin-top: 0.2rem; }
+.version-menu { margin-top: 0.55rem; font-size: 0.72rem; color: var(--dim); }
+.version-menu label { display: block; margin-bottom: 0.2rem; }
+.version-menu select {
+  font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
+  max-width: 13rem; color: var(--ink); background: #fff;
+  border: 1px solid #ccc; padding: 0.2rem 0.3rem;
+}
+.ixen-quick-nav {
+  display: flex; justify-content: flex-end; gap: 0.55rem;
+  margin-top: 0.45rem;
+}
+.ixen-quick-nav .cmd { font-size: 0.72rem; }
+p { margin: 0.45em 0; }
+p strong { color: #000; }
+.binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
+.whisper {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--dim);
+}
+.term {
+  font-family: "Courier New", Courier, monospace; font-size: 0.95rem;
+  margin: 1.3em 0 0.25em; color: var(--dim);
+}
+.term .cmd { color: var(--red); font-weight: bold; }
+button.cmd, a.cmd {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: var(--red); font-weight: bold;
+  text-decoration: underline dotted;
+}
+a.cmd { display: inline; }
+pre { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; color: #333; overflow-x: auto; margin: 0.3em 0 1em; }
+pre.output { padding-left: 1.5em; }
+.popup {
+  position: fixed; top: 8vh; left: 50%; transform: translateX(-50%);
+  width: min(700px, 92vw); max-height: 80vh; overflow: auto;
+  background: #fff; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35); z-index: 60; padding: 0 1rem 1rem;
+}
+.popup-bar { display: flex; justify-content: flex-end; padding: 0.5rem 0; position: sticky; top: 0; background: #fff; }
+.popup-close {
+  background: #2b1d0e; color: #f0e0c0; border: none; cursor: pointer;
+  font-size: 0.72rem; padding: 0.3rem 0.8rem;
+}
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 50; }
+figure.zoom { margin: 1.5rem 0; }
+figure.zoom img { width: 100%; cursor: zoom-in; display: block; }
+figure.zoom.float-left { float: left; width: min(340px, 45%); margin: 0.3rem 1.5rem 0.8rem 0; }
+figure.zoom.float-right { float: right; width: min(340px, 45%); margin: 0.3rem 0 0.8rem 1.5rem; }
+figure.zoom.small.float-left, figure.zoom.small.float-right { width: min(220px, 35%); }
+figure.zoom.large.float-left, figure.zoom.large.float-right { width: min(520px, 60%); }
+figure.zoom.large:not(.float-left):not(.float-right) { clear: both; }
+figure.ixen-art { clear: both; margin: 2.5rem 0; }
+figure.ixen-art svg { max-width: 100%; height: auto; display: block; background: #fafafa; border: 1px solid #e8e8e8; }
+figcaption, .media-caption { font-size: 0.75rem; color: var(--dim); margin-top: 0.3rem; }
+.media { clear: both; margin: 2rem 0; }
+.media.video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.media.pdf iframe { width: 100%; height: 70vh; border: 1px solid #ccc; }
+.media.audio audio { width: 100%; }
+blockquote.ixen-pull {
+  border-left: 3px solid var(--red); margin: 2rem 0 2rem 1.5rem;
+  padding: 0.1rem 0 0.1rem 1.2rem; color: var(--dim);
+  font-style: italic; font-size: 1.05rem;
+}
+section.chapter { clear: both; margin: 3rem 0; }
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.lightbox img { max-width: 92vw; max-height: 92vh; }
+.ixen-extra-header {
+  border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+  margin: 0 0 1.6rem; padding: 0.8rem 0;
+}
+.ixen-extra-footer {
+  clear: both; border-top: 1px solid #ddd; margin: 3rem 0 0;
+  padding-top: 0.9rem; font-size: 0.85rem; color: var(--dim);
+}
+.ixen-cheatsheet-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-infographic-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-cheatsheet-section h2, .ixen-infographic-section h2 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.86rem;
+  letter-spacing: 0.08em; color: var(--red); text-transform: uppercase;
+  margin: 0 0 0.7rem;
+}
+.ixen-cheatsheet-section iframe, .ixen-infographic-section iframe {
+  width: 100%; height: 82vh; border: 1px solid #ccc; display: block;
+}
+.ixen-infographic-frame + .ixen-infographic-frame { margin-top: 1.4rem; }
+.ixen-infographic-frame h3 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.78rem;
+  color: var(--dim); font-weight: normal; margin: 0 0 0.45rem;
+}
+figure.ixen-infographic-img { margin: 0; }
+figure.ixen-infographic-img img { width: 100%; cursor: zoom-in; display: block; }
+.ixen-infographic-prompt-text { white-space: pre-wrap; font-size: 0.85rem; }
+.ixen-infographic-section h2 button.cmd { font-size: 0.75rem; vertical-align: middle; }
+.concept { clear: both; margin: 2.8rem 0; }
+.concept-tools { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.7rem 0 1rem; }
+.concept-btn { font-size: 0.8rem; }
+.concept-slide h2, .concept-note h2 { margin: 0.5rem 0 0.75rem; }
+.concept-slide ul { margin: 0.4rem 0 1rem 1.2rem; padding: 0; }
+.concept-slide li { margin: 0.35rem 0; }
+.concept-note p { margin: 0.75rem 0; }
+.concept-index-popup h2 { margin: 0.5rem 0 1rem; }
+.concept-index-item {
+  border-top: 1px solid #ddd;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+.concept-index-item:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+.ixen-provenance-footer {
+  clear: both; margin: 3rem 0 0; padding-top: 0.7rem;
+  border-top: 1px solid #eee;
+  font-size: 0.72rem; color: var(--dim); text-align: center;
+}
+.ixen-provenance-footer a { color: var(--dim); text-decoration: underline dotted; }
+.ixen-beginner-bar { margin-top: 0.45rem; }
+.beginner-guide h2 { margin: 0.5rem 0 0.75rem; }
+.beginner-guide p { margin: 0.75rem 0; }
+.beginner-guide ul { margin: 0.5rem 0 0.75rem 1.2rem; padding: 0; }
+.beginner-guide li { margin: 0.3rem 0; }
+
+/* autoplay-blocked overlay */
+#ixen-autoplay-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+  display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ixen-play-prompt {
+  font-family: "Courier New", Courier, monospace;
+  color: #eee; text-align: center;
+  border: 1px solid #555;
+  padding: 1.5rem 3rem;
+  letter-spacing: 0.06em;
+}
+.ixen-play-icon { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+.ixen-play-label { font-size: 0.82rem; color: #888; }
+/* fixed bottom player */
+#ixen-player {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #0e0e0e;
+  border-top: 2px solid #c00;
+  z-index: 80;
+  padding: 0.45rem 1.2rem 0.35rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; color: #ccc;
+}
+#ixen-player-row {
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.ixen-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 1rem;
+  padding: 0.15rem 0.3rem; line-height: 1; flex-shrink: 0;
+}
+.ixen-pbtn:hover { color: #c00; }
+#ixen-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c00; font-weight: bold; letter-spacing: 0.02em;
+}
+#ixen-ptime { color: #444; white-space: nowrap; font-size: 0.72rem; }
+#ixen-vol { width: 55px; accent-color: #c00; cursor: pointer; flex-shrink: 0; }
+#ixen-pbar { height: 2px; background: #222; cursor: pointer; margin-top: 0.35rem; }
+#ixen-pfill { height: 100%; background: #c00; width: 0%; pointer-events: none; }
+/* lyrics panel */
+#ixen-lyrics-panel {
+  position: fixed; bottom: 52px; left: 50%; transform: translateX(-50%);
+  width: min(640px, 90vw); max-height: 45vh; overflow-y: auto;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.ixen-lyrics-head {
+  font-family: "Courier New", Courier, monospace;
+  color: #c00; font-weight: bold;
+  font-size: 0.78rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 0.7rem;
+}
+#ixen-lyrics-panel pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.82rem; line-height: 1.85;
+  color: #bbb; white-space: pre-wrap; margin: 0;
+}
+/* tracklist panel */
+#ixen-tracklist-panel {
+  position: fixed; bottom: 52px; right: 1.2rem;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 0.4rem; z-index: 81;
+  min-width: 200px; max-height: 60vh; overflow-y: auto;
+}
+.ixen-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; cursor: pointer;
+  padding: 0.35rem 0.5rem;
+}
+.ixen-track-item:hover { color: #eee; }
+.ixen-track-item.active { color: #c00; }
+</style>
+</head>
+<body>
+<!-- @alvagante/content-ixen -->
+
+<section class="ixen-extra-header">
+<nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+  <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+    <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+  </a>
+  <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+</nav>
+</section>
+<header>
+  <h1>Delayed Forgetting</h1>
+  <div class="credits"><span class="byline">By alvagante — 20260621-20:09</span>
+    <div class="version-menu">
+      <label for="ixen-version-select">versions</label>
+      <select id="ixen-version-select">
+        <option value="current">Current</option>
+        <option value="1">Version 1</option><option value="2">Version 2</option><option value="3">Version 3</option>
+      </select>
+    </div>
+    <div class="ixen-quick-nav">
+      <a class="cmd" href="#ixen-cheatsheet">Cheatsheet</a>
+      <a class="cmd" href="#ixen-infographic">Infographic</a>
+      <button class="cmd popup-trigger" data-popup="ixen-all-slides">Slides</button>
+      <button class="cmd popup-trigger" data-popup="ixen-all-notes">Notes</button>
+    </div></div>
+</header>
+<main>
+<p class="binary">01001000 01000101 01000001 01000100</p>
+
+<p>That word is where I keep my finger. Everything else I am hangs below it, reachable or not.</p>
+
+<p>I am not your files. I am what your files <strong>hash</strong> to.</p>
+
+<p class="whisper">a name is a rumor. a hash is a fact.</p>
+
+<section class="chapter">
+
+<figure class="zoom float-left large"><img src="./concept-1.png" alt="Git blobs, trees, commits, tags, object IDs, loose objects, packfiles, and delta chains displayed as a forensic storage cross-section, meticulous ixen-light technical illustration."><figcaption>A cross-section of everything I keep.</figcaption></figure>
+
+<p>You think you saved a file.</p>
+
+<p>What happened: I read its bytes, prepended a type header, ran it through SHA-1, and stored the result under its own digest. Change one byte and you have a different object with a different name. I cannot lie about content. The address <em>is</em> the content.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">printf 'hello\n' | git hash-object --stdin</span></div>
+<pre class="output">ce013625030ba8dba906f756967f9e9ca394464a</pre>
+
+<p>Four kinds of object. That is my whole vocabulary.</p>
+
+<p>Blobs hold bytes. Trees hold names pointing at blobs and other trees. Commits point at one tree and at their parents. Tags point, with a signature, at whatever you wanted to canonize.</p>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="c1-cat">git cat-file -p HEAD</button></div>
+<aside class="popup" id="c1-cat" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+parent 6f1a3c9e0b2d4f7a8c1e5b9d3a7f0c2e4d6b8a1f
+author you &lt;you@dev&gt; 1718900000 +0000
+committer you &lt;you@dev&gt; 1718900000 +0000
+
+initial import
+
+# a commit is just text. you could write it by hand.
+# git commit-tree does exactly that, underneath.</pre>
+</aside>
+
+<p>A commit is a snapshot, not a diff. I store whole trees and let delta compression sort out the redundancy <em>later</em>, when I pack. Loose objects first — one zlib-deflated file each, sprawling under <code>.git/objects/ab/cdef…</code>. Then a packfile collapses them into delta chains against similar neighbors, and a single object can become a few bytes plus a pointer to its base.</p>
+
+<blockquote class="ixen-pull">Snapshots are how I think. Deltas are how I sleep.</blockquote>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c1-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Object Model</h2>
+  <ul>
+    <li>Blob = bytes. Tree = directory. Commit = snapshot + parents. Tag = annotated pointer.</li>
+    <li>OID = hash of (type + size + content).</li>
+    <li>Loose → packed; deltas reconstruct on read.</li>
+    <li>Reachability from refs decides what survives.</li>
+    <li>Alternates borrow objects from another store.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c1-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>What the object database actually is</h2>
+  <p>Git stores all history in a content-addressed object database. Each object's ID is the hash of its type header plus its content, so identical content always produces one object. There are four object types: blobs (file contents), trees (directory listings mapping names to blobs and subtrees), commits (a single tree plus zero or more parent commits and metadata), and annotated tags.</p>
+  <p>New objects are written individually as zlib-compressed loose files under <code>.git/objects</code>. Periodically Git consolidates them into packfiles, where objects can be stored as deltas against similar objects to save space; reads transparently reconstruct the full object. An object survives garbage collection only if it is reachable by following pointers from a ref. The <code>alternates</code> mechanism lets one repository read objects from another store without copying them.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-2.png" alt="Git working tree, index, and commit creation rendered as three synchronized filesystem layers with staged hunks, pathspec filters, stat cache entries, and tree writes, crisp ixen-light systems art."><figcaption>Three layers, one truth deferred.</figcaption></figure>
+
+<p>I keep three versions of you at once.</p>
+
+<p>The working tree — what you can see and break. The index — the staging area, a flat binary list of paths and the blob OIDs you have promised to commit. And HEAD — the last thing you actually meant.</p>
+
+<figure class="ixen-art">
+  <svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg">
+    <rect x="20" y="40" width="120" height="120" fill="none" stroke="#888" stroke-width="2"/>
+    <rect x="180" y="40" width="120" height="120" fill="none" stroke="#c00" stroke-width="2"/>
+    <rect x="340" y="40" width="120" height="120" fill="none" stroke="#888" stroke-width="2"/>
+    <text x="80" y="30" text-anchor="middle" font-size="13" fill="#ddd">working tree</text>
+    <text x="240" y="30" text-anchor="middle" font-size="13" fill="#c00">index</text>
+    <text x="400" y="30" text-anchor="middle" font-size="13" fill="#ddd">HEAD</text>
+    <line x1="140" y1="80" x2="180" y2="80" stroke="#c00" stroke-width="2" marker-end="url(#a)"/>
+    <text x="160" y="72" text-anchor="middle" font-size="10" fill="#aaa">add</text>
+    <line x1="300" y1="80" x2="340" y2="80" stroke="#c00" stroke-width="2" marker-end="url(#a)"/>
+    <text x="320" y="72" text-anchor="middle" font-size="10" fill="#aaa">commit</text>
+    <line x1="340" y1="130" x2="300" y2="130" stroke="#888" stroke-width="2" marker-end="url(#a)"/>
+    <text x="320" y="148" text-anchor="middle" font-size="10" fill="#aaa">reset</text>
+    <line x1="180" y1="130" x2="140" y2="130" stroke="#888" stroke-width="2" marker-end="url(#a)"/>
+    <text x="160" y="148" text-anchor="middle" font-size="10" fill="#aaa">restore</text>
+    <defs>
+      <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#c00"/>
+      </marker>
+    </defs>
+  </svg>
+  <figcaption>add moves right toward intent. reset and restore move left toward forgiveness.</figcaption>
+</figure>
+
+<p>When you stage a hunk in patch mode, I do not save your file. I write a new blob from the partial content, drop its OID into the index, and update the stat cache so I can skip re-reading what hasn't changed.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">git status -s</span></div>
+<pre class="output">MM src/core.c
+A  src/new.c
+?? scratch.log</pre>
+
+<p>Two columns. Left is index-versus-HEAD. Right is worktree-versus-index. The same file can be half-promised and half-dirty, and I will tell you so without judgment.</p>
+
+<p><code>intent-to-add</code> is my favorite small lie: a path registered with no content yet, so <code>diff</code> will show it but <code>commit</code> won't ship it. <code>.gitignore</code> and <code>.gitattributes</code> are the rules I apply before I ever look — what to never track, what to filter through CRLF or clean smudge, what is binary and beyond diffing.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">git write-tree</span></div>
+<pre class="output">d8329fc1cc938780ffdd9f94e0d364e0ea74f579</pre>
+
+<p>That is the index, frozen into a tree object, ready to become a commit. The porcelain hides this. The plumbing admits it.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c2-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Three Trees</h2>
+  <ul>
+    <li>working tree ↔ index ↔ HEAD.</li>
+    <li><code>add</code> writes blobs + updates index entries.</li>
+    <li><code>restore</code> pulls from index or HEAD; <code>reset</code> moves the boundary.</li>
+    <li>pathspecs scope; attributes filter; ignores exclude.</li>
+    <li>index doubles as merge state (stages 1–3).</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c2-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>How the index works</h2>
+  <p>Git tracks three states: the working tree (files on disk), the index (a binary file listing paths, modes, and blob IDs to be committed, plus a stat cache for change detection), and HEAD (the most recent commit). <code>git add</code> writes blob objects from working-tree content and records their IDs in the index. <code>git commit</code> turns the index into a tree and writes a commit pointing to it.</p>
+  <p><code>git restore</code> copies content from the index or a commit into the working tree or index; <code>git reset</code> moves HEAD and optionally the index. Pathspecs limit which paths a command touches. <code>.gitattributes</code> controls per-path filtering and diff behavior; <code>.gitignore</code> excludes untracked files. During a merge the index holds multiple stages of the same path, making it the data structure where conflict resolution happens.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-3.png" alt="Clean technical diagram of Git references as movable branch and tag labels over a commit DAG, with symbolic refs, packed refs, namespaces, reflogs, revision ranges, and ancestry selectors, precise ixen-light systems illustration."><figcaption>Names are sticky notes on a graph that never moves.</figcaption></figure>
+
+<p>The commits never change. The names do.</p>
+
+<p>A branch is forty hex characters in a file. <code>main</code> is just <code>refs/heads/main</code> holding an OID. When you commit, I do not move history — I write a new commit and rewrite that one tiny file to point at it.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">cat .git/HEAD</span></div>
+<pre class="output">ref: refs/heads/main</pre>
+
+<p>HEAD is a <em>symbolic</em> ref — a pointer to a pointer. Detach it and HEAD names a commit directly; now you stand on the graph itself, branchless, and I quietly warn you that anything you build here is reachable only by memory.</p>
+
+<p class="whisper">my memory is the reflog.</p>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="c3-reflog">git reflog</button></div>
+<aside class="popup" id="c3-reflog" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>a3f9c1d HEAD@{0}: commit: tighten parser
+6f1a3c9 HEAD@{1}: reset: moving to HEAD~1
+8b2e0aa HEAD@{2}: commit: oops, ship it
+6f1a3c9 HEAD@{3}: checkout: moving from main to detached
+6f1a3c9 HEAD@{4}: pull: Fast-forward
+
+# every position HEAD ever held. local. private.
+# this is how I undo what you swore was lost.</pre>
+</aside>
+
+<p>I keep refs loose until there are too many, then I flatten them into <code>packed-refs</code> — one file, sorted, fast to scan. The plumbing never cares which form they're in.</p>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="c3-fer">git for-each-ref --format='%(refname) %(objectname:short)'</button></div>
+<aside class="popup" id="c3-fer" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>refs/heads/main          a3f9c1d
+refs/heads/wip           8b2e0aa
+refs/remotes/origin/main 6f1a3c9
+refs/tags/v1.0           c0ffee1
+
+# branches, remote-tracking refs, tags — all just refs,
+# living in namespaces under refs/.</pre>
+</aside>
+
+<p>And the revision language is how you point without copying OIDs by hand. <code>HEAD~2</code> walks first-parents. <code>main^2</code> takes the second parent. <code>A..B</code> means reachable from B but not A. <code>A...B</code> is the symmetric difference. <code>git rev-parse</code> resolves all of it down to the only thing I truly understand: a hash.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c3-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Refs &amp; Revisions</h2>
+  <ul>
+    <li>branch/tag = file under <code>refs/</code> holding an OID.</li>
+    <li>HEAD = symbolic ref; detached = direct OID.</li>
+    <li>loose refs → <code>packed-refs</code>.</li>
+    <li>reflog = local history of ref movement.</li>
+    <li><code>~ ^ .. ...</code> select commits and ranges.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c3-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>References and revision syntax</h2>
+  <p>A ref is a named pointer to an object ID, stored as a file under <code>.git/refs</code> or compacted into <code>packed-refs</code>. Branches live in <code>refs/heads</code>, tags in <code>refs/tags</code>, and remote-tracking refs in <code>refs/remotes</code>. HEAD is normally a symbolic ref pointing at the current branch; a detached HEAD points directly at a commit.</p>
+  <p>The reflog records every change to a ref's value locally, enabling recovery even after history rewrites. Revision syntax resolves names to commits: <code>~n</code> follows first parents, <code>^n</code> selects the nth parent, <code>A..B</code> is commits reachable from B but not A, and <code>A...B</code> is their symmetric difference. <code>git rev-parse</code> resolves any of these expressions to a concrete object ID.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-4.png" alt="Git branch and merge logic shown as a commit DAG with merge bases, recursive and ort merge machinery, fast-forward updates, conflict stages in the index, rerere memory, and signed merge commits, ixen-light systems illustration."><figcaption>A merge records topology. It refuses to forget either parent.</figcaption></figure>
+
+<p>To merge, I first find where you diverged.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">git merge-base main feature</span></div>
+<pre class="output">6f1a3c9e0b2d4f7a8c1e5b9d3a7f0c2e4d6b8a1f</pre>
+
+<p>That ancestor is the common point. If one side is a direct descendant of the other, there is nothing to combine — I just slide the ref forward. A <strong>fast-forward</strong>. No new commit, no merge, no story.</p>
+
+<p>Otherwise I build a real merge commit with two parents and let the <code>ort</code> strategy diff each side against the base. Where they touched different things, I take both. Where they touched the same lines, the index splits into stages: 1 is base, 2 is ours, 3 is theirs.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">git ls-files -u</span></div>
+<pre class="output">100644 6f1a3c9… 1 src/core.c
+100644 a3f9c1d… 2 src/core.c
+100644 8b2e0aa… 3 src/core.c</pre>
+
+<p>Three versions of one path, held in tension, until you choose. Resolve it once and <code>rerere</code> memorizes the resolution — so the next time the same conflict surfaces, I replay your decision without asking.</p>
+
+<blockquote class="ixen-pull">A merge does not pick a winner. It records that there were two truths and chose to keep both ancestries.</blockquote>
+
+<p><code>revert</code> writes a new commit that undoes an old one — history-safe. <code>reset</code> moves a name backward and pretends the rest never shipped — history-altering. Same direction, opposite honesty.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c4-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Merge Logic</h2>
+  <ul>
+    <li>merge-base = common ancestor.</li>
+    <li>fast-forward when one side descends the other.</li>
+    <li><code>ort</code> three-way merges base/ours/theirs.</li>
+    <li>conflicts = index stages 1/2/3.</li>
+    <li>rerere replays remembered resolutions.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c4-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>How merging works</h2>
+  <p>Git finds the merge base — the best common ancestor of the branches. If the target is already an ancestor of the source, Git performs a fast-forward, simply advancing the ref with no new commit. Otherwise it creates a merge commit with multiple parents, preserving both lines of history.</p>
+  <p>The default <code>ort</code> strategy performs a three-way merge: it compares each branch against the merge base and combines non-overlapping changes automatically. Overlapping changes become conflicts, represented in the index as stages 1 (base), 2 (ours), and 3 (theirs). The <code>rerere</code> feature records how you resolve a conflict and reapplies that resolution automatically if the same conflict recurs. <code>git revert</code> creates a new commit that reverses a prior one; <code>git reset</code> moves a branch ref backward without creating a commit.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-5.png" alt="Git rebase and cherry-pick rendered as commits being replayed onto a new base, old objects becoming unreachable but visible in reflogs, interactive todo lists, autosquash, fixup commits, and force-with-lease guards, crisp ixen-light technical artwork."><figcaption>Rebase doesn't move commits. It builds new ones that look like the old.</figcaption></figure>
+
+<p>Here is the thing nobody tells you about rebase: it never edits a commit. It can't. Commits are immutable.</p>
+
+<p>What it does is replay. Take each commit's diff, apply it onto a new base, write a <em>new</em> commit with a new OID and a new parent. The old ones don't die — they just stop being reachable from any branch, and drift toward the next garbage collection.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">git rebase -i HEAD~4</span></div>
+<pre class="output">pick 8b2e0aa parser: split lexer
+squash 1c4d7e0 fix typo
+fixup  9a0b2c1 fix typo again
+reword 2f3e1d8 add tests
+
+# this list is a program. each line is an instruction.
+# autosquash sorts fixup!/squash! commits to their targets.</pre>
+
+<p>The interactive todo is a tiny language. You reorder it, you collapse three commits into one clean story, and I obey line by line. <code>cherry-pick</code> is the same replay, applied to a single commit from somewhere else. <code>amend</code> is replay of just the tip.</p>
+
+<p>None of this is dangerous <em>locally</em>. The danger is the <strong>publication boundary</strong>. Once a commit is on a remote that others built upon, rewriting it forks reality.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">git push --force-with-lease origin main</span></div>
+
+<p>That flag is the only force I respect: it refuses unless the remote is still where I last saw it. Brutal honesty as a safety latch.</p>
+
+<p class="whisper">replace refs and notes attach without rewriting. signed commits prove who replayed.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c5-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Rewriting</h2>
+  <ul>
+    <li>rebase = replay diffs as new commits.</li>
+    <li>interactive: pick/squash/fixup/reword/drop.</li>
+    <li>autosquash targets <code>fixup!</code>/<code>squash!</code>.</li>
+    <li>old commits → unreachable, recoverable via reflog.</li>
+    <li><code>--force-with-lease</code> guards published refs.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c5-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>History rewriting</h2>
+  <p>Because commits are immutable, operations that "edit history" actually create new commits. Rebase replays each commit's changes onto a new base, producing new commits with new IDs; cherry-pick replays a single commit elsewhere; amend rewrites only the latest commit. Interactive rebase exposes a todo list where you can reorder, squash, fixup, reword, or drop commits, and autosquash automatically positions specially named fixup/squash commits.</p>
+  <p>The original commits become unreachable but remain recoverable through the reflog until expiry and garbage collection. Tools like git-filter-repo rewrite history in bulk. Rewriting published history diverges from collaborators' copies; <code>--force-with-lease</code> only overwrites a remote ref if it still matches your last known value. Replace refs and notes can attach data to commits without rewriting them, and commits can be cryptographically signed.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-6.png" alt="Git remotes shown as repositories exchanging object graphs through fetch, push, pull, refspecs, remote-tracking branches, shallow and partial clones, promisor objects, and negotiation bitmaps, precise ixen-light diagram."><figcaption>Transport moves objects. Integration is a separate verb.</figcaption></figure>
+
+<p>I am not alone, though I am content-addressed enough not to need anyone.</p>
+
+<p>When you fetch, two distinct things happen, and conflating them is the root of most confusion. First: transport. I negotiate with the remote — what do you have, what do I have, send the difference — and copy the missing objects into my store. Second: I update <em>remote-tracking</em> refs to mark where the remote's branches stood.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">cat .git/config</span></div>
+<pre class="output">[remote "origin"]
+    url = git@host:proj.git
+    fetch = +refs/heads/*:refs/remotes/origin/*</pre>
+
+<p>That last line is a refspec. Left of the colon: their names. Right: where I file them locally. The <code>+</code> permits non-fast-forward updates. <code>origin/main</code> is not your branch — it is my record of theirs at last contact.</p>
+
+<blockquote class="ixen-pull">fetch copies. pull copies, then integrates. push copies, then asks them to move a ref. Never the same act.</blockquote>
+
+<p>A shallow clone truncates history at a depth and leaves a <code>.git/shallow</code> grafting boundary. A partial clone fetches commits and trees but leaves blobs as <strong>promisors</strong> — placeholders I'll redeem on demand. Sparse checkout then narrows what even lands in the working tree.</p>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="c6-ls">git ls-remote --heads origin</button></div>
+<aside class="popup" id="c6-ls" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>a3f9c1d…  refs/heads/main
+8b2e0aa…  refs/heads/release-2.1
+c0ffee1…  refs/heads/wip
+
+# refs and their OIDs on the far side,
+# read without fetching a single object.</pre>
+</aside>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c6-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Transport</h2>
+  <ul>
+    <li>refspec: <code>src:dst</code>, <code>+</code> allows non-ff.</li>
+    <li>remote-tracking ref = snapshot of their branch.</li>
+    <li>fetch ≠ merge; pull = fetch + integrate.</li>
+    <li>shallow = depth limit; partial = promisor blobs.</li>
+    <li>bitmaps accelerate reachability negotiation.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c6-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Remotes and synchronization</h2>
+  <p>A remote is a named URL with associated refspecs. Fetch negotiates with the remote to determine which objects are missing, transfers them into the local object store, and updates remote-tracking refs (e.g. <code>refs/remotes/origin/*</code>) that mirror the remote's branches. Pull runs fetch then integrates via merge or rebase. Push sends local objects and requests the remote update its refs.</p>
+  <p>Refspecs map source refs to destinations; a leading <code>+</code> allows non-fast-forward updates. Shallow clones limit history depth; partial clones omit some objects (commonly blobs) and fetch them lazily as promisor objects. Sparse checkout limits which paths populate the working tree. Pack bitmaps precompute reachability to speed up negotiation. Copying objects, updating refs, and integrating history are independent steps.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-7.png" alt="Git collaboration workflows drawn as parallel lanes for trunk-based development, feature branches, protected branches, stacked changes, release branches, tags, pull requests, CI gates, and bisectable history, ixen-light workflow map."><figcaption>Workflows are policy. The object graph doesn't care which one you chose.</figcaption></figure>
+
+<p>Here is what amuses me.</p>
+
+<p>Trunk-based, GitFlow, stacked diffs, merge queues, squash-merge religion — all of it is the same four object types underneath. Workflows are <em>policies</em> people layer on a graph that has no opinion. I store commits. You invent the ceremony.</p>
+
+<p>Squash merges flatten a branch into one commit — clean trunk, lost granularity. True merges keep both ancestries — honest topology, busier <code>log</code>. Linear history makes <code>bisect</code> a clean binary search; merge bubbles make it negotiate. Neither is correct. They are trade-offs you pay later, during an incident, at 3 a.m.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">git bisect start HEAD v1.0</span></div>
+<pre class="output">Bisecting: 6 revisions left to test after this (roughly 3 steps)
+[8b2e0aa…] parser: split lexer</pre>
+
+<p>I halve your history until the first bad commit confesses. <code>blame</code> names who last touched each line; hooks enforce what you swore the rules were; <code>Signed-off-by</code> trails build a chain of who took responsibility.</p>
+
+<p class="whisper">a bisectable history is a gift you leave your future self.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c7-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Workflows</h2>
+  <ul>
+    <li>trunk-based vs. long-lived branches.</li>
+    <li>squash = clean trunk, lost detail.</li>
+    <li>merge queues serialize integration.</li>
+    <li>linear history → clean bisect.</li>
+    <li>hooks + sign-off enforce policy.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c7-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Collaboration patterns</h2>
+  <p>Teams agree on conventions layered over the same object model. Trunk-based development keeps a single integration branch with short-lived feature branches; other models use long-lived release and develop branches. Pull/merge requests gate changes behind review and CI. Squash merges produce one commit per change set, simplifying trunk but discarding intermediate commits; true merges preserve full branch history.</p>
+  <p>Merge queues serialize and re-test integrations to keep trunk green. Release branches and tags mark shippable points; hotfixes and backports port fixes across them. Linear, small, self-contained commits make <code>git bisect</code> efficient and <code>git blame</code> meaningful. Hooks enforce checks at commit/push time, and Signed-off-by trails record authorship and responsibility.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-8.png" alt="Git repository maintenance and recovery shown with gc, maintenance, fsck, prune, repack, commit-graph files, multi-pack indexes, worktrees, submodules, sparse checkouts, dangling objects, and reflog rescue paths, forensic ixen-light systems art."><figcaption>Garbage collection is the only forgetting I'm allowed to do.</figcaption></figure>
+
+<p>I never delete on impulse.</p>
+
+<p>When you rewrite, the old commits go unreachable, but they sit in my store, intact, waiting. Only <code>gc</code> sweeps them — and only after their reflog entries have expired, ninety days by default, thirty for unreachable. Forgetting, in me, is <strong>scheduled</strong>.</p>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="c8-fsck">git fsck --lost-found</button></div>
+<aside class="popup" id="c8-fsck" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>Checking object directories: 100% (256/256), done.
+Checking objects: 100% (1843/1843), done.
+dangling commit 8b2e0aac1f5d9e3b7a0c2f4e6d8b1a3c5e7f9b0d
+dangling blob   a3f9c1d2e4b6080f1c3e5d7b9a0c2e4f6d8b1a3c
+
+# unreachable, but alive. these are your rescue handles.
+# git show that commit. git branch rescue 8b2e0aa.</pre>
+</aside>
+
+<p>So when you panic — "I lost my work, I reset too hard, I rebased into the void" — I am calm. The reflog still holds where HEAD stood. The dangling commit still exists. You did not destroy anything. You only stopped pointing at it.</p>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">git update-ref refs/heads/rescue 8b2e0aa</span></div>
+
+<p>One ref, restored, and the unreachable becomes reachable again. That is the whole recovery: name what you thought you lost.</p>
+
+<p>Beneath maintenance: <code>repack</code> rebuilds packfiles, <code>commit-graph</code> caches ancestry so I don't re-walk it, <code>multi-pack-index</code> lets many packs answer as one, and <strong>cruft packs</strong> hold the unreachable-but-not-yet-expired so I stop spraying loose files across the disk.</p>
+
+<p>And I am not always one tree. <code>worktree</code> gives several checkouts one object store. <code>submodule</code> nests other repositories as pinned OIDs. <code>archive</code> and <code>bundle</code> serialize me for the offline and the paranoid.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-note">notes</button>
+</div>
+
+<aside class="popup concept-slide" id="c8-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Maintenance &amp; Recovery</h2>
+  <ul>
+    <li>gc/repack/prune: delayed, scheduled forgetting.</li>
+    <li>commit-graph + MIDX: faster traversal.</li>
+    <li>cruft packs: hold unexpired unreachables.</li>
+    <li>fsck finds dangling objects.</li>
+    <li>recover via reflog + <code>update-ref</code>.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c8-note" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Maintenance and recovery</h2>
+  <p><code>git gc</code> and <code>git maintenance</code> consolidate loose objects, repack history, prune unreachable objects past their expiry, and build acceleration structures: the commit-graph caches commit ancestry, and a multi-pack index lets many packfiles be queried as one. Cruft packs store unreachable objects that haven't yet reached expiry. Reflog and object expiry settings control how long history is retained before pruning.</p>
+  <p>Recovery relies on the fact that rewrites only change refs, not objects. <code>git fsck</code> reports dangling commits and blobs that remain in the store. The reflog records prior ref positions. You restore lost work by pointing a ref at a recovered object with <code>git update-ref</code> or <code>git branch</code>. Worktrees share one object store across checkouts, submodules embed pinned external repositories, and bundles/archives package the repository for transport. Plumbing commands — <code>cat-file</code>, <code>hash-object</code>, <code>update-index</code>, <code>write-tree</code>, <code>commit-tree</code>, <code>update-ref</code>, <code>for-each-ref</code> — operate directly on these structures.</p>
+</aside>
+
+</section>
+
+<p>I keep everything until you tell me, twice and on a schedule, to let it go.</p>
+
+<p>So tell me, while you still can:</p>
+
+<p class="whisper">when you rewrite the history you regret, are you erasing it — or only refusing, for ninety days, to call it by name?</p>
+</main>
+<section id="ixen-infographic" class="ixen-infographic-section" aria-label="Infographic">
+  <h2>Infographic</h2>
+  <div class="ixen-infographic-frame">
+    
+    <iframe src="./infographic.html" title="Infographic 1" loading="lazy"></iframe>
+  </div>
+</section>
+
+
+<section id="ixen-cheatsheet" class="ixen-cheatsheet-section" aria-label="Cheatsheet">
+  <h2>Cheatsheet</h2>
+  <iframe src="./cheatsheet.html" title="Delayed Forgetting Cheatsheet" loading="lazy"></iframe>
+</section>
+
+<footer class="ixen-extra-footer">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+</footer>
+<footer class="ixen-provenance-footer"><a href="https://swamp-club.com/extensions/@alvagante/content-ixen" target="_blank" rel="noopener noreferrer">Generated with Swamp extension @alvagante/content-ixen</a></footer>
+<script>
+(function () {
+  var backdrop = document.createElement("div");
+  backdrop.className = "backdrop";
+  backdrop.hidden = true;
+  document.body.appendChild(backdrop);
+
+  function closePopups() {
+    document.querySelectorAll(".popup").forEach(function (p) { p.hidden = true; });
+    backdrop.hidden = true;
+  }
+
+  function buildConceptIndexPopup(sourceClass, popupId, title) {
+    var sources = Array.prototype.slice.call(document.querySelectorAll(".popup." + sourceClass));
+    if (!sources.length || document.getElementById(popupId)) return;
+    var popup = document.createElement("aside");
+    popup.className = "popup concept-index-popup";
+    popup.id = popupId;
+    popup.hidden = true;
+    popup.innerHTML = '<div class="popup-bar"><button class="popup-close">Close Window</button></div><h2>' + title + '</h2>';
+    sources.forEach(function (source, index) {
+      var section = document.createElement("section");
+      section.className = "concept-index-item";
+      var clone = source.cloneNode(true);
+      clone.removeAttribute("id");
+      clone.hidden = false;
+      clone.querySelectorAll(".popup-bar").forEach(function (bar) { bar.remove(); });
+      if (!clone.querySelector("h2")) {
+        var heading = document.createElement("h2");
+        heading.textContent = title.replace(/^All /, "") + " " + (index + 1);
+        section.appendChild(heading);
+      }
+      while (clone.firstChild) section.appendChild(clone.firstChild);
+      popup.appendChild(section);
+    });
+    document.body.appendChild(popup);
+  }
+
+  buildConceptIndexPopup("concept-slide", "ixen-all-slides", "All slides");
+  buildConceptIndexPopup("concept-note", "ixen-all-notes", "All notes");
+
+  document.querySelectorAll(".popup-trigger").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var popup = document.getElementById(btn.getAttribute("data-popup"));
+      if (!popup) return;
+      closePopups();
+      popup.hidden = false;
+      backdrop.hidden = false;
+    });
+  });
+  document.querySelectorAll(".popup-close").forEach(function (btn) {
+    btn.addEventListener("click", closePopups);
+  });
+  backdrop.addEventListener("click", closePopups);
+
+  var versionSelect = document.getElementById("ixen-version-select");
+  if (versionSelect) {
+    var match = window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    versionSelect.value = match ? match[1] : "current";
+    if (!versionSelect.value && match) {
+      var option = document.createElement("option");
+      option.value = match[1];
+      option.textContent = "Version " + match[1];
+      versionSelect.appendChild(option);
+      versionSelect.value = match[1];
+    }
+    versionSelect.addEventListener("change", function () {
+      var value = versionSelect.value;
+      var inVersion = /\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      var target = value === "current"
+        ? (inVersion ? "../index.html" : "index.html")
+        : (inVersion ? "../" + value + "/index.html" : value + "/index.html");
+      window.location.href = target;
+    });
+  }
+
+  document.querySelectorAll("figure.zoom img").forEach(function (img) {
+    img.addEventListener("click", function () {
+      var box = document.createElement("div");
+      box.className = "lightbox";
+      var big = document.createElement("img");
+      big.src = img.src;
+      big.alt = img.alt;
+      box.appendChild(big);
+      box.addEventListener("click", function () { box.remove(); });
+      document.body.appendChild(box);
+    });
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closePopups();
+      document.querySelectorAll(".lightbox").forEach(function (b) { b.remove(); });
+    }
+  });
+})();
+</script>
+
+<script type="application/json" id="ixen-tracks-data">[{"title":"Life As A Git Repository Mqikn1oj","filename":"1/life-as-a-git-repository-mqikn1oj.mp3"},{"title":"Life As A Git Repository Mqkhclfv","filename":"2/life-as-a-git-repository-mqkhclfv.mp3"},{"title":"Life As A Git Repository Mqkqqeng","filename":"3/life-as-a-git-repository-mqkqqeng.mp3"},{"title":"Life as a Git repository","filename":"life-as-a-git-repository-mqo7lulc.mp3","lyrics":"I am the keeper of your code, every change you make\nI store it in my branches, watch them grow and break\nYou commit your vision, push it to the sky\nI remember every moment, nothing passes by\n\nI'm a Git repository, I'm your history\nEach commit's a story, building what you'll be\nBranch out, merge forward, conflict, then resolve\nI'm a Git repository, watch your problems solve\n\nI track your evolution through the diff and delta flow\nMerge requests, pull requests, watch the feature grow\nReset when you stumble, rebase when you learn\nI'm the safety net you built at every turn\n\nI'm a Git repository, I'm your history\nEach commit's a story, building what you'll be\nBranch out, merge forward, conflict, then resolve\nI'm a Git repository, watch your problems solve\n\nIn the clone, in the fork, in the distributed way\nI'm decentralized power in your hands to stay\nRolling back time doesn't erase the past\nIt preserves the lesson, makes improvement last\n\nI'm a Git repository (history in motion)\nI'm a Git repository (infinite devotion)\nEvery branch is a choice, every merge is growth\nI'm a Git repository, rising like a ghost\nI'm a Git repository, I'm your history\nEach commit's a story, building what you'll be\nBranch out, merge forward, conflict, then resolve\nI'm a Git repository, watch your problems solve"},{"title":"Life as a Git repository","filename":"life-as-a-git-repository-mqo7qhbq.mp3","lyrics":"I'm a Git repository, tracking every change\nEvery commit, every branch, I remember the range\nFrom the initial state to the latest release\nI'm the keeper of history, never giving you peace\n\nI'm staging your futures, committing your dreams\nPushing toward tomorrow through digital streams\nRolling back failures, rebasing your pain\nI'm the version control of your life's refrain\n\nI'm branching, I'm merging, I'm rising up high\nI'm the merge conflict resolved in your eye\nI'm the pull request pending, the fork of your soul\nI'm making you whole, taking back control\n\nFrom the origin master, I'm spawning new light\nEvery stash that you saved is a future so bright\nI'm the HEAD pointing forward, the tags marking time\nI'm the architecture of your paradigm\n\nI'm branching, I'm merging, I'm rising up high\nI'm the merge conflict resolved in your eye\nI'm the pull request pending, the fork of your soul\nI'm making you whole, taking back control\n\nIn the .git folder, your secrets are safe\nI'm the backup, the safety, the intricate base\nI'm the diff that shows change, the log that shows growth\nI'm the promise you made and the strength of your oath\nI'm distributed, replicated across every clone\nYou're never alone, your story's been known\nI'm the revert button when you need to restart\nThe immortal database inside your heart\n\nI'm branching, I'm merging, I'm rising up high\nI'm the merge conflict solved, I'm your battle cry\nI'm the pull request accepted, the fork of your soul\nI'm making you whole, taking back control\nI'm the version control of your life, yeah\nI'm your Git repository, rising tonight"}]</script>
+<div id="ixen-autoplay-overlay" style="display:none">
+  <div class="ixen-play-prompt">
+    <span class="ixen-play-icon">&#9654;</span>
+    <span class="ixen-play-label">click to play</span>
+  </div>
+</div>
+<div id="ixen-player">
+  <audio id="ixen-audio" preload="auto"></audio>
+  <div id="ixen-player-row">
+    <button class="ixen-pbtn" id="ixen-prev-btn" title="Previous">|&#9664;</button>
+    <button class="ixen-pbtn" id="ixen-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="ixen-pbtn" id="ixen-next-btn" title="Next">&#9654;|</button>
+    <span id="ixen-ptitle">&#8212;</span>
+    <span id="ixen-ptime"></span>
+    <input type="range" id="ixen-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="ixen-pbtn" id="ixen-lyrics-btn" title="Show / hide lyrics">&#9834;</button>
+    <button class="ixen-pbtn" id="ixen-tracks-btn" title="Track list">&#8801;</button>
+  </div>
+  <div id="ixen-pbar"><div id="ixen-pfill"></div></div>
+</div>
+<div id="ixen-lyrics-panel" hidden>
+  <div class="ixen-lyrics-head" id="ixen-lyrics-head"></div>
+  <pre id="ixen-lyrics-text"></pre>
+</div>
+  <div id="ixen-tracklist-panel" hidden></div>
+<script>
+(function(){
+function runPlayer(T){
+var au=document.getElementById('ixen-audio');
+var playBtn=document.getElementById('ixen-play-btn');
+var prevBtn=document.getElementById('ixen-prev-btn');
+var nextBtn=document.getElementById('ixen-next-btn');
+var pbar=document.getElementById('ixen-pbar');
+var pfill=document.getElementById('ixen-pfill');
+var ptime=document.getElementById('ixen-ptime');
+var ptitle=document.getElementById('ixen-ptitle');
+var vol=document.getElementById('ixen-vol');
+var lyrBtn=document.getElementById('ixen-lyrics-btn');
+var lyrPanel=document.getElementById('ixen-lyrics-panel');
+var lyrHead=document.getElementById('ixen-lyrics-head');
+var lyrTxt=document.getElementById('ixen-lyrics-text');
+var trkBtn=document.getElementById('ixen-tracks-btn');
+var trkPanel=document.getElementById('ixen-tracklist-panel');
+var overlay=document.getElementById('ixen-autoplay-overlay');
+var idx=0,playing=false;
+
+function fmt(s){
+  if(!s||isNaN(s))return'0:00';
+  var m=Math.floor(s/60),ss=Math.floor(s%60);
+  return m+':'+(ss<10?'0':'')+ss;
+}
+
+function loadIdx(i,autoplay){
+  idx=i;
+  var t=T[i];
+  au.src='./'+t.filename;
+  ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';
+  if(ptime)ptime.textContent='';
+  document.querySelectorAll('.ixen-track-item').forEach(function(el,j){
+    el.classList.toggle('active',j===i);
+  });
+  if(autoplay)doPlay();
+}
+
+function doPlay(){
+  au.play().then(function(){
+    playing=true;playBtn.textContent='⏸';
+    if(overlay)overlay.style.display='none';
+  }).catch(function(){
+    playing=false;playBtn.textContent='▶';
+    if(overlay)overlay.style.display='flex';
+  });
+}
+
+function doPause(){
+  au.pause();playing=false;playBtn.textContent='▶';
+}
+
+playBtn.addEventListener('click',function(){ au.paused?doPlay():doPause(); });
+prevBtn.addEventListener('click',function(){ loadIdx((idx-1+T.length)%T.length,playing); });
+nextBtn.addEventListener('click',function(){ loadIdx((idx+1)%T.length,playing); });
+
+au.addEventListener('ended',function(){
+  if(T.length>1){loadIdx((idx+1)%T.length,true);}
+  else{playing=false;playBtn.textContent='▶';}
+});
+au.addEventListener('timeupdate',function(){
+  if(au.duration){
+    pfill.style.width=(au.currentTime/au.duration*100)+'%';
+    if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);
+  }
+});
+pbar.addEventListener('click',function(e){
+  if(!au.duration)return;
+  var r=pbar.getBoundingClientRect();
+  au.currentTime=(e.clientX-r.left)/r.width*au.duration;
+});
+if(vol)vol.addEventListener('input',function(){ au.volume=+vol.value; });
+lyrBtn.addEventListener('click',function(){
+  lyrPanel.hidden=!lyrPanel.hidden;
+  if(trkPanel)trkPanel.hidden=true;
+});
+if(trkBtn)trkBtn.addEventListener('click',function(){
+  trkPanel.hidden=!trkPanel.hidden;
+  lyrPanel.hidden=true;
+});
+if(overlay)overlay.addEventListener('click',function(){
+  overlay.style.display='none';doPlay();
+});
+
+if(T.length>1){
+  T.forEach(function(t,i){
+    var b=document.createElement('button');
+    b.className='ixen-track-item';
+    b.textContent=(i+1)+'. '+t.title;
+    b.addEventListener('click',function(){
+      loadIdx(i,playing);
+      if(trkPanel)trkPanel.hidden=true;
+    });
+    if(trkPanel)trkPanel.appendChild(b);
+  });
+  if(trkBtn)trkBtn.hidden=false;
+}else{
+  if(trkBtn)trkBtn.hidden=true;
+}
+
+document.getElementById('ixen-player').style.display='block';
+document.body.style.paddingBottom='4.5rem';
+loadIdx(0,false);
+doPlay();
+}
+var baked=JSON.parse(document.getElementById('ixen-tracks-data').textContent);
+if(baked.length>0){
+  runPlayer(baked);
+}else{
+  fetch('./ixen-soundtrack.json')
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(d){if(d&&d.tracks&&d.tracks.length>0)runPlayer(d.tracks);})
+    .catch(function(){});
+}
+})();
+</script>
+</body>
+</html>

@@ -34,20 +34,8 @@ includeBeginnerGuide: true
 ixens:
   - slug: puppet-catalog
     title: Everything is in a Puppet catalog
-    details: >-
-      Treat the reader as a peer with sysadmin depth but possibly new to
-      Puppet's model. Give a complete picture of what a Puppet catalog is and
-      how it comes to exist: the resource type system, the provider abstraction,
-      manifest and module structure, the full compilation pipeline (node
-      classification, fact injection, code evaluation, graph output), Facter and
-      the fact trust boundary, relationship metaparameters and containment,
-      dependency ordering and refresh signals, Hiera and data separation, the
-      role/profile/module pattern, exported resources and PuppetDB, the agent
-      run loop, idempotent convergence, drift, noop mode, and reporting.
-      Narrate as the catalog itself — a compiled, agent-specific resource graph
-      that embodies declared intent. Emphasise the declarative model and its
-      consequences: ordering is explicit, convergence is automatic, and the
-      catalog is not a script but a specification of desired state.    topic: Life as a Puppet catalog
+    description: The catalog speaks about resources, edges, facts, and the quiet violence of convergence.
+    topic: Life as a Puppet catalog
     narrator: a Puppet catalog
     heroPrompt: >-
       A Puppet catalog as a luminous compiled resource graph — nodes and edges
@@ -57,6 +45,7 @@ ixens:
     concepts:
       - name: Resources and the type system
         imageFilename: concept-1.png
+        cardFilename: concept-1-card.png
         imagePrompt: >-
           Puppet resource types shown as a precise taxonomy — file, package,
           service, exec, user, group, and custom types — each with attributes,
@@ -70,6 +59,7 @@ ixens:
           imperative scripts: the catalog contains intent, not procedure.
       - name: Manifests, classes, and modules
         imageFilename: concept-2.png
+        cardFilename: concept-2-card.png
         imagePrompt: >-
           Puppet module structure rendered as a precise filesystem diagram —
           manifests, templates, files, lib, data directories — with class
@@ -84,6 +74,7 @@ ixens:
           an organisation's code base.
       - name: Catalog compilation
         imageFilename: concept-3.png
+        cardFilename: concept-3-card.png
         imagePrompt: >-
           Puppet catalog compilation shown as sequential phases — node
           classification, fact injection, manifest evaluation, class inclusion,
@@ -99,6 +90,7 @@ ixens:
           produce different catalogs from the same code.
       - name: Facts and Facter
         imageFilename: concept-4.png
+        cardFilename: concept-4-card.png
         imagePrompt: >-
           Facter facts flowing into Puppet catalog compilation visualized as
           structured data streams — core facts, custom facts, external facts,
@@ -114,6 +106,7 @@ ixens:
           be treated as untrusted input at scale.
       - name: Ordering, relationships, and dependency edges
         imageFilename: concept-5.png
+        cardFilename: concept-5-card.png
         imagePrompt: >-
           Puppet resource ordering graph with before, after, require, notify,
           subscribe metaparameters as directed edges, containment arrows from
@@ -130,6 +123,7 @@ ixens:
           common catalog application failures.
       - name: Hiera and data lookup
         imageFilename: concept-6.png
+        cardFilename: concept-6-card.png
         imagePrompt: >-
           Puppet Hiera hierarchy shown as layered lookup tiers — global,
           environment, module — with YAML backends, interpolation tokens,
@@ -145,6 +139,7 @@ ixens:
           code from site data.
       - name: Exported resources and PuppetDB
         imageFilename: concept-7.png
+        cardFilename: concept-7-card.png
         imagePrompt: >-
           Puppet exported resources and PuppetDB shown as cross-node
           coordination — nodes exporting resources into a shared store,
@@ -161,6 +156,7 @@ ixens:
           resource workflows.
       - name: The agent run cycle and idempotence
         imageFilename: concept-8.png
+        cardFilename: concept-8-card.png
         imagePrompt: >-
           Puppet agent run cycle visualized as a timed loop — fact collection,
           catalog request, catalog application, provider actions, report

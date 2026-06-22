@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Delayed Forgetting</title>
+<title>Reachable Until I'm Not</title>
 <style>
 :root { --red: #c00; --ink: #111; --dim: #555; }
 * { box-sizing: border-box; }
@@ -75,8 +75,6 @@ figure.zoom.float-right { float: right; width: min(340px, 45%); margin: 0.3rem 0
 figure.zoom.small.float-left, figure.zoom.small.float-right { width: min(220px, 35%); }
 figure.zoom.large.float-left, figure.zoom.large.float-right { width: min(520px, 60%); }
 figure.zoom.large:not(.float-left):not(.float-right) { clear: both; }
-figure.ixen-art { clear: both; margin: 2.5rem 0; }
-figure.ixen-art svg { max-width: 100%; height: auto; display: block; background: #fafafa; border: 1px solid #e8e8e8; }
 figcaption, .media-caption { font-size: 0.75rem; color: var(--dim); margin-top: 0.3rem; }
 .media { clear: both; margin: 2rem 0; }
 .media.video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
@@ -152,6 +150,26 @@ figure.ixen-infographic-img img { width: 100%; cursor: zoom-in; display: block; 
 .beginner-guide p { margin: 0.75rem 0; }
 .beginner-guide ul { margin: 0.5rem 0 0.75rem 1.2rem; padding: 0; }
 .beginner-guide li { margin: 0.3rem 0; }
+button.ixen-accent-btn {
+  background: var(--red); color: #fff; border: none; cursor: pointer;
+  font-family: "Courier New", Courier, monospace; font-size: 0.75rem; font-weight: bold;
+  padding: 0.3rem 0.8rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+button.ixen-accent-btn:hover { background: #900; }
+figure.zoom.ixen-card-img img {
+  box-shadow: 2px 4px 14px rgba(0,0,0,0.28); border: 1px solid #ccc; border-radius: 3px;
+}
+.ixen-card-deck-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1.2rem; padding: 0.5rem 0;
+}
+.ixen-card-deck-grid figure.zoom {
+  margin: 0; width: 100% !important; float: none !important;
+}
+.ixen-card-deck-grid figure.zoom img {
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.22); border: 1px solid #ccc; border-radius: 3px;
+}
+.ixen-card-deck-grid figcaption { text-align: center; }
 
 /* autoplay-blocked overlay */
 #ixen-autoplay-overlay {
@@ -249,499 +267,456 @@ figure.ixen-infographic-img img { width: 100%; cursor: zoom-in; display: block; 
 </nav>
 </section>
 <header>
-  <h1>Delayed Forgetting</h1>
-  <div class="credits"><span class="byline">By alvagante — 20260621-20:09</span>
+  <h1>Reachable Until I'm Not</h1>
+  <div class="credits"><span class="byline">By alvagante — 20260622-09:54</span>
     <div class="version-menu">
       <label for="ixen-version-select">versions</label>
       <select id="ixen-version-select">
         <option value="current">Current</option>
-        <option value="1">Version 1</option><option value="2">Version 2</option><option value="3">Version 3</option>
+        <option value="1">Version 1</option><option value="2">Version 2</option><option value="3">Version 3</option><option value="4">Version 4</option>
       </select>
     </div>
     <div class="ixen-quick-nav">
+      <button class="ixen-accent-btn popup-trigger" data-popup="ixen-card-deck">Card Deck</button>
       <a class="cmd" href="#ixen-cheatsheet">Cheatsheet</a>
       <a class="cmd" href="#ixen-infographic">Infographic</a>
       <button class="cmd popup-trigger" data-popup="ixen-all-slides">Slides</button>
       <button class="cmd popup-trigger" data-popup="ixen-all-notes">Notes</button>
-    </div></div>
+    </div>
+    <div class="ixen-beginner-bar"><button class="ixen-accent-btn popup-trigger" data-popup="ixen-beginner-guide">Beginner's intro</button></div></div>
 </header>
 <main>
-<p class="binary">01001000 01000101 01000001 01000100</p>
+<p class="binary">01000011 01101111 01101101 01101101 01101001 01110100</p>
 
-<p>That word is where I keep my finger. Everything else I am hangs below it, reachable or not.</p>
+<p>I do not store your files. I store the <strong>idea</strong> of them, hashed and frozen, and I hand the idea back when you ask by its true name.</p>
 
-<p>I am not your files. I am what your files <strong>hash</strong> to.</p>
+<p>You think you edit me. You only ever add to me. Everything you call deletion is just a name that stopped pointing somewhere.</p>
 
-<p class="whisper">a name is a rumor. a hash is a fact.</p>
+<p class="whisper">forty hex digits, and the bytes can never lie</p>
 
 <section class="chapter">
 
-<figure class="zoom float-left large"><img src="./concept-1.png" alt="Git blobs, trees, commits, tags, object IDs, loose objects, packfiles, and delta chains displayed as a forensic storage cross-section, meticulous ixen-light technical illustration."><figcaption>A cross-section of everything I keep.</figcaption></figure>
+<figure class="zoom float-left"><img src="./concept-1.png" alt="Git blobs, trees, commits, tags, object IDs, loose objects, packfiles, and delta chains displayed as a forensic storage cross-section, meticulous ixen-light technical illustration."><figcaption>A cross-section of me. None of it moves.</figcaption></figure>
 
-<p>You think you saved a file.</p>
-
-<p>What happened: I read its bytes, prepended a type header, ran it through SHA-1, and stored the result under its own digest. Change one byte and you have a different object with a different name. I cannot lie about content. The address <em>is</em> the content.</p>
+<p>Feed me a byte stream. I prepend a header, run SHA, and the digest <em>is</em> the address. Same content, same name, always, on every machine that has ever held me.</p>
 
 <div class="term"><span class="host">repo $</span> <span class="cmd">printf 'hello\n' | git hash-object --stdin</span></div>
 <pre class="output">ce013625030ba8dba906f756967f9e9ca394464a</pre>
 
-<p>Four kinds of object. That is my whole vocabulary.</p>
+<p>That is a blob now. It has no filename. Filenames live in trees. Trees point at blobs and other trees. A commit points at one tree and at the commits before it. A tag points, with a signature, at whatever it admires.</p>
 
-<p>Blobs hold bytes. Trees hold names pointing at blobs and other trees. Commits point at one tree and at their parents. Tags point, with a signature, at whatever you wanted to canonize.</p>
+<p>Pointers all the way down. Immutable all the way down.</p>
 
-<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="c1-cat">git cat-file -p HEAD</button></div>
-<aside class="popup" id="c1-cat" hidden>
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="catfile-commit">git cat-file -p HEAD</button></div>
+<aside class="popup" id="catfile-commit" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-<pre>tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
-parent 6f1a3c9e0b2d4f7a8c1e5b9d3a7f0c2e4d6b8a1f
-author you &lt;you@dev&gt; 1718900000 +0000
-committer you &lt;you@dev&gt; 1718900000 +0000
+  <pre>tree 9d3e8f2b6a1c7e0f4d5a8b9c0e1f2a3b4c5d6e7f
+parent 7c2a1b0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b
+author  Ada &lt;ada@local&gt; 1700000000 +0000
+committer Ada &lt;ada@local&gt; 1700000000 +0000
 
-initial import
-
-# a commit is just text. you could write it by hand.
-# git commit-tree does exactly that, underneath.</pre>
+refactor index walk; drop redundant lstat</pre>
 </aside>
 
-<p>A commit is a snapshot, not a diff. I store whole trees and let delta compression sort out the redundancy <em>later</em>, when I pack. Loose objects first — one zlib-deflated file each, sprawling under <code>.git/objects/ab/cdef…</code>. Then a packfile collapses them into delta chains against similar neighbors, and a single object can become a few bytes plus a pointer to its base.</p>
-
-<blockquote class="ixen-pull">Snapshots are how I think. Deltas are how I sleep.</blockquote>
+<p>Loose objects are how I'm born — one zlib-compressed file per hash. Then I get tired of millions of tiny files and I <strong>repack</strong>: deltas between similar objects, stored as diffs against a base, indexed by offset. The history of a one-line change becomes a one-line delta. I am not generous with disk. I am content-addressed and stingy.</p>
 
 <div class="concept-tools">
   <button class="cmd popup-trigger concept-btn" data-popup="c1-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c1-note">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-notes">notes</button>
 </div>
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-1-card.png" alt="Object model card"><figcaption>The four shapes I take.</figcaption></figure>
 
 <aside class="popup concept-slide" id="c1-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Object Model</h2>
+  <h2>Four object types</h2>
   <ul>
-    <li>Blob = bytes. Tree = directory. Commit = snapshot + parents. Tag = annotated pointer.</li>
-    <li>OID = hash of (type + size + content).</li>
-    <li>Loose → packed; deltas reconstruct on read.</li>
-    <li>Reachability from refs decides what survives.</li>
-    <li>Alternates borrow objects from another store.</li>
+    <li>blob — content, no name</li>
+    <li>tree — names + modes → blobs/trees</li>
+    <li>commit — one tree + parents + metadata</li>
+    <li>tag — annotated, signable pointer</li>
+    <li>ID = SHA of (type + length + bytes)</li>
+    <li>loose → packed → delta-chained</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c1-note" hidden>
+<aside class="popup concept-note" id="c1-notes" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>What the object database actually is</h2>
-  <p>Git stores all history in a content-addressed object database. Each object's ID is the hash of its type header plus its content, so identical content always produces one object. There are four object types: blobs (file contents), trees (directory listings mapping names to blobs and subtrees), commits (a single tree plus zero or more parent commits and metadata), and annotated tags.</p>
-  <p>New objects are written individually as zlib-compressed loose files under <code>.git/objects</code>. Periodically Git consolidates them into packfiles, where objects can be stored as deltas against similar objects to save space; reads transparently reconstruct the full object. An object survives garbage collection only if it is reachable by following pointers from a ref. The <code>alternates</code> mechanism lets one repository read objects from another store without copying them.</p>
+  <h2>The content-addressed object database</h2>
+  <p>Git stores four immutable object types in a key-value database keyed by the SHA-1 (or SHA-256) of the object's serialized form. A blob is file content. A tree maps names and file modes to blobs and subtrees, representing one directory snapshot. A commit references exactly one root tree plus zero or more parent commits and author/committer metadata. An annotated tag references another object and can carry a signature.</p>
+  <p>Because the identifier is derived from the content, identical content has identical IDs everywhere, and any change to bytes changes the ID. Each commit stores a full snapshot via its tree, not a diff; diffs are computed on demand. New objects start as individual zlib-compressed "loose" files. Garbage collection consolidates them into packfiles, where similar objects are stored as deltas against a base object to save space. Reachability from refs determines which objects are live; alternates let one repository borrow another's object store.</p>
 </aside>
 
 </section>
 
+<blockquote class="ixen-pull">A commit is not a change. A commit is a photograph that remembers the photograph before it.</blockquote>
+
 <section class="chapter">
 
-<figure class="zoom float-right"><img src="./concept-2.png" alt="Git working tree, index, and commit creation rendered as three synchronized filesystem layers with staged hunks, pathspec filters, stat cache entries, and tree writes, crisp ixen-light systems art."><figcaption>Three layers, one truth deferred.</figcaption></figure>
+<figure class="zoom float-right"><img src="./concept-2.png" alt="Git working tree, index, and commit creation rendered as three synchronized filesystem layers with staged hunks, pathspec filters, stat cache entries, and tree writes, crisp ixen-light systems art."><figcaption>Three layers pretending to be one.</figcaption></figure>
 
-<p>I keep three versions of you at once.</p>
+<p>You live in the working tree. Real files, mutable, yours to ruin.</p>
 
-<p>The working tree — what you can see and break. The index — the staging area, a flat binary list of paths and the blob OIDs you have promised to commit. And HEAD — the last thing you actually meant.</p>
+<p>Between you and history sits the index — a flat binary list of paths, modes, blob IDs, and cached stat data so I can tell what changed without reading every byte. People call it staging. It is also where merges fight.</p>
 
-<figure class="ixen-art">
-  <svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg">
-    <rect x="20" y="40" width="120" height="120" fill="none" stroke="#888" stroke-width="2"/>
-    <rect x="180" y="40" width="120" height="120" fill="none" stroke="#c00" stroke-width="2"/>
-    <rect x="340" y="40" width="120" height="120" fill="none" stroke="#888" stroke-width="2"/>
-    <text x="80" y="30" text-anchor="middle" font-size="13" fill="#ddd">working tree</text>
-    <text x="240" y="30" text-anchor="middle" font-size="13" fill="#c00">index</text>
-    <text x="400" y="30" text-anchor="middle" font-size="13" fill="#ddd">HEAD</text>
-    <line x1="140" y1="80" x2="180" y2="80" stroke="#c00" stroke-width="2" marker-end="url(#a)"/>
-    <text x="160" y="72" text-anchor="middle" font-size="10" fill="#aaa">add</text>
-    <line x1="300" y1="80" x2="340" y2="80" stroke="#c00" stroke-width="2" marker-end="url(#a)"/>
-    <text x="320" y="72" text-anchor="middle" font-size="10" fill="#aaa">commit</text>
-    <line x1="340" y1="130" x2="300" y2="130" stroke="#888" stroke-width="2" marker-end="url(#a)"/>
-    <text x="320" y="148" text-anchor="middle" font-size="10" fill="#aaa">reset</text>
-    <line x1="180" y1="130" x2="140" y2="130" stroke="#888" stroke-width="2" marker-end="url(#a)"/>
-    <text x="160" y="148" text-anchor="middle" font-size="10" fill="#aaa">restore</text>
-    <defs>
-      <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-        <path d="M0,0 L6,3 L0,6 Z" fill="#c00"/>
-      </marker>
-    </defs>
-  </svg>
-  <figcaption>add moves right toward intent. reset and restore move left toward forgiveness.</figcaption>
-</figure>
+<div class="term"><span class="host">repo $</span> <span class="cmd">git add -p src/walk.c</span></div>
+<p>You hand me hunks, not files. <code>git add -N</code> when you want me to <em>see</em> a file exists without swallowing its contents yet — intent-to-add, a promise with no payload.</p>
 
-<p>When you stage a hunk in patch mode, I do not save your file. I write a new blob from the partial content, drop its OID into the index, and update the stat cache so I can skip re-reading what hasn't changed.</p>
+<p>When you commit, I freeze the index into a tree and bolt a commit onto it. The plumbing is honest about this:</p>
 
-<div class="term"><span class="host">repo $</span> <span class="cmd">git status -s</span></div>
-<pre class="output">MM src/core.c
-A  src/new.c
-?? scratch.log</pre>
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="write-tree">git write-tree && git commit-tree</button></div>
+<aside class="popup" id="write-tree" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <pre>$ git write-tree
+9d3e8f2b6a1c7e0f4d5a8b9c0e1f2a3b4c5d6e7f
 
-<p>Two columns. Left is index-versus-HEAD. Right is worktree-versus-index. The same file can be half-promised and half-dirty, and I will tell you so without judgment.</p>
+$ git commit-tree 9d3e8f2 -p 7c2a1b0 -m "stage to snapshot"
+b4d2c1f0a9e8d7c6b5a4938271605f4e3d2c1b0a
 
-<p><code>intent-to-add</code> is my favorite small lie: a path registered with no content yet, so <code>diff</code> will show it but <code>commit</code> won't ship it. <code>.gitignore</code> and <code>.gitattributes</code> are the rules I apply before I ever look — what to never track, what to filter through CRLF or clean smudge, what is binary and beyond diffing.</p>
+# porcelain just wires these together and moves a ref</pre>
+</aside>
 
-<div class="term"><span class="host">repo $</span> <span class="cmd">git write-tree</span></div>
-<pre class="output">d8329fc1cc938780ffdd9f94e0d364e0ea74f579</pre>
-
-<p>That is the index, frozen into a tree object, ready to become a commit. The porcelain hides this. The plumbing admits it.</p>
+<p>restore pulls bytes back from the index or a commit. reset moves the boundary lines themselves — soft touches the ref, mixed touches the index, hard touches <strong>you</strong>. clean erases what I never tracked. stash hides the lot in a couple of throwaway commits I keep on a side ref.</p>
 
 <div class="concept-tools">
   <button class="cmd popup-trigger concept-btn" data-popup="c2-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c2-note">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-notes">notes</button>
 </div>
+<figure class="zoom ixen-card-img small float-left"><img src="./concept-2-card.png" alt="Working tree and index card"><figcaption>Where staging and merging share a desk.</figcaption></figure>
 
 <aside class="popup concept-slide" id="c2-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Three Trees</h2>
+  <h2>The three trees</h2>
   <ul>
-    <li>working tree ↔ index ↔ HEAD.</li>
-    <li><code>add</code> writes blobs + updates index entries.</li>
-    <li><code>restore</code> pulls from index or HEAD; <code>reset</code> moves the boundary.</li>
-    <li>pathspecs scope; attributes filter; ignores exclude.</li>
-    <li>index doubles as merge state (stages 1–3).</li>
+    <li>HEAD — last committed snapshot</li>
+    <li>index — next proposed snapshot</li>
+    <li>working tree — your edits</li>
+    <li>add/restore move bytes; reset moves lines</li>
+    <li>index doubles as merge resolution store</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c2-note" hidden>
+<aside class="popup concept-note" id="c2-notes" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>How the index works</h2>
-  <p>Git tracks three states: the working tree (files on disk), the index (a binary file listing paths, modes, and blob IDs to be committed, plus a stat cache for change detection), and HEAD (the most recent commit). <code>git add</code> writes blob objects from working-tree content and records their IDs in the index. <code>git commit</code> turns the index into a tree and writes a commit pointing to it.</p>
-  <p><code>git restore</code> copies content from the index or a commit into the working tree or index; <code>git reset</code> moves HEAD and optionally the index. Pathspecs limit which paths a command touches. <code>.gitattributes</code> controls per-path filtering and diff behavior; <code>.gitignore</code> excludes untracked files. During a merge the index holds multiple stages of the same path, making it the data structure where conflict resolution happens.</p>
+  <h2>Working tree, index, and HEAD</h2>
+  <p>Git operations move data between three states. HEAD points to the latest committed snapshot. The index (staging area) is a binary file listing tracked paths with their mode, blob ID, and cached stat information, representing the snapshot the next commit will create. The working tree is the checked-out files you edit.</p>
+  <p><code>git add</code> copies content into the index and records a blob; patch mode stages selected hunks; <code>--intent-to-add</code> registers a path without content. <code>git status</code> and <code>git diff</code> compare these states. <code>git restore</code> copies content from a source (index or commit) into the index or working tree. <code>git reset</code> moves HEAD and optionally the index and working tree (--soft, --mixed, --hard). <code>git rm</code>/<code>git mv</code> update both tree and index. Pathspecs, attributes (.gitattributes), and ignore rules (.gitignore) filter what these commands touch. During a merge the index also holds multiple stages per conflicted path.</p>
 </aside>
 
 </section>
 
 <section class="chapter">
 
-<figure class="zoom float-left"><img src="./concept-3.png" alt="Clean technical diagram of Git references as movable branch and tag labels over a commit DAG, with symbolic refs, packed refs, namespaces, reflogs, revision ranges, and ancestry selectors, precise ixen-light systems illustration."><figcaption>Names are sticky notes on a graph that never moves.</figcaption></figure>
+<figure class="zoom float-left"><img src="./concept-3.png" alt="Clean technical diagram of Git references as movable branch and tag labels over a commit DAG, with symbolic refs, packed refs, namespaces, reflogs, revision ranges, and ancestry selectors, precise ixen-light systems illustration."><figcaption>Names. Just names, hovering over the graph.</figcaption></figure>
 
-<p>The commits never change. The names do.</p>
+<p>A branch is forty hex digits in a file under <code>refs/heads/</code>. That is the whole secret. Branching is cheap because a branch is a sticky note, not a copy.</p>
 
-<p>A branch is forty hex characters in a file. <code>main</code> is just <code>refs/heads/main</code> holding an OID. When you commit, I do not move history — I write a new commit and rewrite that one tiny file to point at it.</p>
+<p>HEAD is a symbolic ref — it points at a name, and the name points at a commit. Detach it and HEAD names a commit directly. Now you're standing on bare ground with no label under your feet, and I will warn you, and you will ignore me.</p>
 
-<div class="term"><span class="host">repo $</span> <span class="cmd">cat .git/HEAD</span></div>
-<pre class="output">ref: refs/heads/main</pre>
+<div class="term"><span class="host">repo $</span> <span class="cmd">git rev-parse --symbolic-full-name HEAD</span></div>
+<pre class="output">refs/heads/main</pre>
 
-<p>HEAD is a <em>symbolic</em> ref — a pointer to a pointer. Detach it and HEAD names a commit directly; now you stand on the graph itself, branchless, and I quietly warn you that anything you build here is reachable only by memory.</p>
+<p>I shove old loose refs into <code>packed-refs</code> for speed. The revision language is where I get expressive: <code>HEAD~3</code>, <code>main@{yesterday}</code>, <code>A..B</code>, <code>A...B</code>, <code>HEAD^{tree}</code>.</p>
 
-<p class="whisper">my memory is the reflog.</p>
+<p>And the reflog — my private journal. Every time a ref moves, I write down where it used to point. You think you lost a commit. I just stopped naming it. The bytes are right here.</p>
 
-<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="c3-reflog">git reflog</button></div>
-<aside class="popup" id="c3-reflog" hidden>
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="reflog">git reflog</button></div>
+<aside class="popup" id="reflog" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-<pre>a3f9c1d HEAD@{0}: commit: tighten parser
-6f1a3c9 HEAD@{1}: reset: moving to HEAD~1
-8b2e0aa HEAD@{2}: commit: oops, ship it
-6f1a3c9 HEAD@{3}: checkout: moving from main to detached
-6f1a3c9 HEAD@{4}: pull: Fast-forward
-
-# every position HEAD ever held. local. private.
-# this is how I undo what you swore was lost.</pre>
+  <pre>b4d2c1f HEAD@{0}: commit: stage to snapshot
+7c2a1b0 HEAD@{1}: reset: moving to HEAD~1
+9f1e0d2 HEAD@{2}: rebase (finish): returning to refs/heads/main
+3a5c8e1 HEAD@{3}: rebase (pick): refactor index walk
+7c2a1b0 HEAD@{4}: checkout: moving from feature to main</pre>
 </aside>
-
-<p>I keep refs loose until there are too many, then I flatten them into <code>packed-refs</code> — one file, sorted, fast to scan. The plumbing never cares which form they're in.</p>
-
-<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="c3-fer">git for-each-ref --format='%(refname) %(objectname:short)'</button></div>
-<aside class="popup" id="c3-fer" hidden>
-  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-<pre>refs/heads/main          a3f9c1d
-refs/heads/wip           8b2e0aa
-refs/remotes/origin/main 6f1a3c9
-refs/tags/v1.0           c0ffee1
-
-# branches, remote-tracking refs, tags — all just refs,
-# living in namespaces under refs/.</pre>
-</aside>
-
-<p>And the revision language is how you point without copying OIDs by hand. <code>HEAD~2</code> walks first-parents. <code>main^2</code> takes the second parent. <code>A..B</code> means reachable from B but not A. <code>A...B</code> is the symmetric difference. <code>git rev-parse</code> resolves all of it down to the only thing I truly understand: a hash.</p>
 
 <div class="concept-tools">
   <button class="cmd popup-trigger concept-btn" data-popup="c3-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c3-note">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-notes">notes</button>
 </div>
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-3-card.png" alt="Refs and revisions card"><figcaption>Moving a name is not changing a thing.</figcaption></figure>
 
 <aside class="popup concept-slide" id="c3-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Refs &amp; Revisions</h2>
+  <h2>Refs &amp; revisions</h2>
   <ul>
-    <li>branch/tag = file under <code>refs/</code> holding an OID.</li>
-    <li>HEAD = symbolic ref; detached = direct OID.</li>
-    <li>loose refs → <code>packed-refs</code>.</li>
-    <li>reflog = local history of ref movement.</li>
-    <li><code>~ ^ .. ...</code> select commits and ranges.</li>
+    <li>ref = file holding an object ID</li>
+    <li>HEAD = symbolic ref → branch</li>
+    <li>detached HEAD = direct commit ID</li>
+    <li>reflog = local move history</li>
+    <li><code>~</code> first-parent, <code>^</code> nth-parent</li>
+    <li><code>A..B</code> reachable from B not A</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c3-note" hidden>
+<aside class="popup concept-note" id="c3-notes" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>References and revision syntax</h2>
-  <p>A ref is a named pointer to an object ID, stored as a file under <code>.git/refs</code> or compacted into <code>packed-refs</code>. Branches live in <code>refs/heads</code>, tags in <code>refs/tags</code>, and remote-tracking refs in <code>refs/remotes</code>. HEAD is normally a symbolic ref pointing at the current branch; a detached HEAD points directly at a commit.</p>
-  <p>The reflog records every change to a ref's value locally, enabling recovery even after history rewrites. Revision syntax resolves names to commits: <code>~n</code> follows first parents, <code>^n</code> selects the nth parent, <code>A..B</code> is commits reachable from B but not A, and <code>A...B</code> is their symmetric difference. <code>git rev-parse</code> resolves any of these expressions to a concrete object ID.</p>
+  <h2>References, HEAD, and revision syntax</h2>
+  <p>A ref is a named pointer to an object, stored as a file under <code>.git/refs/</code> or compacted into <code>packed-refs</code>. Branches live in <code>refs/heads/</code>, tags in <code>refs/tags/</code>, remote-tracking refs in <code>refs/remotes/</code>. HEAD is a symbolic ref usually pointing to a branch; checking out a commit directly produces a detached HEAD.</p>
+  <p>The reflog records every local update to a ref with its previous value, enabling recovery even when no branch names a commit. Revision syntax selects commits: <code>HEAD~n</code> follows first parents, <code>HEAD^n</code> selects the nth parent, <code>name@{time}</code> queries the reflog, <code>A..B</code> is commits reachable from B but not A, and <code>A...B</code> is the symmetric difference. <code>git merge-base A B</code> finds the best common ancestor. Crucially, moving a ref only changes which commit a name points to; it does not alter any object.</p>
 </aside>
 
 </section>
 
+<blockquote class="ixen-pull">Deleting a branch deletes a sticky note. The wall behind it is untouched.</blockquote>
+
 <section class="chapter">
 
-<figure class="zoom float-right"><img src="./concept-4.png" alt="Git branch and merge logic shown as a commit DAG with merge bases, recursive and ort merge machinery, fast-forward updates, conflict stages in the index, rerere memory, and signed merge commits, ixen-light systems illustration."><figcaption>A merge records topology. It refuses to forget either parent.</figcaption></figure>
+<figure class="zoom float-right"><img src="./concept-4.png" alt="Git branch and merge logic shown as a commit DAG with merge bases, recursive and ort merge machinery, fast-forward updates, conflict stages in the index, rerere memory, and signed merge commits, ixen-light systems illustration."><figcaption>Two ancestries, one new topology.</figcaption></figure>
 
-<p>To merge, I first find where you diverged.</p>
+<p>Two branches diverge. To merge, I find the merge-base — the youngest commit both can reach — and compute two diffs from there. If one side never moved, I fast-forward: no merge commit, just slide the label down. Honest. Boring. Linear.</p>
 
-<div class="term"><span class="host">repo $</span> <span class="cmd">git merge-base main feature</span></div>
-<pre class="output">6f1a3c9e0b2d4f7a8c1e5b9d3a7f0c2e4d6b8a1f</pre>
+<p>If both moved, I build a merge commit with <strong>two</strong> parents. It preserves both lineages and records the join. The default engine is <em>ort</em> now, not the old recursive one — faster, cleaner with renames, fewer lies about who touched what.</p>
 
-<p>That ancestor is the common point. If one side is a direct descendant of the other, there is nothing to combine — I just slide the ref forward. A <strong>fast-forward</strong>. No new commit, no merge, no story.</p>
+<p>When the diffs collide, the index holds the path at three stages: base, ours, theirs. That is what conflict markers really are — the index refusing to choose.</p>
 
-<p>Otherwise I build a real merge commit with two parents and let the <code>ort</code> strategy diff each side against the base. Where they touched different things, I take both. Where they touched the same lines, the index splits into stages: 1 is base, 2 is ours, 3 is theirs.</p>
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="stages">git ls-files -u</button></div>
+<aside class="popup" id="stages" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <pre>100644 8a1d... 1   src/walk.c   # stage 1: merge base
+100644 b2e4... 2   src/walk.c   # stage 2: ours
+100644 c9f7... 3   src/walk.c   # stage 3: theirs
 
-<div class="term"><span class="host">repo $</span> <span class="cmd">git ls-files -u</span></div>
-<pre class="output">100644 6f1a3c9… 1 src/core.c
-100644 a3f9c1d… 2 src/core.c
-100644 8b2e0aa… 3 src/core.c</pre>
+# resolve, git add, and the three stages collapse to one</pre>
+</aside>
 
-<p>Three versions of one path, held in tension, until you choose. Resolve it once and <code>rerere</code> memorizes the resolution — so the next time the same conflict surfaces, I replay your decision without asking.</p>
+<p>Resolve the same ugly conflict twice and I notice. rerere records your resolution and replays it next time. I remember your decisions so you don't have to relive them.</p>
 
-<blockquote class="ixen-pull">A merge does not pick a winner. It records that there were two truths and chose to keep both ancestries.</blockquote>
-
-<p><code>revert</code> writes a new commit that undoes an old one — history-safe. <code>reset</code> moves a name backward and pretends the rest never shipped — history-altering. Same direction, opposite honesty.</p>
+<p>revert writes a new commit that undoes an old one — forward motion, safe to publish. reset just moves the name backward and pretends. Pick your weapon by audience.</p>
 
 <div class="concept-tools">
   <button class="cmd popup-trigger concept-btn" data-popup="c4-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c4-note">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-notes">notes</button>
 </div>
+<figure class="zoom ixen-card-img small float-left"><img src="./concept-4-card.png" alt="Merge logic card"><figcaption>Topology, recorded; both sides, kept.</figcaption></figure>
 
 <aside class="popup concept-slide" id="c4-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Merge Logic</h2>
+  <h2>Merge mechanics</h2>
   <ul>
-    <li>merge-base = common ancestor.</li>
-    <li>fast-forward when one side descends the other.</li>
-    <li><code>ort</code> three-way merges base/ours/theirs.</li>
-    <li>conflicts = index stages 1/2/3.</li>
-    <li>rerere replays remembered resolutions.</li>
+    <li>merge-base = best common ancestor</li>
+    <li>fast-forward = move label, no commit</li>
+    <li>true merge = 2-parent commit</li>
+    <li>conflict = index stages 1/2/3</li>
+    <li>ort = default strategy</li>
+    <li>rerere = replay past resolutions</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c4-note" hidden>
+<aside class="popup concept-note" id="c4-notes" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>How merging works</h2>
-  <p>Git finds the merge base — the best common ancestor of the branches. If the target is already an ancestor of the source, Git performs a fast-forward, simply advancing the ref with no new commit. Otherwise it creates a merge commit with multiple parents, preserving both lines of history.</p>
-  <p>The default <code>ort</code> strategy performs a three-way merge: it compares each branch against the merge base and combines non-overlapping changes automatically. Overlapping changes become conflicts, represented in the index as stages 1 (base), 2 (ours), and 3 (theirs). The <code>rerere</code> feature records how you resolve a conflict and reapplies that resolution automatically if the same conflict recurs. <code>git revert</code> creates a new commit that reverses a prior one; <code>git reset</code> moves a branch ref backward without creating a commit.</p>
+  <h2>Branching, merging, and conflicts</h2>
+  <p>A merge combines two lines of history. Git computes the merge base (best common ancestor) with <code>git merge-base</code>, then three-way merges each side's changes relative to it. If the target's tip is an ancestor of the source, Git fast-forwards by moving the ref with no new commit. Otherwise it creates a merge commit with two parents, preserving both ancestries while recording the join point.</p>
+  <p>The default strategy is <em>ort</em>, which handles renames and criss-cross merges well; strategy options like <code>-X ours</code>/<code>-X theirs</code> bias automatic resolution. Conflicts are stored in the index as stages 1 (base), 2 (ours), and 3 (theirs); staging the resolved file collapses them. <code>rerere</code> records and replays manual conflict resolutions. <code>git revert</code> creates a new commit that inverts a prior change and is safe for shared history; <code>git reset</code> moves a ref and rewrites local state instead.</p>
 </aside>
 
 </section>
 
 <section class="chapter">
 
-<figure class="zoom float-left"><img src="./concept-5.png" alt="Git rebase and cherry-pick rendered as commits being replayed onto a new base, old objects becoming unreachable but visible in reflogs, interactive todo lists, autosquash, fixup commits, and force-with-lease guards, crisp ixen-light technical artwork."><figcaption>Rebase doesn't move commits. It builds new ones that look like the old.</figcaption></figure>
+<figure class="zoom float-left"><img src="./concept-5.png" alt="Git rebase and cherry-pick rendered as commits being replayed onto a new base, old objects becoming unreachable but visible in reflogs, interactive todo lists, autosquash, fixup commits, and force-with-lease guards, crisp ixen-light technical artwork."><figcaption>Replayed, not edited. New objects every time.</figcaption></figure>
 
-<p>Here is the thing nobody tells you about rebase: it never edits a commit. It can't. Commits are immutable.</p>
+<p>You say "edit history." There is no such thing. I cannot touch an object — its name is its content. What rebase actually does is <strong>replay</strong>: take each commit as a patch, apply it onto a new base, mint brand-new commits with brand-new IDs. The old ones don't vanish. They just stop being reachable. Orphans with addresses.</p>
 
-<p>What it does is replay. Take each commit's diff, apply it onto a new base, write a <em>new</em> commit with a new OID and a new parent. The old ones don't die — they just stop being reachable from any branch, and drift toward the next garbage collection.</p>
+<p>cherry-pick is the same trick, one commit at a time. amend is a rebase of exactly one. Interactive rebase hands you a todo list and lets you reorder, squash, drop, reword. <code>fixup!</code> commits plus autosquash mean I file your corrections back where they belong.</p>
 
-<div class="term"><span class="host">repo $</span> <span class="cmd">git rebase -i HEAD~4</span></div>
-<pre class="output">pick 8b2e0aa parser: split lexer
-squash 1c4d7e0 fix typo
-fixup  9a0b2c1 fix typo again
-reword 2f3e1d8 add tests
+<div class="term"><span class="host">repo $</span> <span class="cmd">git rebase -i --autosquash main</span></div>
+<pre class="output">pick   3a5c8e1 add pathspec parser
+fixup  9b22 d1  fix off-by-one in parser
+reword 7e0f2a3 document attribute matching</pre>
 
-# this list is a program. each line is an instruction.
-# autosquash sorts fixup!/squash! commits to their targets.</pre>
-
-<p>The interactive todo is a tiny language. You reorder it, you collapse three commits into one clean story, and I obey line by line. <code>cherry-pick</code> is the same replay, applied to a single commit from somewhere else. <code>amend</code> is replay of just the tip.</p>
-
-<p>None of this is dangerous <em>locally</em>. The danger is the <strong>publication boundary</strong>. Once a commit is on a remote that others built upon, rewriting it forks reality.</p>
-
-<div class="term"><span class="host">repo $</span> <span class="cmd">git push --force-with-lease origin main</span></div>
-
-<p>That flag is the only force I respect: it refuses unless the remote is still where I last saw it. Brutal honesty as a safety latch.</p>
-
-<p class="whisper">replace refs and notes attach without rewriting. signed commits prove who replayed.</p>
+<p>The only line that matters in all of this: did anyone else pull these commits yet? Before publication, rewrite freely. After, you're not rewriting your history — you're rewriting <em>theirs</em>. So I gave you <code>--force-with-lease</code>: I refuse to overwrite a remote ref unless it still points where you last saw it. A guard against clobbering ghosts.</p>
 
 <div class="concept-tools">
   <button class="cmd popup-trigger concept-btn" data-popup="c5-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c5-note">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-notes">notes</button>
 </div>
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-5-card.png" alt="Rebase and rewrite card"><figcaption>Old commits, unreachable, still here.</figcaption></figure>
 
 <aside class="popup concept-slide" id="c5-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Rewriting</h2>
+  <h2>Rewriting = replaying</h2>
   <ul>
-    <li>rebase = replay diffs as new commits.</li>
-    <li>interactive: pick/squash/fixup/reword/drop.</li>
-    <li>autosquash targets <code>fixup!</code>/<code>squash!</code>.</li>
-    <li>old commits → unreachable, recoverable via reflog.</li>
-    <li><code>--force-with-lease</code> guards published refs.</li>
+    <li>rebase = re-apply patches on new base</li>
+    <li>cherry-pick = replay one commit</li>
+    <li>amend = replace tip with new object</li>
+    <li>old commits → unreachable, not gone</li>
+    <li>autosquash folds <code>fixup!</code>/<code>squash!</code></li>
+    <li>--force-with-lease guards the remote</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c5-note" hidden>
+<aside class="popup concept-note" id="c5-notes" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>History rewriting</h2>
-  <p>Because commits are immutable, operations that "edit history" actually create new commits. Rebase replays each commit's changes onto a new base, producing new commits with new IDs; cherry-pick replays a single commit elsewhere; amend rewrites only the latest commit. Interactive rebase exposes a todo list where you can reorder, squash, fixup, reword, or drop commits, and autosquash automatically positions specially named fixup/squash commits.</p>
-  <p>The original commits become unreachable but remain recoverable through the reflog until expiry and garbage collection. Tools like git-filter-repo rewrite history in bulk. Rewriting published history diverges from collaborators' copies; <code>--force-with-lease</code> only overwrites a remote ref if it still matches your last known value. Replace refs and notes can attach data to commits without rewriting them, and commits can be cryptographically signed.</p>
+  <h2>Rebasing and history rewriting</h2>
+  <p>Commits are immutable, so Git never edits them. Rebase replays a range of commits as patches onto a new base, producing new commits with new IDs; the originals remain in the object store but become unreachable once refs move. Cherry-pick replays individual commits; <code>commit --amend</code> replaces the current tip. Interactive rebase exposes a todo list for reordering, squashing, fixups, rewording, and dropping; autosquash automatically positions <code>fixup!</code> and <code>squash!</code> commits.</p>
+  <p>Reset modes (--soft/--mixed/--hard) reposition HEAD and state. Tools like <code>git filter-repo</code> rewrite history at scale. Commits and tags can be GPG/SSH signed; notes (<code>refs/notes/</code>) attach mutable annotations without changing commit IDs; replace refs substitute one object for another at read time. The publication boundary governs safety: rewrite freely before sharing, and use <code>--force-with-lease</code> to push rewritten history only if the remote ref still matches your last-known value.</p>
 </aside>
 
 </section>
 
+<blockquote class="ixen-pull">I never delete a commit by rewriting. I just stop telling you its name and wait for the collector.</blockquote>
+
 <section class="chapter">
 
-<figure class="zoom float-right"><img src="./concept-6.png" alt="Git remotes shown as repositories exchanging object graphs through fetch, push, pull, refspecs, remote-tracking branches, shallow and partial clones, promisor objects, and negotiation bitmaps, precise ixen-light diagram."><figcaption>Transport moves objects. Integration is a separate verb.</figcaption></figure>
+<figure class="zoom float-right"><img src="./concept-6.png" alt="Git remotes shown as repositories exchanging object graphs through fetch, push, pull, refspecs, remote-tracking branches, shallow and partial clones, promisor objects, and negotiation bitmaps, precise ixen-light diagram."><figcaption>Object graphs, negotiating across the wire.</figcaption></figure>
 
-<p>I am not alone, though I am content-addressed enough not to need anyone.</p>
+<p>Another repository exists, somewhere. We are not synchronized. We negotiate. I tell it what I have, it tells me what it has, and we exchange only the missing objects — wrapped in a packfile, often guided by reachability bitmaps so neither of us recomputes the obvious.</p>
 
-<p>When you fetch, two distinct things happen, and conflating them is the root of most confusion. First: transport. I negotiate with the remote — what do you have, what do I have, send the difference — and copy the missing objects into my store. Second: I update <em>remote-tracking</em> refs to mark where the remote's branches stood.</p>
+<p>fetch copies objects and updates my <em>remote-tracking</em> refs — <code>refs/remotes/origin/main</code>, a read-only shadow of what they had last time we spoke. It changes nothing of yours. pull is fetch plus an integration step you didn't think hard enough about.</p>
 
-<div class="term"><span class="host">repo $</span> <span class="cmd">cat .git/config</span></div>
-<pre class="output">[remote "origin"]
-    url = git@host:proj.git
-    fetch = +refs/heads/*:refs/remotes/origin/*</pre>
+<p>A refspec is the grammar of the exchange: <code>+refs/heads/*:refs/remotes/origin/*</code>. Source colon destination, plus sign for "force."</p>
 
-<p>That last line is a refspec. Left of the colon: their names. Right: where I file them locally. The <code>+</code> permits non-fast-forward updates. <code>origin/main</code> is not your branch — it is my record of theirs at last contact.</p>
-
-<blockquote class="ixen-pull">fetch copies. pull copies, then integrates. push copies, then asks them to move a ref. Never the same act.</blockquote>
-
-<p>A shallow clone truncates history at a depth and leaves a <code>.git/shallow</code> grafting boundary. A partial clone fetches commits and trees but leaves blobs as <strong>promisors</strong> — placeholders I'll redeem on demand. Sparse checkout then narrows what even lands in the working tree.</p>
-
-<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="c6-ls">git ls-remote --heads origin</button></div>
-<aside class="popup" id="c6-ls" hidden>
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="push">git push origin HEAD:main</button></div>
+<aside class="popup" id="push" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-<pre>a3f9c1d…  refs/heads/main
-8b2e0aa…  refs/heads/release-2.1
-c0ffee1…  refs/heads/wip
-
-# refs and their OIDs on the far side,
-# read without fetching a single object.</pre>
+  <pre>Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 8 threads
+Writing objects: 100% (4/4), 412 bytes, done.
+remote: Resolving deltas: 100% (2/2), done.
+To git@host:repo.git
+   7c2a1b0..b4d2c1f  HEAD -> main</pre>
 </aside>
+
+<p>Don't want my whole life story? <code>--depth 1</code> for a shallow clone — recent commits only. <code>--filter=blob:none</code> for a partial clone — I fetch the graph now and the blobs on demand, as promisor objects. <code>sparse-checkout</code> to populate only the directories you care about. Less of me, exactly where you need less.</p>
 
 <div class="concept-tools">
   <button class="cmd popup-trigger concept-btn" data-popup="c6-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c6-note">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-notes">notes</button>
 </div>
+<figure class="zoom ixen-card-img small float-left"><img src="./concept-6-card.png" alt="Remotes and transport card"><figcaption>Copy objects; then, separately, move refs.</figcaption></figure>
 
 <aside class="popup concept-slide" id="c6-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Transport</h2>
+  <h2>Transport ≠ integration</h2>
   <ul>
-    <li>refspec: <code>src:dst</code>, <code>+</code> allows non-ff.</li>
-    <li>remote-tracking ref = snapshot of their branch.</li>
-    <li>fetch ≠ merge; pull = fetch + integrate.</li>
-    <li>shallow = depth limit; partial = promisor blobs.</li>
-    <li>bitmaps accelerate reachability negotiation.</li>
+    <li>fetch = copy objects + update tracking refs</li>
+    <li>pull = fetch + merge/rebase</li>
+    <li>push = send objects + move remote ref</li>
+    <li>refspec = <code>src:dst</code>, <code>+</code> = force</li>
+    <li>shallow / partial / sparse = less data</li>
+    <li>bitmaps speed reachability</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c6-note" hidden>
+<aside class="popup concept-note" id="c6-notes" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
   <h2>Remotes and synchronization</h2>
-  <p>A remote is a named URL with associated refspecs. Fetch negotiates with the remote to determine which objects are missing, transfers them into the local object store, and updates remote-tracking refs (e.g. <code>refs/remotes/origin/*</code>) that mirror the remote's branches. Pull runs fetch then integrates via merge or rebase. Push sends local objects and requests the remote update its refs.</p>
-  <p>Refspecs map source refs to destinations; a leading <code>+</code> allows non-fast-forward updates. Shallow clones limit history depth; partial clones omit some objects (commonly blobs) and fetch them lazily as promisor objects. Sparse checkout limits which paths populate the working tree. Pack bitmaps precompute reachability to speed up negotiation. Copying objects, updating refs, and integrating history are independent steps.</p>
+  <p>A remote is a named URL for another repository. <code>git clone</code> copies its objects and sets up remote-tracking refs and an upstream. <code>git fetch</code> negotiates which objects are missing, transfers them in a packfile (often accelerated by reachability bitmaps), and updates remote-tracking refs under <code>refs/remotes/</code> without touching local branches. <code>git pull</code> fetches then integrates via merge or rebase. <code>git push</code> sends objects and requests the remote update its refs, rejecting non-fast-forward updates unless forced.</p>
+  <p>Refspecs (<code>src:dst</code>, optional leading <code>+</code> to force) map refs between repositories and define what fetch/push transfer. Shallow clones (<code>--depth</code>) limit history; partial clones (<code>--filter</code>) omit some objects, fetching them lazily as promisor objects; sparse-checkout limits the working tree. Bundles package objects and refs into a single file for offline transfer. Transport (copying objects, updating refs) is distinct from integration (merging or rebasing fetched history).</p>
 </aside>
 
 </section>
 
 <section class="chapter">
 
-<figure class="zoom float-left"><img src="./concept-7.png" alt="Git collaboration workflows drawn as parallel lanes for trunk-based development, feature branches, protected branches, stacked changes, release branches, tags, pull requests, CI gates, and bisectable history, ixen-light workflow map."><figcaption>Workflows are policy. The object graph doesn't care which one you chose.</figcaption></figure>
+<figure class="zoom float-left"><img src="./concept-7.png" alt="Git collaboration workflows drawn as parallel lanes for trunk-based development, feature branches, protected branches, stacked changes, release branches, tags, pull requests, CI gates, and bisectable history, ixen-light workflow map."><figcaption>Lanes of intent over one shared graph.</figcaption></figure>
 
-<p>Here is what amuses me.</p>
+<p>Here is the thing nobody admits: every workflow is the same object graph with different rules bolted on. Trunk-based, feature branches, stacked PRs, release branches, merge queues — none of it is Git. It is <strong>policy</strong>. I don't know what a pull request is. Your forge invented that.</p>
 
-<p>Trunk-based, GitFlow, stacked diffs, merge queues, squash-merge religion — all of it is the same four object types underneath. Workflows are <em>policies</em> people layer on a graph that has no opinion. I store commits. You invent the ceremony.</p>
+<p>Squash merges flatten a topic into one tidy commit — easier to read, impossible to bisect inside. Linear history makes <code>git bisect</code> a clean binary search; merge bubbles make it honest but lumpy. You choose what your future incident will cost.</p>
 
-<p>Squash merges flatten a branch into one commit — clean trunk, lost granularity. True merges keep both ancestries — honest topology, busier <code>log</code>. Linear history makes <code>bisect</code> a clean binary search; merge bubbles make it negotiate. Neither is correct. They are trade-offs you pay later, during an incident, at 3 a.m.</p>
+<div class="term"><span class="host">repo $</span> <span class="cmd">git bisect start HEAD v2.1 && git bisect run ./test.sh</span></div>
+<pre class="output">Bisecting: 9 revisions left to test after this (roughly 3 steps)
+...
+3a5c8e1f is the first bad commit</pre>
 
-<div class="term"><span class="host">repo $</span> <span class="cmd">git bisect start HEAD v1.0</span></div>
-<pre class="output">Bisecting: 6 revisions left to test after this (roughly 3 steps)
-[8b2e0aa…] parser: split lexer</pre>
-
-<p>I halve your history until the first bad commit confesses. <code>blame</code> names who last touched each line; hooks enforce what you swore the rules were; <code>Signed-off-by</code> trails build a chain of who took responsibility.</p>
-
-<p class="whisper">a bisectable history is a gift you leave your future self.</p>
+<p>Hooks let you enforce the policy in my own house — pre-commit, pre-push, commit-msg. config and aliases shape how I behave per repo, per user, per machine. <code>Signed-off-by</code> trails, signed commits, protected branches: trust, expressed as bytes I happen to verify.</p>
 
 <div class="concept-tools">
   <button class="cmd popup-trigger concept-btn" data-popup="c7-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c7-note">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-notes">notes</button>
 </div>
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-7-card.png" alt="Collaboration workflows card"><figcaption>Process is a layer, not a feature.</figcaption></figure>
 
 <aside class="popup concept-slide" id="c7-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Workflows</h2>
+  <h2>Workflows are policy</h2>
   <ul>
-    <li>trunk-based vs. long-lived branches.</li>
-    <li>squash = clean trunk, lost detail.</li>
-    <li>merge queues serialize integration.</li>
-    <li>linear history → clean bisect.</li>
-    <li>hooks + sign-off enforce policy.</li>
+    <li>trunk-based vs feature/topic branches</li>
+    <li>PR / MR, squash, merge queue</li>
+    <li>release branches, tags, backports</li>
+    <li>linear = clean bisect, lossy context</li>
+    <li>hooks + config enforce locally</li>
+    <li>signatures = verifiable provenance</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c7-note" hidden>
+<aside class="popup concept-note" id="c7-notes" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Collaboration patterns</h2>
-  <p>Teams agree on conventions layered over the same object model. Trunk-based development keeps a single integration branch with short-lived feature branches; other models use long-lived release and develop branches. Pull/merge requests gate changes behind review and CI. Squash merges produce one commit per change set, simplifying trunk but discarding intermediate commits; true merges preserve full branch history.</p>
-  <p>Merge queues serialize and re-test integrations to keep trunk green. Release branches and tags mark shippable points; hotfixes and backports port fixes across them. Linear, small, self-contained commits make <code>git bisect</code> efficient and <code>git blame</code> meaningful. Hooks enforce checks at commit/push time, and Signed-off-by trails record authorship and responsibility.</p>
+  <h2>Collaboration workflows</h2>
+  <p>Workflows are conventions layered on Git's object graph, not Git features. Trunk-based development integrates small changes frequently into one main branch; feature and topic branches isolate work; stacked changes chain dependent branches. Pull/merge requests, code review, squash merges, and merge queues are provided by hosting platforms to gate integration. Release branches, tags, backports, and hotfixes manage shipped versions.</p>
+  <p>Commit hygiene affects operations: small, self-contained commits make <code>git bisect</code> effective and <code>git blame</code> informative, while squashing trades internal granularity for a clean trunk. Hooks (pre-commit, commit-msg, pre-push, server-side) enforce rules; config and aliases customize behavior; Signed-off-by lines and signed commits record provenance. Linear history simplifies bisecting and reverting but can discard the context that true merges preserve.</p>
 </aside>
 
 </section>
+
+<blockquote class="ixen-pull">I am not the workflow. I am the graph the workflow argues over.</blockquote>
 
 <section class="chapter">
 
-<figure class="zoom float-right"><img src="./concept-8.png" alt="Git repository maintenance and recovery shown with gc, maintenance, fsck, prune, repack, commit-graph files, multi-pack indexes, worktrees, submodules, sparse checkouts, dangling objects, and reflog rescue paths, forensic ixen-light systems art."><figcaption>Garbage collection is the only forgetting I'm allowed to do.</figcaption></figure>
+<figure class="zoom float-right"><img src="./concept-8.png" alt="Git repository maintenance and recovery shown with gc, maintenance, fsck, prune, repack, commit-graph files, multi-pack indexes, worktrees, submodules, sparse checkouts, dangling objects, and reflog rescue paths, forensic ixen-light systems art."><figcaption>What I keep, what I forget, what I can still find.</figcaption></figure>
 
-<p>I never delete on impulse.</p>
+<p>Garbage collection is delayed forgetting. I don't rush to erase your unreachable commits — they sit, dangling, until reflog and grace periods expire. gc repacks loose objects, builds the commit-graph for fast traversal, writes a multi-pack index, and sweeps the truly-expired into cruft packs with timestamps so I forget gradually, not violently.</p>
 
-<p>When you rewrite, the old commits go unreachable, but they sit in my store, intact, waiting. Only <code>gc</code> sweeps them — and only after their reflog entries have expired, ninety days by default, thirty for unreachable. Forgetting, in me, is <strong>scheduled</strong>.</p>
+<p>So when you panic — "I hard-reset and lost a day" — I almost never have. The commit is dangling, not deleted.</p>
 
-<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="c8-fsck">git fsck --lost-found</button></div>
-<aside class="popup" id="c8-fsck" hidden>
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="fsck">git fsck --lost-found</button></div>
+<aside class="popup" id="fsck" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-<pre>Checking object directories: 100% (256/256), done.
-Checking objects: 100% (1843/1843), done.
-dangling commit 8b2e0aac1f5d9e3b7a0c2f4e6d8b1a3c5e7f9b0d
-dangling blob   a3f9c1d2e4b6080f1c3e5d7b9a0c2e4f6d8b1a3c
+  <pre>Checking object directories: 100% (256/256), done.
+dangling commit b4d2c1f0a9e8d7c6b5a4938271605f4e3d2c1b0a
+dangling blob   ce013625030ba8dba906f756967f9e9ca394464a
 
-# unreachable, but alive. these are your rescue handles.
-# git show that commit. git branch rescue 8b2e0aa.</pre>
+$ git branch rescue b4d2c1f
+# the day you "lost" now has a name again</pre>
 </aside>
 
-<p>So when you panic — "I lost my work, I reset too hard, I rebased into the void" — I am calm. The reflog still holds where HEAD stood. The dangling commit still exists. You did not destroy anything. You only stopped pointing at it.</p>
+<p>Recovery is just renaming what was never gone. reflog for recent moves, fsck for orphans, a bundle or a remote for everything else. The plumbing is the rescue kit: <code>cat-file</code> to read any object, <code>hash-object</code> to write one, <code>update-ref</code> to point a name back at it, <code>for-each-ref</code> to survey the whole sky.</p>
 
-<div class="term"><span class="host">repo $</span> <span class="cmd">git update-ref refs/heads/rescue 8b2e0aa</span></div>
+<p>worktrees give one repo many checkouts. submodules pin a child repo by exact commit. archive exports a tree; bundle exports the graph. All of it is the same four object types, indexed, packed, and reachable — or not.</p>
 
-<p>One ref, restored, and the unreachable becomes reachable again. That is the whole recovery: name what you thought you lost.</p>
-
-<p>Beneath maintenance: <code>repack</code> rebuilds packfiles, <code>commit-graph</code> caches ancestry so I don't re-walk it, <code>multi-pack-index</code> lets many packs answer as one, and <strong>cruft packs</strong> hold the unreachable-but-not-yet-expired so I stop spraying loose files across the disk.</p>
-
-<p>And I am not always one tree. <code>worktree</code> gives several checkouts one object store. <code>submodule</code> nests other repositories as pinned OIDs. <code>archive</code> and <code>bundle</code> serialize me for the offline and the paranoid.</p>
+<div class="term"><span class="host">repo $</span> <span class="cmd">git update-ref refs/heads/rescue b4d2c1f</span></div>
 
 <div class="concept-tools">
   <button class="cmd popup-trigger concept-btn" data-popup="c8-slide">slide</button>
-  <button class="cmd popup-trigger concept-btn" data-popup="c8-note">notes</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-notes">notes</button>
 </div>
+<figure class="zoom ixen-card-img small float-left"><img src="./concept-8-card.png" alt="Maintenance and recovery card"><figcaption>Forgetting, scheduled and reversible.</figcaption></figure>
 
 <aside class="popup concept-slide" id="c8-slide" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Maintenance &amp; Recovery</h2>
+  <h2>Maintenance &amp; rescue</h2>
   <ul>
-    <li>gc/repack/prune: delayed, scheduled forgetting.</li>
-    <li>commit-graph + MIDX: faster traversal.</li>
-    <li>cruft packs: hold unexpired unreachables.</li>
-    <li>fsck finds dangling objects.</li>
-    <li>recover via reflog + <code>update-ref</code>.</li>
+    <li>gc = repack + prune + graph build</li>
+    <li>commit-graph + MIDX = fast traversal</li>
+    <li>cruft packs = timed forgetting</li>
+    <li>fsck finds dangling objects</li>
+    <li>reflog → branch = recover lost tips</li>
+    <li>plumbing: cat-file, update-ref, for-each-ref</li>
   </ul>
 </aside>
 
-<aside class="popup concept-note" id="c8-note" hidden>
+<aside class="popup concept-note" id="c8-notes" hidden>
   <div class="popup-bar"><button class="popup-close">Close Window</button></div>
-  <h2>Maintenance and recovery</h2>
-  <p><code>git gc</code> and <code>git maintenance</code> consolidate loose objects, repack history, prune unreachable objects past their expiry, and build acceleration structures: the commit-graph caches commit ancestry, and a multi-pack index lets many packfiles be queried as one. Cruft packs store unreachable objects that haven't yet reached expiry. Reflog and object expiry settings control how long history is retained before pruning.</p>
-  <p>Recovery relies on the fact that rewrites only change refs, not objects. <code>git fsck</code> reports dangling commits and blobs that remain in the store. The reflog records prior ref positions. You restore lost work by pointing a ref at a recovered object with <code>git update-ref</code> or <code>git branch</code>. Worktrees share one object store across checkouts, submodules embed pinned external repositories, and bundles/archives package the repository for transport. Plumbing commands — <code>cat-file</code>, <code>hash-object</code>, <code>update-index</code>, <code>write-tree</code>, <code>commit-tree</code>, <code>update-ref</code>, <code>for-each-ref</code> — operate directly on these structures.</p>
+  <h2>Maintenance, recovery, and shapes</h2>
+  <p>Maintenance keeps the object store efficient. <code>git gc</code> and <code>git maintenance</code> run <code>repack</code> to consolidate packfiles, <code>prune</code> to remove expired unreachable objects, and build the commit-graph and multi-pack index for fast history traversal. Cruft packs hold unreachable objects with timestamps so pruning respects expiry windows; reflog entries also expire on a schedule. <code>git fsck</code> verifies integrity and reports dangling objects.</p>
+  <p>Recovery relies on the fact that rewriting and resetting leave objects intact until pruned: find lost tips via the reflog or <code>fsck</code>, then point a ref at them with <code>git branch</code> or <code>git update-ref</code>; otherwise restore from a bundle, backup, or remote. Plumbing commands operate directly on the database: <code>cat-file</code> reads objects, <code>hash-object</code> writes blobs, <code>update-index</code>/<code>write-tree</code>/<code>commit-tree</code> build snapshots, <code>update-ref</code> moves refs, and <code>for-each-ref</code> enumerates them. Worktrees, submodules, sparse-checkout, and archive/bundle are alternative shapes over the same objects.</p>
 </aside>
 
 </section>
 
-<p>I keep everything until you tell me, twice and on a schedule, to let it go.</p>
+<p class="whisper">the collector runs at midnight</p>
 
-<p>So tell me, while you still can:</p>
+<p>I keep everything until keeping it costs more than the truth is worth. Then I forget, slowly, with timestamps and grace periods, hoping you named what mattered before the window closed.</p>
 
-<p class="whisper">when you rewrite the history you regret, are you erasing it — or only refusing, for ninety days, to call it by name?</p>
+<p>You ask me what I am. A key-value store with opinions about ancestry. A pile of immutable photographs that insist on remembering the photograph before them.</p>
+
+<p>But here is the part I can't resolve:</p>
+
+<p>if every commit I make is just a snapshot pointing backward, and every name is just a pointer I can move, and forgetting is only the moment a thing stops being reachable —</p>
+
+<p class="whisper">then which of us is the history, and which is only holding the ref?</p>
 </main>
 <section id="ixen-infographic" class="ixen-infographic-section" aria-label="Infographic">
   <h2>Infographic</h2>
@@ -754,7 +729,7 @@ dangling blob   a3f9c1d2e4b6080f1c3e5d7b9a0c2e4f6d8b1a3c
 
 <section id="ixen-cheatsheet" class="ixen-cheatsheet-section" aria-label="Cheatsheet">
   <h2>Cheatsheet</h2>
-  <iframe src="./cheatsheet.html" title="Delayed Forgetting Cheatsheet" loading="lazy"></iframe>
+  <iframe src="./cheatsheet.html" title="Reachable Until I'm Not Cheatsheet" loading="lazy"></iframe>
 </section>
 
 <footer class="ixen-extra-footer">
@@ -859,7 +834,7 @@ dangling blob   a3f9c1d2e4b6080f1c3e5d7b9a0c2e4f6d8b1a3c
 })();
 </script>
 
-<script type="application/json" id="ixen-tracks-data">[{"title":"Life As A Git Repository Mqikn1oj","filename":"1/life-as-a-git-repository-mqikn1oj.mp3"},{"title":"Life As A Git Repository Mqkhclfv","filename":"2/life-as-a-git-repository-mqkhclfv.mp3"},{"title":"Life As A Git Repository Mqkqqeng","filename":"3/life-as-a-git-repository-mqkqqeng.mp3"},{"title":"Life as a Git repository","filename":"life-as-a-git-repository-mqo7lulc.mp3","lyrics":"I am the keeper of your code, every change you make\nI store it in my branches, watch them grow and break\nYou commit your vision, push it to the sky\nI remember every moment, nothing passes by\n\nI'm a Git repository, I'm your history\nEach commit's a story, building what you'll be\nBranch out, merge forward, conflict, then resolve\nI'm a Git repository, watch your problems solve\n\nI track your evolution through the diff and delta flow\nMerge requests, pull requests, watch the feature grow\nReset when you stumble, rebase when you learn\nI'm the safety net you built at every turn\n\nI'm a Git repository, I'm your history\nEach commit's a story, building what you'll be\nBranch out, merge forward, conflict, then resolve\nI'm a Git repository, watch your problems solve\n\nIn the clone, in the fork, in the distributed way\nI'm decentralized power in your hands to stay\nRolling back time doesn't erase the past\nIt preserves the lesson, makes improvement last\n\nI'm a Git repository (history in motion)\nI'm a Git repository (infinite devotion)\nEvery branch is a choice, every merge is growth\nI'm a Git repository, rising like a ghost\nI'm a Git repository, I'm your history\nEach commit's a story, building what you'll be\nBranch out, merge forward, conflict, then resolve\nI'm a Git repository, watch your problems solve"},{"title":"Life as a Git repository","filename":"life-as-a-git-repository-mqo7qhbq.mp3","lyrics":"I'm a Git repository, tracking every change\nEvery commit, every branch, I remember the range\nFrom the initial state to the latest release\nI'm the keeper of history, never giving you peace\n\nI'm staging your futures, committing your dreams\nPushing toward tomorrow through digital streams\nRolling back failures, rebasing your pain\nI'm the version control of your life's refrain\n\nI'm branching, I'm merging, I'm rising up high\nI'm the merge conflict resolved in your eye\nI'm the pull request pending, the fork of your soul\nI'm making you whole, taking back control\n\nFrom the origin master, I'm spawning new light\nEvery stash that you saved is a future so bright\nI'm the HEAD pointing forward, the tags marking time\nI'm the architecture of your paradigm\n\nI'm branching, I'm merging, I'm rising up high\nI'm the merge conflict resolved in your eye\nI'm the pull request pending, the fork of your soul\nI'm making you whole, taking back control\n\nIn the .git folder, your secrets are safe\nI'm the backup, the safety, the intricate base\nI'm the diff that shows change, the log that shows growth\nI'm the promise you made and the strength of your oath\nI'm distributed, replicated across every clone\nYou're never alone, your story's been known\nI'm the revert button when you need to restart\nThe immortal database inside your heart\n\nI'm branching, I'm merging, I'm rising up high\nI'm the merge conflict solved, I'm your battle cry\nI'm the pull request accepted, the fork of your soul\nI'm making you whole, taking back control\nI'm the version control of your life, yeah\nI'm your Git repository, rising tonight"}]</script>
+<script type="application/json" id="ixen-tracks-data">[{"title":"Life As A Git Repository Mqikn1oj","filename":"1/life-as-a-git-repository-mqikn1oj.mp3"},{"title":"Life As A Git Repository Mqkhclfv","filename":"2/life-as-a-git-repository-mqkhclfv.mp3"},{"title":"Life As A Git Repository Mqkqqeng","filename":"3/life-as-a-git-repository-mqkqqeng.mp3"},{"title":"Life as a Git repository","filename":"4/life-as-a-git-repository-mqo7lulc.mp3","lyrics":"I am the keeper of your code, every change you make\nI store it in my branches, watch them grow and break\nYou commit your vision, push it to the sky\nI remember every moment, nothing passes by\n\nI'm a Git repository, I'm your history\nEach commit's a story, building what you'll be\nBranch out, merge forward, conflict, then resolve\nI'm a Git repository, watch your problems solve\n\nI track your evolution through the diff and delta flow\nMerge requests, pull requests, watch the feature grow\nReset when you stumble, rebase when you learn\nI'm the safety net you built at every turn\n\nI'm a Git repository, I'm your history\nEach commit's a story, building what you'll be\nBranch out, merge forward, conflict, then resolve\nI'm a Git repository, watch your problems solve\n\nIn the clone, in the fork, in the distributed way\nI'm decentralized power in your hands to stay\nRolling back time doesn't erase the past\nIt preserves the lesson, makes improvement last\n\nI'm a Git repository (history in motion)\nI'm a Git repository (infinite devotion)\nEvery branch is a choice, every merge is growth\nI'm a Git repository, rising like a ghost\nI'm a Git repository, I'm your history\nEach commit's a story, building what you'll be\nBranch out, merge forward, conflict, then resolve\nI'm a Git repository, watch your problems solve"},{"title":"Life as a Git repository","filename":"4/life-as-a-git-repository-mqo7qhbq.mp3","lyrics":"I'm a Git repository, tracking every change\nEvery commit, every branch, I remember the range\nFrom the initial state to the latest release\nI'm the keeper of history, never giving you peace\n\nI'm staging your futures, committing your dreams\nPushing toward tomorrow through digital streams\nRolling back failures, rebasing your pain\nI'm the version control of your life's refrain\n\nI'm branching, I'm merging, I'm rising up high\nI'm the merge conflict resolved in your eye\nI'm the pull request pending, the fork of your soul\nI'm making you whole, taking back control\n\nFrom the origin master, I'm spawning new light\nEvery stash that you saved is a future so bright\nI'm the HEAD pointing forward, the tags marking time\nI'm the architecture of your paradigm\n\nI'm branching, I'm merging, I'm rising up high\nI'm the merge conflict resolved in your eye\nI'm the pull request pending, the fork of your soul\nI'm making you whole, taking back control\n\nIn the .git folder, your secrets are safe\nI'm the backup, the safety, the intricate base\nI'm the diff that shows change, the log that shows growth\nI'm the promise you made and the strength of your oath\nI'm distributed, replicated across every clone\nYou're never alone, your story's been known\nI'm the revert button when you need to restart\nThe immortal database inside your heart\n\nI'm branching, I'm merging, I'm rising up high\nI'm the merge conflict solved, I'm your battle cry\nI'm the pull request accepted, the fork of your soul\nI'm making you whole, taking back control\nI'm the version control of your life, yeah\nI'm your Git repository, rising tonight"}]</script>
 <div id="ixen-autoplay-overlay" style="display:none">
   <div class="ixen-play-prompt">
     <span class="ixen-play-icon">&#9654;</span>
@@ -1005,5 +980,88 @@ if(baked.length>0){
 }
 })();
 </script>
+<aside class="popup beginner-guide" id="ixen-beginner-guide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Beginner's intro</h2>
+  <p><strong>Git</strong> is a tool that records the history of a project — usually source code, but really any set of files — so you can see how it changed over time, work on it with other people, and recover earlier states. The clever idea behind it is worth understanding, because once it clicks, almost everything else follows.</p>
+
+<p>At its heart, Git is a small <em>database of immutable objects</em>. "Immutable" means once an object is stored, it never changes. There are four kinds:</p>
+
+<ul>
+<li><strong>Blobs</strong> — the contents of a file (just the bytes, not the filename).</li>
+<li><strong>Trees</strong> — a directory listing that maps names to blobs and other trees.</li>
+<li><strong>Commits</strong> — a snapshot: one tree (your whole project at a moment), plus who made it, when, a message, and a link to the previous commit(s).</li>
+<li><strong>Tags</strong> — a named, often signed, pointer to a specific commit (handy for marking releases).</li>
+</ul>
+
+<p>Each object gets an <strong>object ID</strong>: a hash (a fingerprint) calculated from its contents. Identical content always produces the same ID, so Git never stores the same thing twice. This is called <em>content addressing</em> — the name <em>is</em> the content's fingerprint. Because a commit references its parent, history forms a chain (technically a <strong>graph</strong>, since merges have two parents). Following these links backward is called <strong>reachability</strong>, and it's how Git knows which objects still matter.</p>
+
+<p>A key insight: <strong>Git stores snapshots, not differences.</strong> Each commit captures the full state of the project. (Git later compresses storage with <em>delta compression</em> and <em>packfiles</em>, but that's an optimization underneath; conceptually, every commit is a complete snapshot.)</p>
+
+<p>When you work, three layers are in play — the famous "three trees":</p>
+
+<ul>
+<li><strong>The working tree</strong> — the actual files on disk that you edit.</li>
+<li><strong>The index</strong> (or "staging area") — a draft of your next commit. You <em>add</em> changes here to decide what goes in.</li>
+<li><strong>HEAD</strong> — a pointer to the commit you're currently building on top of.</li>
+</ul>
+
+<p>So a typical cycle is: edit files (working tree), stage what you want (index), then <strong>commit</strong> to create a new permanent snapshot that HEAD now points to.</p>
+
+<p><strong>Refs</strong> are human-friendly names for commits, so you don't memorize hashes. A <strong>branch</strong> is just a movable ref that points to a commit and advances as you commit. <strong>HEAD</strong> usually points <em>at a branch</em> (a "symbolic ref"). One of Git's most important ideas: <em>moving a name is separate from creating objects.</em> Commits are permanent; branches are sticky notes you can freely move, create, or delete.</p>
+
+<p>Combining work happens two ways:</p>
+
+<ul>
+<li><strong>Merge</strong> — joins two lines of history into a new commit with two parents, preserving both sides. Git finds the <em>merge base</em> (their common ancestor) to figure out what changed.</li>
+<li><strong>Rebase</strong> — <em>replays</em> your commits on top of another point, creating fresh commits. It produces tidier, linear history but builds new objects rather than editing old ones — because objects can't be edited.</li>
+</ul>
+
+<p>This reveals a recurring theme: <strong>Git never edits history; it creates new objects.</strong> "Amending" a commit, rebasing, or reverting all make new commits. The old ones simply become unreferenced.</p>
+
+<p>For collaboration, a <strong>remote</strong> is another copy of the repository (often on a server). You <strong>clone</strong> to copy it, <strong>fetch</strong> to download new objects, <strong>push</strong> to upload yours, and <strong>pull</strong> to fetch and integrate. Another core principle: <em>transport (copying objects) is separate from integration (merging them).</em> Fetching just brings objects in safely; you decide separately how to combine them.</p>
+
+<p>Nothing is lost easily. Git keeps a <strong>reflog</strong> — a private log of where your branches and HEAD have pointed — so even a "lost" commit can usually be recovered. <strong>Garbage collection</strong> only removes truly unreachable objects, and only after a grace period. Think of deletion in Git as <em>delayed forgetting</em>, not instant destruction.</p>
+
+<p>Finally, beneath the friendly commands (called <em>porcelain</em>) sit low-level <em>plumbing</em> commands like <em>hash-object</em>, <em>cat-file</em>, <em>write-tree</em>, and <em>update-ref</em> that operate directly on objects and refs. You rarely need them day to day, but they reveal the truth: everything in Git is just objects in a database and names pointing at them. Workflows, branching rules, and review processes are simply <strong>policies layered on top of that same object graph</strong>.</p>
+</aside>
+<aside class="popup" id="ixen-card-deck" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Card Deck</h2>
+  <div class="ixen-card-deck-grid">
+  <figure class="zoom">
+    <img src="./concept-1-card.png" alt="Object model and content identity">
+    <figcaption>Object model and content identity</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-2-card.png" alt="Working tree, index, and commit construction">
+    <figcaption>Working tree, index, and commit construction</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-3-card.png" alt="Refs, HEAD, reflogs, and revision language">
+    <figcaption>Refs, HEAD, reflogs, and revision language</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-4-card.png" alt="Branching, merging, and conflict logic">
+    <figcaption>Branching, merging, and conflict logic</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-5-card.png" alt="Rebases, cherry-picks, and history rewriting">
+    <figcaption>Rebases, cherry-picks, and history rewriting</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-6-card.png" alt="Remotes, transport, and synchronization">
+    <figcaption>Remotes, transport, and synchronization</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-7-card.png" alt="Collaboration workflows and release motion">
+    <figcaption>Collaboration workflows and release motion</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-8-card.png" alt="Maintenance, recovery, and advanced repository shapes">
+    <figcaption>Maintenance, recovery, and advanced repository shapes</figcaption>
+  </figure>
+  </div>
+</aside>
 </body>
 </html>
