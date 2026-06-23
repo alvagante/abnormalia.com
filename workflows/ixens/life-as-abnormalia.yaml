@@ -1,7 +1,7 @@
 ixenApiFormat: anthropic
 ixenBaseUrl: https://api.anthropic.com
 skillLevel: intermediate
-outputLength: long
+outputLength: medium
 ixenModel: claude-opus-4-8
 ixenPersona: abnormalia
 credits: alvagante
@@ -55,15 +55,21 @@ ixens:
         cardFilename: concept-1-card.png
         imagePrompt: >-
           Early 1990s Amiga diskmag scene shown as floppy disks, postal mail,
-          pixel typography, Italian demoscene notes, and a small group called
-          Abnormalia assembling issue one, archival ixen-dark illustration.
+          pixel typography, Italian demoscene notes, Macno assembling seven
+          issues of Abnormalia from 1992 to 1995 including a special edition
+          called Macnolamia, archival ixen-dark illustration.
         details: >-
-          Cover the earliest known form: Abnormalia as the group dedicated to
-          releasing the Amiga diskmagazine Abnormalia. Use the Demozoo indexed
-          facts carefully: Abnormalia was tied to Italian writer Macno after
-          Grace and Scene Lyrics, and Abnormalia 1 is listed as a diskmag
-          released in December 1992. Do not invent article titles, staff lists,
-          or issue contents beyond the evidence.
+          Cover the full run: Macno was the main editor of Abnormalia, also a
+          writer and contributor in several other diskmags (Grace, Scene Lyrics,
+          and others before Abnormalia). The group released seven issues plus a
+          special edition: Abnormalia 1 (December 1992), Abnormalia 2 (May
+          1993), Abnormalia 3 (September 1993), Abnormalia 3.14 (January 1994
+          — the π numbering, not sequential), Abnormalia 4 (1994), Abnormalia 5
+          (1995), and Macnolamia — Abnormalia Special Edition (July 1995). After
+          Macnolamia, demoscene involvement faded. Do not invent article titles,
+          staff lists, or issue contents beyond what is confirmed. The voice
+          narrates from inside the project — "I" is Abnormalia, Macno is the
+          person who made it.
       - name: Scene distribution and BBS traces
         imageFilename: concept-2.png
         cardFilename: concept-2-card.png
@@ -86,13 +92,18 @@ ixens:
           newsletter form, abnominio links 0 through 5 and 900, strange Italian
           microcopy, ixen-dark web fossil.
         details: >-
-          Cover the May 21, 2004 Wayback capture of abnormalia.com: title
-          "Abnormalia. Un nome. Pochi fatti."; description "Luogo anomalo di
-          anomini in rete. Notizie, racconti, storie, satira, grafica,
-          praticamente di tutto. Per niente."; links to abnominio 0, 1, 2, 3,
-          4, 5, and 900; a small mailing-list form asking for "Una tua e-mail"
-          to "@bnolistarti". Preserve the handmade, irregular, anti-polished
-          web feeling.
+          The Internet Archive's earliest capture of abnormalia.com is March 8,
+          2001 — not 2004. The site ran until at least 2010. There is also a
+          mentioned pre-2000 version (possibly the "900 version") with no
+          confirmed online trace. The May 21, 2004 Wayback snapshot remains
+          the richest: title "Abnormalia. Un nome. Pochi fatti."; description
+          "Luogo anomalo di anomini in rete. Notizie, racconti, storie, satira,
+          grafica, praticamente di tutto. Per niente."; links to abnominio 0,
+          1, 2, 3, 4, 5, and 900; a small mailing-list form asking for "Una
+          tua e-mail" to "@bnolistarti". The site was in Italian throughout.
+          The abnomini were microsites on internet topics, ironic and sarcastic.
+          Mention the 2001–2010 span. Preserve the handmade, irregular,
+          anti-polished web feeling.
       - name: Abnominio language
         imageFilename: concept-4.png
         cardFilename: concept-4-card.png
@@ -121,19 +132,26 @@ ixens:
           madness, first chapter of an interactive story for Xen configuration
           and understanding, or "just another half born fun project." Tie it to
           today's Ixens as an ancestor in form, not as the same technology.
-      - name: Social apparition
+      - name: 2023 comeback and fade
         imageFilename: concept-6.png
         cardFilename: concept-6-card.png
         imagePrompt: >-
-          A later social-media apparition of Abnormalia: a Facebook vanity URL
-          as a locked door, login prompt, absent posts, a handle named
-          abnominio, and the archive logic of what cannot be publicly fetched.
+          The 2023 return of Abnormalia as social media: a burst of daily
+          abnominio posts — small images with text, serialized, released once
+          a day — then a frequency counter dropping week by week toward
+          silence, accounts still visible but frozen, ixen-dark archival tone.
         details: >-
-          Cover the later social trace at facebook.com/abnominio as a public
-          pointer rather than a content source: current anonymous access only
-          exposes a login/not-found shell. Narrate it as sporadic, evasive,
-          mostly absent, matching the existing about page. Do not fabricate
-          posts, dates, followers, or activity.
+          In 2023, abnormalia.com came back — 26 years after Abnormalia 1.
+          Social accounts launched with a daily abnominio: images with text,
+          multiple series on different topics, formatted for social posts.
+          Different format from the early-2000s Italian website abnomini —
+          these were visual, serialized, daily. The everyday release lasted
+          a few months, then got rarer, then faded away slowly, unnoticed,
+          as most of my projects. The accounts are still up but not active.
+          No final announcement. Narrate the arc without sentimentality:
+          the burst of energy, the gradual frequency drop, the last post that
+          didn't know it was the last. The phrase "slowly, unnoticed, as most
+          of my projects" is available — use it close to verbatim.
       - name: Current static site and pipeline
         imageFilename: concept-7.png
         cardFilename: concept-7-card.png
@@ -182,18 +200,25 @@ ixens:
       The story should move through these evidenced layers: an early 1990s Amiga
       diskmagazine/group in the Italian demoscene; the indexed Demozoo fact that
       Abnormalia was dedicated to releasing the Amiga diskmagazine Abnormalia,
-      connected to Italian writer Macno after Grace and Scene Lyrics, with
-      Abnormalia 1 listed as a December 1992 diskmag; partial BBS/BBStro traces
-      from 1996; the archived abnormalia.com homepage captured on May 21, 2004,
-      titled "Abnormalia. Un nome. Pochi fatti." and described as "Luogo anomalo
-      di anomini in rete. Notizie, racconti, storie, satira, grafica,
-      praticamente di tutto. Per niente."; the abnominio 0, 1, 2, 3, 4, 5, and
-      900 portals with their mutated language; the 2005 I-Xen page, a Xen on
-      Suse 9.3 tutorial and "I, System" short story with text by al and graphics
-      by tatlin; the later social trace at facebook.com/abnominio, which should
-      be treated only as a login-gated or publicly inaccessible social
-      apparition; and the current static Jekyll site that hosts generated Ixens
-      made by a swamp workflow.
+      with Macno as the main editor — also writer and contributor in several
+      other diskmags (Grace, Scene Lyrics, others before Abnormalia). Full
+      release list: Abnormalia 1 (December 1992), 2 (May 1993), 3 (September
+      1993), 3.14 (January 1994, π-numbered), 4 (1994), 5 (1995), and
+      Macnolamia — Abnormalia Special Edition (July 1995); demoscene involvement
+      then faded; partial BBS/BBStro traces from 1996; the abnormalia.com site,
+      first archived on March 8, 2001 (running until at least 2010, with a
+      possible pre-2000 version leaving no confirmed online trace), with the
+      richest Wayback capture on May 21, 2004, titled "Abnormalia. Un nome.
+      Pochi fatti." and described as "Luogo anomalo di anomini in rete.
+      Notizie, racconti, storie, satira, grafica, praticamente di tutto. Per
+      niente."; the abnominio 0, 1, 2, 3, 4, 5, and 900 portals with their
+      mutated language; the 2005 I-Xen page, a Xen on Suse 9.3 tutorial and
+      "I, System" short story with text by al and graphics by tatlin; the 2023
+      return of website and social accounts, 26 years after the first issue,
+      with daily abnominio releases (images with text, multiple series, different
+      topics) that lasted a few months then faded away slowly, unnoticed, as
+      most projects do — accounts still up but inactive; and the current static
+      Jekyll site that hosts generated Ixens made by a swamp workflow.
       Do not invent precise facts not present in the sources. Make the prose
       archival, weird, technical, and self-aware: from floppy to handmade web to
       social absence to generated mixed-media pages. Use the existing site
