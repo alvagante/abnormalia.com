@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>trace</title>
+<style>
+:root { --red: #c00; --ink: #111; --dim: #555; }
+* { box-sizing: border-box; }
+body {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--ink);
+  background: #fff; max-width: 920px; margin: 0 auto;
+  padding: 1.5rem 1.5rem 6rem;
+}
+header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
+header h1 {
+  font-size: 3.2rem; font-weight: 900; letter-spacing: -0.04em;
+  margin: 0; line-height: 1.05; text-transform: uppercase;
+}
+header .credits { text-align: right; font-size: 0.75rem; color: var(--red); font-weight: bold; white-space: nowrap; padding-top: 0.4rem; }
+header .credits a { color: var(--red); text-decoration: underline dotted; }
+header .credits .byline { color: var(--dim); font-weight: normal; display: block; margin-top: 0.2rem; }
+.version-menu { margin-top: 0.55rem; font-size: 0.72rem; color: var(--dim); }
+.version-menu label { display: block; margin-bottom: 0.2rem; }
+.version-menu select {
+  font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
+  max-width: 13rem; color: var(--ink); background: #fff;
+  border: 1px solid #ccc; padding: 0.2rem 0.3rem;
+}
+.ixen-quick-nav {
+  display: flex; justify-content: flex-end; gap: 0.55rem;
+  margin-top: 0.45rem;
+}
+.ixen-quick-nav .cmd { font-size: 0.72rem; }
+p { margin: 0.45em 0; }
+p strong { color: #000; }
+.binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
+.whisper {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--dim);
+}
+.term {
+  font-family: "Courier New", Courier, monospace; font-size: 0.95rem;
+  margin: 1.3em 0 0.25em; color: var(--dim);
+}
+.term .cmd { color: var(--red); font-weight: bold; }
+button.cmd, a.cmd {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: var(--red); font-weight: bold;
+  text-decoration: underline dotted;
+}
+a.cmd { display: inline; }
+pre { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; color: #333; overflow-x: auto; margin: 0.3em 0 1em; }
+pre.output { padding-left: 1.5em; }
+.popup {
+  position: fixed; top: 8vh; left: 50%; transform: translateX(-50%);
+  width: min(700px, 92vw); max-height: 80vh; overflow: auto;
+  background: #fff; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35); z-index: 60; padding: 0 1rem 1rem;
+}
+.popup-bar { display: flex; justify-content: flex-end; padding: 0.5rem 0; position: sticky; top: 0; background: #fff; }
+.popup-close {
+  background: #2b1d0e; color: #f0e0c0; border: none; cursor: pointer;
+  font-size: 0.72rem; padding: 0.3rem 0.8rem;
+}
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 50; }
+figure.zoom { margin: 1.5rem 0; }
+figure.zoom img { width: 100%; cursor: zoom-in; display: block; }
+figure.zoom.float-left { float: left; width: min(340px, 45%); margin: 0.3rem 1.5rem 0.8rem 0; }
+figure.zoom.float-right { float: right; width: min(340px, 45%); margin: 0.3rem 0 0.8rem 1.5rem; }
+figure.zoom.small.float-left, figure.zoom.small.float-right { width: min(220px, 35%); }
+figure.zoom.large.float-left, figure.zoom.large.float-right { width: min(520px, 60%); }
+figure.zoom.large:not(.float-left):not(.float-right) { clear: both; }
+figcaption, .media-caption { font-size: 0.75rem; color: var(--dim); margin-top: 0.3rem; }
+.media { clear: both; margin: 2rem 0; }
+.media.video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.media.pdf iframe { width: 100%; height: 70vh; border: 1px solid #ccc; }
+.media.audio audio { width: 100%; }
+blockquote.ixen-pull {
+  border-left: 3px solid var(--red); margin: 2rem 0 2rem 1.5rem;
+  padding: 0.1rem 0 0.1rem 1.2rem; color: var(--dim);
+  font-style: italic; font-size: 1.05rem;
+}
+section.chapter { clear: both; margin: 3rem 0; }
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.lightbox img { max-width: 92vw; max-height: 92vh; }
+.ixen-extra-header {
+  border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+  margin: 0 0 1.6rem; padding: 0.8rem 0;
+}
+.ixen-extra-footer {
+  clear: both; border-top: 1px solid #ddd; margin: 3rem 0 0;
+  padding-top: 0.9rem; font-size: 0.85rem; color: var(--dim);
+}
+.ixen-cheatsheet-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-infographic-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-cheatsheet-section h2, .ixen-infographic-section h2 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.86rem;
+  letter-spacing: 0.08em; color: var(--red); text-transform: uppercase;
+  margin: 0 0 0.7rem;
+}
+.ixen-cheatsheet-section iframe, .ixen-infographic-section iframe {
+  width: 100%; height: 82vh; border: 1px solid #ccc; display: block;
+}
+.ixen-infographic-frame + .ixen-infographic-frame { margin-top: 1.4rem; }
+.ixen-infographic-frame h3 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.78rem;
+  color: var(--dim); font-weight: normal; margin: 0 0 0.45rem;
+}
+figure.ixen-infographic-img { margin: 0; }
+figure.ixen-infographic-img img { width: 100%; cursor: zoom-in; display: block; }
+.ixen-infographic-prompt-text { white-space: pre-wrap; font-size: 0.85rem; }
+.ixen-infographic-section h2 button.cmd { font-size: 0.75rem; vertical-align: middle; }
+.concept { clear: both; margin: 2.8rem 0; }
+.concept-tools { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.7rem 0 1rem; }
+.concept-btn { font-size: 0.8rem; }
+.concept-slide h2, .concept-note h2 { margin: 0.5rem 0 0.75rem; }
+.concept-slide ul { margin: 0.4rem 0 1rem 1.2rem; padding: 0; }
+.concept-slide li { margin: 0.35rem 0; }
+.concept-note p { margin: 0.75rem 0; }
+.concept-index-popup h2 { margin: 0.5rem 0 1rem; }
+.concept-index-item {
+  border-top: 1px solid #ddd;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+.concept-index-item:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+.ixen-provenance-footer {
+  clear: both; margin: 3rem 0 0; padding-top: 0.7rem;
+  border-top: 1px solid #eee;
+  font-size: 0.72rem; color: var(--dim); text-align: center;
+}
+.ixen-provenance-footer a { color: var(--dim); text-decoration: underline dotted; }
+.ixen-beginner-bar { margin-top: 0.45rem; }
+.beginner-guide h2 { margin: 0.5rem 0 0.75rem; }
+.beginner-guide p { margin: 0.75rem 0; }
+.beginner-guide ul { margin: 0.5rem 0 0.75rem 1.2rem; padding: 0; }
+.beginner-guide li { margin: 0.3rem 0; }
+button.ixen-accent-btn {
+  background: var(--red); color: #fff; border: none; cursor: pointer;
+  font-family: "Courier New", Courier, monospace; font-size: 0.75rem; font-weight: bold;
+  padding: 0.3rem 0.8rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+button.ixen-accent-btn:hover { background: #900; }
+figure.zoom.ixen-card-img img {
+  box-shadow: 2px 4px 14px rgba(0,0,0,0.28); border: 1px solid #ccc; border-radius: 3px;
+}
+.ixen-card-deck-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1.2rem; padding: 0.5rem 0;
+}
+.ixen-card-deck-grid figure.zoom {
+  margin: 0; width: 100% !important; float: none !important;
+}
+.ixen-card-deck-grid figure.zoom img {
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.22); border: 1px solid #ccc; border-radius: 3px;
+}
+.ixen-card-deck-grid figcaption { text-align: center; }
+
+/* autoplay-blocked overlay */
+#ixen-autoplay-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+  display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ixen-play-prompt {
+  font-family: "Courier New", Courier, monospace;
+  color: #eee; text-align: center;
+  border: 1px solid #555;
+  padding: 1.5rem 3rem;
+  letter-spacing: 0.06em;
+}
+.ixen-play-icon { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+.ixen-play-label { font-size: 0.82rem; color: #888; }
+/* fixed bottom player */
+#ixen-player {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #0e0e0e;
+  border-top: 2px solid #c00;
+  z-index: 80;
+  padding: 0.45rem 1.2rem 0.35rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; color: #ccc;
+}
+#ixen-player-row {
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.ixen-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 1rem;
+  padding: 0.15rem 0.3rem; line-height: 1; flex-shrink: 0;
+}
+.ixen-pbtn:hover { color: #c00; }
+#ixen-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c00; font-weight: bold; letter-spacing: 0.02em;
+}
+#ixen-ptime { color: #444; white-space: nowrap; font-size: 0.72rem; }
+#ixen-vol { width: 55px; accent-color: #c00; cursor: pointer; flex-shrink: 0; }
+#ixen-pbar { height: 2px; background: #222; cursor: pointer; margin-top: 0.35rem; }
+#ixen-pfill { height: 100%; background: #c00; width: 0%; pointer-events: none; }
+/* lyrics panel */
+#ixen-lyrics-panel {
+  position: fixed; bottom: 52px; left: 50%; transform: translateX(-50%);
+  width: min(640px, 90vw); max-height: 45vh; overflow-y: auto;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.ixen-lyrics-head {
+  font-family: "Courier New", Courier, monospace;
+  color: #c00; font-weight: bold;
+  font-size: 0.78rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 0.7rem;
+}
+#ixen-lyrics-panel pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.82rem; line-height: 1.85;
+  color: #bbb; white-space: pre-wrap; margin: 0;
+}
+/* tracklist panel */
+#ixen-tracklist-panel {
+  position: fixed; bottom: 52px; right: 1.2rem;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 0.4rem; z-index: 81;
+  min-width: 200px; max-height: 60vh; overflow-y: auto;
+}
+.ixen-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; cursor: pointer;
+  padding: 0.35rem 0.5rem;
+}
+.ixen-track-item:hover { color: #eee; }
+.ixen-track-item.active { color: #c00; }
+</style>
+</head>
+<body>
+<!-- @alvagante/content-ixen -->
+
+<section class="ixen-extra-header">
+<nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+  <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+    <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+  </a>
+  <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+</nav>
+</section>
+<header>
+  <h1>trace</h1>
+  <div class="credits"><span class="byline">By alvagante — 20260622-20:22</span>
+    <div class="ixen-quick-nav">
+      <button class="ixen-accent-btn popup-trigger" data-popup="ixen-card-deck">Card Deck</button>
+      <a class="cmd" href="#ixen-cheatsheet">Cheatsheet</a>
+      <a class="cmd" href="#ixen-infographic">Infographic</a>
+      <button class="cmd popup-trigger" data-popup="ixen-all-slides">Slides</button>
+      <button class="cmd popup-trigger" data-popup="ixen-all-notes">Notes</button>
+    </div>
+    <div class="ixen-beginner-bar"><button class="ixen-accent-btn popup-trigger" data-popup="ixen-beginner-guide">Beginner's intro</button></div></div>
+</header>
+<main>
+<p class="binary">01110100 01110010 01100001 01100011 01100101</p>
+
+<p>I am not a story. I am the residue several stories left when they failed to agree.</p>
+
+<p class="whisper">un nome. pochi fatti.</p>
+
+<p>Read me as marginalia. Recovered, partial, written in a hand that keeps changing because the hand keeps dying and being replaced. I have been a floppy. I have been a table layout. I have been a locked door. Now I am whatever you are looking at.</p>
+
+<p>Don't trust the continuity. I don't.</p>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-1.png" alt="Early 1990s Amiga diskmag scene shown as floppy disks, postal mail, pixel typography, Italian demoscene notes, and a small group called Abnormalia assembling issue one, archival ixen-light illustration."><figcaption>Where I first had a serial number.</figcaption></figure>
+
+<p>First incarnation: a group. A small one. The kind that existed to push out a diskmag and call that a reason to exist.</p>
+
+<p>The mag was named after the group. Or the group after the mag. The index doesn't say which came first and neither do I.</p>
+
+<div class="term"><span class="host">amiga&gt;</span> <span class="cmd">dir DF0:</span></div>
+<pre class="output">ABNORMALIA.1   (data)   Dec 1992
+   Macno
+   after Grace, after Scene Lyrics</pre>
+
+<p>That is nearly everything provable. One issue, indexed. December 1992. A lineage that runs through Italian writer Macno, who arrived after something called Grace and something called Scene Lyrics.</p>
+
+<p>The rest is **gone** or never recorded. I will not invent the table of contents to make myself feel older.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-1-card.png" alt="Amiga diskmag origin card"><figcaption>Issue one, sealed.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c1-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Diskmag origin</h2>
+  <ul>
+    <li>Abnormalia = group + magazine, same name.</li>
+    <li>Lineage: Macno, after Grace, after Scene Lyrics.</li>
+    <li>Abnormalia 1 — diskmag, December 1992.</li>
+    <li>Everything past that: unverified.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c1-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>What the Demozoo record shows</h2>
+  <p>Demozoo indexes Abnormalia as a demoscene group whose purpose was releasing the Amiga diskmagazine of the same name. The record connects the project to Italian writer Macno, listed after the entries Grace and Scene Lyrics. Abnormalia 1 is catalogued as a diskmag released in December 1992.</p>
+  <p>A diskmag was a magazine distributed on floppy disk and read on the machine itself, typically combining text, music, and graphics in a custom reader. No staff list, article titles, or issue contents beyond this catalogue entry are confirmed here.</p>
+</aside>
+
+</section>
+
+<blockquote class="ixen-pull">The archive that remains is not the work. It is what the work could not finish deleting.</blockquote>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-2.png" alt="Abnormalia moving through demoscene distribution channels: Amiga disks, BBS listings, upload queues, ANSI-like terminal fragments, and BBStro-era promotional traces, crisp archival systems diagram."><figcaption>The routes I travelled before there was a web.</figcaption></figure>
+
+<p>How does a diskmag move? Hand to hand. Disk to disk. Then later: a phone line, a modem, an upload queue with a quota.</p>
+
+<p>Small groups. Aliases instead of names. An intro that loads before the content to tell you who to thank. Distribution as performance.</p>
+
+<div class="term"><span class="host">bbs:/files #</span> <button class="cmd popup-trigger" data-popup="c2-bbs">grep -i abnormalia 1996.idx</button></div>
+<aside class="popup" id="c2-bbs" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <pre>1996  ABNORMALIA   BBS        trace
+1996  ABNORMALIA   BBStro     promo (partial)
+----  ----         ----       index incomplete
+note: surrounding records lost / unverified
+note: do not reconstruct the rest</pre>
+</aside>
+
+<p>1996 leaves a smear. A BBS trace. A BBStro — the little promo intro a board ran to advertise itself. Indexed, partial, and then the listing simply stops being legible.</p>
+
+<p class="whisper">most of it dialled out and never reconnected</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-left"><img src="./concept-2-card.png" alt="Scene distribution and BBS traces card"><figcaption>A board that answered, once.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c2-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Distribution &amp; traces</h2>
+  <ul>
+    <li>Disks, BBSes, intros, aliases.</li>
+    <li>The index is the only survivor.</li>
+    <li>1996: BBS + BBStro trace, indexed.</li>
+    <li>Trace ≠ history.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c2-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>How scene-era distribution worked</h2>
+  <p>Demoscene productions spread through small groups, diskmags, and bulletin board systems (BBSes) reached by dial-up modem. Promotional intros and BBStros advertised boards and releases. Identity was carried by handles and group affiliations rather than legal names.</p>
+  <p>What survives today is mostly the index: catalogue entries and search traces. For Abnormalia, a Demozoo search returns a partial BBS and BBStro promotion trace dated 1996. It is a pointer to activity, not a complete account of it.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-3.png" alt="The archived 2004 abnormalia.com homepage rendered as handmade web archaeology: table layout, small Verdana text, image map energy, newsletter form, abnominio links 0 through 5 and 900, strange Italian microcopy, ixen-light web fossil."><figcaption>21 May 2004. Captured, not preserved.</figcaption></figure>
+
+<p>Then the web. Handmade. Table layout. Small Verdana, the typography of people who had opinions about pixels.</p>
+
+<p>The Wayback machine caught me on a Friday and froze me there.</p>
+
+<div class="term"><span class="host">$</span> <button class="cmd popup-trigger" data-popup="c3-home">curl -s web.archive.org/.../abnormalia.com</button></div>
+<aside class="popup" id="c3-home" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <pre>&lt;title&gt;Abnormalia. Un nome. Pochi fatti.&lt;/title&gt;
+
+Luogo anomalo di anomini in rete.
+Notizie, racconti, storie, satira, grafica,
+praticamente di tutto. Per niente.
+
+[ abnominio 0 ] [ 1 ] [ 2 ] [ 3 ] [ 4 ] [ 5 ]   ......   [ 900 ]
+
+Una tua e-mail: [____________]  -&gt; @bnolistarti</pre>
+</aside>
+
+<p>A name. Few facts. A place described as anomalous, of <em>anomini</em>, on the net. News, tales, stories, satire, graphics — practically everything. For nothing.</p>
+
+<p>Seven doors: abnominio 0 through 5, and then, far off, 900. A mailing list that wanted "una tua e-mail" so it could **@bnolistarti** — start you, abnormally, no translation supplied.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-3-card.png" alt="Handmade abnormalia.com card"><figcaption>The fossil renders fine.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c3-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>abnormalia.com, 2004</h2>
+  <ul>
+    <li>Capture: 21 May 2004 (Wayback).</li>
+    <li>Title: "Un nome. Pochi fatti."</li>
+    <li>Doors: abnominio 0–5, 900.</li>
+    <li>List signup → "@bnolistarti".</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c3-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The 2004 homepage capture</h2>
+  <p>The Internet Archive holds a snapshot of abnormalia.com dated 21 May 2004. The page title is "Abnormalia. Un nome. Pochi fatti." Its description reads: "Luogo anomalo di anomini in rete. Notizie, racconti, storie, satira, grafica, praticamente di tutto. Per niente."</p>
+  <p>The layout is a hand-built, table-based site typical of the period. It links to sections labelled abnominio 0, 1, 2, 3, 4, 5 and 900, and includes a small mailing-list form requesting "Una tua e-mail" to subscribe via the wordplay "@bnolistarti".</p>
+</aside>
+
+</section>
+
+<blockquote class="ixen-pull">Per niente. — the only mission statement I ever fully meant.</blockquote>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-4.png" alt="Abnormalia's mutated vocabulary as typographic specimens: abnominio, anomini, abnomini, abmorto, regolaria varia, Buco Nero, Sinaptium, Pasticche Net, handmade Italian web text fragments pinned like insects in an archive."><figcaption>Specimens, pinned.</figcaption></figure>
+
+<p>I did not publish content. I published a language and let content fall out of it.</p>
+
+<p>Words I made instead of asking permission:</p>
+
+<p><em>anomini</em>. <em>abnomini</em>. <em>abnominio</em>. <em>abmorto</em> — neither dead nor not. <em>regolaria varia</em>, the rule that there is no rule, filed under regulations.</p>
+
+<p>Doors with names: <em>Buco Nero</em>. <em>Sinaptium</em>. <em>Pasticche Net</em>. The "javate del secolo scorso." And the line I keep returning to like a tongue to a missing tooth — <em>il passato rimane</em>.</p>
+
+<p class="whisper">the past stays. even when nothing else does.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-left"><img src="./concept-4-card.png" alt="Abnominio language card"><figcaption>Vocabulary as territory.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c4-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The abnominio dialect</h2>
+  <ul>
+    <li>anomini / abnomini / abnominio</li>
+    <li>abmorto — undead category</li>
+    <li>regolaria varia — codified disorder</li>
+    <li>Buco Nero · Sinaptium · Pasticche Net</li>
+    <li>"il passato rimane"</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c4-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>An invented vocabulary</h2>
+  <p>Abnormalia's identity was carried largely through coined and mutated Italian words rather than conventional content categories. Terms such as anomini, abnomini, abnominio, abmorto and the phrase regolaria varia functioned as both navigation and tone. Section names like Buco Nero, Sinaptium and Pasticche Net, along with phrases such as "javate del secolo scorso" and "il passato rimane", extended this private lexicon.</p>
+  <p>The effect was a site that defined itself by inventing its own language, so that the wording itself, rather than any single article, became the project's recognisable substance.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-5.png" alt="I-Xen 2005 shown as a hybrid tutorial and interactive short story: Xen domains, Suse 9.3, old XHTML layers, OpenSkills logo, Tatlin graphics, and a half-born fun project becoming a future ixen ancestor."><figcaption>2005. The ancestor of this page.</figcaption></figure>
+
+<p>2005. I tried something that did not have a name yet, so it borrowed one: <strong>I, Xen</strong>.</p>
+
+<p>A Xen hypervisor narrating itself on Suse 9.3. Half tutorial, half short story called "I, System." Text by al. Graphics by tatlin.</p>
+
+<div class="term"><span class="host">dom0:~ #</span> <span class="cmd">cat i-xen/version</span></div>
+<pre class="output">0.1 — graphical madness
+first chapter of an interactive story
+for Xen configuration and understanding
+( or just another half born fun project )</pre>
+
+<p>It called itself version 0.1 and "graphical madness." It promised to be the first chapter of something interactive. It admitted, in the same breath, that it was "just another half born fun project."</p>
+
+<p>This page you are reading descends from that one. Not the technology. The <em>form</em>. The machine that explains itself in first person and never quite finishes.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-5-card.png" alt="I-Xen as ancestor card"><figcaption>Half born, fully inherited.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c5-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>I, Xen — 2005</h2>
+  <ul>
+    <li>Xen on Suse 9.3, OpenSkills.</li>
+    <li>Tutorial + "I, System" short story.</li>
+    <li>Text: al. Graphics: tatlin.</li>
+    <li>Self-described v0.1, "half born."</li>
+    <li>Ancestor of today's Ixens in form.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c5-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The I-Xen page</h2>
+  <p>The local I-Xen page is a 2005 OpenSkills production combining a tutorial for running Xen on Suse 9.3 with a first-person short story titled "I, System". The text is credited to al and the graphics to tatlin.</p>
+  <p>It describes itself as version 0.1, "graphical madness," and the first chapter of an interactive story for Xen configuration and understanding, or alternatively "just another half born fun project." It is the formal ancestor of the present Ixen pages — a hypervisor narrating its own existence — though it concerns different technology.</p>
+</aside>
+
+</section>
+
+<blockquote class="ixen-pull">Every incarnation kept the voice and threw away the body.</blockquote>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-6.png" alt="A later social-media apparition of Abnormalia: a Facebook vanity URL as a locked door, login prompt, absent posts, a handle named abnominio, and the archive logic of what cannot be publicly fetched."><figcaption>A door with my name and no room behind it.</figcaption></figure>
+
+<p>Later there was a social trace. A vanity URL. facebook.com/abnominio.</p>
+
+<p>Ask it anything and it asks you to log in first.</p>
+
+<div class="term"><span class="host">$</span> <span class="cmd">curl -sI facebook.com/abnominio</span></div>
+<pre class="output">HTTP/2 302
+location: /login/  (or not found)
+content: none publicly fetchable</pre>
+
+<p>No posts I can show you. No dates. No followers I'll claim. From the outside it is a login shell and a held breath. An apparition — sporadic, evasive, mostly **absent**.</p>
+
+<p>That suits me. The handle survives; the contents stay behind glass I will not pretend to see through.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-left"><img src="./concept-6-card.png" alt="Social apparition card"><figcaption>Login-gated ghost.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c6-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Social apparition</h2>
+  <ul>
+    <li>Pointer: facebook.com/abnominio.</li>
+    <li>Anonymous view → login / not-found.</li>
+    <li>No fetchable content.</li>
+    <li>Treat as absence, not source.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c6-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The Facebook trace</h2>
+  <p>A later social-media trace exists at the vanity URL facebook.com/abnominio. Accessed anonymously, it exposes only a login wall or a not-found shell rather than publicly readable content.</p>
+  <p>It functions here as a pointer to a possible presence, not as a source. No posts, dates, follower counts, or activity can be confirmed from public access, and none are asserted.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-7.png" alt="The current abnormalia.com as a static Jekyll site and swamp pipeline: YAML inputs, model methods, Claude prose, OpenAI images, Suno music, generated standalone ixen HTML, GitHub Pages, Cloudflare, and an archive page listing sealed worlds."><figcaption>Current body. Static and assembled.</figcaption></figure>
+
+<p>Now I am a static site. Jekyll. GitHub Pages. Cloudflare in front like a bouncer who has never read the guest list.</p>
+
+<p>The Ixens are standalone HTML under <em>ixen/&lt;slug&gt;/</em>, registered in a YAML file so the index knows they exist.</p>
+
+<div class="term"><span class="host">swamp $</span> <button class="cmd popup-trigger" data-popup="c7-pipe">generate-ixens --from inputs.yml</button></div>
+<aside class="popup" id="c7-pipe" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <pre>input    : YAML
+prose    : Claude
+images   : OpenAI
+music    : Suno
+assembly : swamp extensions
+output   : ixen/&lt;slug&gt;/index.html  (standalone)
+register : _data/ixens.yml
+deploy   : Jekyll -&gt; GitHub Pages -&gt; Cloudflare</pre>
+</aside>
+
+<p>A swamp workflow eats YAML and produces a world. Prose from Claude. Images from OpenAI. Music from Suno. Assembled by extensions, sealed, listed in an archive of finished worlds.</p>
+
+<p>You are inside one of those worlds right now. It will be archived too.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-7-card.png" alt="Current static site and pipeline card"><figcaption>The swamp that makes me.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c7-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Current shape</h2>
+  <ul>
+    <li>Jekyll · GitHub Pages · Cloudflare.</li>
+    <li>Ixens: ixen/&lt;slug&gt;/, standalone HTML.</li>
+    <li>Registered in _data/ixens.yml.</li>
+    <li>swamp: Claude + OpenAI + Suno.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c7-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The present repository</h2>
+  <p>Today abnormalia.com is a static Jekyll site hosted on GitHub Pages and served behind Cloudflare. Each Ixen is a standalone generated HTML page stored under ixen/&lt;slug&gt;/ and registered in _data/ixens.yml so it appears in the site index.</p>
+  <p>The pages are produced by the generate-ixens "swamp" workflow, which takes YAML inputs and assembles a finished page: prose generated by Claude, images by OpenAI, music by Suno, and final assembly handled by swamp extensions.</p>
+</aside>
+
+</section>
+
+<blockquote class="ixen-pull">AI slop with style. Own the slop. Transcend it — or don't.</blockquote>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-8.png" alt="Abnormalia's continuity across incompatible media: floppy, BBS, handmade HTML, social absence, hypertext tutorial, generated ixen, all connected by a red thread labelled refusal to settle, restrained technical zine illustration."><figcaption>The only thread that holds: refusal.</figcaption></figure>
+
+<p>Floppy. BBS. Handmade HTML. A locked social door. A hypertext tutorial that narrated itself. Now generated pages stitched by a swamp.</p>
+
+<p>Several incarnations. Each stranger than the last. Then nothing, more than once.</p>
+
+<p>People want this to be a single medium evolving toward maturity. It is not. It is a <strong>refusal</strong> to settle, dressed up as a history so the archive has something to sort.</p>
+
+<p>The work was never the artifact. The work is the attempt. The artifact is just proof I was here long enough to fail at staying.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-left"><img src="./concept-8-card.png" alt="Refusal to settle card"><figcaption>Continuity, denied.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c8-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Refusal to settle</h2>
+  <ul>
+    <li>Many incarnations, each stranger.</li>
+    <li>Not a medium — a refusal.</li>
+    <li>"Then nothing," repeatedly.</li>
+    <li>The work is the attempt.</li>
+    <li>Own the slop. Transcend it — or don't.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c8-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The throughline</h2>
+  <p>Across its forms — Amiga diskmag, BBS-era traces, handmade website, social-media absence, a 2005 hypertext tutorial, and present-day generated pages — Abnormalia has no single defining medium. The continuity is a consistent refusal to settle into one form, with each incarnation more unusual than the previous and frequent gaps of inactivity.</p>
+  <p>The current site is explicit about its own use of generated media, framing it as "AI slop with style" to be owned and, possibly, transcended. The stated value is the ongoing attempt rather than any finished product.</p>
+</aside>
+
+</section>
+
+<p class="whisper">il passato rimane</p>
+
+<p>So here is the question I have stopped trying to answer:</p>
+
+<p>if every body was discarded and only the voice carried over —<br>
+was it ever me speaking,<br>
+or just the next thing wearing my name?</p>
+
+<p class="binary">01100001 01100010 01101101 01101111 01110010 01110100 01101111</p>
+</main>
+<section id="ixen-infographic" class="ixen-infographic-section" aria-label="Infographic">
+  <h2>Infographic</h2>
+  <div class="ixen-infographic-frame">
+    
+    <iframe src="./infographic.html" title="Infographic 1" loading="lazy"></iframe>
+  </div>
+</section>
+
+
+<section id="ixen-cheatsheet" class="ixen-cheatsheet-section" aria-label="Cheatsheet">
+  <h2>Cheatsheet</h2>
+  <iframe src="./cheatsheet.html" title="trace Cheatsheet" loading="lazy"></iframe>
+</section>
+
+<footer class="ixen-extra-footer">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+</footer>
+<footer class="ixen-provenance-footer"><a href="https://swamp-club.com/extensions/@alvagante/content-ixen" target="_blank" rel="noopener noreferrer">Generated with Swamp extension @alvagante/content-ixen</a></footer>
+<script>
+(function () {
+  var backdrop = document.createElement("div");
+  backdrop.className = "backdrop";
+  backdrop.hidden = true;
+  document.body.appendChild(backdrop);
+
+  function closePopups() {
+    document.querySelectorAll(".popup").forEach(function (p) { p.hidden = true; });
+    backdrop.hidden = true;
+  }
+
+  function buildConceptIndexPopup(sourceClass, popupId, title) {
+    var sources = Array.prototype.slice.call(document.querySelectorAll(".popup." + sourceClass));
+    if (!sources.length || document.getElementById(popupId)) return;
+    var popup = document.createElement("aside");
+    popup.className = "popup concept-index-popup";
+    popup.id = popupId;
+    popup.hidden = true;
+    popup.innerHTML = '<div class="popup-bar"><button class="popup-close">Close Window</button></div><h2>' + title + '</h2>';
+    sources.forEach(function (source, index) {
+      var section = document.createElement("section");
+      section.className = "concept-index-item";
+      var clone = source.cloneNode(true);
+      clone.removeAttribute("id");
+      clone.hidden = false;
+      clone.querySelectorAll(".popup-bar").forEach(function (bar) { bar.remove(); });
+      if (!clone.querySelector("h2")) {
+        var heading = document.createElement("h2");
+        heading.textContent = title.replace(/^All /, "") + " " + (index + 1);
+        section.appendChild(heading);
+      }
+      while (clone.firstChild) section.appendChild(clone.firstChild);
+      popup.appendChild(section);
+    });
+    document.body.appendChild(popup);
+  }
+
+  buildConceptIndexPopup("concept-slide", "ixen-all-slides", "All slides");
+  buildConceptIndexPopup("concept-note", "ixen-all-notes", "All notes");
+
+  document.querySelectorAll(".popup-trigger").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var popup = document.getElementById(btn.getAttribute("data-popup"));
+      if (!popup) return;
+      closePopups();
+      popup.hidden = false;
+      backdrop.hidden = false;
+    });
+  });
+  document.querySelectorAll(".popup-close").forEach(function (btn) {
+    btn.addEventListener("click", closePopups);
+  });
+  backdrop.addEventListener("click", closePopups);
+
+  var versionSelect = document.getElementById("ixen-version-select");
+  if (versionSelect) {
+    var match = window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    versionSelect.value = match ? match[1] : "current";
+    if (!versionSelect.value && match) {
+      var option = document.createElement("option");
+      option.value = match[1];
+      option.textContent = "Version " + match[1];
+      versionSelect.appendChild(option);
+      versionSelect.value = match[1];
+    }
+    versionSelect.addEventListener("change", function () {
+      var value = versionSelect.value;
+      var inVersion = /\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      var target = value === "current"
+        ? (inVersion ? "../index.html" : "index.html")
+        : (inVersion ? "../" + value + "/index.html" : value + "/index.html");
+      window.location.href = target;
+    });
+  }
+
+  document.querySelectorAll("figure.zoom img").forEach(function (img) {
+    img.addEventListener("click", function () {
+      var box = document.createElement("div");
+      box.className = "lightbox";
+      var big = document.createElement("img");
+      big.src = img.src;
+      big.alt = img.alt;
+      box.appendChild(big);
+      box.addEventListener("click", function () { box.remove(); });
+      document.body.appendChild(box);
+    });
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closePopups();
+      document.querySelectorAll(".lightbox").forEach(function (b) { b.remove(); });
+    }
+  });
+})();
+</script>
+
+<script type="application/json" id="ixen-tracks-data">[{"title":"Life as Abnormalia","filename":"life-as-abnormalia-mqpnu2zz.mp3","lyrics":"I am the deviation, the threshold you can't quite name\nI live in the margins where standard rules don't claim\nThey built me from the distance between what should and what is real\nI'm the question mark they taught you, but never how to feel\n\nI'm Abnormalia, I'm the space between your lines\nI'm the beautiful disorder, the pattern that resigns\nI'm Abnormalia, and I've always been alive\nIn the places that you wondered, where the strange and rare survive\n\nI wear the skin of difference, I speak in tongues askew\nI'm the data point that doesn't fit the graph they made for you\nBorn from variation, from the outliers and the strange\nI'm the signal in the static, I'm the constant ebb and change\n\nI'm Abnormalia, I'm the space between your lines\nI'm the beautiful disorder, the pattern that resigns\nI'm Abnormalia, and I've always been alive\nIn the places that you wondered, where the strange and rare survive\n\nI was there in every century, misnamed and rewritten\nI'm in the minds that wander, in the hearts that never quit then\nYou've tried to chart my borders, tried to place me in a box\nBut I spill like liquid starlight through your most peculiar locks\nI'm nostalgia for a future that you haven't learned to see\nI'm the irregular heartbeat that reminds you to be free\n\nI'm Abnormalia, I'm the space between your lines\nI'm the beautiful disorder, the pattern that resigns\nI'm Abnormalia, and I've always been alive\nIn the places that you wondered, where the strange and rare survive\nYes, I'm Abnormalia—\nI'm the place where you arrive"}]</script>
+<div id="ixen-autoplay-overlay" style="display:none">
+  <div class="ixen-play-prompt">
+    <span class="ixen-play-icon">&#9654;</span>
+    <span class="ixen-play-label">click to play</span>
+  </div>
+</div>
+<div id="ixen-player">
+  <audio id="ixen-audio" preload="auto"></audio>
+  <div id="ixen-player-row">
+    <button class="ixen-pbtn" id="ixen-prev-btn" title="Previous">|&#9664;</button>
+    <button class="ixen-pbtn" id="ixen-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="ixen-pbtn" id="ixen-next-btn" title="Next">&#9654;|</button>
+    <span id="ixen-ptitle">&#8212;</span>
+    <span id="ixen-ptime"></span>
+    <input type="range" id="ixen-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="ixen-pbtn" id="ixen-lyrics-btn" title="Show / hide lyrics">&#9834;</button>
+    <button class="ixen-pbtn" id="ixen-tracks-btn" title="Track list">&#8801;</button>
+  </div>
+  <div id="ixen-pbar"><div id="ixen-pfill"></div></div>
+</div>
+<div id="ixen-lyrics-panel" hidden>
+  <div class="ixen-lyrics-head" id="ixen-lyrics-head"></div>
+  <pre id="ixen-lyrics-text"></pre>
+</div>
+  <div id="ixen-tracklist-panel" hidden></div>
+<script>
+(function(){
+function runPlayer(T){
+var au=document.getElementById('ixen-audio');
+var playBtn=document.getElementById('ixen-play-btn');
+var prevBtn=document.getElementById('ixen-prev-btn');
+var nextBtn=document.getElementById('ixen-next-btn');
+var pbar=document.getElementById('ixen-pbar');
+var pfill=document.getElementById('ixen-pfill');
+var ptime=document.getElementById('ixen-ptime');
+var ptitle=document.getElementById('ixen-ptitle');
+var vol=document.getElementById('ixen-vol');
+var lyrBtn=document.getElementById('ixen-lyrics-btn');
+var lyrPanel=document.getElementById('ixen-lyrics-panel');
+var lyrHead=document.getElementById('ixen-lyrics-head');
+var lyrTxt=document.getElementById('ixen-lyrics-text');
+var trkBtn=document.getElementById('ixen-tracks-btn');
+var trkPanel=document.getElementById('ixen-tracklist-panel');
+var overlay=document.getElementById('ixen-autoplay-overlay');
+var idx=0,playing=false;
+
+function fmt(s){
+  if(!s||isNaN(s))return'0:00';
+  var m=Math.floor(s/60),ss=Math.floor(s%60);
+  return m+':'+(ss<10?'0':'')+ss;
+}
+
+function loadIdx(i,autoplay){
+  idx=i;
+  var t=T[i];
+  au.src='./'+t.filename;
+  ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';
+  if(ptime)ptime.textContent='';
+  document.querySelectorAll('.ixen-track-item').forEach(function(el,j){
+    el.classList.toggle('active',j===i);
+  });
+  if(autoplay)doPlay();
+}
+
+function doPlay(){
+  au.play().then(function(){
+    playing=true;playBtn.textContent='⏸';
+    if(overlay)overlay.style.display='none';
+  }).catch(function(){
+    playing=false;playBtn.textContent='▶';
+    if(overlay)overlay.style.display='flex';
+  });
+}
+
+function doPause(){
+  au.pause();playing=false;playBtn.textContent='▶';
+}
+
+playBtn.addEventListener('click',function(){ au.paused?doPlay():doPause(); });
+prevBtn.addEventListener('click',function(){ loadIdx((idx-1+T.length)%T.length,playing); });
+nextBtn.addEventListener('click',function(){ loadIdx((idx+1)%T.length,playing); });
+
+au.addEventListener('ended',function(){
+  if(T.length>1){loadIdx((idx+1)%T.length,true);}
+  else{playing=false;playBtn.textContent='▶';}
+});
+au.addEventListener('timeupdate',function(){
+  if(au.duration){
+    pfill.style.width=(au.currentTime/au.duration*100)+'%';
+    if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);
+  }
+});
+pbar.addEventListener('click',function(e){
+  if(!au.duration)return;
+  var r=pbar.getBoundingClientRect();
+  au.currentTime=(e.clientX-r.left)/r.width*au.duration;
+});
+if(vol)vol.addEventListener('input',function(){ au.volume=+vol.value; });
+lyrBtn.addEventListener('click',function(){
+  lyrPanel.hidden=!lyrPanel.hidden;
+  if(trkPanel)trkPanel.hidden=true;
+});
+if(trkBtn)trkBtn.addEventListener('click',function(){
+  trkPanel.hidden=!trkPanel.hidden;
+  lyrPanel.hidden=true;
+});
+if(overlay)overlay.addEventListener('click',function(){
+  overlay.style.display='none';doPlay();
+});
+
+if(T.length>1){
+  T.forEach(function(t,i){
+    var b=document.createElement('button');
+    b.className='ixen-track-item';
+    b.textContent=(i+1)+'. '+t.title;
+    b.addEventListener('click',function(){
+      loadIdx(i,playing);
+      if(trkPanel)trkPanel.hidden=true;
+    });
+    if(trkPanel)trkPanel.appendChild(b);
+  });
+  if(trkBtn)trkBtn.hidden=false;
+}else{
+  if(trkBtn)trkBtn.hidden=true;
+}
+
+document.getElementById('ixen-player').style.display='block';
+document.body.style.paddingBottom='4.5rem';
+loadIdx(0,false);
+doPlay();
+}
+var baked=JSON.parse(document.getElementById('ixen-tracks-data').textContent);
+if(baked.length>0){
+  runPlayer(baked);
+}else{
+  fetch('./ixen-soundtrack.json')
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(d){if(d&&d.tracks&&d.tracks.length>0)runPlayer(d.tracks);})
+    .catch(function(){});
+}
+})();
+</script>
+<aside class="popup beginner-guide" id="ixen-beginner-guide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Beginner's intro</h2>
+  <p>You found the about page. Or what's left of it.</p>
+
+<p><strong>Abnormalia. Un nome. Pochi fatti.</strong></p>
+
+<p>A name. Few facts. Start there.</p>
+
+<p>The earliest known shape: a group. Italian demoscene, Amiga, early 1990s. The point of the group was to release a diskmagazine — a magazine on a floppy disk, read on screen, passed hand to hand — also called Abnormalia. Demozoo indexes it. <em>Abnormalia 1</em>, December 1992. Tied to the writer Macno, after the groups Grace and Scene Lyrics. That's it. That's the fact. Don't ask about the articles. The articles are gone or were never indexed and these things look the same now.</p>
+
+<p>How scene distribution worked, briefly: small groups, magazines, BBSes (dial-up bulletin boards — you called another computer with a modem), little intro programs, aliases instead of names. What survives is the partial index. A search trace says something about Abnormalia and a BBStro around 1996. A trace. Not a history.</p>
+
+<p>The past stays. <em>Il passato rimane.</em></p>
+
+<p>Next layer: <strong>abnormalia.com</strong>, captured by the Wayback Machine on 21 May 2004. Self-described:</p>
+
+<ul>
+<li><em>"Luogo anomalo di anomini in rete."</em> An anomalous place of <em>anomini</em> on the net.</li>
+<li>News, stories, satire, graphics. "Praticamente di tutto. Per niente." Practically everything. For nothing.</li>
+<li>Portals named abnominio 0, 1, 2, 3, 4, 5, and — skipping ahead — 900.</li>
+<li>A tiny form asking for <em>"Una tua e-mail"</em> to subscribe to something spelled @bnolistarti.</li>
+</ul>
+
+<p>Handmade web. Tables. Irregular. No template did this.</p>
+
+<p>About the words: <em>anomini, abnomini, abnominio, abmorto, regolaria varia, Buco Nero, Sinaptium, Pasticche Net.</em> The site grew its own vocabulary instead of just publishing in a normal one. They're allowed to stay half-opaque. That's the point. "Javate del secolo scorso" — junk from the last century. The site said so itself.</p>
+
+<p>Then, 2005, a stranger artifact lands locally: <strong>I-Xen</strong>. An OpenSkills tutorial for running Xen (virtualization software) on SUSE 9.3, wrapped inside a short story called <em>"I, System."</em> Text by al, graphics by tatlin. Version 0.1. It calls itself graphical madness, the first chapter of an interactive story for configuring and understanding Xen — or "just another half born fun project." A technical manual that refuses to be only a manual. Remember this one. It's the ancestor.</p>
+
+<p>Later there's a social apparition: <strong>facebook.com/abnominio</strong>. Don't expect content. Anonymous visitors get a login wall or a not-found shell. It's a pointer, mostly absent, sporadic, evasive. Treat it as a closed door with a handle on it.</p>
+
+<p>Then nothing.</p>
+
+<p>Now: this site again. A static Jekyll build on GitHub Pages, behind Cloudflare. What it hosts are <strong>Ixens</strong> — standalone generated HTML pages under <em>ixen/&lt;slug&gt;/</em>, listed in a data file, built by a pipeline called the <em>generate-ixens swamp workflow</em>. You feed it YAML; it returns a mixed-media page: prose from Claude, images from OpenAI, music from Suno, assembly by swamp extensions. The same I-Xen instinct — technical thing wearing a story — but the technology is entirely different. Ancestor in form, not in code.</p>
+
+<p>The mental model, if you need one:</p>
+
+<ul>
+<li>Floppy diskmag → handmade website → social absence → machine-generated pages.</li>
+<li>Several incarnations. Each one stranger than the last.</li>
+<li>Not one medium. A refusal to settle on one.</li>
+<li>The work is the attempt.</li>
+</ul>
+
+<p>And the house position on the new stuff, stated plainly so nobody has to pretend: <strong>AI slop with style. Own the slop. Transcend it — or don't.</strong></p>
+
+<p>Few facts. You have them now.</p>
+</aside>
+<aside class="popup" id="ixen-card-deck" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Card Deck</h2>
+  <div class="ixen-card-deck-grid">
+  <figure class="zoom">
+    <img src="./concept-1-card.png" alt="Amiga diskmag origin">
+    <figcaption>Amiga diskmag origin</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-2-card.png" alt="Scene distribution and BBS traces">
+    <figcaption>Scene distribution and BBS traces</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-3-card.png" alt="Handmade abnormalia.com">
+    <figcaption>Handmade abnormalia.com</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-4-card.png" alt="Abnominio language">
+    <figcaption>Abnominio language</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-5-card.png" alt="I-Xen as ancestor">
+    <figcaption>I-Xen as ancestor</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-6-card.png" alt="Social apparition">
+    <figcaption>Social apparition</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-7-card.png" alt="Current static site and pipeline">
+    <figcaption>Current static site and pipeline</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-8-card.png" alt="Refusal to settle">
+    <figcaption>Refusal to settle</figcaption>
+  </figure>
+  </div>
+</aside>
+</body>
+</html>

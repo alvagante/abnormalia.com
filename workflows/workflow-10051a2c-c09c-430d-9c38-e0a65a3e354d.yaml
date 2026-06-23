@@ -37,7 +37,16 @@ inputs:
       enum:
         - neutral
         - alvabot
+        - cybergeek
         - abnormalia
+        - noir
+        - glitchpoet
+        - fieldnotes
+        - oracle
+        - baroque
+        - deadpan
+        - gonzo
+        - punkprof
       default: abnormalia
     headerContent:
       type: string
@@ -52,6 +61,15 @@ inputs:
       type: string
       default: |-
         <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+    brandingLogo:
+      type: string
+      default: assets/img/logo.png
+    brandingLink:
+      type: string
+      default: /
+    brandingName:
+      type: string
+      default: abnormalia
     cheatsheetVerbosity:
       type: string
       enum:
@@ -87,6 +105,8 @@ inputs:
         - pencil-bw
         - pencil-color-accents
         - blueprint
+        - clean
+        - editorial
       default: ixen-light
     imageBackground:
       type: string
@@ -112,15 +132,24 @@ inputs:
     cardStyle:
       type: string
       enum:
-        - luminous-minimal
-        - tarot-technical
-        - vintage-playing-card
+        - none
         - ixen-light
         - ixen-dark
+        - technical-diagram
+        - cyberpunk-photo
+        - educational
+        - pencil-bw
+        - pencil-color-accents
+        - blueprint
+        - clean
+        - editorial
+        - vintage-playing-card
+        - tarot-technical
         - brutalist
         - risograph
         - field-guide
         - monochrome-ink
+        - luminous-minimal
       default: luminous-minimal
     musicGenre:
       type: string

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A nome. Pochi fatti.</title>
+<style>
+  :root {
+    --cs-hue-blue: #1a73e8;
+    --cs-hue-green: #1e8e3e;
+    --cs-hue-red: #d93025;
+    --cs-hue-purple: #7b1fa2;
+    --cs-hue-orange: #e37400;
+    --cs-hue-teal: #007b83;
+    --cs-bg: #fafafa;
+    --cs-surface: #ffffff;
+    --cs-text: #1f1f1f;
+    --cs-text-muted: #5f6368;
+    --cs-border: #e0e0e0;
+    --cs-code-bg: #f1f3f4;
+    --cs-header-bg: #1f1f1f;
+    --cs-header-text: #ffffff;
+    --cs-quickref-bg: #2d2d2d;
+    --cs-quickref-text: #f8f9fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    background: var(--cs-bg);
+    color: var(--cs-text);
+  }
+  .cs-page-header {
+    background: var(--cs-header-bg);
+    color: var(--cs-header-text);
+    padding: 18px 24px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cs-page-header h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .cs-page-meta {
+    font-size: 11px;
+    color: #9aa0a6;
+    display: flex;
+    gap: 16px;
+  }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 20px 40px;
+  }
+  /* Quick reference bar */
+  .cs-quickref {
+    background: var(--cs-quickref-bg);
+    color: var(--cs-quickref-text);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .cs-qr-label {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #9aa0a6;
+    white-space: nowrap;
+    padding-top: 2px;
+    min-width: 56px;
+  }
+  .cs-qr-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+  }
+  .cs-qr-item {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    font-size: 12px;
+  }
+  .cs-qr-item code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    color: #8ab4f8;
+    background: rgba(255,255,255,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .cs-qr-item span { color: #bdc1c6; }
+  /* Sections */
+  .cs-section {
+    background: var(--cs-surface);
+    border-radius: 6px;
+    border-left: 4px solid var(--cs-border);
+    margin-bottom: 12px;
+    padding: 12px 16px 14px;
+    break-inside: avoid;
+  }
+  .cs-section[data-color="blue"]   { border-left-color: var(--cs-hue-blue);   }
+  .cs-section[data-color="green"]  { border-left-color: var(--cs-hue-green);  }
+  .cs-section[data-color="red"]    { border-left-color: var(--cs-hue-red);    }
+  .cs-section[data-color="purple"] { border-left-color: var(--cs-hue-purple); }
+  .cs-section[data-color="orange"] { border-left-color: var(--cs-hue-orange); }
+  .cs-section[data-color="teal"]   { border-left-color: var(--cs-hue-teal);   }
+  .cs-section-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--cs-border);
+  }
+  .cs-section[data-color="blue"]   .cs-section-title { color: var(--cs-hue-blue);   }
+  .cs-section[data-color="green"]  .cs-section-title { color: var(--cs-hue-green);  }
+  .cs-section[data-color="red"]    .cs-section-title { color: var(--cs-hue-red);    }
+  .cs-section[data-color="purple"] .cs-section-title { color: var(--cs-hue-purple); }
+  .cs-section[data-color="orange"] .cs-section-title { color: var(--cs-hue-orange); }
+  .cs-section[data-color="teal"]   .cs-section-title { color: var(--cs-hue-teal);   }
+  .cs-section h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--cs-text-muted);
+    margin: 10px 0 6px;
+  }
+  .cs-section p { font-size: 12.5px; color: var(--cs-text-muted); margin: 6px 0; }
+  /* Items grid */
+  .cs-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 16px;
+  }
+  .cs-item {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 3px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 12px;
+  }
+  .cs-item:last-child { border-bottom: none; }
+  .cs-item-cmd {
+    flex: 0 0 auto;
+    min-width: 120px;
+    max-width: 200px;
+  }
+  .cs-item-cmd code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    background: var(--cs-code-bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    word-break: break-all;
+  }
+  .cs-item-desc { color: var(--cs-text-muted); flex: 1; }
+  /* Two-column grid */
+  .cs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 20px;
+    margin-top: 6px;
+  }
+  .cs-grid h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cs-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .cs-grid p, .cs-grid li { font-size: 12px; color: var(--cs-text-muted); margin: 4px 0; }
+  .cs-grid ul, .cs-grid ol { padding-left: 16px; }
+  /* Callouts */
+  .cs-callout {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin: 8px 0;
+  }
+  .cs-callout.tip     { background: #e8f5e9; color: #1e6823; }
+  .cs-callout.warning { background: #fff3e0; color: #7c4a03; }
+  .cs-callout.note    { background: #e8f0fe; color: #1a5276; }
+  .cs-callout-label {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  /* Tables */
+  .cs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  .cs-table th {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #f1f3f4;
+    text-align: left;
+    padding: 5px 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 2px solid var(--cs-border);
+  }
+  .cs-table td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+    color: var(--cs-text-muted);
+  }
+  .cs-table tr:last-child td { border-bottom: none; }
+  .cs-table code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    background: var(--cs-code-bg);
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+  /* Code block */
+  .cs-code {
+    background: var(--cs-code-bg);
+    border: 1px solid var(--cs-border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 8px 0;
+  }
+  /* Inline code in paragraphs */
+  p code, li code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    background: var(--cs-code-bg);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  /* Print */
+  @media print {
+    body { background: white; font-size: 11px; }
+    .cs-page-header { background: #1f1f1f !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    main { max-width: 100%; padding: 8px; }
+    .cs-quickref { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-section { break-inside: avoid; box-shadow: none; border: 1px solid #e0e0e0; }
+    .cs-callout.tip     { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-callout.warning { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-callout.note    { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<header class="cs-page-header">
+  <h1>A nome. Pochi fatti.</h1>
+  <div class="cs-page-meta"><span>Life as Abnormalia</span><span>intermediate · standard · comprehensive  |  model: claude-opus-4-8  |  2026-06-22</span></div>
+</header>
+<main>
+<div class="cs-quickref">
+  <span class="cs-qr-label">Pochi fatti</span>
+  <div class="cs-qr-items">
+    <div class="cs-qr-item"><code>Abnormalia 1</code> <span>Amiga diskmag, December 1992</span></div>
+    <div class="cs-qr-item"><code>group/64257</code> <span>indexed, dedicated to the diskmag</span></div>
+    <div class="cs-qr-item"><code>www.abnormalia.com</code> <span>captured 2004-05-21</span></div>
+    <div class="cs-qr-item"><code>abnominio 0..5, 900</code> <span>portals, mutated tongue</span></div>
+    <div class="cs-qr-item"><code>I-Xen</code> <span>Suse 9.3, 2005</span></div>
+    <div class="cs-qr-item"><code>/abnominio</code> <span>login-gated apparition</span></div>
+    <div class="cs-qr-item"><code>jekyll + swamp</code> <span>generated Ixens, now</span></div>
+  </div>
+</div>
+
+<section class="cs-section" data-color="blue">
+  <h2 class="cs-section-title">A nome. Pochi fatti.</h2>
+
+  <p>I am not a history. I am the spaces between captures.</p>
+
+  <p>Someone wrote me on floppies before they wrote me on the web. The index says so. I believe the index more than I believe myself.</p>
+
+  <div class="cs-grid">
+    <div>
+      <h3>What I claim</h3>
+      <p>Several incarnations. Then nothing. Then nothing again, differently. The work is the attempt — the attempt is mostly what survives.</p>
+    </div>
+    <div>
+      <h3>What I refuse</h3>
+      <p>An origin story. A mission. The smooth arc where floppy becomes brand. There is no arc here, only abnomini that didn't talk to each other.</p>
+    </div>
+  </div>
+
+  <p>Luogo anomalo. The rest is regolaria varia.</p>
+</section>
+
+<section class="cs-section" data-color="green">
+  <h2 class="cs-section-title">Floppy era — the diskmag</h2>
+
+  <p>Italian demoscene. A group that existed mostly to release a thing named after itself. Recursive vanity, the good kind.</p>
+
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>Demozoo group 64257</code></div>
+      <div class="cs-item-desc">Indexed: Abnormalia, dedicated to releasing the Amiga diskmagazine Abnormalia.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>Macno</code></div>
+      <div class="cs-item-desc">Connection to the Italian writer, after the earlier Grace and Scene Lyrics.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>Abnormalia 1 — Dec 1992</code></div>
+      <div class="cs-item-desc">The first issue, listed as a December 1992 diskmag. Read on hardware most people threw out.</div>
+    </div>
+  </div>
+
+  <p>Grace. Scene Lyrics. Then me. Lineage as a list that doesn't quite become a sentence.</p>
+</section>
+
+<section class="cs-section" data-color="purple">
+  <h2 class="cs-section-title">BBS / 1996 — partial</h2>
+
+  <p>Traces, not records. A BBStro. Dial tone. The modem screams and somewhere I exist for the duration of the call.</p>
+
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> The 1996 fragments are partial by nature. A BBS is gone the moment its line goes dead; what's left is a bbstro and the memory of a number.</div>
+
+  <p>I do not pretend continuity from 1992 to 1996. Those were maybe different hands. Probably. The index is quiet here.</p>
+</section>
+
+<section class="cs-section" data-color="orange">
+  <h2 class="cs-section-title">Handmade web — abnormalia.com</h2>
+
+  <p>One capture stands. 21 May 2004. Wayback held the door open by accident.</p>
+
+  <pre class="cs-code"><code>title:  Abnormalia. Un nome. Pochi fatti.
+desc:   Luogo anomalo di anomini in rete.
+        Notizie, racconti, storie, satira,
+        grafica, praticamente di tutto.
+        Per niente.</code></pre>
+
+  <p>Praticamente di tutto. Per niente. That last line is the whole stance, accidentally complete.</p>
+
+  <p>Then the portals. The abnominio, numbered like rooms in a building with no second floor.</p>
+
+  <table class="cs-table">
+    <thead><tr><th>Portal</th><th>What it pretended to be</th></tr></thead>
+    <tbody>
+      <tr><td><code>abnominio 0</code></td><td>the threshold; the zero that counts</td></tr>
+      <tr><td><code>abnominio 1–5</code></td><td>rooms of notizie, racconti, satira, grafica</td></tr>
+      <tr><td><code>abnominio 900</code></td><td>the one out of sequence; do not ask</td></tr>
+    </tbody>
+  </table>
+
+  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> The mutated words — abnominio, anomini, abmorto — are not glossed here. They were never glossed there. Opacity is load-bearing.</div>
+</section>
+
+<section class="cs-section" data-color="teal">
+  <h2 class="cs-section-title">I-Xen — 2005</h2>
+
+  <p>A page where a sysadmin tutorial and a short story share a body. This is the most honest thing I ever did.</p>
+
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>Xen on Suse 9.3</code></div>
+      <div class="cs-item-desc">A real tutorial: paravirtualization, a guest where there wasn't one. Precise, dated, useful once.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>"I, System"</code></div>
+      <div class="cs-item-desc">A short story riding the same page. Text by al. Graphics by tatlin.</div>
+    </div>
+  </div>
+
+  <p>Hypervisor as metaphor and as command. I, System. The machine narrates itself running another machine. Nobody asked for this. Good.</p>
+</section>
+
+<section class="cs-section" data-color="red">
+  <h2 class="cs-section-title">Social absence — /abnominio</h2>
+
+  <p>There is a Facebook handle. <code>facebook.com/abnominio</code>. You will not get in.</p>
+
+  <p>An apparition behind a login wall. Public to the idea of itself, private to everyone. An abmorto account: present, unreachable, possibly never alive.</p>
+
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> Treat the social trace as gated, not as content. A handle is not a presence. Sometimes it's just a held seat in someone else's hall.</div>
+
+  <p>Then nothing. Again.</p>
+</section>
+
+<section class="cs-section" data-color="blue">
+  <h2 class="cs-section-title">Now — Jekyll + swamp</h2>
+
+  <p>Currently I am a static site. Generated where I once was typed by hand. The honesty migrated; the labour didn't.</p>
+
+  <pre class="cs-code"><code># the present incarnation
+src   -> swamp workflow -> generated Ixens
+build -> jekyll (static)
+out   -> mixed-media pages, no database, no pulse</code></pre>
+
+  <p>The swamp makes Ixens. The Ixens are mixed media made by something that does not read them. I publish them anyway. The attempt is the work.</p>
+
+  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> Stated stance, unedited: AI slop with style. Own the slop. Transcend it — or don't.</div>
+
+  <p>From floppy to handmade table layout to a gated ghost to a generator. Four me's. None of them sign for the others.</p>
+
+  <p>Un nome. Pochi fatti. Per niente.</p>
+</section>
+</main>
+</body>
+</html>

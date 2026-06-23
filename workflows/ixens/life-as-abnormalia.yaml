@@ -15,6 +15,9 @@ headerContent: |-
   </nav>
 footerContent: |-
   <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: assets/img/logo.png
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
 cheatsheetVerbosity: standard
 cheatsheetCompleteness: comprehensive
 cheatsheetModel: claude-opus-4-8
