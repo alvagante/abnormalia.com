@@ -182,11 +182,12 @@ inputs:
       type: string
       enum:
         - clean
-        - technical
-        - ixen
+        - technical-diagram
+        - ixen-light
+        - ixen-dark
         - editorial
         - blueprint
-      default: ixen
+      default: ixen-light
     infographicModel:
       type: string
       default: gpt-image-2
@@ -316,6 +317,7 @@ jobs:
             format: png
             filename: hero.png
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -340,6 +342,7 @@ jobs:
             format: png
             filename: ${{ self.ixen.concepts[0].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -364,6 +367,7 @@ jobs:
             format: png
             filename: ${{ self.ixen.concepts[1].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -388,6 +392,7 @@ jobs:
             format: png
             filename: ${{ self.ixen.concepts[2].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -412,6 +417,7 @@ jobs:
             format: png
             filename: ${{ self.ixen.concepts[3].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -436,6 +442,7 @@ jobs:
             format: png
             filename: ${{ self.ixen.concepts[4].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -460,6 +467,7 @@ jobs:
             format: png
             filename: ${{ self.ixen.concepts[5].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -484,6 +492,7 @@ jobs:
             format: png
             filename: ${{ self.ixen.concepts[6].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -508,6 +517,7 @@ jobs:
             format: png
             filename: ${{ self.ixen.concepts[7].imageFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -828,6 +838,7 @@ jobs:
             format: png
             htmlFilename: infographic.html
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
         dependsOn: []
         weight: 0
         allowFailure: false
