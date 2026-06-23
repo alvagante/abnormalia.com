@@ -52,11 +52,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Local development
 
 ```bash
-bundle exec jekyll serve   # http://localhost:4000
-bundle exec jekyll build   # outputs to _site/
+docker run --rm -v "$PWD:/srv/jekyll" -p 4000:4000 jekyll/jekyll jekyll serve   # http://localhost:4000
+docker run --rm -v "$PWD:/srv/jekyll" jekyll/jekyll jekyll build                 # outputs to _site/
 ```
 
-Requires Ruby + Bundler. The only Jekyll plugin in use is `jekyll-sitemap` (bundled with `github-pages`).
+No local Ruby required. The only Jekyll plugin in use is `jekyll-sitemap` (bundled with `github-pages`).
 
 ## Architecture
 
