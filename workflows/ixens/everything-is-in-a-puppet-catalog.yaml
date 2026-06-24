@@ -23,7 +23,7 @@ cheatsheetCompleteness: comprehensive
 cheatsheetModel: claude-opus-4-8
 imageStyle: ixen-light
 imageBackground: opaque
-imageModel: gpt-image-1.5
+imageModel: gpt-image-2
 imageSize: 1024x1024
 imageQuality: auto
 musicGenre: electronic, country, piano

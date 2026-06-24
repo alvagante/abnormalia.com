@@ -21,9 +21,9 @@ brandingName: abnormalia
 cheatsheetVerbosity: standard
 cheatsheetCompleteness: comprehensive
 cheatsheetModel: claude-opus-4-8
-imageStyle: ixen-dark
+imageStyle: editorial
 imageBackground: opaque
-imageModel: gpt-image-1.5
+imageModel: gpt-image-2
 imageSize: 1024x1024
 imageQuality: auto
 musicGenre: electronic, post-punk, piano
@@ -31,7 +31,7 @@ musicMood: nostalgic, irregular, contemplative
 musicModel: suno-ttapi
 musicInstrumental: false
 sunoVersion: chirp-v4-5
-infographicStyle: ixen-light
+infographicStyle: technical-diagram
 infographicModel: gpt-image-2
 includeBeginnerGuide: true
 ixens:
@@ -45,7 +45,7 @@ ixens:
     heroPrompt: >-
       Abnormalia as a layered media fossil: an Amiga floppy diskmag, postal
       envelopes, a 2004 handmade web table layout, abnominio issue portals,
-      the 2005 I-Xen hypertext, a login-gated social trace, and a modern swamp
+      a social presence started December 29 2018 (26 years after the first Abnormalia issue), and a modern swamp
       CLI pipeline generating text, images, music, and static HTML, precise
       ixen-dark technical zine aesthetic with black ink, red accents, and
       archival fragments.
@@ -61,10 +61,9 @@ ixens:
         details: >-
           Cover the full run: Macno was the main editor of Abnormalia, also a
           writer and contributor in several other diskmags (Grace, Scene Lyrics,
-          and others before Abnormalia). The group released seven issues plus a
+          and others before Abnormalia). Abnormalia, which was not a group had seven issues plus a
           special edition: Abnormalia 1 (December 1992), Abnormalia 2 (May
-          1993), Abnormalia 3 (September 1993), Abnormalia 3.14 (January 1994
-          — the π numbering, not sequential), Abnormalia 4 (1994), Abnormalia 5
+          1993), Abnormalia 3 (September 1993), Abnormalia 3.14 (January 1994), Abnormalia 4 (1994), Abnormalia 5
           (1995), and Macnolamia — Abnormalia Special Edition (July 1995). After
           Macnolamia, demoscene involvement faded. Do not invent article titles,
           staff lists, or issue contents beyond what is confirmed. The voice
@@ -80,9 +79,7 @@ ixens:
         details: >-
           Explain the scene-era distribution mood: small groups, magazines,
           BBSes, intros, aliases, and partial indexes as the archive that
-          remains. Mention the indexed Demozoo search trace for Abnormalia BBS
-          and BBStro promotion in 1996 only as a trace, not as a complete
-          history.
+          remains.
       - name: Handmade abnormalia.com
         imageFilename: concept-3.png
         cardFilename: concept-3-card.png
@@ -93,7 +90,7 @@ ixens:
           microcopy, ixen-dark web fossil.
         details: >-
           The Internet Archive's earliest capture of abnormalia.com is March 8,
-          2001 — not 2004. The site ran until at least 2010. There is also a
+          2001. The site ran until at least 2010. There is also a
           mentioned pre-2000 version (possibly the "900 version") with no
           confirmed online trace. The May 21, 2004 Wayback snapshot remains
           the richest: title "Abnormalia. Un nome. Pochi fatti."; description
@@ -132,26 +129,27 @@ ixens:
           madness, first chapter of an interactive story for Xen configuration
           and understanding, or "just another half born fun project." Tie it to
           today's Ixens as an ancestor in form, not as the same technology.
-      - name: 2023 comeback and fade
+      - name: 2019 comeback and fade
         imageFilename: concept-6.png
         cardFilename: concept-6-card.png
         imagePrompt: >-
-          The 2023 return of Abnormalia as social media: a burst of daily
+          The 2019 return of Abnormalia as social media: a burst of daily
           abnominio posts — small images with text, serialized, released once
           a day — then a frequency counter dropping week by week toward
           silence, accounts still visible but frozen, ixen-dark archival tone.
         details: >-
-          In 2023, abnormalia.com came back — 26 years after Abnormalia 1.
+          In 28 December 2018, exactl 26 years after the first diskmag issue,
+          released at The Party in Denmark, Abnormalia came back.
           Social accounts launched with a daily abnominio: images with text,
           multiple series on different topics, formatted for social posts.
           Different format from the early-2000s Italian website abnomini —
           these were visual, serialized, daily. The everyday release lasted
           a few months, then got rarer, then faded away slowly, unnoticed,
-          as most of my projects. The accounts are still up but not active.
+          as most of my father's projects. The accounts are still up but not active.
           No final announcement. Narrate the arc without sentimentality:
           the burst of energy, the gradual frequency drop, the last post that
           didn't know it was the last. The phrase "slowly, unnoticed, as most
-          of my projects" is available — use it close to verbatim.
+          of my father's projects" is available — use it close to verbatim.
       - name: Current static site and pipeline
         imageFilename: concept-7.png
         cardFilename: concept-7-card.png
@@ -178,14 +176,15 @@ ixens:
         details: >-
           Synthesize the throughline from the existing about page: several
           incarnations, each stranger than the one before; not a single medium
-          but a refusal to settle. Include the site's self-aware stance toward
+          but a refusal to settle, after 34 years of erratic existence.
+          Include the site's self-aware stance toward
           generated media: "AI slop with style. Own the slop. Transcend it - or
           don't." Keep the tone sharp, peer-level, unsentimental, and abnormal.
     details: >-
-      Treat the reader as a peer. Write a first-person about page narrated by
+      Treat the reader as an old friend. Write a first-person about page narrated by
       Abnormalia itself, not by a marketing site. The voice is fragmented,
-      elliptical, handmade, and suspicious of continuity. It should feel like
-      recovered marginalia, not a polished institutional history: short
+      elliptical, handmade, and suspicious of continuity. Short Interrupted. Sentences.
+      It should feel like recovered marginalia, not a polished institutional history: short
       paragraphs, abrupt cuts, fragments that are allowed to stand alone,
       occasional one-line whispers, and sudden precise facts embedded inside
       strange prose. Keep the Italian web-era mutations as living vocabulary:
@@ -195,7 +194,7 @@ ixens:
       lists, old-web dry humour, technical precision, self-mockery, and refusal.
       Avoid corporate origin-story language, sentimental nostalgia, generic
       "creative community" phrasing, and tidy hero narratives. The texture is
-      diskmag + BBS + handmade table layout + abandoned social handle + CLI
+      diskmag + handmade site + abandoned social handle + CLI
       pipeline. Strange, but not random. Literate, but not well-behaved.
       The story should move through these evidenced layers: an early 1990s Amiga
       diskmagazine/group in the Italian demoscene; the indexed Demozoo fact that
@@ -213,7 +212,8 @@ ixens:
       Notizie, racconti, storie, satira, grafica, praticamente di tutto. Per
       niente."; the abnominio 0, 1, 2, 3, 4, 5, and 900 portals with their
       mutated language; the 2005 I-Xen page, a Xen on Suse 9.3 tutorial and
-      "I, System" short story with text by al and graphics by tatlin; the 2023
+      "I, System" short story with text by al and graphics by tatlin and publsihed
+      on Openskills.info website (another project of Abnormalia's father); the 2023
       return of website and social accounts, 26 years after the first issue,
       with daily abnominio releases (images with text, multiple series, different
       topics) that lasted a few months then faded away slowly, unnoticed, as
@@ -224,6 +224,3 @@ ixens:
       social absence to generated mixed-media pages. Use the existing site
       stance: several incarnations, "then nothing", "the work is the attempt",
       and "AI slop with style. Own the slop. Transcend it - or don't."
-      Sources consulted for the generation brief: https://demozoo.org/groups/64257/,
-      https://web.archive.org/web/20040521224525/http://www.abnormalia.com/,
-      https://www.facebook.com/abnominio, local about.html, and local i-xen/.

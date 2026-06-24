@@ -209,20 +209,25 @@ figure.zoom.ixen-card-img img {
 .ixen-card-rail figure.zoom.ixen-card-img.is-active img {
   box-shadow: 4px 10px 28px rgba(0,0,0,0.36);
 }
-.ixen-card-rail figcaption {
-  margin-top: 0.25rem;
-  text-align: right;
-}
-.ixen-card-jump {
+.ixen-card-rail figcaption { display: none; }
+.ixen-card-rail-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 142px;
   background: none;
   border: none;
   color: var(--red);
   cursor: pointer;
-  font: inherit;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
   font-weight: bold;
+  line-height: 1.25;
   padding: 0;
   text-align: right;
   text-decoration: underline dotted;
+  text-shadow: 0 1px 0 #fff, 0 0 8px #fff;
+  pointer-events: auto;
 }
 .ixen-card-rail-hint {
   position: absolute;
@@ -266,7 +271,10 @@ figure.zoom.ixen-card-img img {
     height: min(68vh, 520px);
   }
   .ixen-card-rail figure.zoom.ixen-card-img { width: 78px !important; }
-  .ixen-card-rail figcaption { display: none; }
+  .ixen-card-rail-caption {
+    width: 92px;
+    font-size: 0.62rem;
+  }
   .ixen-card-rail-hint { display: none; }
 }
 @media (max-width: 720px) {
@@ -295,6 +303,13 @@ figure.zoom.ixen-card-img img {
   .ixen-card-rail figure.zoom.ixen-card-img.is-active {
     opacity: 1;
     transform: translateY(-0.4rem) scale(1.12) !important;
+  }
+  .ixen-card-rail-caption {
+    left: 0.65rem;
+    right: auto;
+    bottom: 0.25rem;
+    width: min(52vw, 14rem);
+    text-align: left;
   }
   .ixen-card-hover {
     left: 50%; right: auto; transform: translate(-50%, -50%);
@@ -894,8 +909,9 @@ Domain-0     0   256     1     r-----   42.0</pre>
     var rail = document.createElement("aside");
     rail.className = "ixen-card-rail";
     rail.setAttribute("aria-label", "Concept cards");
-    rail.innerHTML = '<div class="ixen-card-rail-hint">concept deck</div><div class="ixen-card-rail-track"></div>';
+    rail.innerHTML = '<div class="ixen-card-rail-hint">concept deck</div><div class="ixen-card-rail-track"></div><button type="button" class="ixen-card-rail-caption"></button>';
     var track = rail.querySelector(".ixen-card-rail-track");
+    var activeCaption = rail.querySelector(".ixen-card-rail-caption");
     var items = [];
 
     cards.forEach(function (card, index) {
@@ -912,14 +928,7 @@ Domain-0     0   256     1     r-----   42.0</pre>
       var fallback = img && img.alt ? img.alt.replace(/\s+card$/i, "") : "Concept " + (index + 1);
       var caption = card.querySelector("figcaption") || document.createElement("figcaption");
       var captionText = (caption.textContent || fallback).trim();
-      caption.textContent = "";
-      var jump = document.createElement("button");
-      jump.type = "button";
-      jump.className = "ixen-card-jump";
-      jump.textContent = captionText || fallback;
-      jump.setAttribute("data-concept-target", section.id);
-      jump.title = "Jump to " + fallback;
-      caption.appendChild(jump);
+      card.setAttribute("data-card-caption", captionText || fallback);
       if (!caption.parentElement) card.appendChild(caption);
 
       track.appendChild(card);
@@ -945,6 +954,13 @@ Domain-0     0   256     1     r-----   42.0</pre>
         item.card.style.zIndex = String(100 - abs);
         item.card.style.transform = "translateY(calc(-50% + " + y + "px)) translateX(" + x + "px) scale(" + scale + ") rotate(" + tilt + "deg)";
       });
+      var active = items[activeIndex];
+      if (active && activeCaption) {
+        var activeText = active.card.getAttribute("data-card-caption") || "";
+        activeCaption.textContent = activeText;
+        activeCaption.setAttribute("data-concept-target", active.section.id);
+        activeCaption.title = "Jump to " + activeText;
+      }
     }
 
     function chooseActive() {
@@ -1024,7 +1040,7 @@ Domain-0     0   256     1     r-----   42.0</pre>
       return;
     }
 
-    var jump = e.target.closest ? e.target.closest(".ixen-card-jump") : null;
+    var jump = e.target.closest ? e.target.closest(".ixen-card-rail-caption") : null;
     var railCard = e.target.closest ? e.target.closest("figure.ixen-card-rail-item") : null;
     if (jump || (railCard && !e.target.closest("img"))) {
       var targetId = (jump || railCard).getAttribute("data-concept-target");

@@ -117,7 +117,7 @@ inputs:
       default: opaque
     imageModel:
       type: string
-      default: gpt-image-1.5
+      default: gpt-image-2
     imageSize:
       type: string
       default: 1024x1024
