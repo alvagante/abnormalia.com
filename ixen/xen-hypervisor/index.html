@@ -13,26 +13,113 @@ body {
   background: #fff; max-width: 920px; margin: 0 auto;
   padding: 1.5rem 1.5rem 6rem;
 }
-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
-header h1 {
-  font-size: 3.2rem; font-weight: 900; letter-spacing: -0.04em;
-  margin: 0; line-height: 1.05; text-transform: uppercase;
+header.ixen-title-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 34%);
+  grid-template-areas:
+    "copy hero"
+    "dock hero";
+  gap: 0.95rem 1.1rem;
+  align-items: stretch;
+  margin: 0 0 2.6rem;
+  padding: 1.05rem 0 1.25rem;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #ddd;
 }
-header .credits { text-align: right; font-size: 0.75rem; color: var(--red); font-weight: bold; white-space: nowrap; padding-top: 0.4rem; }
-header .credits a { color: var(--red); text-decoration: underline dotted; }
-header .credits .byline { color: var(--dim); font-weight: normal; display: block; margin-top: 0.2rem; }
-.version-menu { margin-top: 0.55rem; font-size: 0.72rem; color: var(--dim); }
-.version-menu label { display: block; margin-bottom: 0.2rem; }
+header.ixen-title-shell:not(.has-hero) {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "copy"
+    "dock";
+}
+.ixen-title-copy { grid-area: copy; align-self: start; }
+.ixen-title-meta {
+  display: block;
+  margin: 0 0 0.55rem;
+  color: var(--dim);
+  font-size: 0.75rem;
+}
+header.ixen-title-shell h1 {
+  font-size: clamp(2.55rem, 5vw, 4.05rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  margin: 0;
+  line-height: 0.96;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+.ixen-title-hero {
+  grid-area: hero;
+  margin: 0;
+  min-height: 15.5rem;
+  border: 1px solid #111;
+  background: #111;
+  overflow: hidden;
+}
+.ixen-title-hero img {
+  width: 100%;
+  height: 100%;
+  min-height: 15.5rem;
+  object-fit: cover;
+  display: block;
+}
+.ixen-title-dock {
+  grid-area: dock;
+  align-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.version-menu {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  font-size: 0.72rem;
+  color: var(--dim);
+}
+.version-menu label {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  text-transform: uppercase;
+}
 .version-menu select {
   font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
   max-width: 13rem; color: var(--ink); background: #fff;
-  border: 1px solid #ccc; padding: 0.2rem 0.3rem;
+  border: 1px solid #bbb; padding: 0.37rem 0.45rem;
 }
 .ixen-quick-nav {
-  display: flex; justify-content: flex-end; gap: 0.55rem;
-  margin-top: 0.45rem;
+  display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.45rem;
 }
-.ixen-quick-nav .cmd { font-size: 0.72rem; }
+.ixen-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  border: 1px solid var(--red);
+  background: #fff;
+  color: var(--red);
+  cursor: pointer;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  font-weight: bold;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  padding: 0.46rem 0.7rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.ixen-nav-btn:hover { background: #fff4f4; }
+.ixen-nav-btn-primary {
+  background: var(--red);
+  color: #fff;
+  padding-inline: 0.9rem;
+}
+.ixen-nav-btn-primary:hover { background: #900; }
+.ixen-nav-btn-secondary { border-color: #111; color: #111; }
+.ixen-nav-btn-secondary:hover { background: #f4f4f4; }
+.ixen-nav-btn-tertiary { border-color: #ccc; color: var(--dim); }
+.ixen-nav-btn-tertiary:hover { color: var(--red); border-color: var(--red); background: #fff; }
 p { margin: 0.45em 0; }
 p strong { color: #000; }
 .binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
@@ -146,7 +233,7 @@ figure.ixen-infographic-img img { width: 100%; cursor: zoom-in; display: block; 
   font-size: 0.72rem; color: var(--dim); text-align: center;
 }
 .ixen-provenance-footer a { color: var(--dim); text-decoration: underline dotted; }
-.ixen-beginner-bar { margin-top: 0.45rem; }
+.ixen-beginner-bar { display: inline-flex; }
 .beginner-guide h2 { margin: 0.5rem 0 0.75rem; }
 .beginner-guide p { margin: 0.75rem 0; }
 .beginner-guide ul { margin: 0.5rem 0 0.75rem 1.2rem; padding: 0; }
@@ -278,6 +365,29 @@ figure.zoom.ixen-card-img img {
   .ixen-card-rail-hint { display: none; }
 }
 @media (max-width: 720px) {
+  header.ixen-title-shell,
+  header.ixen-title-shell.has-hero {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "hero"
+      "copy"
+      "dock";
+  }
+  .ixen-title-hero,
+  .ixen-title-hero img {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+  header.ixen-title-shell h1 {
+    font-size: 2.55rem;
+  }
+  .ixen-title-dock,
+  .ixen-quick-nav {
+    width: 100%;
+  }
+  .ixen-nav-btn {
+    flex: 1 1 auto;
+  }
   .ixen-card-rail {
     top: auto;
     right: 0;
@@ -428,24 +538,29 @@ figure.zoom.ixen-card-img img {
   <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
 </nav>
 </section>
-<header>
-  <h1>Below the Operating System</h1>
-  <div class="credits"><span class="byline">By alvagante — 20260622-09:42</span>
+<header class="ixen-title-shell has-hero">
+  <div class="ixen-title-copy">
+    <span class="ixen-title-meta">By alvagante — 20260622-09:42</span>
+    <h1>Below the Operating System</h1>
+  </div>
+  <figure class="ixen-title-hero"><img src="./hero.png" alt="Below the Operating System"></figure>
+  <div class="ixen-title-dock">
     <div class="version-menu">
-      <label for="ixen-version-select">versions</label>
+      <label for="ixen-version-select">previous versions</label>
       <select id="ixen-version-select">
         <option value="current">Current</option>
         <option value="1">Version 1</option><option value="2">Version 2</option><option value="3">Version 3</option><option value="4">Version 4</option><option value="5">Version 5</option><option value="6">Version 6</option><option value="7">Version 7</option>
       </select>
     </div>
     <div class="ixen-quick-nav">
-      <button class="ixen-accent-btn popup-trigger" data-popup="ixen-card-deck">Card Deck</button>
-      <a class="cmd" href="#ixen-cheatsheet">Cheatsheet</a>
-      <a class="cmd" href="#ixen-infographic">Infographic</a>
-      <button class="cmd popup-trigger" data-popup="ixen-all-slides">Slides</button>
-      <button class="cmd popup-trigger" data-popup="ixen-all-notes">Notes</button>
+      <button class="ixen-nav-btn ixen-nav-btn-primary popup-trigger" data-popup="ixen-card-deck">Card Deck</button>
+      <a class="ixen-nav-btn ixen-nav-btn-secondary" href="#ixen-cheatsheet">Cheatsheet</a>
+      <a class="ixen-nav-btn ixen-nav-btn-secondary" href="#ixen-infographic">Infographic</a>
+      <button class="ixen-nav-btn ixen-nav-btn-tertiary popup-trigger" data-popup="ixen-all-slides">Slides</button>
+      <button class="ixen-nav-btn ixen-nav-btn-tertiary popup-trigger" data-popup="ixen-all-notes">Notes</button>
     </div>
-    <div class="ixen-beginner-bar"><button class="ixen-accent-btn popup-trigger" data-popup="ixen-beginner-guide">Beginner's intro</button></div></div>
+    <div class="ixen-beginner-bar"><button class="ixen-nav-btn ixen-nav-btn-primary popup-trigger" data-popup="ixen-beginner-guide">Beginner's intro</button></div>
+  </div>
 </header>
 <main>
 <p class="binary">01100010 01100101 01101100 01101111 01110111</p>
