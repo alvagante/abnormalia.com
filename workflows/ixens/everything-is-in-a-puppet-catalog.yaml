@@ -36,6 +36,10 @@ infographicModel: gpt-image-2
 includeBeginnerGuide: true
 ixens:
   - slug: puppet-catalog
+    regenerate:
+      images: false
+      cards: false
+      infographic: false
     title: Everything is in a Puppet catalog
     description: The catalog speaks about resources, edges, facts, and the quiet violence of convergence.
     topic: Life as a Puppet catalog

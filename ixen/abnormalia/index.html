@@ -362,6 +362,15 @@ figure.zoom.ixen-card-img img {
   padding: 0.15rem 0.3rem; line-height: 1; flex-shrink: 0;
 }
 .ixen-pbtn:hover { color: #c00; }
+#ixen-player.ixen-autoplay-blocked #ixen-play-btn {
+  color: #fff; background: #c00; border-radius: 2px;
+  box-shadow: 0 0 0 1px #c00, 0 0 18px rgba(204,0,0,0.55);
+  animation: ixen-play-pulse 1.35s ease-in-out infinite;
+}
+@keyframes ixen-play-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 1px #c00, 0 0 12px rgba(204,0,0,0.35); }
+  50% { transform: scale(1.14); box-shadow: 0 0 0 1px #f33, 0 0 24px rgba(204,0,0,0.8); }
+}
 #ixen-ptitle {
   flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   color: #c00; font-weight: bold; letter-spacing: 0.02em;
@@ -1142,6 +1151,7 @@ var lyrTxt=document.getElementById('ixen-lyrics-text');
 var trkBtn=document.getElementById('ixen-tracks-btn');
 var trkPanel=document.getElementById('ixen-tracklist-panel');
 var overlay=document.getElementById('ixen-autoplay-overlay');
+var player=document.getElementById('ixen-player');
 var idx=0,playing=false;
 
 function fmt(s){
@@ -1165,13 +1175,20 @@ function loadIdx(i,autoplay){
   if(autoplay)doPlay();
 }
 
+function setAutoplayBlocked(blocked){
+  if(overlay)overlay.style.display='none';
+  if(player)player.classList.toggle('ixen-autoplay-blocked',blocked);
+  playBtn.title=blocked?'Play soundtrack':'Play / Pause';
+}
+
 function doPlay(){
+  setAutoplayBlocked(false);
   au.play().then(function(){
     playing=true;playBtn.textContent='⏸';
-    if(overlay)overlay.style.display='none';
+    setAutoplayBlocked(false);
   }).catch(function(){
     playing=false;playBtn.textContent='▶';
-    if(overlay)overlay.style.display='flex';
+    setAutoplayBlocked(true);
   });
 }
 
@@ -1227,7 +1244,7 @@ if(T.length>1){
   if(trkBtn)trkBtn.hidden=true;
 }
 
-document.getElementById('ixen-player').style.display='block';
+player.style.display='block';
 document.body.style.paddingBottom='4.5rem';
 loadIdx(0,false);
 doPlay();

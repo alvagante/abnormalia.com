@@ -36,6 +36,10 @@ infographicModel: gpt-image-2
 includeBeginnerGuide: true
 ixens:
   - slug: git-repository
+    regenerate:
+      images: false
+      cards: false
+      infographic: false
     title: Life as a Git repository
     description: A repository narrates objects, refs, the index, merges, rebases, remotes, maintenance, and recovery.
     topic: Life as a Git repository

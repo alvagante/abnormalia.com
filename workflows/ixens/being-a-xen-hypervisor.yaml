@@ -36,6 +36,10 @@ infographicModel: gpt-image-2
 includeBeginnerGuide: true
 ixens:
   - slug: xen-hypervisor
+    regenerate:
+      images: false
+      cards: false
+      infographic: false
     title: Being a Xen hypervisor
     description: The host narrates Xen's domain model, CPU, memory, I/O, device isolation, migration, and failure boundaries.
     topic: Life as a Xen hypervisor
