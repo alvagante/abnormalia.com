@@ -226,6 +226,9 @@ inputs:
               infographic:
                 type: boolean
                 default: false
+              music:
+                type: boolean
+                default: false
           concepts:
             type: array
             minItems: 2
@@ -761,13 +764,13 @@ jobs:
           type: succeeded
     weight: 0
   - name: music
-    description: Generate a fresh soundtrack for each Ixen that does not yet have enough tracks.
+    description: Generate a fresh soundtrack for each Ixen that asks for music regeneration or does not yet have enough tracks.
     steps:
       - name: track-${{ self.ixen.slug }}
-        description: Generate the soundtrack playlist for one Ixen topic, unless it already has enough MP3s.
+        description: Generate the soundtrack playlist for one Ixen topic when requested or when it does not already have enough MP3s.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, data.latest("tracks-" + ixen.slug, "count").attributes.trackCount < inputs.musicSkipThreshold) }}
+          in: ${{ inputs.ixens.filter(ixen, (has(ixen.regenerate) && has(ixen.regenerate.music) && ixen.regenerate.music) || data.latest("tracks-" + ixen.slug, "count").attributes.trackCount < inputs.musicSkipThreshold) }}
         task:
           type: model_method
           modelType: "@alvagante/content-music"
