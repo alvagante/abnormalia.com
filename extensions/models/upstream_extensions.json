@@ -1,16 +1,17 @@
 {
   "@alvagante/content-ixen": {
-    "version": "2026.06.23.1",
-    "pulledAt": "2026-06-23T07:47:17.211Z",
+    "version": "2026.06.24.3",
+    "pulledAt": "2026-06-25T12:36:18.161Z",
     "files": [
+      ".swamp/pulled-extensions/@alvagante/content-ixen/models/extensions/models/content_shared.ts",
       ".swamp/pulled-extensions/@alvagante/content-ixen/models/extensions/models/content_ixen.ts",
       ".swamp/bundles/af59c063/extensions/models/content_ixen.js",
       ".swamp/pulled-extensions/@alvagante/content-ixen/files/README.md",
       ".swamp/pulled-extensions/@alvagante/content-ixen/files/LICENSE.txt",
       ".swamp/pulled-extensions/@alvagante/content-ixen/manifest.yaml"
     ],
-    "checksum": "f004674ccbec5a8cdd39c3a9766d831fbed1c308c37506f36676c949eb52e149",
-    "filesChecksum": "debab14d7f1e399eccd6a78a2e8d1ca600ebb5a9586e9b3a547093ce8398fe1e",
+    "checksum": "1f09cefb662e0abb5eba8ac7faa16533abd720a3e3d946fdfb80eae2f38331f0",
+    "filesChecksum": "dbc5d8d877df1fd54de44038698562a651e54a815b112532be108ddb0eed7693",
     "serverUrl": "https://swamp-club.com"
   },
   "@alvagante/content-music": {
@@ -28,59 +29,63 @@
     "serverUrl": "https://swamp-club.com"
   },
   "@alvagante/content-image": {
-    "version": "2026.06.23.2",
-    "pulledAt": "2026-06-23T15:51:35.550Z",
+    "version": "2026.06.24.1",
+    "pulledAt": "2026-06-25T12:36:21.530Z",
     "files": [
       ".swamp/pulled-extensions/@alvagante/content-image/models/extensions/models/content_image.ts",
+      ".swamp/pulled-extensions/@alvagante/content-image/models/extensions/models/content_shared.ts",
       ".swamp/bundles/d9decf6e/extensions/models/content_image.js",
       ".swamp/pulled-extensions/@alvagante/content-image/files/README.md",
       ".swamp/pulled-extensions/@alvagante/content-image/files/LICENSE.txt",
       ".swamp/pulled-extensions/@alvagante/content-image/manifest.yaml"
     ],
-    "checksum": "73f5a379e943a62455d072c63fe5384c37a7d7a5168b1bee78cabfab36d241a9",
-    "filesChecksum": "dbdd60458cf2c4ee517f321f545a84326701da916d5bab5fa474f7f374a398ef",
+    "checksum": "50ed8fe3169d5ec5ad9718f977e3eea985f18736ae3437e0957100c6da80c56f",
+    "filesChecksum": "550fdce99dcabbc84f32173014043cad8b4aa74cdd11e9d5ca26784d569268ea",
     "serverUrl": "https://swamp-club.com"
   },
   "@alvagante/content-cheatsheet": {
-    "version": "2026.06.23.1",
-    "pulledAt": "2026-06-23T07:47:05.555Z",
+    "version": "2026.06.23.2",
+    "pulledAt": "2026-06-25T12:36:24.349Z",
     "files": [
+      ".swamp/pulled-extensions/@alvagante/content-cheatsheet/models/content_shared.ts",
       ".swamp/pulled-extensions/@alvagante/content-cheatsheet/models/content_cheatsheet.ts",
       ".swamp/bundles/8980856b/content_cheatsheet.js",
       ".swamp/pulled-extensions/@alvagante/content-cheatsheet/files/README.md",
       ".swamp/pulled-extensions/@alvagante/content-cheatsheet/files/LICENSE.txt",
       ".swamp/pulled-extensions/@alvagante/content-cheatsheet/manifest.yaml"
     ],
-    "checksum": "ad792a0bb1dfcc110e85748f7b8176cf2e5e07fa13012646ebb38d219b25df88",
-    "filesChecksum": "005354f71c27ca2f9fe1792b4575a6710d6b079313c172d72acdf3781cc098f0",
+    "checksum": "98b7068e52610a9d5edab1c973d944e56696b5e67313874b638df9ac4129dad8",
+    "filesChecksum": "2f92e1b1935efff0debda62656ce7cb1fef64bd427007307306f3e43a122be00",
     "serverUrl": "https://swamp-club.com"
   },
   "@alvagante/content-infographic": {
-    "version": "2026.06.23.2",
-    "pulledAt": "2026-06-23T15:51:39.538Z",
+    "version": "2026.06.24.1",
+    "pulledAt": "2026-06-25T12:36:27.667Z",
     "files": [
+      ".swamp/pulled-extensions/@alvagante/content-infographic/models/extensions/models/content_shared.ts",
       ".swamp/pulled-extensions/@alvagante/content-infographic/models/extensions/models/content_infographic.ts",
       ".swamp/bundles/5933d5f5/extensions/models/content_infographic.js",
       ".swamp/pulled-extensions/@alvagante/content-infographic/files/README.md",
       ".swamp/pulled-extensions/@alvagante/content-infographic/files/LICENSE.txt",
       ".swamp/pulled-extensions/@alvagante/content-infographic/manifest.yaml"
     ],
-    "checksum": "f69995e8033c64d0275e0b63c3dce4f7a3f56c2d3383e55b486ab9e80d33866a",
-    "filesChecksum": "19b91ce56a4c5f1292114286d862b86dbd1c699c1829b7c28a222992b63c97a7",
+    "checksum": "383877e18dc8e5a7917cf370b0ecbe0df042f855b7ad65eb906b749cb0c1ef70",
+    "filesChecksum": "ed465751541e7f3473c003e98c9bef80d81c47bed277b43b709751df17dca8eb",
     "serverUrl": "https://swamp-club.com"
   },
   "@alvagante/content-card": {
-    "version": "2026.06.23.1",
-    "pulledAt": "2026-06-23T07:47:22.481Z",
+    "version": "2026.06.24.1",
+    "pulledAt": "2026-06-25T12:36:30.452Z",
     "files": [
       ".swamp/pulled-extensions/@alvagante/content-card/models/extensions/models/content_card.ts",
+      ".swamp/pulled-extensions/@alvagante/content-card/models/extensions/models/content_shared.ts",
       ".swamp/bundles/97d7c00f/extensions/models/content_card.js",
       ".swamp/pulled-extensions/@alvagante/content-card/files/README.md",
       ".swamp/pulled-extensions/@alvagante/content-card/files/LICENSE.txt",
       ".swamp/pulled-extensions/@alvagante/content-card/manifest.yaml"
     ],
-    "checksum": "1103b99fac2697e9c75e3f0579967b9498dd4f6da2cc549fa42aa84d7c19c03e",
-    "filesChecksum": "0b81eafaba763811bb7ec1a82762e4fc084f5cbacdd1c3f524a373856ac4ba2b",
+    "checksum": "2fc56a312d3c3e45fd80bc73fa56ce95f71e0552c5df878c61bc7f00884188cb",
+    "filesChecksum": "5ec2f3f07b075678c25d0386d478ad9bb39acbbc2cb21f3c5c449e0ec6b5ecd3",
     "serverUrl": "https://swamp-club.com"
   }
 }

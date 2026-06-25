@@ -1,0 +1,11 @@
+type: '@alvagante/content-ixen'
+typeVersion: 2026.06.24.3
+id: 3ba52d92-1f9f-47a2-839d-3c99a83d24cf
+name: ixen-generate-ixens-workflow
+version: 1
+tags: {}
+globalArguments:
+  apiFormat: anthropic
+  apiKey: '${{ vault.get(anthropic-keys, api-key) }}'
+  baseUrl: 'https://api.anthropic.com'
+methods: {}

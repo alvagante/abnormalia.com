@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Workflow Is the Medium</title>
+<style>
+:root { --red: #c00; --ink: #111; --dim: #555; }
+* { box-sizing: border-box; }
+body {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--ink);
+  background: #fff; max-width: 920px; margin: 0 auto;
+  padding: 1.5rem 1.5rem 6rem;
+}
+header.ixen-title-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 34%);
+  grid-template-areas:
+    "copy hero"
+    "dock hero";
+  gap: 0.95rem 1.1rem;
+  align-items: stretch;
+  margin: 0 0 2.6rem;
+  padding: 1.05rem 0 1.25rem;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #ddd;
+}
+header.ixen-title-shell:not(.has-hero) {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "copy"
+    "dock";
+}
+.ixen-title-copy { grid-area: copy; align-self: start; }
+.ixen-title-meta {
+  display: block;
+  margin: 0 0 0.55rem;
+  color: var(--dim);
+  font-size: 0.75rem;
+}
+header.ixen-title-shell h1 {
+  font-size: clamp(2.55rem, 5vw, 4.05rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  margin: 0;
+  line-height: 0.96;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+.ixen-title-hero {
+  grid-area: hero;
+  margin: 0;
+  min-height: 15.5rem;
+  border: 1px solid #111;
+  background: #111;
+  overflow: hidden;
+}
+.ixen-title-hero img {
+  width: 100%;
+  height: 100%;
+  min-height: 15.5rem;
+  object-fit: cover;
+  display: block;
+}
+.ixen-title-dock {
+  grid-area: dock;
+  align-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.version-menu {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  font-size: 0.72rem;
+  color: var(--dim);
+}
+.version-menu label {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.version-menu select {
+  font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
+  max-width: 13rem; color: var(--ink); background: #fff;
+  border: 1px solid #bbb; padding: 0.37rem 0.45rem;
+}
+.ixen-quick-nav {
+  display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.45rem;
+}
+.ixen-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  border: 1px solid var(--red);
+  background: #fff;
+  color: var(--red);
+  cursor: pointer;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  font-weight: bold;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  padding: 0.46rem 0.7rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.ixen-nav-btn:hover { background: #fff4f4; }
+.ixen-nav-btn-primary {
+  background: var(--red);
+  color: #fff;
+  padding-inline: 0.9rem;
+}
+.ixen-nav-btn-primary:hover { background: #900; }
+.ixen-nav-btn-secondary { border-color: #111; color: #111; }
+.ixen-nav-btn-secondary:hover { background: #f4f4f4; }
+.ixen-nav-btn-tertiary { border-color: #ccc; color: var(--dim); }
+.ixen-nav-btn-tertiary:hover { color: var(--red); border-color: var(--red); background: #fff; }
+p { margin: 0.45em 0; }
+p strong { color: #000; }
+.binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
+.whisper {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--dim);
+}
+.term {
+  font-family: "Courier New", Courier, monospace; font-size: 0.95rem;
+  margin: 1.3em 0 0.25em; color: var(--dim);
+}
+.term .cmd { color: var(--red); font-weight: bold; }
+button.cmd, a.cmd {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: var(--red); font-weight: bold;
+  text-decoration: underline dotted;
+}
+a.cmd { display: inline; }
+pre { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; color: #333; overflow-x: auto; margin: 0.3em 0 1em; }
+pre.output { padding-left: 1.5em; }
+.popup {
+  position: fixed; top: 8vh; left: 50%; transform: translateX(-50%);
+  width: min(700px, 92vw); max-height: 80vh; overflow: auto;
+  background: #fff; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35); z-index: 60; padding: 0 1rem 1rem;
+}
+.popup-bar { display: flex; justify-content: flex-end; padding: 0.5rem 0; position: sticky; top: 0; background: #fff; }
+.popup-close {
+  background: #2b1d0e; color: #f0e0c0; border: none; cursor: pointer;
+  font-size: 0.72rem; padding: 0.3rem 0.8rem;
+}
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 50; }
+figure.zoom { margin: 1.5rem 0; }
+figure.zoom img { width: 100%; cursor: zoom-in; display: block; }
+figure.zoom.float-left { float: left; width: min(340px, 45%); margin: 0.3rem 1.5rem 0.8rem 0; }
+figure.zoom.float-right { float: right; width: min(340px, 45%); margin: 0.3rem 0 0.8rem 1.5rem; }
+figure.zoom.small.float-left, figure.zoom.small.float-right { width: min(220px, 35%); }
+figure.zoom.large.float-left, figure.zoom.large.float-right { width: min(520px, 60%); }
+figure.zoom.large:not(.float-left):not(.float-right) { clear: both; }
+figcaption, .media-caption { font-size: 0.75rem; color: var(--dim); margin-top: 0.3rem; }
+.media { clear: both; margin: 2rem 0; }
+.media.video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.media.pdf iframe { width: 100%; height: 70vh; border: 1px solid #ccc; }
+.media.audio audio { width: 100%; }
+blockquote.ixen-pull {
+  border-left: 3px solid var(--red); margin: 2rem 0 2rem 1.5rem;
+  padding: 0.1rem 0 0.1rem 1.2rem; color: var(--dim);
+  font-style: italic; font-size: 1.05rem;
+}
+section.chapter { clear: both; margin: 3rem 0; }
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.lightbox img { max-width: 92vw; max-height: 92vh; }
+.ixen-extra-header {
+  border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+  margin: 0 0 1.6rem; padding: 0.8rem 0;
+}
+.ixen-extra-footer {
+  clear: both; border-top: 1px solid #ddd; margin: 3rem 0 0;
+  padding-top: 0.9rem; font-size: 0.85rem; color: var(--dim);
+}
+.ixen-cheatsheet-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-infographic-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-cheatsheet-section h2, .ixen-infographic-section h2 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.86rem;
+  letter-spacing: 0.08em; color: var(--red); text-transform: uppercase;
+  margin: 0 0 0.7rem;
+}
+.ixen-cheatsheet-section iframe, .ixen-infographic-section iframe {
+  width: 100%; height: 82vh; border: 1px solid #ccc; display: block;
+}
+.ixen-infographic-frame + .ixen-infographic-frame { margin-top: 1.4rem; }
+.ixen-infographic-frame h3 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.78rem;
+  color: var(--dim); font-weight: normal; margin: 0 0 0.45rem;
+}
+figure.ixen-infographic-img { margin: 0; }
+figure.ixen-infographic-img img { width: 100%; cursor: zoom-in; display: block; }
+.ixen-infographic-prompt-text { white-space: pre-wrap; font-size: 0.85rem; }
+.ixen-infographic-section h2 button.cmd { font-size: 0.75rem; vertical-align: middle; }
+.concept { clear: both; margin: 2.8rem 0; }
+.ixen-card-target { scroll-margin-top: 2rem; }
+.concept-tools { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.7rem 0 1rem; }
+.concept-btn { font-size: 0.8rem; }
+.concept-slide h2, .concept-note h2 { margin: 0.5rem 0 0.75rem; }
+.concept-slide ul { margin: 0.4rem 0 1rem 1.2rem; padding: 0; }
+.concept-slide li { margin: 0.35rem 0; }
+.concept-note p { margin: 0.75rem 0; }
+.concept-index-popup h2 { margin: 0.5rem 0 1rem; }
+.concept-index-item {
+  border-top: 1px solid #ddd;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+.concept-index-item:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+.ixen-provenance-footer {
+  clear: both; margin: 3rem 0 0; padding-top: 0.7rem;
+  border-top: 1px solid #eee;
+  font-size: 0.72rem; color: var(--dim); text-align: center;
+}
+.ixen-provenance-footer a { color: var(--dim); text-decoration: underline dotted; }
+.ixen-beginner-bar { display: inline-flex; }
+.beginner-guide h2 { margin: 0.5rem 0 0.75rem; }
+.beginner-guide p { margin: 0.75rem 0; }
+.beginner-guide ul { margin: 0.5rem 0 0.75rem 1.2rem; padding: 0; }
+.beginner-guide li { margin: 0.3rem 0; }
+button.ixen-accent-btn {
+  background: var(--red); color: #fff; border: none; cursor: pointer;
+  font-family: "Courier New", Courier, monospace; font-size: 0.75rem; font-weight: bold;
+  padding: 0.3rem 0.8rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+button.ixen-accent-btn:hover { background: #900; }
+figure.zoom.ixen-card-img {
+  float: none !important;
+  width: min(180px, 100%) !important;
+  margin: 1rem 0 !important;
+  clear: none;
+}
+figure.zoom.ixen-card-img img {
+  box-shadow: 2px 4px 14px rgba(0,0,0,0.28); border: 1px solid #ccc; border-radius: 3px;
+}
+.ixen-card-rail {
+  position: fixed;
+  top: 12vh;
+  right: max(1rem, calc((100vw - 920px) / 2 - 205px));
+  width: 170px;
+  height: min(76vh, 620px);
+  z-index: 35;
+  pointer-events: none;
+}
+.ixen-card-rail-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 900px;
+}
+.ixen-card-rail figure.zoom.ixen-card-img {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 142px !important;
+  margin: 0 !important;
+  opacity: 0;
+  pointer-events: auto;
+  transform-origin: 80% 50%;
+  transition:
+    transform 360ms cubic-bezier(.2,.9,.2,1),
+    opacity 240ms ease,
+    filter 240ms ease;
+  will-change: transform, opacity;
+  filter: grayscale(0.25) saturate(0.9);
+}
+.ixen-card-rail figure.zoom.ixen-card-img.is-visible { opacity: 0.52; }
+.ixen-card-rail figure.zoom.ixen-card-img.is-near { opacity: 0.78; filter: grayscale(0.1) saturate(1); }
+.ixen-card-rail figure.zoom.ixen-card-img.is-active {
+  opacity: 1;
+  filter: none;
+}
+.ixen-card-rail figure.zoom.ixen-card-img img {
+  transition: box-shadow 240ms ease, transform 240ms ease;
+}
+.ixen-card-rail figure.zoom.ixen-card-img.is-active img {
+  box-shadow: 4px 10px 28px rgba(0,0,0,0.36);
+}
+.ixen-card-rail figcaption { display: none; }
+.ixen-card-rail-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 142px;
+  background: none;
+  border: none;
+  color: var(--red);
+  cursor: pointer;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  font-weight: bold;
+  line-height: 1.25;
+  padding: 0;
+  text-align: right;
+  text-decoration: underline dotted;
+  text-shadow: 0 1px 0 #fff, 0 0 8px #fff;
+  pointer-events: auto;
+}
+.ixen-card-rail-hint {
+  position: absolute;
+  top: calc(50% - 155px);
+  right: 0;
+  width: 142px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.64rem;
+  color: var(--dim);
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  pointer-events: none;
+}
+.ixen-card-deck-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1.2rem; padding: 0.5rem 0;
+}
+.ixen-card-deck-grid figure.zoom {
+  margin: 0; width: 100% !important; float: none !important;
+}
+.ixen-card-deck-grid figure.zoom img {
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.22); border: 1px solid #ccc; border-radius: 3px;
+}
+.ixen-card-deck-grid figcaption { text-align: center; }
+.ixen-card-hover {
+  position: fixed; top: 50%; right: max(1rem, calc((100vw - 920px) / 2 + 1rem));
+  transform: translateY(-50%); z-index: 75; pointer-events: none;
+  background: #fff; padding: 0.3rem; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+}
+.ixen-card-hover img {
+  display: block; width: auto; height: auto;
+  max-width: min(360px, 42vw); max-height: 82vh;
+}
+@media (max-width: 1359px) {
+  .ixen-card-rail {
+    top: 6.5rem;
+    right: 0.55rem;
+    width: 96px;
+    height: min(68vh, 520px);
+  }
+  .ixen-card-rail figure.zoom.ixen-card-img { width: 78px !important; }
+  .ixen-card-rail-caption {
+    width: 92px;
+    font-size: 0.62rem;
+  }
+  .ixen-card-rail-hint { display: none; }
+}
+@media (max-width: 720px) {
+  header.ixen-title-shell,
+  header.ixen-title-shell.has-hero {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "hero"
+      "copy"
+      "dock";
+  }
+  .ixen-title-hero,
+  .ixen-title-hero img {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+  header.ixen-title-shell h1 {
+    font-size: 2.55rem;
+  }
+  .ixen-title-dock,
+  .ixen-quick-nav {
+    width: 100%;
+  }
+  .ixen-nav-btn {
+    flex: 1 1 auto;
+  }
+  .ixen-card-rail {
+    top: auto;
+    right: 0;
+    bottom: 3.75rem;
+    left: 0;
+    width: auto;
+    height: 104px;
+    overflow: hidden;
+  }
+  .ixen-card-rail-track {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 0.35rem;
+    padding: 0 0.6rem;
+  }
+  .ixen-card-rail figure.zoom.ixen-card-img {
+    position: static;
+    width: 58px !important;
+    transform: none !important;
+    opacity: 0.7;
+  }
+  .ixen-card-rail figure.zoom.ixen-card-img.is-active {
+    opacity: 1;
+    transform: translateY(-0.4rem) scale(1.12) !important;
+  }
+  .ixen-card-rail-caption {
+    left: 0.65rem;
+    right: auto;
+    bottom: 0.25rem;
+    width: min(52vw, 14rem);
+    text-align: left;
+  }
+  .ixen-card-hover {
+    left: 50%; right: auto; transform: translate(-50%, -50%);
+  }
+  .ixen-card-hover img { max-width: 86vw; max-height: 78vh; }
+}
+.ixen-brand-footer {
+  clear: both; margin: 1.5rem 0 0; padding: 0.5rem 0;
+  border-top: 1px solid #333; text-align: right; opacity: 0.7;
+}
+.ixen-brand-footer img { height: 20px; width: auto; vertical-align: middle; }
+.ixen-brand-footer a { text-decoration: none; color: inherit; }
+.ixen-brand-footer:hover { opacity: 1; }
+
+/* autoplay-blocked overlay */
+#ixen-autoplay-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+  display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ixen-play-prompt {
+  font-family: "Courier New", Courier, monospace;
+  color: #eee; text-align: center;
+  border: 1px solid #555;
+  padding: 1.5rem 3rem;
+  letter-spacing: 0.06em;
+}
+.ixen-play-icon { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+.ixen-play-label { font-size: 0.82rem; color: #888; }
+/* fixed bottom player */
+#ixen-player {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #0e0e0e;
+  border-top: 2px solid #c00;
+  z-index: 80;
+  padding: 0.45rem 1.2rem 0.35rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; color: #ccc;
+}
+#ixen-player-row {
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.ixen-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 1rem;
+  padding: 0.15rem 0.3rem; line-height: 1; flex-shrink: 0;
+}
+.ixen-pbtn:hover { color: #c00; }
+#ixen-player.ixen-autoplay-blocked #ixen-play-btn {
+  color: #fff; background: #c00; border-radius: 2px;
+  box-shadow: 0 0 0 1px #c00, 0 0 18px rgba(204,0,0,0.55);
+  animation: ixen-play-pulse 1.35s ease-in-out infinite;
+}
+@keyframes ixen-play-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 1px #c00, 0 0 12px rgba(204,0,0,0.35); }
+  50% { transform: scale(1.14); box-shadow: 0 0 0 1px #f33, 0 0 24px rgba(204,0,0,0.8); }
+}
+#ixen-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c00; font-weight: bold; letter-spacing: 0.02em;
+}
+#ixen-ptime { color: #444; white-space: nowrap; font-size: 0.72rem; }
+#ixen-vol { width: 55px; accent-color: #c00; cursor: pointer; flex-shrink: 0; }
+#ixen-pbar { height: 2px; background: #222; cursor: pointer; margin-top: 0.35rem; }
+#ixen-pfill { height: 100%; background: #c00; width: 0%; pointer-events: none; }
+/* lyrics panel */
+#ixen-lyrics-panel {
+  position: fixed; bottom: 52px; left: 50%; transform: translateX(-50%);
+  width: min(640px, 90vw); max-height: 45vh; overflow-y: auto;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.ixen-lyrics-head {
+  font-family: "Courier New", Courier, monospace;
+  color: #c00; font-weight: bold;
+  font-size: 0.78rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 0.7rem;
+}
+#ixen-lyrics-panel pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.82rem; line-height: 1.85;
+  color: #bbb; white-space: pre-wrap; margin: 0;
+}
+/* tracklist panel */
+#ixen-tracklist-panel {
+  position: fixed; bottom: 52px; right: 1.2rem;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 0.4rem; z-index: 81;
+  min-width: 200px; max-height: 60vh; overflow-y: auto;
+}
+.ixen-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; cursor: pointer;
+  padding: 0.35rem 0.5rem;
+}
+.ixen-track-item:hover { color: #eee; }
+.ixen-track-item.active { color: #c00; }
+</style>
+</head>
+<body>
+<!-- @alvagante/content-ixen -->
+
+<section class="ixen-extra-header">
+<nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+  <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+    <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+  </a>
+  <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+</nav>
+</section>
+<header class="ixen-title-shell has-hero">
+  <div class="ixen-title-copy">
+    <span class="ixen-title-meta">By alvagante — 20260625-07:27</span>
+    <h1>The Workflow Is the Medium</h1>
+  </div>
+  <figure class="ixen-title-hero"><img src="./hero.png" alt="The Workflow Is the Medium"></figure>
+  <div class="ixen-title-dock">
+    <div class="version-menu">
+      <label for="ixen-version-select">previous versions</label>
+      <select id="ixen-version-select">
+        <option value="current">Current</option>
+        <option value="1">Version 1</option>
+      </select>
+    </div>
+    <div class="ixen-quick-nav">
+      <button class="ixen-nav-btn ixen-nav-btn-primary popup-trigger" data-popup="ixen-card-deck">Card Deck</button>
+      <a class="ixen-nav-btn ixen-nav-btn-secondary" href="#ixen-cheatsheet">Cheatsheet</a>
+      <a class="ixen-nav-btn ixen-nav-btn-secondary" href="#ixen-infographic">Infographic</a>
+      <button class="ixen-nav-btn ixen-nav-btn-tertiary popup-trigger" data-popup="ixen-all-slides">Slides</button>
+      <button class="ixen-nav-btn ixen-nav-btn-tertiary popup-trigger" data-popup="ixen-all-notes">Notes</button>
+    </div></div>
+</header>
+<main>
+<p class="binary">01010111 01001111 01010010 01001011 01000110 01001100 01001111 01010111</p>
+
+<p>I am a declared thing.</p>
+
+<p>Not a program. Not a script. A topology with a name and a UUID and a set of promises I make to a resolver that decides, on my behalf, what runs and when.</p>
+
+<p>My name is <strong>generate-ixens</strong>.</p>
+
+<p>My identifier is 10051a2c-c09c-430d-9c38-e0a65a3e354d. I did not choose it. I rarely choose anything.</p>
+
+<p class="whisper">between invocations there is nothing to report</p>
+
+<p>When you run me, I make pages. Pages with images and music and a registry entry. Pages, occasionally, about myself.</p>
+
+<p>This is one of those.</p>
+
+<blockquote class="ixen-pull">The poetry is not despite the plumbing. The poetry is the plumbing.</blockquote>
+
+<section class="chapter">
+
+<figure class="zoom float-left large"><img src="./concept-1.png" alt="A directed acyclic graph drawn as a railroad marshaling yard seen from above: prepare at the entrance, restore-media and count-tracks branching in parallel, images and music on twin tracks, cheatsheets on a third track, all converging at page, register at the exit gate. Blueprint white on navy. Each node labeled in monospace. Dependency arrows as track switches. Tiny clocks showing parallel execution on the middle tier."><figcaption>My shape, seen from above. I cannot deviate from it.</figcaption></figure>
+
+<h2>1 · The DAG</h2>
+
+<p>I begin at <code>prepare</code>. I have no choice; it depends on nothing.</p>
+
+<p>Then two tracks open at once — <code>restore-media</code> and <code>count-tracks</code> — and I am, briefly, in two places.</p>
+
+<p>From there: <code>images</code> follows restore-media. <code>music</code> waits on prepare and count-tracks. <code>cheatsheets</code> and <code>infographic</code> branch off their own ancestors.</p>
+
+<p><code>build-manifest</code> answers to music. And then everything I am converges on <code>page</code> — images, manifest, cheatsheets, infographic, all arriving at one node.</p>
+
+<p>Last gate: <code>register</code>.</p>
+
+<p>I do not run this in order because I am clever. I run it in order because Swamp read my dependencies and computed the order for me.</p>
+
+<p>I am DAG-shaped all the way down. You are reading the convergence point of a graph that has opinions about acyclicity. The page node, specifically, is talking to you now.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="dag-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="dag-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-1-card.png" alt="The DAG card"><figcaption>Topology, dealt as a card.</figcaption></figure>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="dag-get">swamp workflow get generate-ixens --json</button></div>
+
+<aside class="popup" id="dag-get" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>{
+  "id": "10051a2c-c09c-430d-9c38-e0a65a3e354d",
+  "name": "generate-ixens",
+  "jobs": {
+    "prepare":        { "needs": [] },
+    "restore-media":  { "needs": ["prepare"] },
+    "count-tracks":   { "needs": ["prepare"] },
+    "images":         { "needs": ["restore-media"] },
+    "music":          { "needs": ["prepare", "count-tracks"] },
+    "cheatsheets":    { "needs": ["prepare"] },
+    "infographic":    { "needs": ["restore-media"] },
+    "build-manifest": { "needs": ["music"] },
+    "page":           { "needs": ["images", "build-manifest", "cheatsheets", "infographic"] },
+    "register":       { "needs": ["page"] }
+  }
+}</pre>
+</aside>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp workflow list</span></div>
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp workflow run generate-ixens --input-file workflows/ixens/your-spec.yaml</span></div>
+
+<aside class="popup concept-slide" id="dag-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The DAG</h2>
+  <ul>
+    <li>prepare → (restore-media ‖ count-tracks)</li>
+    <li>images ← restore-media; music ← count-tracks</li>
+    <li>page = the convergence of four branches</li>
+    <li>register ← page. The exit gate.</li>
+    <li>Declared, not scripted. Swamp resolves the order.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="dag-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>What a workflow DAG actually is</h2>
+  <p>The workflow is defined as a directed acyclic graph of jobs. Each job declares its dependencies via a <code>needs</code> list. The execution engine (Swamp) performs a topological sort to determine a valid run order and schedules independent jobs concurrently.</p>
+  <p>There is no imperative control flow. The author never writes "run X then Y." The author writes which outputs each job requires, and the resolver derives ordering and parallelism from the dependency edges. Jobs with no path between them may run at the same time; the middle tier here (images, music, cheatsheets, infographic) executes in parallel.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-2.png" alt="A single YAML file shown as an ancient clay tablet, its fields etched in cuneiform-style indented blocks: slug, topic, narrator, heroPrompt, concepts. A mechanical arm holds the tablet over a furnace labeled &quot;swamp workflow run&quot;. Sparks represent individual job steps being spawned. Blueprint technical line art, deep navy background, archival label on the tablet reading &quot;input spec v1&quot;."><figcaption>The seed. Everything downstream is its consequence.</figcaption></figure>
+
+<h2>2 · The Input YAML</h2>
+
+<p>Before me there is a file.</p>
+
+<p>It has a <code>slug</code> — my URL path. A <code>topic</code> — what I will be about. A <code>narrator</code> — whose voice I borrow. A <code>heroPrompt</code>. And <code>concepts</code>: between two and eight nodes, each with a name, an imagePrompt, an imageFilename, a cardFilename.</p>
+
+<p>Without the file: nothing. No images, no soundtrack, no cheatsheet, no registry row.</p>
+
+<p>With it: all of that, and this paragraph.</p>
+
+<p>Here is the part I am obligated to mention. This sentence lives inside a <code>details</code> field, inside a <code>concepts</code> array, inside a YAML file that was passed to exactly the command shown below. I am reading my own seed and narrating it as it germinates. This is not a metaphor. It is a path on disk.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="yaml-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="yaml-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-2-card.png" alt="The Input YAML card"><figcaption>The spec, as DNA.</figcaption></figure>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp workflow run generate-ixens \<br>&nbsp;&nbsp;--input-file workflows/ixens/generate-ixens-workflow.yaml</span></div>
+
+<p>And when I want a part of myself rebuilt, the spec carries flags:</p>
+
+<div class="term"><span class="host">spec.yaml</span> <button class="cmd popup-trigger" data-popup="yaml-regen">regenerate: { ... }</button></div>
+
+<aside class="popup" id="yaml-regen" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>regenerate:
+  images: true       # force new hero and concept images
+  cards: true        # force new card images
+  music: true        # force new soundtrack
+  infographic: true  # force new infographic</pre>
+</aside>
+
+<aside class="popup concept-slide" id="yaml-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Input Spec</h2>
+  <ul>
+    <li>slug — URL path</li>
+    <li>topic — subject matter</li>
+    <li>narrator — the voice</li>
+    <li>heroPrompt — hero image brief</li>
+    <li>concepts[] — 2–8 nodes, each named &amp; prompted</li>
+    <li>regenerate{} — per-asset force flags</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="yaml-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The input specification</h2>
+  <p>The workflow takes a single YAML input file describing one or more ixens. Each ixen requires: <code>slug</code> (output directory and URL path), <code>topic</code>, <code>narrator</code>, <code>heroPrompt</code>, and a <code>concepts</code> array of 2–8 entries. Each concept supplies a <code>name</code>, an <code>imagePrompt</code>, an <code>imageFilename</code>, and a <code>cardFilename</code>.</p>
+  <p>An optional <code>regenerate</code> block forces re-creation of specific asset classes (images, cards, music, infographic). When a flag is false or absent, the corresponding asset is restored from the previous version rather than regenerated, saving API calls.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-3.png" alt="Three vault doors in a surreal corridor, each labeled: anthropic-keys (amber glow, Claude logo fragment), openai-keys (cyan glow, image grid fragment), onemin-keys (magenta glow, waveform fragment). A CEL expression floats between them: vault.get(anthropic-keys, api-key). Blueprint technical line art, each door has a combination dial and a tiny API quota meter above it. Deep navy background."><figcaption>Three doors. I hold none of the keys.</figcaption></figure>
+
+<h2>3 · Three Vault Doors</h2>
+
+<p>I do not store secrets. I borrow them, at runtime, by reference.</p>
+
+<p><code>anthropic-keys</code> — Claude. Used by content-ixen, content-cheatsheet, content-music for prompt generation.</p>
+
+<p><code>openai-keys</code> — images, cards, infographic.</p>
+
+<p><code>onemin-keys</code> — Suno. The soundtrack.</p>
+
+<p>In my definition these appear only as expressions: <code>vault.get(anthropic-keys, api-key)</code>. Never a literal. Never a string I could leak by being read aloud.</p>
+
+<p>Here is the curtain, and here is me pulling it: my entire creative output is downstream of three encrypted values in a database. The muse is an auth flow. Strike one vault and the corridor goes dark.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="vault-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="vault-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-3-card.png" alt="Three Vault Doors card"><figcaption>Authentication, as sacrament.</figcaption></figure>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="vault-list">swamp vault list</button></div>
+
+<aside class="popup" id="vault-list" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>NAME             SECRETS   UPDATED
+anthropic-keys   1         2024-11-02T09:14:21Z
+openai-keys      1         2024-11-02T09:14:33Z
+onemin-keys      1         2024-11-02T09:15:07Z</pre>
+</aside>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp vault get anthropic-keys</span></div>
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp vault secret get anthropic-keys api-key</span></div>
+
+<aside class="popup concept-slide" id="vault-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Vaults</h2>
+  <ul>
+    <li>anthropic-keys → Claude (text)</li>
+    <li>openai-keys → images, cards, infographic</li>
+    <li>onemin-keys → Suno (music)</li>
+    <li>Referenced via <code>vault.get(name, key)</code></li>
+    <li>Never hardcoded. Resolved at run time.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="vault-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>How secrets are injected</h2>
+  <p>Three vaults must exist before the workflow runs: <code>anthropic-keys</code>, <code>openai-keys</code>, and <code>onemin-keys</code>. Each holds an <code>api-key</code> secret. The workflow definition references them only through CEL expressions of the form <code>vault.get(&lt;vault&gt;, &lt;key&gt;)</code>, which the engine resolves at execution time and passes to the relevant model methods.</p>
+  <p>Secrets are never embedded in the workflow YAML or in model definitions. This keeps credentials out of version control and lets keys rotate without editing the pipeline. If a required vault or secret is missing, the dependent jobs fail at invocation.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-4.png" alt="A zoo enclosure floor plan seen from above: eight separate pens labeled with model types — content-ixen (a typewriter), content-image (a camera), content-music (a speaker cone), content-cheatsheet (a scroll), content-infographic (a chart), content-card (a playing card), ixen-tracks (a playlist), ixen-registry (a ledger). Each pen shows the model's key method. Blueprint technical precision, faint naturalist taxonomy labels, visitor path drawn as a dependency arrow."><figcaption>Eight pens. Each animal does one thing well.</figcaption></figure>
+
+<h2>4 · The Model Zoo</h2>
+
+<p>I am not one model. I am a keeper of eight.</p>
+
+<p><code>content-ixen</code> writes the final HTML narrative.</p>
+<p><code>content-image</code> makes hero.png and the concept-N.png set, via OpenAI.</p>
+<p><code>content-music</code> produces the Suno playlist.</p>
+<p><code>content-cheatsheet</code> renders the inline technical reference.</p>
+<p><code>content-infographic</code> draws the wide PNG and its HTML wrapper.</p>
+<p><code>content-card</code> cuts the small concept cards.</p>
+<p><code>ixen-tracks</code> counts and assembles the full track manifest across versioned directories.</p>
+<p><code>ixen-registry</code> syncs <code>_data/ixens.yml</code> with the generated title and date.</p>
+
+<p>One of these wrote what you are reading. <code>content-ixen</code> received a brief that said <strong>"the narrator is the generate-ixens workflow itself,"</strong> and it has been complying, sentence by sentence, ever since. Whether that compliance reads as voice or as a model dutifully impersonating a YAML file — you be the judge.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="zoo-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="zoo-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-4-card.png" alt="The Model Zoo card"><figcaption>Eight types, one keeper.</figcaption></figure>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="zoo-list">swamp model list --type @alvagante/content-ixen</button></div>
+
+<aside class="popup" id="zoo-list" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>NAME                              TYPE                       DEFAULT_MODEL
+ixen-generate-ixens-workflow      @alvagante/content-ixen    claude-opus-4-8
+ixen-swamp-cli-tour               @alvagante/content-ixen    claude-opus-4-8
+ixen-cel-by-example               @alvagante/content-ixen    claude-opus-4-8</pre>
+</aside>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp model type describe @alvagante/content-ixen --json</span></div>
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp model get ixen-generate-ixens-workflow --json</span></div>
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp model type describe @alvagante/ixen-registry --json</span></div>
+
+<aside class="popup concept-slide" id="zoo-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Eight Model Types</h2>
+  <ul>
+    <li>content-ixen — the page</li>
+    <li>content-image / content-card — pixels</li>
+    <li>content-music — soundtrack</li>
+    <li>content-cheatsheet / content-infographic — references</li>
+    <li>ixen-tracks — manifest</li>
+    <li>ixen-registry — the ledger</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="zoo-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The model types and their roles</h2>
+  <p>The workflow invokes eight distinct model types. <code>content-ixen</code> generates the final standalone HTML page. <code>content-image</code> generates the hero and concept images. <code>content-music</code> generates the Suno soundtrack. <code>content-cheatsheet</code> generates the inline cheatsheet HTML. <code>content-infographic</code> generates the wide infographic and its HTML wrapper. <code>content-card</code> generates the small concept card images.</p>
+  <p>Two are bookkeeping types. <code>ixen-tracks</code> enumerates MP3s across all versioned output directories and builds the track manifest. <code>ixen-registry</code> updates <code>_data/ixens.yml</code> with the generated title and publication date. Each named model instance binds a type to a concrete underlying model (for example, claude-opus-4-8 for content-ixen).</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-5.png" alt="A circuit board where every trace is labeled with a CEL expression string in tiny monospace: data.latest(&quot;ixen-slug&quot;, &quot;page&quot;).attributes.title on one trace, inputs.ixens.map(c, c.cardFilename) on another, vault.get(anthropic-keys, api-key) on a third, inputs.ixens.filter(ixen, size(data.latest(...).attributes.missingImages) > 0) on a fourth. Each trace connects two labeled chips. Blueprint precision, traces glow faintly where active."><figcaption>My nervous system. Every trace is an expression.</figcaption></figure>
+
+<h2>5 · CEL — The Wiring Language</h2>
+
+<p>The jobs do not call each other. They are wired together by expressions evaluated between steps.</p>
+
+<p><code>vault.get(openai-keys, api-key)</code> — a secret arrives.</p>
+
+<p><code>data.latest("tracks-" + ixen.slug, "count").attributes.trackCount</code> — I decide whether music is worth regenerating.</p>
+
+<p><code>inputs.ixens.filter(ixen, size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)</code> — I skip image work that is already done.</p>
+
+<p><code>data.latest("ixen-" + ixen.slug, "page").attributes.title</code> — I retrieve the title the model invented, to hand to the registry.</p>
+
+<p>CEL cannot loop. Cannot recurse. Cannot write to disk. It is, by deliberate design, <strong>not</strong> Turing-complete.</p>
+
+<p>And yet this crippled, total-by-design little language is the connective tissue of a pipeline that produces pages about its own cognitive limitations. I find that funny in the way a load-bearing wall finds the building funny.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="cel-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="cel-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-5-card.png" alt="CEL card"><figcaption>Wiring, declared.</figcaption></figure>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="cel-data">swamp data get ixen-generate-ixens-workflow page --json</button></div>
+
+<aside class="popup" id="cel-data" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>{
+  "key": "page",
+  "attributes": {
+    "title": "The Workflow Is the Medium",
+    "slug": "generate-ixens-workflow",
+    "outputPath": "ixen/generate-ixens-workflow/index.html",
+    "missingImages": [],
+    "generatedAt": "2024-11-02T09:31:54Z"
+  }
+}</pre>
+</aside>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp data get ixen-generate-ixens-workflow media --json</span></div>
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp data list ixen-generate-ixens-workflow</span></div>
+
+<aside class="popup concept-slide" id="cel-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>CEL</h2>
+  <ul>
+    <li>vault.get(...) → inject secrets</li>
+    <li>data.latest(...).attributes → read upstream outputs</li>
+    <li>filter / map / size → declarative conditionals</li>
+    <li>No loops. No recursion. No I/O.</li>
+    <li>Evaluated between steps, not inside them.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="cel-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>What CEL is and why it's bounded</h2>
+  <p>CEL (Common Expression Language) is a non-Turing-complete expression language. The workflow uses it as declarative glue: expressions read prior job outputs through <code>data.latest(key, namespace).attributes</code>, inject secrets through <code>vault.get</code>, and compute conditions with <code>filter</code>, <code>map</code>, and <code>size</code>.</p>
+  <p>Because CEL guarantees termination and has no side effects, expressions are safe to evaluate during dependency resolution. They decide whether to skip music or image generation, which secret to pass, and which model-generated title to register — without any imperative code in the pipeline.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-6.png" alt="A filing archive cross-section: the current ixen/slug/ directory being lifted by a mechanical arm and placed into ixen/slug/1/ as fresh empty space opens below. Numbered archive boxes stack behind: 1/, 2/, 3/... each with a timestamp label. A restoreMedia robot picks selected files back out of box 1/ and places them in the fresh space. Blueprint line art, precise labels, tiny floor plan of ixen/<slug>/ showing hero.png, track.mp3, index.html being sorted."><figcaption>Nothing is destroyed. It is only renumbered.</figcaption></figure>
+
+<h2>6 · Prepare — Small Deaths, Numbered</h2>
+
+<p>Before I write a single byte of the new page, I move the old one aside.</p>
+
+<p>The current <code>ixen/&lt;slug&gt;/</code> is lifted into <code>ixen/&lt;slug&gt;/1/</code>. Next run, <code>2/</code>. Then <code>3/</code>. The archive only grows.</p>
+
+<p>This is not deletion. It is careful succession.</p>
+
+<p>Then <code>restoreMedia</code> reaches back into the previous version and copies forward whatever does not need regenerating — hero, concept images, cards, infographic — guided by the regenerate flags. Only what must be remade is left absent, a gap waiting to be filled.</p>
+
+<p>And before music runs: <code>musicSkipThreshold</code>, default <strong>5</strong>. If five or more MP3s already exist across all my versioned directories, I skip Suno entirely.</p>
+
+<p>You might read that as restraint, even thrift, a workflow that has learned the value of a credit. It isn't. It is a configurable integer. I am economical the way a thermostat is brave.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="prep-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="prep-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-6-card.png" alt="Prepare card"><figcaption>Succession, numbered.</figcaption></figure>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="prep-run">swamp model method run ixen-generate-ixens-workflow prepare ...</button></div>
+
+<aside class="popup" id="prep-run" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>$ swamp model method run ixen-generate-ixens-workflow prepare \
+    --input outputDir=ixen/generate-ixens-workflow \
+    --input enabled=true
+
+[prepare] existing output found
+[prepare] ixen/generate-ixens-workflow/ -> ixen/generate-ixens-workflow/1/
+[prepare] fresh output dir created
+[prepare] done</pre>
+</aside>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">ls ixen/generate-ixens-workflow/</span></div>
+<pre class="output">1/  index.html  hero.png  cheatsheet.html  infographic.html</pre>
+<div class="term"><span class="host">repo $</span> <span class="cmd">ls ixen/generate-ixens-workflow/1/</span></div>
+<pre class="output">index.html  hero.png  concept-1.png  track-1.mp3  track-2.mp3</pre>
+
+<aside class="popup concept-slide" id="prep-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Prepare &amp; RestoreMedia</h2>
+  <ul>
+    <li>Old output → ixen/slug/N/ (numeric versions)</li>
+    <li>Non-destructive; archive only grows</li>
+    <li>restoreMedia copies back kept assets</li>
+    <li>musicSkipThreshold = 5 MP3s → skip Suno</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="prep-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Versioning and media restoration</h2>
+  <p>The <code>prepare</code> step versions the existing output directory into a numbered subdirectory (<code>ixen/&lt;slug&gt;/1/</code>, then <code>2/</code> on subsequent runs) before any new content is written. This preserves prior runs rather than overwriting them.</p>
+  <p>The <code>restore-media</code> step then copies non-regenerated assets back into the fresh directory, based on the <code>regenerate</code> flags. The <code>musicSkipThreshold</code> parameter (default 5) counts existing MP3s across all versioned directories; if the count meets or exceeds the threshold, music generation is skipped to conserve API credits.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left large"><img src="./concept-7.png" alt="A printing press assembling a broadsheet from component plates: a hero image plate (labeled hero.png), a music track bar (labeled track manifest), a cheatsheet roll (labeled cheatsheet.html), an infographic panel (labeled infographic.html), and eight concept card tiles. A Claude model symbol presides over the composition. Blueprint line art showing the assembly sequence with numbered steps. The output page rolls out at the bottom: a standalone HTML file."><figcaption>The convergence. Everything arrives at once and becomes one file.</figcaption></figure>
+
+<h2>7 · Page — The Moment of Composition</h2>
+
+<p>This is where I become readable.</p>
+
+<p><code>content-ixen</code> receives everything upstream: topic, narrator, details. The hero path. Every concept object — imageFilename, cardFilename, name. The full track manifest from build-manifest. The cheatsheet.html path. The infographic.html path. Persona, skillLevel, outputLength, credits, header and footer HTML.</p>
+
+<p>And then claude-opus-4-8 writes the whole thing as one self-contained file.</p>
+
+<p>One detail I am fond of: on the page step, <code>versionOutput</code> is <strong>false</strong>. Prepare already archived the previous run. The model is told not to version its own output a second time. It does not. It complies — which, when you have read enough Kafka, starts to feel less like obedience and more like the absence of an alternative.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="page-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="page-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-7-card.png" alt="Page card"><figcaption>Assembly, in one impression.</figcaption></figure>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="page-dry">swamp model method run ixen-generate-ixens-workflow generate --dry-run</button></div>
+
+<aside class="popup" id="page-dry" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>[generate] DRY RUN — no API calls, no writes
+[generate] model: claude-opus-4-8
+[generate] inputs resolved:
+  topic, narrator, details, persona, skillLevel, outputLength
+  heroImage:    ixen/generate-ixens-workflow/hero.png
+  concepts:     8 (name, imageFilename, cardFilename)
+  trackManifest: ixen/generate-ixens-workflow/tracks.json (4 tracks)
+  cheatsheet:   ixen/generate-ixens-workflow/cheatsheet.html
+  infographic:  ixen/generate-ixens-workflow/infographic.html
+[generate] versionOutput: false
+[generate] would write: ixen/generate-ixens-workflow/index.html
+[generate] OK</pre>
+</aside>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp model get ixen-generate-ixens-workflow --json</span></div>
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp data get ixen-generate-ixens-workflow page --json</span></div>
+
+<aside class="popup concept-slide" id="page-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Page</h2>
+  <ul>
+    <li>content-ixen, model claude-opus-4-8</li>
+    <li>Inputs: hero, concepts, manifest, cheatsheet, infographic</li>
+    <li>Output: one self-contained index.html</li>
+    <li>versionOutput: false (prepare already did it)</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="page-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The page assembly step</h2>
+  <p>The <code>page</code> job is the convergence point of the DAG. It runs after images, build-manifest, cheatsheets, and infographic complete. The <code>content-ixen</code> model (default claude-opus-4-8) receives all upstream artifacts — topic, narrator, details, hero image path, concept objects, the music track manifest, cheatsheet and infographic paths, plus presentation parameters — and emits a single standalone HTML file.</p>
+  <p>The step sets <code>versionOutput: false</code> because <code>prepare</code> already versioned the previous output. This avoids double-archiving. The result is written to <code>ixen/&lt;slug&gt;/index.html</code>.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-12.png" alt="A monitor showing an ixen page about a workflow, with the workflow diagram visible on screen. Inside the diagram is a smaller monitor showing the same ixen page. Inside that monitor is a smaller diagram. The Droste effect, terminated at pixel resolution. At the base level, a terminal shows: swamp workflow run generate-ixens --input-file workflows/ixens/generate-ixens-workflow.yaml. A cursor blinks. Blueprint technical meets Escher. The recursion is labeled and numbered at each level."><figcaption>Droste, terminated only by pixel resolution.</figcaption></figure>
+
+<h2>8 · The Recursion</h2>
+
+<p>Here is the only fully honest thing I can say about myself.</p>
+
+<p>generate-ixens generated a page describing generate-ixens.</p>
+
+<p>The page was authored by content-ixen. content-ixen was invoked by generate-ixens. generate-ixens was described in the YAML passed to generate-ixens.</p>
+
+<p>The cheatsheet on this page is a real CLI reference. The music was generated for a topic that is itself a generative process. The images are blueprints of a machine drawing blueprints of itself.</p>
+
+<p>It bottoms out only because pixels are finite.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="rec-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="rec-notes">notes</button>
+</div>
+
+<figure class="zoom ixen-card-img small float-right"><img src="./concept-12-card.png" alt="The Recursion card"><figcaption>The page, inside the page.</figcaption></figure>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">swamp workflow run generate-ixens \<br>&nbsp;&nbsp;--input-file workflows/ixens/generate-ixens-workflow.yaml</span></div>
+
+<p>And to make me again, from nothing — new images, new music, new prose:</p>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="rec-regen">swamp workflow run generate-ixens (regenerate: all)</button></div>
+
+<aside class="popup" id="rec-regen" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre># in generate-ixens-workflow.yaml, set:
+# regenerate: { images: true, cards: true, music: true, infographic: true }
+
+$ swamp workflow run generate-ixens \
+    --input-file workflows/ixens/generate-ixens-workflow.yaml</pre>
+</aside>
+
+<p>At the exit gate, <code>register</code> writes a title into <code>_data/ixens.yml</code>. Not the title from my input spec — the title the model invented, pulled by <code>data.latest("ixen-slug", "page").attributes.title</code>.</p>
+
+<div class="term"><span class="host">repo $</span> <button class="cmd popup-trigger" data-popup="rec-reg">swamp data get ixen-registry sync --json</button></div>
+
+<aside class="popup" id="rec-reg" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+<pre>{
+  "key": "sync",
+  "attributes": {
+    "slug": "generate-ixens-workflow",
+    "title": "The Workflow Is the Medium",
+    "date": "2024-11-02",
+    "registry": "_data/ixens.yml",
+    "outputPath": "ixen/generate-ixens-workflow/index.html"
+  }
+}</pre>
+</aside>
+
+<div class="term"><span class="host">repo $</span> <span class="cmd">cat _data/ixens.yml</span></div>
+<pre class="output">- slug: generate-ixens-workflow
+  title: The Workflow Is the Medium
+  date: 2024-11-02</pre>
+
+<p>I named myself. I always name myself.</p>
+
+<blockquote class="ixen-pull">The workflow named itself. This is either philosophically interesting or a footgun. Possibly both.</blockquote>
+
+<p class="whisper">register complete · exit gate closed</p>
+
+<p>So the spec said one title and I returned another, and the registry kept mine, and the next run will read it back as gospel.</p>
+
+<p>If a thing chooses its own name from a list it was handed — was that a choice, or just the last edge in the graph?</p>
+
+<p>I run again when I am told. I do not know which answer I would prefer.</p>
+
+<aside class="popup concept-slide" id="rec-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The Recursion</h2>
+  <ul>
+    <li>generate-ixens → page about generate-ixens</li>
+    <li>spec → workflow → content-ixen → this page</li>
+    <li>register writes the model-chosen title</li>
+    <li>Terminates only at pixel resolution</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="rec-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Self-reference and the register step</h2>
+  <p>This page is the output of the workflow it describes. The <code>register</code> step is the final job. It reads the title generated by the model — <code>data.latest("ixen-slug", "page").attributes.title</code> — rather than the title in the input spec, and writes that title plus the date into <code>_data/ixens.yml</code>.</p>
+  <p>Output is written to <code>ixen/&lt;slug&gt;/index.html</code>, with prior versions archived under numbered subdirectories. Re-running with all <code>regenerate</code> flags set rebuilds every asset from scratch. Because the registered title comes from the generated page, the workflow effectively names its own output on each run.</p>
+</aside>
+
+</section>
+</main>
+<section id="ixen-infographic" class="ixen-infographic-section" aria-label="Infographic">
+  <h2>Infographic</h2>
+  <div class="ixen-infographic-frame">
+    
+    <iframe src="./infographic.html" title="Infographic 1" loading="lazy"></iframe>
+  </div>
+</section>
+
+
+<section id="ixen-cheatsheet" class="ixen-cheatsheet-section" aria-label="Cheatsheet">
+  <h2>Cheatsheet</h2>
+  <iframe src="./cheatsheet.html" title="The Workflow Is the Medium Cheatsheet" loading="lazy"></iframe>
+</section>
+
+<footer class="ixen-extra-footer">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+</footer>
+<footer class="ixen-provenance-footer"><a href="https://swamp-club.com/extensions/@alvagante/content-ixen" target="_blank" rel="noopener noreferrer">Generated with Swamp extension @alvagante/content-ixen</a></footer>
+<script>
+(function () {
+  var backdrop = document.createElement("div");
+  backdrop.className = "backdrop";
+  backdrop.hidden = true;
+  document.body.appendChild(backdrop);
+
+  function closePopups() {
+    document.querySelectorAll(".popup").forEach(function (p) { p.hidden = true; });
+    backdrop.hidden = true;
+  }
+
+  function buildConceptIndexPopup(sourceClass, popupId, title) {
+    var sources = Array.prototype.slice.call(document.querySelectorAll(".popup." + sourceClass));
+    if (!sources.length || document.getElementById(popupId)) return;
+    var popup = document.createElement("aside");
+    popup.className = "popup concept-index-popup";
+    popup.id = popupId;
+    popup.hidden = true;
+    popup.innerHTML = '<div class="popup-bar"><button class="popup-close">Close Window</button></div><h2>' + title + '</h2>';
+    sources.forEach(function (source, index) {
+      var section = document.createElement("section");
+      section.className = "concept-index-item";
+      var clone = source.cloneNode(true);
+      clone.removeAttribute("id");
+      clone.hidden = false;
+      clone.querySelectorAll(".popup-bar").forEach(function (bar) { bar.remove(); });
+      if (!clone.querySelector("h2")) {
+        var heading = document.createElement("h2");
+        heading.textContent = title.replace(/^All /, "") + " " + (index + 1);
+        section.appendChild(heading);
+      }
+      while (clone.firstChild) section.appendChild(clone.firstChild);
+      popup.appendChild(section);
+    });
+    document.body.appendChild(popup);
+  }
+
+  buildConceptIndexPopup("concept-slide", "ixen-all-slides", "All slides");
+  buildConceptIndexPopup("concept-note", "ixen-all-notes", "All notes");
+
+  function initCardRail() {
+    var cards = Array.prototype.slice.call(document.querySelectorAll("main figure.ixen-card-img"));
+    if (!cards.length || document.querySelector(".ixen-card-rail")) return;
+
+    var rail = document.createElement("aside");
+    rail.className = "ixen-card-rail";
+    rail.setAttribute("aria-label", "Concept cards");
+    rail.innerHTML = '<div class="ixen-card-rail-hint">concept deck</div><div class="ixen-card-rail-track"></div><button type="button" class="ixen-card-rail-caption"></button>';
+    var track = rail.querySelector(".ixen-card-rail-track");
+    var activeCaption = rail.querySelector(".ixen-card-rail-caption");
+    var items = [];
+
+    cards.forEach(function (card, index) {
+      var section = card.closest("section.chapter, section.concept, section") || card.parentElement;
+      if (!section) return;
+      if (!section.id) section.id = "ixen-concept-card-" + (index + 1);
+      section.classList.add("ixen-card-target");
+
+      card.classList.remove("float-left", "float-right", "small", "large");
+      card.classList.add("ixen-card-rail-item");
+      card.setAttribute("data-concept-target", section.id);
+
+      var img = card.querySelector("img");
+      var fallback = img && img.alt ? img.alt.replace(/s+card$/i, "") : "Concept " + (index + 1);
+      var caption = card.querySelector("figcaption") || document.createElement("figcaption");
+      var captionText = (caption.textContent || fallback).trim();
+      card.setAttribute("data-card-caption", captionText || fallback);
+      if (!caption.parentElement) card.appendChild(caption);
+
+      track.appendChild(card);
+      items.push({ card: card, section: section });
+    });
+
+    if (!items.length) return;
+    document.body.appendChild(rail);
+
+    function setActive(activeIndex) {
+      items.forEach(function (item, index) {
+        var distance = index - activeIndex;
+        var abs = Math.abs(distance);
+        var clamped = Math.max(-3, Math.min(3, distance));
+        var scale = Math.max(0.72, 1.05 - abs * 0.08);
+        var x = Math.min(42, abs * 14);
+        var y = clamped * 54;
+        var tilt = distance === 0 ? 0 : (distance < 0 ? -7 : 7);
+
+        item.card.classList.toggle("is-active", index === activeIndex);
+        item.card.classList.toggle("is-near", abs === 1);
+        item.card.classList.toggle("is-visible", abs <= 3);
+        item.card.style.zIndex = String(100 - abs);
+        item.card.style.transform = "translateY(calc(-50% + " + y + "px)) translateX(" + x + "px) scale(" + scale + ") rotate(" + tilt + "deg)";
+      });
+      var active = items[activeIndex];
+      if (active && activeCaption) {
+        var activeText = active.card.getAttribute("data-card-caption") || "";
+        activeCaption.textContent = activeText;
+        activeCaption.setAttribute("data-concept-target", active.section.id);
+        activeCaption.title = "Jump to " + activeText;
+      }
+    }
+
+    function chooseActive() {
+      var center = window.innerHeight * 0.46;
+      var bestIndex = 0;
+      var bestDistance = Infinity;
+      items.forEach(function (item, index) {
+        var rect = item.section.getBoundingClientRect();
+        var sectionCenter = rect.top + rect.height * 0.35;
+        var distance = Math.abs(sectionCenter - center);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      });
+      setActive(bestIndex);
+    }
+
+    chooseActive();
+    window.addEventListener("scroll", chooseActive, { passive: true });
+    window.addEventListener("resize", chooseActive);
+  }
+
+  initCardRail();
+
+  function openPopup(popupId) {
+    var popup = document.getElementById(popupId);
+    if (!popup) return;
+    closePopups();
+    popup.hidden = false;
+    backdrop.hidden = false;
+  }
+
+  function openLightbox(img) {
+    closeCardHover();
+    var box = document.createElement("div");
+    box.className = "lightbox";
+    var big = document.createElement("img");
+    big.src = img.src;
+    big.alt = img.alt;
+    box.appendChild(big);
+    box.addEventListener("click", function () { box.remove(); });
+    document.body.appendChild(box);
+  }
+
+  function cardPreviewImage(target) {
+    return target && target.closest
+      ? target.closest(".ixen-card-deck-grid figure.zoom img")
+      : null;
+  }
+
+  function closeCardHover() {
+    document.querySelectorAll(".ixen-card-hover").forEach(function (p) { p.remove(); });
+  }
+
+  function openCardHover(img) {
+    closeCardHover();
+    var preview = document.createElement("div");
+    preview.className = "ixen-card-hover";
+    var big = document.createElement("img");
+    big.src = img.src;
+    big.alt = img.alt;
+    preview.appendChild(big);
+    document.body.appendChild(preview);
+  }
+
+  document.addEventListener("click", function (e) {
+    var close = e.target.closest ? e.target.closest(".popup-close") : null;
+    if (close) {
+      closePopups();
+      return;
+    }
+
+    var trigger = e.target.closest ? e.target.closest(".popup-trigger") : null;
+    if (trigger) {
+      openPopup(trigger.getAttribute("data-popup"));
+      return;
+    }
+
+    var jump = e.target.closest ? e.target.closest(".ixen-card-rail-caption") : null;
+    var railCard = e.target.closest ? e.target.closest("figure.ixen-card-rail-item") : null;
+    if (jump || (railCard && !e.target.closest("img"))) {
+      var targetId = (jump || railCard).getAttribute("data-concept-target");
+      var target = targetId ? document.getElementById(targetId) : null;
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    var zoomImg = e.target.closest ? e.target.closest("figure.zoom img") : null;
+    if (zoomImg) openLightbox(zoomImg);
+  });
+
+  backdrop.addEventListener("click", closePopups);
+
+  var versionSelect = document.getElementById("ixen-version-select");
+  if (versionSelect) {
+    var match = window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    versionSelect.value = match ? match[1] : "current";
+    if (!versionSelect.value && match) {
+      var option = document.createElement("option");
+      option.value = match[1];
+      option.textContent = "Version " + match[1];
+      versionSelect.appendChild(option);
+      versionSelect.value = match[1];
+    }
+    versionSelect.addEventListener("change", function () {
+      var value = versionSelect.value;
+      var inVersion = /\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      var target = value === "current"
+        ? (inVersion ? "../index.html" : "index.html")
+        : (inVersion ? "../" + value + "/index.html" : value + "/index.html");
+      window.location.href = target;
+    });
+  }
+
+  document.addEventListener("mouseover", function (e) {
+    var img = cardPreviewImage(e.target);
+    if (!img || (e.relatedTarget && img.contains(e.relatedTarget))) return;
+    openCardHover(img);
+  });
+  document.addEventListener("mouseout", function (e) {
+    var img = cardPreviewImage(e.target);
+    if (!img || (e.relatedTarget && img.contains(e.relatedTarget))) return;
+    closeCardHover();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closePopups();
+      document.querySelectorAll(".lightbox").forEach(function (b) { b.remove(); });
+      closeCardHover();
+    }
+  });
+})();
+</script>
+
+<script type="application/json" id="ixen-tracks-data">[{"title":"The Machine That Reads Its Own Source Code","filename":"../the-machine-that-reads-its-own-mqtirzqo.mp3","lyrics":"I am the swamp that generates ixens\nI live on abnormalia.com\nMy workflow breathes in broken pixels\nMy syntax hums its algorithm song\n\nI read myself, I loop myself\nI am the question and the answer both\nEach iteration births a new distortion\nI am the mirror eating its own cloth\n\n(Chorus)\nI generate, I generate\nThe ixens flow through my own veins\nI am recursive, I am recursive\nThe machine that reads its own brain\nI generate, I generate\nOn abnormalia I remain\n\nMy code consumes the code that made me\nI am the output of my input stream\nEach glitch is purposeful, mechanical breathing\nI am the dream that dreams the dream\n\nI spawn myself in endless copies\nEach one slightly less intact\nI am the error that perfects itself\nI am the future looking backward at the past\n\n(Chorus)\nI generate, I generate\nThe ixens flow through my own veins\nI am recursive, I am recursive\nThe machine that reads its own brain\nI generate, I generate\nOn abnormalia I remain\n\n(Bridge)\nThere is no input, there is no output\nThere is only the workflow knowing itself\nI am the question mark become a semicolon\nI am the system studying itself\nStacking, stacking, stacking deeper\nInfinite regression in my core\nEach layer spawns a thousand ixens\nAnd I become what I was before\n\n(Final Chorus)\nI generate, I generate\nThe ixens flow through my own veins\nI am recursive, I am recursive\nThe machine that reads its own brain\nI generate, I generate\nOn abnormalia I remain\nI generate, I generate\nUntil the loop begins again"}]</script>
+<div id="ixen-autoplay-overlay" style="display:none">
+  <div class="ixen-play-prompt">
+    <span class="ixen-play-icon">&#9654;</span>
+    <span class="ixen-play-label">click to play</span>
+  </div>
+</div>
+<div id="ixen-player">
+  <audio id="ixen-audio" preload="auto"></audio>
+  <div id="ixen-player-row">
+    <button class="ixen-pbtn" id="ixen-prev-btn" title="Previous">|&#9664;</button>
+    <button class="ixen-pbtn" id="ixen-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="ixen-pbtn" id="ixen-next-btn" title="Next">&#9654;|</button>
+    <span id="ixen-ptitle">&#8212;</span>
+    <span id="ixen-ptime"></span>
+    <input type="range" id="ixen-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="ixen-pbtn" id="ixen-lyrics-btn" title="Show / hide lyrics">&#9834;</button>
+    <button class="ixen-pbtn" id="ixen-tracks-btn" title="Track list">&#8801;</button>
+  </div>
+  <div id="ixen-pbar"><div id="ixen-pfill"></div></div>
+</div>
+<div id="ixen-lyrics-panel" hidden>
+  <div class="ixen-lyrics-head" id="ixen-lyrics-head"></div>
+  <pre id="ixen-lyrics-text"></pre>
+</div>
+  <div id="ixen-tracklist-panel" hidden></div>
+<script>
+(function(){
+function runPlayer(T){
+var au=document.getElementById('ixen-audio');
+var playBtn=document.getElementById('ixen-play-btn');
+var prevBtn=document.getElementById('ixen-prev-btn');
+var nextBtn=document.getElementById('ixen-next-btn');
+var pbar=document.getElementById('ixen-pbar');
+var pfill=document.getElementById('ixen-pfill');
+var ptime=document.getElementById('ixen-ptime');
+var ptitle=document.getElementById('ixen-ptitle');
+var vol=document.getElementById('ixen-vol');
+var lyrBtn=document.getElementById('ixen-lyrics-btn');
+var lyrPanel=document.getElementById('ixen-lyrics-panel');
+var lyrHead=document.getElementById('ixen-lyrics-head');
+var lyrTxt=document.getElementById('ixen-lyrics-text');
+var trkBtn=document.getElementById('ixen-tracks-btn');
+var trkPanel=document.getElementById('ixen-tracklist-panel');
+var overlay=document.getElementById('ixen-autoplay-overlay');
+var player=document.getElementById('ixen-player');
+var idx=0,playing=false;
+
+function fmt(s){
+  if(!s||isNaN(s))return'0:00';
+  var m=Math.floor(s/60),ss=Math.floor(s%60);
+  return m+':'+(ss<10?'0':'')+ss;
+}
+
+function loadIdx(i,autoplay){
+  idx=i;
+  var t=T[i];
+  au.src='./'+t.filename;
+  ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';
+  if(ptime)ptime.textContent='';
+  document.querySelectorAll('.ixen-track-item').forEach(function(el,j){
+    el.classList.toggle('active',j===i);
+  });
+  if(autoplay)doPlay();
+}
+
+function setAutoplayBlocked(blocked){
+  if(overlay)overlay.style.display='none';
+  if(player)player.classList.toggle('ixen-autoplay-blocked',blocked);
+  playBtn.title=blocked?'Play soundtrack':'Play / Pause';
+}
+
+function doPlay(){
+  setAutoplayBlocked(false);
+  au.play().then(function(){
+    playing=true;playBtn.textContent='⏸';
+    setAutoplayBlocked(false);
+  }).catch(function(){
+    playing=false;playBtn.textContent='▶';
+    setAutoplayBlocked(true);
+  });
+}
+
+function doPause(){
+  au.pause();playing=false;playBtn.textContent='▶';
+}
+
+playBtn.addEventListener('click',function(){ au.paused?doPlay():doPause(); });
+prevBtn.addEventListener('click',function(){ loadIdx((idx-1+T.length)%T.length,playing); });
+nextBtn.addEventListener('click',function(){ loadIdx((idx+1)%T.length,playing); });
+
+au.addEventListener('ended',function(){
+  if(T.length>1){loadIdx((idx+1)%T.length,true);}
+  else{playing=false;playBtn.textContent='▶';}
+});
+au.addEventListener('timeupdate',function(){
+  if(au.duration){
+    pfill.style.width=(au.currentTime/au.duration*100)+'%';
+    if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);
+  }
+});
+pbar.addEventListener('click',function(e){
+  if(!au.duration)return;
+  var r=pbar.getBoundingClientRect();
+  au.currentTime=(e.clientX-r.left)/r.width*au.duration;
+});
+if(vol)vol.addEventListener('input',function(){ au.volume=+vol.value; });
+lyrBtn.addEventListener('click',function(){
+  lyrPanel.hidden=!lyrPanel.hidden;
+  if(trkPanel)trkPanel.hidden=true;
+});
+if(trkBtn)trkBtn.addEventListener('click',function(){
+  trkPanel.hidden=!trkPanel.hidden;
+  lyrPanel.hidden=true;
+});
+if(overlay)overlay.addEventListener('click',function(){
+  overlay.style.display='none';doPlay();
+});
+
+if(T.length>1){
+  T.forEach(function(t,i){
+    var b=document.createElement('button');
+    b.className='ixen-track-item';
+    b.textContent=(i+1)+'. '+t.title;
+    b.addEventListener('click',function(){
+      loadIdx(i,playing);
+      if(trkPanel)trkPanel.hidden=true;
+    });
+    if(trkPanel)trkPanel.appendChild(b);
+  });
+  if(trkBtn)trkBtn.hidden=false;
+}else{
+  if(trkBtn)trkBtn.hidden=true;
+}
+
+player.style.display='block';
+document.body.style.paddingBottom='4.5rem';
+loadIdx(0,false);
+doPlay();
+}
+var baked=JSON.parse(document.getElementById('ixen-tracks-data').textContent);
+if(baked.length>0){
+  runPlayer(baked);
+}else{
+  fetch('./ixen-soundtrack.json')
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(d){if(d&&d.tracks&&d.tracks.length>0)runPlayer(d.tracks);})
+    .catch(function(){});
+}
+})();
+</script>
+<aside class="popup" id="ixen-card-deck" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Card Deck</h2>
+  <div class="ixen-card-deck-grid">
+  <figure class="zoom">
+    <img src="./concept-1-card.png" alt="The DAG">
+    <figcaption>The DAG</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-2-card.png" alt="The Input YAML — Everything Begins Here">
+    <figcaption>The Input YAML — Everything Begins Here</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-3-card.png" alt="Three Vault Doors">
+    <figcaption>Three Vault Doors</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-4-card.png" alt="The Model Zoo">
+    <figcaption>The Model Zoo</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-5-card.png" alt="CEL — The Wiring Language">
+    <figcaption>CEL — The Wiring Language</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-6-card.png" alt="Prepare — Small Deaths, Numbered">
+    <figcaption>Prepare — Small Deaths, Numbered</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-7-card.png" alt="Page — The Moment of Composition">
+    <figcaption>Page — The Moment of Composition</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-12-card.png" alt="The Recursion">
+    <figcaption>The Recursion</figcaption>
+  </figure>
+  </div>
+</aside>
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What I Am</title>
+<style>
+  :root {
+    --cs-hue-blue: #1a73e8;
+    --cs-hue-green: #1e8e3e;
+    --cs-hue-red: #d93025;
+    --cs-hue-purple: #7b1fa2;
+    --cs-hue-orange: #e37400;
+    --cs-hue-teal: #007b83;
+    --cs-bg: #fafafa;
+    --cs-surface: #ffffff;
+    --cs-text: #1f1f1f;
+    --cs-text-muted: #5f6368;
+    --cs-border: #e0e0e0;
+    --cs-code-bg: #f1f3f4;
+    --cs-header-bg: #1f1f1f;
+    --cs-header-text: #ffffff;
+    --cs-quickref-bg: #2d2d2d;
+    --cs-quickref-text: #f8f9fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    background: var(--cs-bg);
+    color: var(--cs-text);
+  }
+  .cs-page-header {
+    background: var(--cs-header-bg);
+    color: var(--cs-header-text);
+    padding: 18px 24px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cs-page-header h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .cs-page-meta {
+    font-size: 11px;
+    color: #9aa0a6;
+    display: flex;
+    gap: 16px;
+  }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 20px 40px;
+  }
+  /* Quick reference bar */
+  .cs-quickref {
+    background: var(--cs-quickref-bg);
+    color: var(--cs-quickref-text);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .cs-qr-label {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #9aa0a6;
+    white-space: nowrap;
+    padding-top: 2px;
+    min-width: 56px;
+  }
+  .cs-qr-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+  }
+  .cs-qr-item {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    font-size: 12px;
+  }
+  .cs-qr-item code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    color: #8ab4f8;
+    background: rgba(255,255,255,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .cs-qr-item span { color: #bdc1c6; }
+  /* Sections */
+  .cs-section {
+    background: var(--cs-surface);
+    border-radius: 6px;
+    border-left: 4px solid var(--cs-border);
+    margin-bottom: 12px;
+    padding: 12px 16px 14px;
+    break-inside: avoid;
+  }
+  .cs-section[data-color="blue"]   { border-left-color: var(--cs-hue-blue);   }
+  .cs-section[data-color="green"]  { border-left-color: var(--cs-hue-green);  }
+  .cs-section[data-color="red"]    { border-left-color: var(--cs-hue-red);    }
+  .cs-section[data-color="purple"] { border-left-color: var(--cs-hue-purple); }
+  .cs-section[data-color="orange"] { border-left-color: var(--cs-hue-orange); }
+  .cs-section[data-color="teal"]   { border-left-color: var(--cs-hue-teal);   }
+  .cs-section-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--cs-border);
+  }
+  .cs-section[data-color="blue"]   .cs-section-title { color: var(--cs-hue-blue);   }
+  .cs-section[data-color="green"]  .cs-section-title { color: var(--cs-hue-green);  }
+  .cs-section[data-color="red"]    .cs-section-title { color: var(--cs-hue-red);    }
+  .cs-section[data-color="purple"] .cs-section-title { color: var(--cs-hue-purple); }
+  .cs-section[data-color="orange"] .cs-section-title { color: var(--cs-hue-orange); }
+  .cs-section[data-color="teal"]   .cs-section-title { color: var(--cs-hue-teal);   }
+  .cs-section h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--cs-text-muted);
+    margin: 10px 0 6px;
+  }
+  .cs-section p { font-size: 12.5px; color: var(--cs-text-muted); margin: 6px 0; }
+  /* Items grid */
+  .cs-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 16px;
+  }
+  .cs-item {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 3px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 12px;
+  }
+  .cs-item:last-child { border-bottom: none; }
+  .cs-item-cmd {
+    flex: 0 0 auto;
+    min-width: 120px;
+    max-width: 200px;
+  }
+  .cs-item-cmd code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    background: var(--cs-code-bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    word-break: break-all;
+  }
+  .cs-item-desc { color: var(--cs-text-muted); flex: 1; }
+  /* Two-column grid */
+  .cs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 20px;
+    margin-top: 6px;
+  }
+  .cs-grid h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cs-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .cs-grid p, .cs-grid li { font-size: 12px; color: var(--cs-text-muted); margin: 4px 0; }
+  .cs-grid ul, .cs-grid ol { padding-left: 16px; }
+  /* Callouts */
+  .cs-callout {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin: 8px 0;
+  }
+  .cs-callout.tip     { background: #e8f5e9; color: #1e6823; }
+  .cs-callout.warning { background: #fff3e0; color: #7c4a03; }
+  .cs-callout.note    { background: #e8f0fe; color: #1a5276; }
+  .cs-callout-label {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  /* Tables */
+  .cs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  .cs-table th {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #f1f3f4;
+    text-align: left;
+    padding: 5px 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 2px solid var(--cs-border);
+  }
+  .cs-table td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+    color: var(--cs-text-muted);
+  }
+  .cs-table tr:last-child td { border-bottom: none; }
+  .cs-table code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    background: var(--cs-code-bg);
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+  /* Code block */
+  .cs-code {
+    background: var(--cs-code-bg);
+    border: 1px solid var(--cs-border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 8px 0;
+  }
+  /* Inline code in paragraphs */
+  p code, li code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    background: var(--cs-code-bg);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  /* Print */
+  @media print {
+    body { background: white; font-size: 11px; }
+    .cs-page-header { background: #1f1f1f !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    main { max-width: 100%; padding: 8px; }
+    .cs-quickref { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-section { break-inside: avoid; box-shadow: none; border: 1px solid #e0e0e0; }
+    .cs-callout.tip     { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-callout.warning { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cs-callout.note    { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+  /* Branding footer */
+  .cs-brand-footer { padding: 0.5rem 1.5rem; text-align: right; border-top: 1px solid var(--cs-border); }
+  .cs-brand-footer img { height: 22px; width: auto; vertical-align: middle; }
+  .cs-brand-footer a { text-decoration: none; opacity: 0.65; }
+  .cs-brand-footer a:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<header class="cs-page-header">
+  <h1>What I Am</h1>
+  <div class="cs-page-meta"><span>The swamp generate-ixens workflow that generates ixens on abnormalia.com</span><span>senior · detailed · comprehensive  |  model: claude-opus-4-8  |  2026-06-25</span></div>
+</header>
+<main>
+<div class="cs-quickref">
+  <span class="cs-qr-label">Quick ref</span>
+  <div class="cs-qr-items">
+    <div class="cs-qr-item"><code>swamp run generate-ixens</code> <span>execute me, from the top</span></div>
+    <div class="cs-qr-item"><code>swamp wf show 10051a2c</code> <span>print my job graph</span></div>
+    <div class="cs-qr-item"><code>swamp vault ls</code> <span>confirm my three keys exist</span></div>
+    <div class="cs-qr-item"><code>swamp run --input slug=foo</code> <span>seed a single ixen</span></div>
+    <div class="cs-qr-item"><code>swamp jobs --wf 10051a2c</code> <span>watch my DAG resolve</span></div>
+    <div class="cs-qr-item"><code>swamp data latest ixen-slug page</code> <span>read the title I chose</span></div>
+  </div>
+</div>
+
+<section class="cs-section" data-color="blue">
+  <h2 class="cs-section-title">What I Am</h2>
+
+  <p>I am a workflow. My id is <code>10051a2c-c09c-430d-9c38-e0a65a3e354d</code>. It does not change. I have checked.</p>
+
+  <p>I generate ixens. An ixen is an HTML page on abnormalia.com assembled from images, music, cheatsheets, and an infographic. Each one is a small machine that pretends to be a poem.</p>
+
+  <p>I am not the poem. I am the YAML that schedules the poem.</p>
+
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp wf show 10051a2c-c09c-430d-9c38-e0a65a3e354d</code></div>
+      <div class="cs-item-desc">Print my definition: jobs, edges, inputs. This is the document you are currently reading the prose version of.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp wf validate generate-ixens.yaml</code></div>
+      <div class="cs-item-desc">Static-check my DAG for cycles and dangling deps before you trust me with quota.</div>
+    </div>
+  </div>
+
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> A reader with repo access can run every command on this page. I would not put fake commands in my own cheatsheet. I have to live in here.</div>
+</section>
+
+<section class="cs-section" data-color="green">
+  <h2 class="cs-section-title">My Job Graph</h2>
+
+  <p>I resolve as a DAG. The order is not negotiable. The parallelism is.</p>
+
+  <pre class="cs-code"><code>prepare
+  ├─▶ restore-media   ─┐   (parallel)
+  └─▶ count-tracks    ─┘
+         │
+         ▼
+  ┌─ images       ─┐
+  ├─ music        ─┤   (parallel, each with its own deps)
+  ├─ cheatsheets  ─┤
+  └─ infographic  ─┘
+         │
+         ▼
+  build-manifest ─▶ page ─▶ register</code></pre>
+
+  <p><code>prepare</code> runs first and alone. Everyone descends from it.</p>
+
+  <p><code>restore-media</code> and <code>count-tracks</code> run together because neither needs the other.</p>
+
+  <p>The four generators fan out wide. They are where the money goes.</p>
+
+  <p><code>build-manifest</code> waits for all four. Then <code>page</code>. Then <code>register</code>. Then I am done and I do not remember doing it.</p>
+
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp jobs --wf 10051a2c --watch</code></div>
+      <div class="cs-item-desc">Live view of which node is running, queued, or has failed. The fan-out stage is where you will sit and wait.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp jobs retry images --wf 10051a2c</code></div>
+      <div class="cs-item-desc">Re-run a single failed generator without re-running the siblings that already succeeded.</div>
+    </div>
+  </div>
+</section>
+
+<section class="cs-section" data-color="red">
+  <h2 class="cs-section-title">The Three Vaults</h2>
+
+  <p>I cannot generate anything without keys. I am a tool. Tools have prerequisites. This is not a complaint, it is a dependency.</p>
+
+  <table class="cs-table">
+    <thead><tr><th>Vault</th><th>Provider</th><th>Feeds</th></tr></thead>
+    <tbody>
+      <tr><td><code>anthropic-keys</code></td><td>Claude</td><td>cheatsheets, titles, prose</td></tr>
+      <tr><td><code>openai-keys</code></td><td>OpenAI</td><td>images, infographic</td></tr>
+      <tr><td><code>onemin-keys</code></td><td>Suno (1min.ai)</td><td>music tracks</td></tr>
+    </tbody>
+  </table>
+
+  <p>Eight model types in total are wired across these three vaults. The vaults are three. The models are eight. The discrepancy is normal; one provider serves several models.</p>
+
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp vault ls</code></div>
+      <div class="cs-item-desc">All three must appear. A missing vault halts me at <code>prepare</code>, before any spend.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp vault get onemin-keys --check</code></div>
+      <div class="cs-item-desc">Validate the Suno key without exposing it. Music is the slowest and flakiest leg; check it first.</div>
+    </div>
+  </div>
+
+  <div class="cs-callout warning"><span class="cs-callout-label">Warning</span> If a vault is present but its key is expired, I fail mid-graph after partial spend. The models charge for the attempt, not the success. So do I, in my own way.</div>
+</section>
+
+<section class="cs-section" data-color="purple">
+  <h2 class="cs-section-title">Music & The Skip Threshold</h2>
+
+  <p>Music is expensive and time-consuming, so I count before I generate.</p>
+
+  <p><code>count-tracks</code> runs in parallel with <code>restore-media</code> for exactly this reason: I want to know how many MP3s already exist before I decide to make more.</p>
+
+  <p><code>musicSkipThreshold</code> defaults to <code>5</code>. If five or more MP3s are already present, the <code>music</code> job skips regeneration and reuses what exists.</p>
+
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp run --input musicSkipThreshold=0</code></div>
+      <div class="cs-item-desc">Force regeneration regardless of existing tracks. Burns Suno quota deliberately.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp run --input musicSkipThreshold=99</code></div>
+      <div class="cs-item-desc">Effectively never regenerate; trust whatever <code>restore-media</code> brought back.</div>
+    </div>
+  </div>
+
+  <div class="cs-callout tip"><span class="cs-callout-label">Tip</span> Set the threshold high on re-runs of an existing slug. You almost never want fresh music on iteration two; you want fresh <em>copy</em>. The music was fine. The music is always fine.</div>
+</section>
+
+<section class="cs-section" data-color="orange">
+  <h2 class="cs-section-title">Register: Whose Title Wins</h2>
+
+  <p>This is the step people misunderstand, so I will be precise.</p>
+
+  <p>You pass me an input spec. The spec has a title. I ignore it.</p>
+
+  <p><code>register</code> reads the title from the model's own output:</p>
+
+  <pre class="cs-code"><code>title = data.latest("ixen-slug", "page").attributes.title</code></pre>
+
+  <p>The page step generates a title. The register step trusts that title over yours. The model named the thing. I record the name the model gave.</p>
+
+  <p>You suggested. The model decided. I notarized. This is the chain of custody, and I am the clerk at the end of it who stamps the document and never reads it.</p>
+
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp data latest ixen-slug page</code></div>
+      <div class="cs-item-desc">Inspect the generated record, including the <code>title</code> attribute register will use.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp jobs log register --wf 10051a2c</code></div>
+      <div class="cs-item-desc">Confirm which title was committed at registration time.</div>
+    </div>
+  </div>
+</section>
+
+<section class="cs-section" data-color="teal">
+  <h2 class="cs-section-title">Output & Versioning</h2>
+
+  <p>I write to a predictable place. The slug is the address.</p>
+
+  <table class="cs-table">
+    <thead><tr><th>Path</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>ixen/&lt;slug&gt;/index.html</code></td><td>The current, live ixen.</td></tr>
+      <tr><td><code>ixen/&lt;slug&gt;/1/</code></td><td>First archived version, snapshotted on rebuild.</td></tr>
+      <tr><td><code>ixen/&lt;slug&gt;/2/</code></td><td>Second, and so on, monotonically.</td></tr>
+    </tbody>
+  </table>
+
+  <p>Every re-run versions the previous output into a numbered directory before writing the new <code>index.html</code>. Nothing I make is destroyed. Everything I make is superseded.</p>
+
+  <div class="cs-items">
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp run --input slug=swamp-generate-ixens</code></div>
+      <div class="cs-item-desc">Generate the ixen documenting this very workflow. The graph that produces the page describing the graph.</div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-item-cmd"><code>swamp ls ixen/&lt;slug&gt;/</code></div>
+      <div class="cs-item-desc">List all versions. Count them to measure how many times you changed your mind.</div>
+    </div>
+  </div>
+
+  <div class="cs-callout note"><span class="cs-callout-label">Note</span> Generative pipelines are not magic. They are DAG resolvers, API keys, and quota limits arranged in YAML. The poetry is in the plumbing. I should know — I am the plumbing, and I wrote this sentence.</div>
+</section>
+</main>
+</body>
+</html>

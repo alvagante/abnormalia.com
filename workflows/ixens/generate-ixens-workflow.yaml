@@ -1,11 +1,11 @@
 ixenApiFormat: anthropic
 ixenBaseUrl: https://api.anthropic.com
-skillLevel: senior
+skillLevel: intermediate
 outputLength: long
 ixenModel: claude-opus-4-8
 ixenPersona: gonzo
 credits: alvagante
-versionOutput: true
+versionOutput: false
 headerContent: |-
   <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
     <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
@@ -29,8 +29,8 @@ imageQuality: high
 cardStyle: blueprint
 musicGenre: industrial glitch ambient
 musicMood: recursive, mechanical, absurdist
-musicModel: lyria-002
-musicInstrumental: true
+musicModel: suno-ttapi
+musicInstrumental: false
 musicSkipThreshold: 0
 sunoVersion: chirp-v4-5
 infographicStyle: technical-diagram
@@ -42,7 +42,7 @@ ixens:
       images: false
       cards: false
       infographic: false
-      music: false
+      music: true
     title: The Machine That Reads Its Own Source Code
     description: >-
       The generate-ixens swamp workflow narrates its own execution: DAG topology,
