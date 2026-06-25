@@ -232,7 +232,7 @@ inputs:
           concepts:
             type: array
             minItems: 2
-            maxItems: 8
+            maxItems: 20
             items:
               type: object
               properties:
@@ -566,6 +566,306 @@ jobs:
         dependsOn: []
         weight: 0
         allowFailure: false
+      - name: concept-9-${{ self.ixen.slug }}
+        description: Generate the ninth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 8 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-9" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[8].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[8].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-10-${{ self.ixen.slug }}
+        description: Generate the tenth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 9 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-10" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[9].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[9].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-11-${{ self.ixen.slug }}
+        description: Generate the eleventh supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 10 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-11" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[10].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[10].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-12-${{ self.ixen.slug }}
+        description: Generate the twelfth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 11 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-12" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[11].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[11].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-13-${{ self.ixen.slug }}
+        description: Generate the thirteenth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 12 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-13" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[12].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[12].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-14-${{ self.ixen.slug }}
+        description: Generate the fourteenth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 13 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-14" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[13].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[13].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-15-${{ self.ixen.slug }}
+        description: Generate the fifteenth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 14 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-15" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[14].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[14].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-16-${{ self.ixen.slug }}
+        description: Generate the sixteenth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 15 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-16" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[15].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[15].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-17-${{ self.ixen.slug }}
+        description: Generate the seventeenth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 16 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-17" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[16].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[16].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-18-${{ self.ixen.slug }}
+        description: Generate the eighteenth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 17 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-18" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[17].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[17].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-19-${{ self.ixen.slug }}
+        description: Generate the nineteenth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 18 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-19" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[18].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[18].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: concept-20-${{ self.ixen.slug }}
+        description: Generate the twentieth supporting concept image for one Ixen topic when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 19 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-image"
+          modelName: '${{ "image-" + self.ixen.slug + "-concept-20" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[19].imagePrompt }}
+            style: ${{ inputs.imageStyle }}
+            model: ${{ inputs.imageModel }}
+            background: ${{ inputs.imageBackground }}
+            size: ${{ inputs.imageSize }}
+            quality: ${{ inputs.imageQuality }}
+            format: png
+            filename: ${{ self.ixen.concepts[19].imageFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
       - name: card-1-${{ self.ixen.slug }}
         description: Generate the card image for the first concept.
         forEach:
@@ -754,6 +1054,294 @@ jobs:
             style: ${{ inputs.cardStyle }}
             model: ${{ inputs.imageModel }}
             filename: ${{ self.ixen.concepts[7].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-9-${{ self.ixen.slug }}
+        description: Generate the card image for the ninth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 8 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-9" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[8].imagePrompt }}
+            title: ${{ self.ixen.concepts[8].name }}
+            cardNumber: 9
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[8].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-10-${{ self.ixen.slug }}
+        description: Generate the card image for the tenth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 9 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-10" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[9].imagePrompt }}
+            title: ${{ self.ixen.concepts[9].name }}
+            cardNumber: 10
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[9].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-11-${{ self.ixen.slug }}
+        description: Generate the card image for the eleventh concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 10 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-11" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[10].imagePrompt }}
+            title: ${{ self.ixen.concepts[10].name }}
+            cardNumber: 11
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[10].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-12-${{ self.ixen.slug }}
+        description: Generate the card image for the twelfth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 11 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-12" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[11].imagePrompt }}
+            title: ${{ self.ixen.concepts[11].name }}
+            cardNumber: 12
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[11].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-13-${{ self.ixen.slug }}
+        description: Generate the card image for the thirteenth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 12 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-13" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[12].imagePrompt }}
+            title: ${{ self.ixen.concepts[12].name }}
+            cardNumber: 13
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[12].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-14-${{ self.ixen.slug }}
+        description: Generate the card image for the fourteenth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 13 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-14" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[13].imagePrompt }}
+            title: ${{ self.ixen.concepts[13].name }}
+            cardNumber: 14
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[13].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-15-${{ self.ixen.slug }}
+        description: Generate the card image for the fifteenth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 14 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-15" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[14].imagePrompt }}
+            title: ${{ self.ixen.concepts[14].name }}
+            cardNumber: 15
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[14].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-16-${{ self.ixen.slug }}
+        description: Generate the card image for the sixteenth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 15 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-16" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[15].imagePrompt }}
+            title: ${{ self.ixen.concepts[15].name }}
+            cardNumber: 16
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[15].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-17-${{ self.ixen.slug }}
+        description: Generate the card image for the seventeenth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 16 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-17" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[16].imagePrompt }}
+            title: ${{ self.ixen.concepts[16].name }}
+            cardNumber: 17
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[16].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-18-${{ self.ixen.slug }}
+        description: Generate the card image for the eighteenth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 17 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-18" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[17].imagePrompt }}
+            title: ${{ self.ixen.concepts[17].name }}
+            cardNumber: 18
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[17].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-19-${{ self.ixen.slug }}
+        description: Generate the card image for the nineteenth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 18 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-19" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[18].imagePrompt }}
+            title: ${{ self.ixen.concepts[18].name }}
+            cardNumber: 19
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[18].cardFilename }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: card-20-${{ self.ixen.slug }}
+        description: Generate the card image for the twentieth concept when present.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 19 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-card"
+          modelName: '${{ "card-" + self.ixen.slug + "-20" }}'
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            prompt: ${{ self.ixen.concepts[19].imagePrompt }}
+            title: ${{ self.ixen.concepts[19].name }}
+            cardNumber: 20
+            cardCount: ${{ size(self.ixen.concepts) }}
+            skillLevel: ${{ inputs.skillLevel }}
+            style: ${{ inputs.cardStyle }}
+            model: ${{ inputs.imageModel }}
+            filename: ${{ self.ixen.concepts[19].cardFilename }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
         dependsOn: []
         weight: 0

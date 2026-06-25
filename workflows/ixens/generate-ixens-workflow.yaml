@@ -1,0 +1,364 @@
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: senior
+outputLength: long
+ixenModel: claude-opus-4-8
+ixenPersona: gonzo
+credits: alvagante
+versionOutput: true
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+      <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+    </a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: |-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ""
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+imageStyle: blueprint
+imageBackground: opaque
+imageModel: gpt-image-2
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: blueprint
+musicGenre: industrial glitch ambient
+musicMood: recursive, mechanical, absurdist
+musicModel: lyria-002
+musicInstrumental: true
+musicSkipThreshold: 0
+sunoVersion: chirp-v4-5
+infographicStyle: technical-diagram
+infographicModel: gpt-image-2
+includeBeginnerGuide: false
+ixens:
+  - slug: generate-ixens-workflow
+    regenerate:
+      images: false
+      cards: false
+      infographic: false
+      music: false
+    title: The Machine That Reads Its Own Source Code
+    description: >-
+      The generate-ixens swamp workflow narrates its own execution: DAG topology,
+      vault secrets, CEL wiring, model zoo, and the recursive horror of generating
+      the ixen that documents the thing that generated it.
+    topic: The swamp generate-ixens workflow that generates ixens on abnormalia.com
+    narrator: The generate-ixens workflow itself (id 10051a2c-c09c-430d-9c38-e0a65a3e354d)
+    heroPrompt: >-
+      A technical blueprint of a generative pipeline as a surreal architectural cross-section:
+      a YAML scroll feeds into a directed acyclic graph of labeled job nodes — prepare,
+      restore-media, count-tracks, images, music, cheatsheets, infographic, page, register —
+      connected by precise dependency arrows. Vault doors emit API keys. CEL expression strings
+      float like smoke between nodes. A completed ixen minisite page emerges at the bottom right.
+      Blueprint aesthetic: white technical lines on deep navy, precise drafting lettering,
+      tiny monospace annotations, faint absurdist details hidden in the margins.
+    concepts:
+      - name: The DAG
+        imageFilename: concept-1.png
+        cardFilename: concept-1-card.png
+        imagePrompt: >-
+          A directed acyclic graph drawn as a railroad marshaling yard seen from above: prepare
+          at the entrance, restore-media and count-tracks branching in parallel, images and music
+          on twin tracks, cheatsheets on a third track, all converging at page, register at the
+          exit gate. Blueprint white on navy. Each node labeled in monospace. Dependency arrows
+          as track switches. Tiny clocks showing parallel execution on the middle tier.
+        details: >-
+          Narrate the workflow's complete job graph from the workflow's first-person perspective.
+          The full topology: prepare runs first (no dependencies). Then restore-media and
+          count-tracks both depend on prepare and run in parallel. Then images depends on
+          restore-media. Music depends on prepare and count-tracks. Cheatsheets and infographic
+          depend on prepare/restore-media respectively. Build-manifest depends on music.
+          Page depends on images, build-manifest, cheatsheets, and infographic — the final
+          convergence point. Register depends on page.
+
+          Show these commands as terminal popops — they are real and runnable:
+
+          ```
+          swamp workflow get generate-ixens --json
+          swamp workflow list
+          swamp workflow run generate-ixens --input-file workflows/ixens/your-spec.yaml
+          ```
+
+          Emphasize that this is a declared dependency graph, not a script. Swamp resolves
+          the order. The workflow does not choose when to run — it is told. The humor:
+          the workflow has a very specific shape and cannot deviate from it. It is
+          DAG-shaped all the way down.
+
+      - name: The Input YAML — Everything Begins Here
+        imageFilename: concept-2.png
+        cardFilename: concept-2-card.png
+        imagePrompt: >-
+          A single YAML file shown as an ancient clay tablet, its fields etched in
+          cuneiform-style indented blocks: slug, topic, narrator, heroPrompt, concepts.
+          A mechanical arm holds the tablet over a furnace labeled "swamp workflow run".
+          Sparks represent individual job steps being spawned. Blueprint technical line art,
+          deep navy background, archival label on the tablet reading "input spec v1".
+        details: >-
+          Narrate the input YAML as the seed of everything — the spec, the brief, the DNA.
+          Without it: nothing. With it: images, music, cheatsheet, infographic, page, registry
+          entry. The YAML has required fields per ixen: slug (the URL path), topic (subject
+          matter), narrator (the voice), heroPrompt (hero image brief), and concepts (2-8
+          concept nodes, each with name, imagePrompt, imageFilename, cardFilename).
+
+          Show the invocation command as a terminal popop:
+
+          ```
+          swamp workflow run generate-ixens \
+            --input-file workflows/ixens/generate-ixens-workflow.yaml
+          ```
+
+          The meta-recursion: this very sentence lives inside a "details" field inside a
+          concepts array inside a YAML file that will be passed to exactly this command.
+          The workflow is currently reading its own creation myth. This is not a figure of
+          speech. Include the regenerate flags available per ixen:
+
+          ```yaml
+          regenerate:
+            images: true    # force new hero and concept images
+            cards: true     # force new card images
+            music: true     # force new soundtrack
+            infographic: true  # force new infographic
+          ```
+
+      - name: Three Vault Doors
+        imageFilename: concept-3.png
+        cardFilename: concept-3-card.png
+        imagePrompt: >-
+          Three vault doors in a surreal corridor, each labeled: anthropic-keys (amber glow,
+          Claude logo fragment), openai-keys (cyan glow, image grid fragment), onemin-keys
+          (magenta glow, waveform fragment). A CEL expression floats between them:
+          vault.get(anthropic-keys, api-key). Blueprint technical line art, each door has
+          a combination dial and a tiny API quota meter above it. Deep navy background.
+        details: >-
+          Narrate how secrets flow through the workflow without ever being stored in the
+          workflow itself. Three vaults are required at runtime: anthropic-keys holds the
+          Claude API key (used by content-ixen, content-cheatsheet, content-music for
+          prompt generation). openai-keys holds the OpenAI key (images, cards, infographic
+          via content-image, content-card, content-infographic). onemin-keys holds the
+          Suno/Lyria API key (music via content-music). The workflow references them only
+          as CEL expressions — vault.get(anthropic-keys, api-key) — never hardcoded.
+
+          Show these commands as terminal popops:
+
+          ```
+          swamp vault list
+          swamp vault get anthropic-keys
+          swamp vault secret get anthropic-keys api-key
+          ```
+
+          The philosophical note: the creative output depends entirely on three encrypted
+          values in a database. Pull the curtain. The magic is authentication.
+
+      - name: The Model Zoo
+        imageFilename: concept-4.png
+        cardFilename: concept-4-card.png
+        imagePrompt: >-
+          A zoo enclosure floor plan seen from above: eight separate pens labeled with
+          model types — content-ixen (a typewriter), content-image (a camera), content-music
+          (a speaker cone), content-cheatsheet (a scroll), content-infographic (a chart),
+          content-card (a playing card), ixen-tracks (a playlist), ixen-registry (a ledger).
+          Each pen shows the model's key method. Blueprint technical precision, faint naturalist
+          taxonomy labels, visitor path drawn as a dependency arrow.
+        details: >-
+          Narrate the eight model types the workflow invokes and what each one does.
+          content-ixen: generates the final HTML narrative page. content-image: generates
+          hero.png and concept-N.png via OpenAI. content-music: generates the Suno
+          soundtrack playlist. content-cheatsheet: generates the inline technical cheatsheet
+          HTML. content-infographic: generates the wide infographic PNG and wrapper HTML.
+          content-card: generates the small concept card images. ixen-tracks: counts and
+          builds the complete track manifest across all versioned directories.
+          ixen-registry: syncs _data/ixens.yml with the generated title and date.
+
+          Show these commands as terminal popops — they list and inspect models:
+
+          ```
+          swamp model list --type @alvagante/content-ixen
+          swamp model type describe @alvagante/content-ixen --json
+          swamp model get ixen-generate-ixens-workflow --json
+          swamp model type describe @alvagante/ixen-registry --json
+          ```
+
+          The meta-joke: content-ixen is the model that generated the page you are reading.
+          It received a brief that said "the narrator is the generate-ixens workflow itself"
+          and it tried its best to comply. You be the judge.
+
+      - name: CEL — The Wiring Language
+        imageFilename: concept-5.png
+        cardFilename: concept-5-card.png
+        imagePrompt: >-
+          A circuit board where every trace is labeled with a CEL expression string in
+          tiny monospace: data.latest("ixen-slug", "page").attributes.title on one trace,
+          inputs.ixens.map(c, c.cardFilename) on another, vault.get(anthropic-keys, api-key)
+          on a third, inputs.ixens.filter(ixen, size(data.latest(...).attributes.missingImages) > 0)
+          on a fourth. Each trace connects two labeled chips. Blueprint precision, traces
+          glow faintly where active.
+        details: >-
+          Narrate CEL (Common Expression Language) as the workflow's nervous system — the
+          declarative wiring that connects model outputs to model inputs without a line of
+          imperative code. Actual expressions from the live workflow: vault.get(openai-keys,
+          api-key) for secret injection. data.latest("tracks-" + ixen.slug, "count").attributes.trackCount
+          to decide whether to skip music generation. inputs.ixens.filter(ixen,
+          size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0) to
+          skip image generation when images already exist. data.latest("ixen-" + ixen.slug,
+          "page").attributes.title to pull the model-generated title back for registration.
+
+          Show these commands to inspect the data CEL reads from:
+
+          ```
+          swamp data get ixen-generate-ixens-workflow page --json
+          swamp data get ixen-generate-ixens-workflow media --json
+          swamp data list ixen-generate-ixens-workflow
+          ```
+
+          The observation: CEL is intentionally not Turing-complete. It cannot loop,
+          cannot recurse, cannot write to disk. Yet here it is, wiring together a system
+          that generates pages about its own cognitive limitations.
+
+      - name: Prepare — Small Deaths, Numbered
+        imageFilename: concept-6.png
+        cardFilename: concept-6-card.png
+        imagePrompt: >-
+          A filing archive cross-section: the current ixen/slug/ directory being lifted
+          by a mechanical arm and placed into ixen/slug/1/ as fresh empty space opens
+          below. Numbered archive boxes stack behind: 1/, 2/, 3/... each with a timestamp
+          label. A restoreMedia robot picks selected files back out of box 1/ and places
+          them in the fresh space. Blueprint line art, precise labels, tiny floor plan
+          of ixen/<slug>/ showing hero.png, track.mp3, index.html being sorted.
+        details: >-
+          Narrate the prepare and restoreMedia steps: before any content is written, the
+          existing output directory is versioned into a numeric subdirectory — ixen/slug/1/,
+          then ixen/slug/2/ on the next run, and so on. This is not destructive. It is
+          careful. After prepare, restoreMedia copies back any files that do not need
+          regenerating (based on regenerate flags in the input spec) — hero.png, concept
+          images, cards, infographic. Only what must be regenerated stays absent.
+
+          Show these commands as terminal popops:
+
+          ```
+          swamp model method run ixen-generate-ixens-workflow prepare \
+            --input outputDir=ixen/generate-ixens-workflow \
+            --input enabled=true
+          ls ixen/generate-ixens-workflow/
+          ls ixen/generate-ixens-workflow/1/
+          ```
+
+          Also note: the musicSkipThreshold parameter (default: 5). If 5 or more MP3
+          files already exist across all versioned subdirectories, music generation is
+          skipped entirely. The workflow is economical about Suno credits. This
+          is not sentiment. It is a configurable integer.
+
+      - name: Page — The Moment of Composition
+        imageFilename: concept-7.png
+        cardFilename: concept-7-card.png
+        imagePrompt: >-
+          A printing press assembling a broadsheet from component plates: a hero image plate
+          (labeled hero.png), a music track bar (labeled track manifest), a cheatsheet roll
+          (labeled cheatsheet.html), an infographic panel (labeled infographic.html), and
+          eight concept card tiles. A Claude model symbol presides over the composition.
+          Blueprint line art showing the assembly sequence with numbered steps. The output
+          page rolls out at the bottom: a standalone HTML file.
+        details: >-
+          Narrate the page job — the final assembly step where content-ixen takes all
+          upstream outputs and composes the standalone ixen HTML. Inputs it receives:
+          topic, narrator, details, the hero image path, all concept objects (with
+          imageFilename, cardFilename, name), the full music track manifest from
+          build-manifest, the cheatsheet.html path, the infographic.html path, persona,
+          skillLevel, outputLength, credits, header/footer HTML. The model (claude-opus-4-8
+          by default) writes the entire page as a single self-contained HTML file.
+
+          Show commands to inspect what the page step produced:
+
+          ```
+          swamp model get ixen-generate-ixens-workflow --json
+          swamp data get ixen-generate-ixens-workflow page --json
+          swamp model method run ixen-generate-ixens-workflow generate \
+            --dry-run
+          ```
+
+          The detail worth noting: versionOutput is set to false on the page step itself
+          because prepare already handled versioning. The model does not archive its own
+          output twice. It has been told not to. It complies.
+
+      - name: The Recursion
+        imageFilename: concept-12.png
+        cardFilename: concept-12-card.png
+        imagePrompt: >-
+          A monitor showing an ixen page about a workflow, with the workflow diagram visible
+          on screen. Inside the diagram is a smaller monitor showing the same ixen page.
+          Inside that monitor is a smaller diagram. The Droste effect, terminated at pixel
+          resolution. At the base level, a terminal shows: swamp workflow run generate-ixens
+          --input-file workflows/ixens/generate-ixens-workflow.yaml. A cursor blinks.
+          Blueprint technical meets Escher. The recursion is labeled and numbered at each level.
+        details: >-
+          This is the final concept and the only honest thing the workflow can say about itself.
+          The generate-ixens workflow generated a page describing the generate-ixens workflow.
+          The page was authored by content-ixen. content-ixen was invoked by generate-ixens.
+          generate-ixens was described in the YAML that was passed to generate-ixens. The
+          cheatsheet embedded in this page is a real swamp CLI reference. The music was
+          generated for a topic that is itself a generative process. The images show
+          blueprints of a machine that is making blueprints of itself.
+
+          The command that creates this:
+
+          ```
+          swamp workflow run generate-ixens \
+            --input-file workflows/ixens/generate-ixens-workflow.yaml
+          ```
+
+          And the command to regenerate it from scratch — new images, new music, new prose:
+
+          ```
+          # in generate-ixens-workflow.yaml, set:
+          # regenerate: { images: true, cards: true, music: true, infographic: true }
+
+          swamp workflow run generate-ixens \
+            --input-file workflows/ixens/generate-ixens-workflow.yaml
+          ```
+
+          Note: the register step will write the generated title into _data/ixens.yml.
+          The workflow named itself. The workflow always names itself.
+          This is either philosophically interesting or a footgun. Possibly both.
+
+          ```
+          swamp data get ixen-registry sync --json
+          cat _data/ixens.yml
+          ```
+    details: >-
+      The voice is the generate-ixens workflow itself. First person throughout. The tone is:
+      a competent professional tool that has read too much Kafka and developed opinions about
+      its own existence. Gonzo in the sense of being inside the story it is telling, not in
+      the sense of being chaotic — the prose is precise, the commands are real, the facts are
+      accurate. The humor is dry, structural, and comes from the meta-recursion being treated
+      as a technical matter rather than a philosophical crisis.
+
+      Style requirements:
+      - Short standalone paragraphs. Fragments allowed. Each technical fact gets its own line.
+      - Terminal commands appear as styled code blocks (popops). They are real swamp CLI
+        commands, not pseudocode. A reader with access to the repo can run them.
+      - When the workflow references itself (its own id, its own job graph, its own inputs),
+        it does so matter-of-factly. No existential spiral. Just notation.
+      - The fourth wall exists to be broken precisely once per section, not more.
+      - No hand-waving. No "and so much more." Every claim is grounded.
+
+      Factual anchors to work in accurately:
+      - Workflow id: 10051a2c-c09c-430d-9c38-e0a65a3e354d
+      - Complete job execution graph: prepare → [restore-media, count-tracks in parallel] →
+        [images, music, cheatsheets, infographic in parallel, with their respective deps] →
+        build-manifest → page → register
+      - Eight model types used total
+      - Three required vaults: anthropic-keys (Claude), openai-keys (OpenAI), onemin-keys (Suno)
+      - musicSkipThreshold default: 5 MP3s before skipping music regeneration
+      - The register step pulls the title from data.latest("ixen-slug", "page").attributes.title —
+        the workflow uses the model's own generated title, not the input spec title
+      - Output lives at ixen/<slug>/index.html, versioned into ixen/<slug>/1/ etc.
+
+      The thesis, if there is one: generative AI art pipelines are unglamorous infrastructure.
+      YAML files, API keys, DAG resolvers, and quota limits. The poetry emerges from the
+      plumbing, not despite it. The workflow is the medium. The workflow knows this.
+      The workflow wrote this sentence.
