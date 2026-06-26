@@ -1,0 +1,354 @@
+id: 26cc0fe1-5b01-4bae-b431-0ee50ecf67b7
+name: generate-iams
+description: Generate one self-contained I Am biography minisite per subject under iam/<slug>/ with portrait, facet images and cards, influence map, soundtrack, and self-narrated HTML page.
+tags: {}
+inputs:
+  type: object
+  properties:
+    slug:
+      type: string
+      description: "Directory name under iam/<slug>/ and registry key"
+    subject:
+      type: string
+      description: "Subject full name"
+    title:
+      type: string
+      description: "Stylized page title (optional, defaults to subject)"
+    subjectType:
+      type: string
+      default: "real"
+    description:
+      type: string
+    details:
+      type: string
+    wikipediaTitle:
+      type: string
+    facts:
+      type: string
+    sourceMode:
+      type: string
+      default: "both"
+    facets:
+      type: array
+    persona:
+      type: string
+      default: "confessional"
+    personaDescription:
+      type: string
+    outputLength:
+      type: string
+      default: "long"
+    iamModel:
+      type: string
+      default: "claude-opus-4-8"
+    iamApiFormat:
+      type: string
+      default: "anthropic"
+    iamBaseUrl:
+      type: string
+      default: "https://api.anthropic.com"
+    metaBorn:
+      type: string
+    metaDied:
+      type: string
+    metaNationality:
+      type: string
+    metaEra:
+      type: string
+    metaDomain:
+      type: string
+    portraitPrompt:
+      type: string
+    portraitFilename:
+      type: string
+      default: "portrait.png"
+    imageStyle:
+      type: string
+      default: "pencil-bw"
+    imageBackground:
+      type: string
+      default: "white"
+    imageModel:
+      type: string
+      default: "gpt-image-2"
+    imageSize:
+      type: string
+      default: "1024x1024"
+    imageQuality:
+      type: string
+      default: "high"
+    cardStyle:
+      type: string
+      default: "iam-portrait"
+    influenceMapPrompt:
+      type: string
+    influenceMapStyle:
+      type: string
+      default: "node-graph"
+    influenceMapModel:
+      type: string
+      default: "gpt-image-2"
+    musicGenre:
+      type: string
+    musicMood:
+      type: string
+    musicInstrumental:
+      type: boolean
+      default: true
+    musicModel:
+      type: string
+      default: "suno-ttapi"
+    sunoVersion:
+      type: string
+      default: "chirp-v4-5"
+    versionOutput:
+      type: boolean
+      default: true
+    credits:
+      type: string
+    brandingName:
+      type: string
+      default: "abnormalia"
+    brandingLink:
+      type: string
+      default: "https://abnormalia.com"
+    brandingLogo:
+      type: string
+      default: ""
+    regenerate:
+      type: object
+      properties:
+        portrait:
+          type: boolean
+          default: true
+        facetImages:
+          type: boolean
+          default: true
+        facetCards:
+          type: boolean
+          default: true
+        influenceMap:
+          type: boolean
+          default: true
+        music:
+          type: boolean
+          default: true
+jobs:
+  - name: prepare
+    description: Rotate the current I Am output before writing fresh media and HTML.
+    steps:
+      - name: prepare-iam
+        description: Move the existing generated I Am page and media into the next numeric version directory.
+        task:
+          type: model_method
+          modelType: "@alvagante/content-iam"
+          modelName: "${{ 'iam-' + inputs.slug }}"
+          methodName: prepare
+          inputs:
+            outputDir: ${{ 'iam/' + inputs.slug }}
+            enabled: ${{ inputs.versionOutput }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn: []
+    weight: 0
+
+  - name: media
+    description: Generate portrait, facet images, and cards in a single factory call.
+    steps:
+      - name: media-iam
+        description: Generate portrait + all facet images + all facet cards for the subject.
+        task:
+          type: model_method
+          modelType: "@alvagante/content-iam"
+          modelName: "${{ 'iam-' + inputs.slug }}"
+          methodName: generateAllMedia
+          inputs:
+            outputDir: ${{ 'iam/' + inputs.slug }}
+            portraitPrompt: ${{ inputs.portraitPrompt }}
+            portraitFilename: ${{ inputs.portraitFilename }}
+            facets: ${{ inputs.facets }}
+            imageApiKey: ${{ vault.get(openai-keys, api-key) }}
+            imageModel: ${{ inputs.imageModel }}
+            imageStyle: ${{ inputs.imageStyle }}
+            imageBackground: ${{ inputs.imageBackground }}
+            imageSize: ${{ inputs.imageSize }}
+            imageQuality: ${{ inputs.imageQuality }}
+            cardStyle: ${{ inputs.cardStyle }}
+            regeneratePortrait: ${{ !(has(inputs.regenerate) && has(inputs.regenerate.portrait) && !inputs.regenerate.portrait) }}
+            regenerateFacetImages: ${{ !(has(inputs.regenerate) && has(inputs.regenerate.facetImages) && !inputs.regenerate.facetImages) }}
+            regenerateFacetCards: ${{ !(has(inputs.regenerate) && has(inputs.regenerate.facetCards) && !inputs.regenerate.facetCards) }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: prepare
+        condition:
+          type: succeeded
+    weight: 0
+
+  - name: music
+    description: Generate or skip the soundtrack based on the regenerate flag.
+    steps:
+      - name: music-iam
+        description: Generate the soundtrack for this subject.
+        task:
+          type: model_method
+          modelType: "@alvagante/content-music"
+          modelName: "${{ 'music-' + inputs.slug }}"
+          methodName: generatePlaylist
+          inputs:
+            apiKey: ${{ vault.get(onemin-keys, API_KEY) }}
+            anthropicApiKey: ${{ vault.get(anthropic-keys, api-key) }}
+            topic: ${{ inputs.subject }}
+            title: ${{ inputs.title }}
+            genre: ${{ inputs.musicGenre }}
+            mood: ${{ inputs.musicMood }}
+            instrumental: ${{ inputs.musicInstrumental }}
+            model: ${{ inputs.musicModel }}
+            sunoVersion: ${{ inputs.sunoVersion }}
+            outputDir: ${{ 'iam/' + inputs.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: prepare
+        condition:
+          type: succeeded
+    weight: 0
+
+  - name: influence-map
+    description: Generate the influence map using content-infographic.
+    steps:
+      - name: influence-iam
+        description: Generate an influence node-graph for the subject via content-infographic.
+        task:
+          type: model_method
+          modelType: "@alvagante/content-infographic"
+          modelName: "${{ 'infographic-' + inputs.slug }}"
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(openai-keys, api-key) }}
+            topic: ${{ inputs.subject }}
+            title: "${{ 'Influence Map: ' + inputs.subject }}"
+            details: ${{ inputs.influenceMapPrompt }}
+            keyPoints: ${{ inputs.facets.map(f, f.name) }}
+            style: ${{ inputs.influenceMapStyle }}
+            orientation: wide
+            model: ${{ inputs.influenceMapModel }}
+            background: opaque
+            quality: auto
+            format: png
+            htmlFilename: influence-map.html
+            outputDir: ${{ 'iam/' + inputs.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: prepare
+        condition:
+          type: succeeded
+    weight: 0
+
+  - name: track-manifest
+    description: Scan all audio files across current and versioned dirs; merge with sidecar metadata.
+    steps:
+      - name: tracks-iam
+        description: Build the complete ordered track manifest from all available audio files.
+        task:
+          type: model_method
+          modelType: "@alvagante/content-iam"
+          modelName: "${{ 'iam-' + inputs.slug }}"
+          methodName: buildTrackManifest
+          inputs:
+            outputDir: ${{ 'iam/' + inputs.slug }}
+            newTracks: ${{ data.latest('music-' + inputs.slug, 'playlist').attributes.tracks }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: music
+        condition:
+          type: succeeded
+    weight: 0
+
+  - name: page
+    description: Generate the self-narrated I Am biography page once all media and tracks are ready.
+    steps:
+      - name: page-iam
+        description: Generate the biography minisite for the subject.
+        task:
+          type: model_method
+          modelType: "@alvagante/content-iam"
+          modelName: "${{ 'iam-' + inputs.slug }}"
+          methodName: generate
+          inputs:
+            apiFormat: ${{ inputs.iamApiFormat }}
+            apiKey: ${{ vault.get(anthropic-keys, api-key) }}
+            baseUrl: ${{ inputs.iamBaseUrl }}
+            subject: ${{ inputs.subject }}
+            title: ${{ inputs.title }}
+            subjectType: ${{ inputs.subjectType }}
+            details: ${{ inputs.details }}
+            wikipediaTitle: ${{ inputs.wikipediaTitle }}
+            facts: ${{ inputs.facts }}
+            sourceMode: ${{ inputs.sourceMode }}
+            facets: ${{ inputs.facets }}
+            cards: "${{ inputs.facets.map(f, {'path': f.cardFilename, 'title': f.name}) }}"
+            persona: ${{ inputs.persona }}
+            portraitPath: ${{ inputs.portraitFilename }}
+            influencePath: influence-map.html
+            metaBorn: ${{ inputs.metaBorn }}
+            metaDied: ${{ inputs.metaDied }}
+            metaNationality: ${{ inputs.metaNationality }}
+            metaEra: ${{ inputs.metaEra }}
+            metaDomain: ${{ inputs.metaDomain }}
+            outputLength: ${{ inputs.outputLength }}
+            model: ${{ inputs.iamModel }}
+            credits: ${{ inputs.credits }}
+            outputDir: ${{ 'iam/' + inputs.slug }}
+            versionOutput: false
+            musicTracks: ${{ data.latest('iam-' + inputs.slug, 'tracks').attributes.tracks }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: media
+        condition:
+          type: succeeded
+      - job: track-manifest
+        condition:
+          type: succeeded
+      - job: influence-map
+        condition:
+          type: succeeded
+    weight: 0
+
+  - name: register
+    description: Upsert the subject into _data/iams.yml for the Jekyll archive.
+    steps:
+      - name: register-iam
+        description: Write the slug, subject, title, date, and description into _data/iams.yml.
+        task:
+          type: model_method
+          modelType: "@alvagante/content-iam"
+          modelName: "${{ 'iam-' + inputs.slug }}"
+          methodName: register
+          inputs:
+            registryPath: _data/iams.yml
+            slug: ${{ inputs.slug }}
+            subject: ${{ inputs.subject }}
+            title: ${{ data.latest('iam-' + inputs.slug, 'page').attributes.title }}
+            date: ${{ data.latest('iam-' + inputs.slug, 'page').attributes.generatedAt }}
+            description: ${{ inputs.description }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: page
+        condition:
+          type: succeeded
+    weight: 0
+version: 1

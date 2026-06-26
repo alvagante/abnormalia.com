@@ -1,0 +1,11 @@
+type: "@alvagante/content-iam"
+typeVersion: 2026.06.26.1
+id: d51a7398-ed65-4ff3-ab61-3467b06d3b9e
+name: iam-abnormalia
+version: 1
+tags: {}
+globalArguments:
+  apiFormat: anthropic
+  apiKey: "${{ vault.get(anthropic-keys, api-key) }}"
+  baseUrl: "https://api.anthropic.com"
+methods: {}

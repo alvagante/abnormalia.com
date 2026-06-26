@@ -1,0 +1,8 @@
+type: '@alvagante/content-music'
+typeVersion: 2026.06.23.3
+id: 21608b47-f812-4a08-a590-f35ddeee47b2
+name: music-kafka
+version: 1
+tags: {}
+globalArguments: {}
+methods: {}

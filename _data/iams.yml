@@ -1,0 +1,14 @@
+# I Am registry
+# Each entry drives both the /iam/ archive listing and the page metadata.
+# Fields:
+#   slug        — matches the directory name under iam/<slug>/
+#   subject     — the person's full name (used for alt text, aria labels)
+#   title       — stylized page title (may differ from subject name)
+#   date        — ISO 8601 date of generation
+#   description — one or two sentence teaser shown in the archive list
+- slug: kafka
+  subject: Franz Kafka
+  title: I Am the Trial
+  date: "2026-06-26"
+  description: >-
+    Franz Kafka speaks in first person — the trial, the letter, the bureau, the burning.

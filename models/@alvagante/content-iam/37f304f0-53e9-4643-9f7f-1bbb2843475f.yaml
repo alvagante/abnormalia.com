@@ -1,0 +1,11 @@
+type: '@alvagante/content-iam'
+typeVersion: 2026.06.26.2
+id: 37f304f0-53e9-4643-9f7f-1bbb2843475f
+name: iam-kafka
+version: 1
+tags: {}
+globalArguments:
+  apiFormat: anthropic
+  apiKey: "${{ vault.get(anthropic-keys, api-key) }}"
+  baseUrl: "https://api.anthropic.com"
+methods: {}

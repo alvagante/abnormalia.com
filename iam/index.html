@@ -1,0 +1,32 @@
+---
+title: I Am
+description: First-person biography minisites — real people, fictional characters, and constructed personas narrating their own lives.
+---
+
+<section class="page-heading">
+  <p class="kicker">I Am archive</p>
+  <h1>I Am</h1>
+</section>
+
+<p>Self-narrated biography minisites. Each subject speaks in first person.</p>
+
+{% assign iams = site.data.iams | sort: "date" | reverse %}
+{% if iams.size > 0 %}
+  <ol class="ixen-list">
+    {% for iam in iams %}
+      <li>
+        <a href="{{ '/iam/' | append: iam.slug | append: '/' | relative_url }}">
+          <span>{{ iam.title | default: iam.subject }}</span>
+          {% if iam.date %}
+            <time datetime="{{ iam.date }}">{{ iam.date | date: "%Y-%m-%d" }}</time>
+          {% endif %}
+        </a>
+        {% if iam.description %}
+          <p>{{ iam.description }}</p>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <p class="empty-state">No I Am profiles have been published yet.</p>
+{% endif %}

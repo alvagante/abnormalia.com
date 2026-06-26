@@ -1,0 +1,118 @@
+# Input file for: swamp workflow run generate-iams --input-file workflows/iams/kafka.yaml
+#
+# Workflow DAG: prepare → (media ∥ music ∥ influence-map) → track-manifest → page → register
+
+# ── Subject ────────────────────────────────────────────────────────────────────
+subject: "Franz Kafka"
+subjectType: real
+wikipediaTitle: "Franz Kafka"
+sourceMode: both
+facts: |
+  Kafka explicitly asked Max Brod to burn all his unpublished manuscripts.
+  Brod refused. Kafka knew Brod would refuse.
+details: ""
+description: "Franz Kafka speaks in first person — the trial, the letter, the bureau, the burning."
+slug: kafka
+
+# ── Narrative ──────────────────────────────────────────────────────────────────
+title: "I Am the Trial"
+persona: confessional
+outputLength: long
+iamModel: claude-opus-4-8
+
+# ── Subject metadata (shown in masthead strip) ─────────────────────────────────
+metaBorn: "3 July 1883"
+metaDied: "3 June 1924"
+metaNationality: "Austro-Hungarian / Czech"
+metaEra: "Early 20th century"
+metaDomain: "Fiction, Modernist literature"
+
+# ── Facets ─────────────────────────────────────────────────────────────────────
+facets:
+  - name: The Trial
+    imageFilename: facet-trial.png
+    cardFilename: facet-card-trial.png
+    details: >-
+      Focus on the biographical parallel with the first broken engagement to Felice Bauer.
+      Written in a burst in summer 1914. Josef K is arrested without charge.
+      The court is inaccessible and self-referential. The verdict is predetermined.
+    imagePrompt: >-
+      A labyrinthine corridor of identical wooden doors stretching to infinity,
+      warm amber candlelight, pencil-bw style white background, no color.
+
+  - name: The Letter to His Father
+    imageFilename: facet-letter.png
+    cardFilename: facet-card-letter.png
+    details: >-
+      45 pages, never sent. The longest sustained act of filial accusation
+      in German literature. Hermann Kafka read a summary. His reaction: he was not wrong.
+    imagePrompt: >-
+      A hand writing a letter at a desk, the pages multiplying and overflowing the desk,
+      pencil-bw style white background.
+
+  - name: Prague and the Bureau
+    imageFilename: facet-bureau.png
+    cardFilename: facet-card-bureau.png
+    details: >-
+      Insurance clerk by day. Kafka's insurance work was not incidental — it shaped
+      everything he understood about bureaucracy and the body. He invented worker safety
+      helmets and fought for compensation for men with silicosis.
+    imagePrompt: >-
+      An insurance office, filing cabinets stacked to the ceiling, a clerk buried
+      under forms, pencil-bw style white background.
+
+  - name: The Burning
+    imageFilename: facet-burning.png
+    cardFilename: facet-card-burning.png
+    details: >-
+      The instruction to destroy. The act of writing knowing it would not survive.
+      The specific horror of being preserved against your will.
+    imagePrompt: >-
+      A bonfire of papers, fragments floating upward into darkness, one sheet
+      caught mid-flight, pencil-bw style white background.
+
+# ── Portrait ──────────────────────────────────────────────────────────────────
+portraitPrompt: >-
+  A portrait of Franz Kafka: sharp cheekbones, large dark eyes, slight frame,
+  formal collar. Pencil-bw, white background. Editorial biography portrait style.
+portraitFilename: portrait.png
+
+# ── Images ────────────────────────────────────────────────────────────────────
+imageStyle: pencil-bw
+imageBackground: white
+imageModel: gpt-image-2
+imageSize: 1024x1024
+imageQuality: high
+
+# ── Cards ─────────────────────────────────────────────────────────────────────
+cardStyle: iam-portrait
+
+# ── Influence map ──────────────────────────────────────────────────────────────
+influenceMapStyle: clean
+influenceMapModel: gpt-image-2
+influenceMapPrompt: >-
+  Franz Kafka's intellectual and literary influences: Dostoevsky, Flaubert, Kierkegaard,
+  Nietzsche, Yiddish theatre, Kleist, Goethe. Place Kafka at center.
+  Show bidirectional links where relevant (e.g. Kafka influenced Borges, Camus, Beckett).
+
+# ── Music ─────────────────────────────────────────────────────────────────────
+musicGenre: "late romantic chamber music, string quartet, minor key, Central European"
+musicMood: "melancholic, claustrophobic, resigned, with flashes of dark humor"
+musicModel: suno-ttapi
+musicInstrumental: true
+sunoVersion: chirp-v4-5
+
+# ── Regeneration flags (set to false after first run to preserve existing files) ──
+regenerate:
+  portrait: false
+  facetImages: false
+  facetCards: false
+  influenceMap: false
+  music: false
+
+# ── Site branding ──────────────────────────────────────────────────────────────
+credits: alvagante
+versionOutput: true
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+brandingLogo: ""
