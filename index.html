@@ -16,18 +16,41 @@ description: Ixens and other abnormalia.
 
 
 {% assign recent_ixens = site.data.ixens | sort: "date" | reverse | limit: 10 %}
-{% if recent_ixens.size > 0 %}
-<section class="home-recent">
+{% assign recent_iams = site.data.iams | sort: "date" | reverse | limit: 10 %}
+
+<section class="home-collections">
+  <div class="home-collections-col">
+    <p class="home-collections-label">Ixens</p>
+    {% if recent_ixens.size > 0 %}
     <ol class="ixen-list">
-    {% for ixen in recent_ixens %}
-      <li>
-        <a href="{{ '/ixen/' | append: ixen.slug | append: '/' | relative_url }}">
-          <span>{{ ixen.title }}</span>
-          {% if ixen.date %}<time datetime="{{ ixen.date }}">{{ ixen.date | date: "%Y-%m-%d" }}</time>{% endif %}
-        </a>
-        {% if ixen.description %}<p>{{ ixen.description }}</p>{% endif %}
-      </li>
-    {% endfor %}
-  </ol>
+      {% for ixen in recent_ixens %}
+        <li>
+          <a href="{{ '/ixen/' | append: ixen.slug | append: '/' | relative_url }}">
+            <span>{{ ixen.title }}</span>
+            {% if ixen.date %}<time datetime="{{ ixen.date }}">{{ ixen.date | date: "%Y-%m-%d" }}</time>{% endif %}
+          </a>
+          {% if ixen.description %}<p>{{ ixen.description }}</p>{% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+  </div>
+  <div class="home-collections-col">
+    <p class="home-collections-label">I Am</p>
+    {% if recent_iams.size > 0 %}
+    <ol class="ixen-list">
+      {% for iam in recent_iams %}
+        <li>
+          <a href="{{ '/iam/' | append: iam.slug | append: '/' | relative_url }}">
+            <span>{{ iam.title | default: iam.subject }}</span>
+            {% if iam.date %}<time datetime="{{ iam.date }}">{{ iam.date | date: "%Y-%m-%d" }}</time>{% endif %}
+          </a>
+          {% if iam.description %}<p>{{ iam.description }}</p>{% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+    {% else %}
+    <p class="empty-state">No I Am profiles yet.</p>
+    {% endif %}
+  </div>
 </section>
-{% endif %}

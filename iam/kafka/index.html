@@ -96,10 +96,9 @@ body {
   font-size: 1.1rem; color: var(--dim); margin: 0 0 1rem;
 }
 .iam-meta-strip {
-  display: flex; flex-wrap: wrap; gap: 0.25rem 1.2rem;
+  display: flex; flex-direction: column; gap: 0.35rem;
   font-family: system-ui, sans-serif; font-size: 0.74rem;
-  color: var(--dim); margin-bottom: 1.4rem;
-  padding-bottom: 1.1rem; border-bottom: 1px solid var(--rule);
+  color: var(--dim); margin-bottom: 0;
 }
 .iam-meta-item { display: flex; gap: 0.35rem; align-items: baseline; }
 .iam-meta-label {
@@ -256,6 +255,7 @@ a.iam-link:hover { border-color: var(--accent); }
 
 /* ── Side drawer ── */
 .iam-drawer {
+  display: block; /* override [hidden] attribute */
   position: fixed; top: 0; right: 0; bottom: 0;
   width: min(480px, 90vw); background: var(--bg);
   border-left: 1px solid var(--rule);
@@ -507,9 +507,9 @@ button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border
   <p class="iam-aside">Profile by alvagante — 20260626-15:21</p>
   <h1 class="iam-name">Franz Kafka</h1>
   <p class="iam-title-line">I Am the Trial</p>
-  <div class="iam-meta-strip"><span class="iam-meta-item"><span class="iam-meta-label">Dates</span>3 July 1883 – 3 June 1924</span><span class="iam-meta-item"><span class="iam-meta-label">Nationality</span>Austro-Hungarian / Czech</span><span class="iam-meta-item"><span class="iam-meta-label">Era</span>Early 20th century</span><span class="iam-meta-item"><span class="iam-meta-label">Domain</span>Fiction, Modernist literature</span></div>
   <div class="iam-lead">
   <figure class="iam-portrait"><img src="./portrait.png" alt="Portrait of Franz Kafka"><figcaption>Franz Kafka</figcaption></figure>
+  <div class="iam-meta-strip"><span class="iam-meta-item"><span class="iam-meta-label">Dates</span>3 July 1883 – 3 June 1924</span><span class="iam-meta-item"><span class="iam-meta-label">Nationality</span>Austro-Hungarian / Czech</span><span class="iam-meta-item"><span class="iam-meta-label">Era</span>Early 20th century</span><span class="iam-meta-item"><span class="iam-meta-label">Domain</span>Fiction, Modernist literature</span></div>
   </div>
 </header>
 <main>
@@ -581,7 +581,7 @@ button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border
 <p>I never finished it. Of course I never finished it. A trial with no charge cannot have an ending; it can only have a death, which is a different thing.</p>
 </section>
 
-<aside class="iam-drawer" id="drawer-facet-1" hidden>
+<aside class="iam-drawer" id="drawer-facet-1">
 <div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
 <div class="iam-drawer-facet-name">The Trial</div>
 <div class="iam-drawer-slides">
@@ -620,7 +620,7 @@ button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border
 <p>He read a summary of it, I understand. And here is the cruelty I have to confess: he was not entirely wrong. I had made him into the size of the world. A man cannot live up to that, nor down to it.</p>
 </section>
 
-<aside class="iam-drawer" id="drawer-facet-2" hidden>
+<aside class="iam-drawer" id="drawer-facet-2">
 <div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
 <div class="iam-drawer-facet-name">The Letter to His Father</div>
 <div class="iam-drawer-slides">
@@ -658,7 +658,7 @@ button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border
 <p>So when Gregor Samsa becomes vermin and his employer's chief clerk arrives to investigate his absence — that is not surreal to me. That is Tuesday. I simply removed the partition between the office and the nightmare and found there had never been one.</p>
 </section>
 
-<aside class="iam-drawer" id="drawer-facet-3" hidden>
+<aside class="iam-drawer" id="drawer-facet-3">
 <div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
 <div class="iam-drawer-facet-name">Prague and the Bureau</div>
 <div class="iam-drawer-slides">
@@ -698,7 +698,7 @@ button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border
 <p>Everything you have read of mine, you read because I was a coward in exactly the right direction.</p>
 </section>
 
-<aside class="iam-drawer" id="drawer-facet-4" hidden>
+<aside class="iam-drawer" id="drawer-facet-4">
 <div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
 <div class="iam-drawer-facet-name">The Burning</div>
 <div class="iam-drawer-slides">
@@ -723,7 +723,6 @@ button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border
 </section>
 
 <section id="iam-quotes">
-<p>No verified, attributed quotations have been supplied for this page. Rather than place invented words in my mouth and call them documented, I leave this space honest and empty. What I actually wrote survives in the works themselves — read those, and distrust any sentence presented here as mine without a source.</p>
 </section>
 
 <section id="iam-ai-voices">
@@ -838,11 +837,23 @@ button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border
       var item=document.createElement('div');
       item.className='iam-card-item';
       item.innerHTML='<div class="iam-card-inner">'+
-        '<div class="iam-card-front"><img src="'+(img?img.src:'')+'" alt="'+(img?img.alt:'')+'" loading="lazy"></div>'+
+        '<div class="iam-card-front"><img src="'+(img?img.src:'')+'" alt="'+(img?img.alt:'')+'" loading="lazy" style="cursor:zoom-in"></div>'+
         '<div class="iam-card-back"><div class="iam-card-back-name">'+escH(name)+'</div>'+
         '<div class="iam-card-back-desc">'+escH(desc)+'</div></div>'+
         '</div>';
       item.addEventListener('click',function(){item.classList.toggle('is-flipped');});
+      var frontImg=item.querySelector('.iam-card-front img');
+      if(frontImg){frontImg.addEventListener('click',function(e){
+        e.stopPropagation();
+        var box=document.createElement('div');
+        box.className='iam-lightbox';
+        box.style.zIndex='90';
+        var big=document.createElement('img');
+        big.src=frontImg.src;big.alt=frontImg.alt;
+        box.appendChild(big);
+        box.addEventListener('click',function(){box.remove();});
+        document.body.appendChild(box);
+      });}
       grid.appendChild(item);
     });
     inner.appendChild(grid);

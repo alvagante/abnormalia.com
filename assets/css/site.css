@@ -187,6 +187,35 @@ h1 {
   color: var(--muted);
 }
 
+.home-collections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 3rem;
+  margin-top: 2.5rem;
+}
+
+.home-collections-col .ixen-list {
+  margin-top: 0.5rem;
+  max-width: 100%;
+}
+
+.home-collections-label {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+@media (max-width: 52rem) {
+  .home-collections {
+    grid-template-columns: 1fr;
+    gap: 3rem 0;
+  }
+}
+
 .site-footer {
   padding: 2rem 0;
   border-top: 1px solid var(--rule);
