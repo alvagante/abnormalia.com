@@ -101,6 +101,15 @@ inputs:
     sunoVersion:
       type: string
       default: "chirp-v4-5"
+    timelineType:
+      type: string
+      default: "biographical"
+    timelineDensity:
+      type: string
+      default: "standard"
+    timelineModel:
+      type: string
+      default: "claude-opus-4-8"
     versionOutput:
       type: boolean
       default: true
@@ -131,6 +140,9 @@ inputs:
           type: boolean
           default: true
         music:
+          type: boolean
+          default: true
+        timeline:
           type: boolean
           default: true
 jobs:
@@ -251,6 +263,35 @@ jobs:
           type: succeeded
     weight: 0
 
+  - name: timeline
+    description: Generate the life timeline using content-timeline.
+    steps:
+      - name: timeline-iam
+        description: Generate a chronological, phase-grouped timeline for the subject.
+        task:
+          type: model_method
+          modelType: "@alvagante/content-timeline"
+          modelName: "${{ 'timeline-' + inputs.slug }}"
+          methodName: generate
+          inputs:
+            apiKey: ${{ vault.get(anthropic-keys, api-key) }}
+            subject: ${{ inputs.subject }}
+            timelineType: ${{ inputs.timelineType }}
+            details: ${{ inputs.facts }}
+            density: ${{ inputs.timelineDensity }}
+            model: ${{ inputs.timelineModel }}
+            filename: timeline.html
+            outputDir: ${{ 'iam/' + inputs.slug }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+    dependsOn:
+      - job: prepare
+        condition:
+          type: succeeded
+    weight: 0
+
   - name: track-manifest
     description: Scan all audio files across current and versioned dirs; merge with sidecar metadata.
     steps:
@@ -299,6 +340,7 @@ jobs:
             persona: ${{ inputs.persona }}
             portraitPath: ${{ inputs.portraitFilename }}
             influencePath: influence-map.html
+            datelinePath: timeline.html
             metaBorn: ${{ inputs.metaBorn }}
             metaDied: ${{ inputs.metaDied }}
             metaNationality: ${{ inputs.metaNationality }}
@@ -322,6 +364,9 @@ jobs:
         condition:
           type: succeeded
       - job: influence-map
+        condition:
+          type: succeeded
+      - job: timeline
         condition:
           type: succeeded
     weight: 0

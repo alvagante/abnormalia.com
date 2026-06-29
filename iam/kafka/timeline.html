@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Franz Kafka — Timeline</title>
+<style>
+:root {
+  --tl-bg: #faf8f4;
+  --tl-ink: #1a1a18;
+  --tl-dim: #6b6360;
+  --tl-rule: #d4cdc8;
+  --tl-surface: #f0ede6;
+  --tl-header-bg: #1a1a18;
+  --tl-amber: #8b5e3c;
+  --tl-sage:  #4a6741;
+  --tl-rust:  #8b3522;
+  --tl-slate: #3a4f68;
+  --tl-dusk:  #54437a;
+  --tl-umber: #5e4824;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: Georgia, "Times New Roman", "Liberation Serif", serif;
+  font-size: 13px;
+  line-height: 1.58;
+  background: var(--tl-bg);
+  color: var(--tl-ink);
+}
+.tl-page-header {
+  background: var(--tl-header-bg);
+  color: #fff;
+  padding: 14px 22px 11px;
+}
+.tl-page-header h1 {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  margin: 0 0 3px;
+}
+.tl-page-meta {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  color: #9aa0a6;
+}
+.tl-main { padding: 14px 18px 28px; }
+.tl-phase { margin-bottom: 20px; }
+.tl-phase-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 10px;
+  background: var(--tl-surface);
+  border-left: 3px solid var(--tl-rule);
+  border-bottom: 1px solid var(--tl-rule);
+}
+.tl-phase[data-color="amber"] .tl-phase-header { border-left-color: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-phase-header { border-left-color: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-phase-header { border-left-color: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-phase-header { border-left-color: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-phase-header { border-left-color: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-phase-header { border-left-color: var(--tl-umber); }
+.tl-phase-name {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tl-dim);
+}
+.tl-phase[data-color="amber"] .tl-phase-name { color: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-phase-name { color: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-phase-name { color: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-phase-name { color: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-phase-name { color: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-phase-name { color: var(--tl-umber); }
+.tl-phase-span {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  color: var(--tl-dim);
+  letter-spacing: 0.03em;
+}
+.tl-events {
+  padding: 4px 0 2px 0;
+  border-left: 3px solid var(--tl-rule);
+  margin-left: 10px;
+}
+.tl-phase[data-color="amber"] .tl-events { border-left-color: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-events { border-left-color: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-events { border-left-color: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-events { border-left-color: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-events { border-left-color: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-events { border-left-color: var(--tl-umber); }
+.tl-event {
+  display: grid;
+  grid-template-columns: 80px 22px 1fr;
+  min-height: 28px;
+  padding: 3px 0;
+}
+.tl-date {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  color: var(--tl-dim);
+  text-align: right;
+  padding: 4px 8px 0 0;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.tl-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.tl-connector::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background: var(--tl-rule);
+}
+.tl-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tl-rule);
+  margin-top: 5px;
+  z-index: 1;
+  position: relative;
+  flex-shrink: 0;
+}
+.tl-phase[data-color="amber"] .tl-dot { background: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-dot { background: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-dot { background: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-dot { background: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-dot { background: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-dot { background: var(--tl-umber); }
+.tl-body { padding: 2px 0 6px 6px; }
+.tl-title {
+  font-family: system-ui, sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--tl-ink);
+  line-height: 1.35;
+}
+.tl-desc {
+  font-family: Georgia, serif;
+  font-size: 11.5px;
+  color: var(--tl-dim);
+  line-height: 1.5;
+  margin-top: 1px;
+}
+.tl-brand-footer {
+  padding: 0.5rem 1.2rem;
+  text-align: right;
+  border-top: 1px solid var(--tl-rule);
+  margin-top: 4px;
+}
+.tl-brand-footer a { text-decoration: none; opacity: 0.55; font-family: system-ui, sans-serif; font-size: 11px; color: var(--tl-dim); }
+.tl-brand-footer a:hover { opacity: 1; }
+@media print {
+  body { background: white; font-size: 11px; }
+  .tl-page-header { background: #1a1a18 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tl-phase { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<header class="tl-page-header">
+  <h1>Franz Kafka</h1>
+  <div class="tl-page-meta">biographical · standard  ·  1883 – 1924</div>
+</header>
+<main class="tl-main">
+
+<div class="tl-phase" data-color="amber">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">Prague Childhood</span>
+    <span class="tl-phase-span">1883 – 1900</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1883 Jul 3</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Born in Prague</div>
+        <div class="tl-desc">Born to Hermann Kafka and Julie Löwy in the Old Town quarter of Prague, then part of Austria-Hungary. The family spoke German at home.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1889</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Sister Gabriele (Elli) born</div>
+        <div class="tl-desc">First of three sisters; two younger brothers (Georg, 1885–1886; Heinrich, 1887–1888) had already died in infancy before Elli's birth.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1890</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Sister Valerie (Valli) born</div>
+        <div class="tl-desc">Second sister. Kafka would remain closest to his youngest sister Ottla.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1892</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Sister Ottilie (Ottla) born</div>
+        <div class="tl-desc">Youngest sibling and Kafka's most trusted confidante; she would later house him during his tuberculosis sick leave in Zürau.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1893</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Enrolled at Altstädter Gymnasium</div>
+        <div class="tl-desc">Entered the German-language grammar school in Prague's Old Town — the Deutsche Staatsgymnasium. Remained until his Matura in 1901.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tl-phase" data-color="sage">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">Studies &amp; Formation</span>
+    <span class="tl-phase-span">1901 – 1907</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1901</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Graduated; enrolled at Karl-Ferdinand University</div>
+        <div class="tl-desc">Passed the Matura examination and entered the German Karl-Ferdinand University in Prague, briefly studying chemistry before switching to law.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1902</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">First meeting with Max Brod</div>
+        <div class="tl-desc">Met fellow student Max Brod at a philosophy lecture; the friendship would prove decisive — Brod later preserved all of Kafka's manuscripts against his explicit instructions.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1906 Jun</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Awarded JUDr. (Doctor of Law)</div>
+        <div class="tl-desc">Received the degree of Doctor of Law (JUDr.) from Karl-Ferdinand University after completing his legal studies and examinations.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1906 – 1907</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Court clerkship in Prague</div>
+        <div class="tl-desc">Completed the mandatory unpaid practical legal training (Rechtspraktikant) at the Prague Regional and Criminal Courts.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1907 Oct</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Joined Assicurazioni Generali</div>
+        <div class="tl-desc">Began work at the Italian insurance company; found the hours oppressive and the position ill-suited to his writing ambitions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tl-phase" data-color="rust">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">The Bureau &amp; the Night Writer</span>
+    <span class="tl-phase-span">1908 – 1913</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1908 Jul</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Joined Workers' Accident Insurance Institute</div>
+        <div class="tl-desc">Took a position at the Workers' Accident Insurance Institute for the Kingdom of Bohemia — a single-shift job that left evenings free for writing.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1908</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">First literary publications</div>
+        <div class="tl-desc">Eight prose pieces published in the Munich literary journal <em>Hyperion</em> — Kafka's first appearance in print.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1911 Oct</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Encounters Yiddish theater troupe</div>
+        <div class="tl-desc">A Galician Yiddish theater company performed in Prague; Kafka attended repeatedly and became deeply engaged with Yiddish language and Eastern European Jewish culture.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1912 Aug 13</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Met Felice Bauer</div>
+        <div class="tl-desc">Introduced to Felice Bauer, a Berlin office manager, at Max Brod's parents' apartment; within days he began a years-long correspondence with her.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1912 Sep 22–23</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">"The Judgment" written in a single night</div>
+        <div class="tl-desc">Wrote the story <em>Das Urteil</em> in one uninterrupted overnight session, from 10 p.m. to 6 a.m. Kafka regarded this night as his literary breakthrough.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1912 Nov – Dec</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">"The Metamorphosis" written</div>
+        <div class="tl-desc">Composed <em>Die Verwandlung</em> in the weeks following "The Judgment." Published in 1915 by Kurt Wolff Verlag, Leipzig.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1912 Dec</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title"><em>Betrachtung</em> (Meditation) published</div>
+        <div class="tl-desc">First book — a collection of 18 short prose pieces — published by Rowohlt Verlag, Leipzig. The print run was small and largely unnoticed.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tl-phase" data-color="slate">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">Works &amp; Their Trials</span>
+    <span class="tl-phase-span">1914 – 1922</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1914 Jun 1</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">First engagement to Felice Bauer</div>
+        <div class="tl-desc">Engagement formally announced in Berlin after two years of correspondence; Kafka almost immediately felt it to be a mistake.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1914 Jul</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Engagement broken off — "the tribunal"</div>
+        <div class="tl-desc">Felice, her sister, and a friend confronted Kafka at the Askanischer Hof hotel in Berlin and ended the engagement. Kafka privately called it "the tribunal."</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1914 Aug</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Began writing <em>The Trial</em></div>
+        <div class="tl-desc">Started <em>Der Proceß</em> within weeks of the broken engagement. Left unfinished; published posthumously by Max Brod in 1925.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1914 Oct</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">"In the Penal Colony" written</div>
+        <div class="tl-desc">Wrote <em>In der Strafkolonie</em> in two weeks; published as a standalone volume in 1919.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1915</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title"><em>The Metamorphosis</em> published</div>
+        <div class="tl-desc"><em>Die Verwandlung</em> appeared in <em>Die Weißen Blätter</em> and then as a book (Kurt Wolff Verlag). Kafka received the Fontane Prize and redirected it to Carl Sternheim.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1917 Jul</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Second engagement to Felice</div>
+        <div class="tl-desc">Re-engaged to Felice Bauer in July; the engagement lasted only until December.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1917 Aug</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Tuberculosis diagnosed</div>
+        <div class="tl-desc">Suffered a pulmonary hemorrhage in the night of 9–10 August; tuberculosis diagnosed shortly after. Kafka took extended sick leave and moved to sister Ottla's farm in Zürau.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1917 Dec</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Second engagement ended</div>
+        <div class="tl-desc">Felice Bauer ended the engagement for good; Kafka later attributed the breakdown to his sense that writing and marriage were irreconcilable.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1919</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title"><em>A Country Doctor</em> published</div>
+        <div class="tl-desc"><em>Ein Landarzt</em>, a collection of 14 stories, published by Kurt Wolff Verlag; dedicated to his father. <em>In der Strafkolonie</em> published as a standalone the same year.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1919 Nov</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Letter to His Father written</div>
+        <div class="tl-desc">Wrote a 45-page letter to Hermann Kafka in Schelesen (Želízy), entrusted to his mother to deliver. She never passed it on. Published posthumously as <em>Brief an den Vater</em>.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1920</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Relationship with Milena Jesenská</div>
+        <div class="tl-desc">Intense correspondence and occasional meetings with Czech journalist and translator Milena Jesenská, who was translating his work. The relationship ended by late 1920.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1922 Jan</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Began writing <em>The Castle</em></div>
+        <div class="tl-desc">Started <em>Das Schloß</em> in January; left unfinished in August. Published posthumously by Max Brod in 1926.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1922 Jul</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Retired from the Insurance Institute</div>
+        <div class="tl-desc">Granted early retirement on a disability pension from the Workers' Accident Insurance Institute due to advancing tuberculosis; had worked there for 14 years.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tl-phase" data-color="dusk">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">Last Years</span>
+    <span class="tl-phase-span">1923 – 1924</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1923 Jul</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Met Dora Diamant</div>
+        <div class="tl-desc">Met Dora Diamant, a young woman from an Eastern European Hasidic family, at the Baltic Sea resort of Müritz where he was vacationing with his sister Elli's family.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1923 Sep</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Moved to Berlin with Dora</div>
+        <div class="tl-desc">Relocated to Berlin to live with Dora Diamant, first in Steglitz, then Zehlendorf. His last months of relative happiness, despite poverty, inflation, and worsening health.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1924 Mar</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Returned to Prague</div>
+        <div class="tl-desc">Tuberculosis had spread to his larynx, making swallowing increasingly painful. Returned to Prague as his condition made independent living in Berlin impossible.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1924 Apr</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Admitted to Kierling sanatorium</div>
+        <div class="tl-desc">Transferred to Dr. Hoffmann's sanatorium in Kierling, near Klosterneuburg, Austria. Dora Diamant remained with him until his death.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1924 May 25</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Correcting proofs of <em>A Hunger Artist</em></div>
+        <div class="tl-desc">Corrected page proofs of <em>Ein Hungerkünstler</em> from his sanatorium bed — his final literary act. The collection appeared in print shortly after his death.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1924 Jun 3</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Died at Kierling, aged 40</div>
+        <div class="tl-desc">Died of laryngeal tuberculosis; lesions in his throat had made eating impossible in his final weeks. Buried at the New Jewish Cemetery in Prague-Žižkov.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tl-phase" data-color="umber">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">Posthumous</span>
+    <span class="tl-phase-span">1924 – 1927</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1924</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title"><em>A Hunger Artist</em> published</div>
+        <div class="tl-desc">Four stories (<em>Ein Hungerkünstler</em>) published by Die Schmiede, Berlin — the last book to appear in Kafka's name, issued days after his death.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1925</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title"><em>The Trial</em> published by Max Brod</div>
+        <div class="tl-desc">Brod edited and published <em>Der Proceß</em> (Verlag Die Schmiede), defying Kafka's written instruction to destroy all unpublished manuscripts unread.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1926</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title"><em>The Castle</em> published by Max Brod</div>
+        <div class="tl-desc"><em>Das Schloß</em> published by Kurt Wolff Verlag, Munich. Brod assembled it from the unfinished manuscript, ordering the chapters as he judged fit.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1927</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title"><em>Amerika</em> published by Max Brod</div>
+        <div class="tl-desc">Published as <em>Amerika</em> (later known by its manuscript title <em>Der Verschollene</em>) — Kafka's first novel, begun in 1911, likewise left unfinished and published against his instructions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer class="tl-brand-footer"><a href="https://abnormalia.com">abnormalia</a></footer>
+</body>
+</html>
