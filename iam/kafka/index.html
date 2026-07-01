@@ -382,6 +382,14 @@ button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border
   z-index: 70; cursor: zoom-out;
 }
 .iam-lightbox img { max-width: 92vw; max-height: 92vh; }
+.iam-extra-header {
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  margin: 0 0 1.6rem; padding: 0.8rem 0;
+}
+.iam-extra-footer {
+  clear: both; border-top: 1px solid var(--rule); margin: 3rem 0 0;
+  padding-top: 0.9rem; font-size: 0.85rem; color: var(--dim);
+}
 
 /* ── Provenance footer ── */
 .iam-provenance {
@@ -505,6 +513,14 @@ button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border
     <button class="iam-toc-cards-btn">Facet Cards</button>
 </nav>
 <div class="iam-content">
+<section class="iam-extra-header">
+<nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+  <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+    <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+  </a>
+  <a href="/iam/" style="font-weight:bold;text-decoration:none;">I Am</a>
+</nav>
+</section>
 <header class="iam-masthead">
   <p class="iam-aside">Profile by alvagante — 20260626-15:21</p>
   <h1 class="iam-name">Franz Kafka</h1>
@@ -779,6 +795,9 @@ button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border
   <iframe src="./timeline.html" title="Franz Kafka — Timeline" loading="lazy"></iframe>
 </section>
 
+<footer class="iam-extra-footer">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+</footer>
 <footer class="iam-brand-footer"><a href="https://abnormalia.com">abnormalia</a></footer>
 <footer class="iam-provenance"><a href="https://swamp-club.com/extensions/@alvagante/content-iam" target="_blank" rel="noopener noreferrer">Generated with Swamp extension @alvagante/content-iam</a><div class="iam-provenance-meta"><span>confessional</span><span>subject type: real</span></div></footer>
 </div>

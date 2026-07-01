@@ -175,6 +175,15 @@ regenerate:
 # -- Site branding -------------------------------------------------------------
 credits: alvagante
 versionOutput: true
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+      <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+    </a>
+    <a href="/iam/" style="font-weight:bold;text-decoration:none;">I Am</a>
+  </nav>
+footerContent: |-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
 brandingLink: https://abnormalia.com
 brandingName: abnormalia
 brandingLogo: assets/img/logo.png

@@ -162,6 +162,19 @@ inputs:
       default: true
     credits:
       type: string
+    headerContent:
+      type: string
+      default: |-
+        <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+          <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+            <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+          </a>
+          <a href="/iam/" style="font-weight:bold;text-decoration:none;">I Am</a>
+        </nav>
+    footerContent:
+      type: string
+      default: |-
+        <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
     brandingName:
       type: string
       default: "abnormalia"
@@ -510,6 +523,8 @@ jobs:
             outputLength: ${{ inputs.outputLength }}
             model: ${{ inputs.iamModel }}
             credits: ${{ inputs.credits }}
+            headerContent: ${{ inputs.headerContent }}
+            footerContent: ${{ inputs.footerContent }}
             outputDir: ${{ 'iam/' + inputs.slug }}
             versionOutput: false
             musicTracks: ${{ data.latest('iam-' + inputs.slug, 'tracks').attributes.tracks }}
@@ -547,6 +562,8 @@ jobs:
             outputLength: ${{ inputs.outputLength }}
             model: ${{ inputs.pageProvider }}
             credits: ${{ inputs.credits }}
+            headerContent: ${{ inputs.headerContent }}
+            footerContent: ${{ inputs.footerContent }}
             outputDir: ${{ 'iam/' + inputs.slug }}
             versionOutput: false
             musicTracks: ${{ data.latest('iam-' + inputs.slug, 'tracks').attributes.tracks }}
