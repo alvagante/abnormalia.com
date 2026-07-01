@@ -80,6 +80,16 @@ inputs:
     cardStyle:
       type: string
       default: "iam-portrait"
+    mediaProvider:
+      type: string
+      enum:
+        - api
+        - manual_file
+        - existing_assets
+      default: api
+    assetsDir:
+      type: string
+      default: ""
     influenceMapPrompt:
       type: string
     influenceMapStyle:
@@ -88,6 +98,16 @@ inputs:
     influenceMapModel:
       type: string
       default: "gpt-image-2"
+    influenceMapBackground:
+      type: string
+      default: "opaque"
+    influenceMapProvider:
+      type: string
+      enum:
+        - api
+        - manual_file
+        - existing_assets
+      default: api
     musicGenre:
       type: string
     musicMood:
@@ -101,6 +121,16 @@ inputs:
     sunoVersion:
       type: string
       default: "chirp-v4-5"
+    musicProvider:
+      type: string
+      enum:
+        - api
+        - manual_file
+        - existing_assets
+      default: api
+    musicTracks:
+      type: array
+      default: []
     timelineType:
       type: string
       default: "biographical"
@@ -110,6 +140,23 @@ inputs:
     timelineModel:
       type: string
       default: "claude-opus-4-8"
+    timelineProvider:
+      type: string
+      enum:
+        - api
+        - manual_file
+        - existing_assets
+      default: api
+    pageProvider:
+      type: string
+      enum:
+        - api
+        - manual_file
+        - existing_assets
+      default: api
+    pageFilename:
+      type: string
+      default: page.html
     versionOutput:
       type: boolean
       default: true
@@ -166,10 +213,13 @@ jobs:
     weight: 0
 
   - name: media
-    description: Generate portrait, facet images, and cards in a single factory call.
+    description: Generate, copy, or verify portrait, facet images, and cards.
     steps:
       - name: media-iam
         description: Generate portrait + all facet images + all facet cards for the subject.
+        forEach:
+          item: run
+          in: '${{ inputs.mediaProvider == "api" ? [inputs.slug] : [] }}'
         task:
           type: model_method
           modelType: "@alvagante/content-iam"
@@ -193,6 +243,29 @@ jobs:
         dependsOn: []
         weight: 0
         allowFailure: false
+      - name: media-assets-iam
+        description: Copy or verify portrait + all facet images + all facet cards for the subject.
+        forEach:
+          item: run
+          in: '${{ inputs.mediaProvider == "api" ? [] : [inputs.slug] }}'
+        task:
+          type: model_method
+          modelType: "@alvagante/content-iam"
+          modelName: "${{ 'iam-' + inputs.slug }}"
+          methodName: stageAllMedia
+          inputs:
+            provider: ${{ inputs.mediaProvider }}
+            sourceDir: ${{ inputs.assetsDir }}
+            outputDir: ${{ 'iam/' + inputs.slug }}
+            portraitFilename: ${{ inputs.portraitFilename }}
+            facets: ${{ inputs.facets }}
+            includePortrait: true
+            includeFacetImages: true
+            includeFacetCards: true
+            requireAll: true
+        dependsOn: []
+        weight: 0
+        allowFailure: false
     dependsOn:
       - job: prepare
         condition:
@@ -200,10 +273,13 @@ jobs:
     weight: 0
 
   - name: music
-    description: Generate or skip the soundtrack based on the regenerate flag.
+    description: Generate, copy, or verify the soundtrack.
     steps:
       - name: music-iam
         description: Generate the soundtrack for this subject.
+        forEach:
+          item: run
+          in: '${{ inputs.musicProvider == "api" ? [inputs.slug] : [] }}'
         task:
           type: model_method
           modelType: "@alvagante/content-music"
@@ -223,6 +299,29 @@ jobs:
         dependsOn: []
         weight: 0
         allowFailure: false
+      - name: music-assets-iam
+        description: Copy or verify existing soundtrack tracks for this subject.
+        forEach:
+          item: run
+          in: '${{ inputs.musicProvider == "api" ? [] : [inputs.slug] }}'
+        task:
+          type: model_method
+          modelType: "@alvagante/content-music"
+          modelName: "${{ 'music-' + inputs.slug }}"
+          methodName: savePlaylistAssets
+          inputs:
+            provider: ${{ inputs.musicProvider }}
+            topic: ${{ inputs.subject }}
+            title: ${{ inputs.title }}
+            genre: ${{ inputs.musicGenre }}
+            mood: ${{ inputs.musicMood }}
+            instrumental: ${{ inputs.musicInstrumental }}
+            model: ${{ inputs.musicProvider }}
+            outputDir: ${{ 'iam/' + inputs.slug }}
+            tracks: ${{ inputs.musicTracks }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
     dependsOn:
       - job: prepare
         condition:
@@ -230,10 +329,13 @@ jobs:
     weight: 0
 
   - name: influence-map
-    description: Generate the influence map using content-infographic.
+    description: Generate, copy, or verify the influence map using content-infographic.
     steps:
       - name: influence-iam
         description: Generate an influence node-graph for the subject via content-infographic.
+        forEach:
+          item: run
+          in: '${{ inputs.influenceMapProvider == "api" ? [inputs.slug] : [] }}'
         task:
           type: model_method
           modelType: "@alvagante/content-infographic"
@@ -248,12 +350,42 @@ jobs:
             style: ${{ inputs.influenceMapStyle }}
             orientation: wide
             model: ${{ inputs.influenceMapModel }}
-            background: opaque
+            background: ${{ inputs.influenceMapBackground }}
             quality: auto
             format: png
+            filename: influence-map.png
             htmlFilename: influence-map.html
             outputDir: ${{ 'iam/' + inputs.slug }}
             branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: influence-assets-iam
+        description: Copy or verify an influence map image and wrap it as influence-map.html.
+        forEach:
+          item: run
+          in: '${{ inputs.influenceMapProvider == "api" ? [] : [inputs.slug] }}'
+        task:
+          type: model_method
+          modelType: "@alvagante/content-infographic"
+          modelName: "${{ 'infographic-' + inputs.slug }}"
+          methodName: saveAsset
+          inputs:
+            provider: ${{ inputs.influenceMapProvider }}
+            sourcePath: ${{ inputs.assetsDir + '/influence-map.png' }}
+            topic: ${{ inputs.subject }}
+            title: "${{ 'Influence Map: ' + inputs.subject }}"
+            details: ${{ inputs.influenceMapPrompt }}
+            keyPoints: ${{ inputs.facets.map(f, f.name) }}
+            style: ${{ inputs.influenceMapStyle }}
+            orientation: wide
+            model: ${{ inputs.influenceMapProvider }}
+            background: ${{ inputs.influenceMapBackground }}
+            quality: auto
+            format: png
+            filename: influence-map.png
+            htmlFilename: influence-map.html
+            outputDir: ${{ 'iam/' + inputs.slug }}
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -264,10 +396,13 @@ jobs:
     weight: 0
 
   - name: timeline
-    description: Generate the life timeline using content-timeline.
+    description: Generate, copy, or verify the life timeline.
     steps:
       - name: timeline-iam
         description: Generate a chronological, phase-grouped timeline for the subject.
+        forEach:
+          item: run
+          in: '${{ inputs.timelineProvider == "api" ? [inputs.slug] : [] }}'
         task:
           type: model_method
           modelType: "@alvagante/content-timeline"
@@ -283,6 +418,29 @@ jobs:
             filename: timeline.html
             outputDir: ${{ 'iam/' + inputs.slug }}
             branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: timeline-assets-iam
+        description: Copy or verify timeline.html for this subject.
+        forEach:
+          item: run
+          in: '${{ inputs.timelineProvider == "api" ? [] : [inputs.slug] }}'
+        task:
+          type: model_method
+          modelType: "@alvagante/content-iam"
+          modelName: "${{ 'iam-' + inputs.slug }}"
+          methodName: stageAllMedia
+          inputs:
+            provider: ${{ inputs.timelineProvider }}
+            sourceDir: ${{ inputs.assetsDir }}
+            outputDir: ${{ 'iam/' + inputs.slug }}
+            includePortrait: false
+            includeFacetImages: false
+            includeFacetCards: false
+            extraFiles:
+              - timeline.html
+            requireAll: true
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -315,10 +473,13 @@ jobs:
     weight: 0
 
   - name: page
-    description: Generate the self-narrated I Am biography page once all media and tracks are ready.
+    description: Generate or save the self-narrated I Am biography page once all media and tracks are ready.
     steps:
       - name: page-iam
         description: Generate the biography minisite for the subject.
+        forEach:
+          item: run
+          in: '${{ inputs.pageProvider == "api" ? [inputs.slug] : [] }}'
         task:
           type: model_method
           modelType: "@alvagante/content-iam"
@@ -348,6 +509,43 @@ jobs:
             metaDomain: ${{ inputs.metaDomain }}
             outputLength: ${{ inputs.outputLength }}
             model: ${{ inputs.iamModel }}
+            credits: ${{ inputs.credits }}
+            outputDir: ${{ 'iam/' + inputs.slug }}
+            versionOutput: false
+            musicTracks: ${{ data.latest('iam-' + inputs.slug, 'tracks').attributes.tracks }}
+            branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: page-assets-iam
+        description: Save an externally written I Am page body without a text-generation API call.
+        forEach:
+          item: run
+          in: '${{ inputs.pageProvider == "api" ? [] : [inputs.slug] }}'
+        task:
+          type: model_method
+          modelType: "@alvagante/content-iam"
+          modelName: "${{ 'iam-' + inputs.slug }}"
+          methodName: saveFromFile
+          inputs:
+            sourcePath: '${{ inputs.pageProvider == "manual_file" ? inputs.assetsDir + "/" + inputs.pageFilename : "iam/" + inputs.slug + "/" + inputs.pageFilename }}'
+            subject: ${{ inputs.subject }}
+            title: ${{ inputs.title }}
+            subjectType: ${{ inputs.subjectType }}
+            details: ${{ inputs.details }}
+            facets: ${{ inputs.facets }}
+            cards: "${{ inputs.facets.map(f, {'path': f.cardFilename, 'title': f.name}) }}"
+            persona: ${{ inputs.persona }}
+            portraitPath: ${{ inputs.portraitFilename }}
+            influencePath: influence-map.html
+            datelinePath: timeline.html
+            metaBorn: ${{ inputs.metaBorn }}
+            metaDied: ${{ inputs.metaDied }}
+            metaNationality: ${{ inputs.metaNationality }}
+            metaEra: ${{ inputs.metaEra }}
+            metaDomain: ${{ inputs.metaDomain }}
+            outputLength: ${{ inputs.outputLength }}
+            model: ${{ inputs.pageProvider }}
             credits: ${{ inputs.credits }}
             outputDir: ${{ 'iam/' + inputs.slug }}
             versionOutput: false

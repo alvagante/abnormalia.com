@@ -93,6 +93,16 @@ inputs:
     versionOutput:
       type: boolean
       default: true
+    assetsRoot:
+      type: string
+      default: ""
+    mediaProvider:
+      type: string
+      enum:
+        - api
+        - manual_file
+        - existing_assets
+      default: api
     imageStyle:
       type: string
       enum:
@@ -170,6 +180,13 @@ inputs:
       type: integer
       default: 5
       description: Skip music generation for an ixen when this many MP3 files already exist across all versions.
+    musicProvider:
+      type: string
+      enum:
+        - api
+        - manual_file
+        - existing_assets
+      default: api
     sunoVersion:
       type: string
       enum:
@@ -191,6 +208,30 @@ inputs:
     infographicModel:
       type: string
       default: gpt-image-2
+    infographicProvider:
+      type: string
+      enum:
+        - api
+        - manual_file
+        - existing_assets
+      default: api
+    cheatsheetProvider:
+      type: string
+      enum:
+        - api
+        - manual_file
+        - existing_assets
+      default: api
+    pageProvider:
+      type: string
+      enum:
+        - api
+        - manual_file
+        - existing_assets
+      default: api
+    pageFilename:
+      type: string
+      default: page.html
     includeBeginnerGuide:
       type: boolean
       default: false
@@ -214,6 +255,12 @@ inputs:
             type: string
           heroPrompt:
             type: string
+          assetsDir:
+            type: string
+          pageSourcePath:
+            type: string
+          musicTracks:
+            type: array
           regenerate:
             type: object
             properties:
@@ -310,6 +357,30 @@ jobs:
         dependsOn: []
         weight: 0
         allowFailure: false
+      - name: stage-media-${{ self.ixen.slug }}
+        description: Copy or verify manual/existing hero, concept, and card assets.
+        forEach:
+          item: ixen
+          in: '${{ inputs.mediaProvider == "api" ? [] : inputs.ixens }}'
+        task:
+          type: model_method
+          modelType: "@alvagante/content-ixen"
+          modelName: '${{ "ixen-" + self.ixen.slug }}'
+          methodName: stageMediaAssets
+          inputs:
+            provider: ${{ inputs.mediaProvider }}
+            sourceDir: '${{ has(self.ixen.assetsDir) ? self.ixen.assetsDir : inputs.assetsRoot + "/" + self.ixen.slug }}'
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            requireAll: true
+            includeImages: true
+            heroFile: hero.png
+            imageFiles: ${{ self.ixen.concepts.map(c, c.imageFilename) }}
+            includeCards: true
+            cardFiles: ${{ self.ixen.concepts.map(c, c.cardFilename) }}
+            includeInfographic: false
+        dependsOn: []
+        weight: 0
+        allowFailure: false
     dependsOn:
       - job: prepare
         condition:
@@ -341,11 +412,34 @@ jobs:
   - name: images
     description: Generate the hero and supporting concept images for each Ixen.
     steps:
+      - name: media-ready-${{ self.ixen.slug }}
+        description: Keep media assets visible to the workflow when no image/card generation is needed.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-ixen"
+          modelName: '${{ "ixen-" + self.ixen.slug }}'
+          methodName: stageMediaAssets
+          inputs:
+            provider: existing_assets
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            requireAll: false
+            includeImages: true
+            heroFile: hero.png
+            imageFiles: ${{ self.ixen.concepts.map(c, c.imageFilename) }}
+            includeCards: true
+            cardFiles: ${{ self.ixen.concepts.map(c, c.cardFilename) }}
+            includeInfographic: false
+        dependsOn: []
+        weight: 0
+        allowFailure: false
       - name: hero-${{ self.ixen.slug }}
         description: Generate the hero image for one Ixen topic.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, (has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -370,7 +464,7 @@ jobs:
         description: Generate the first supporting concept image for one Ixen topic.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, (has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -395,7 +489,7 @@ jobs:
         description: Generate the second supporting concept image for one Ixen topic.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, (has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -420,7 +514,7 @@ jobs:
         description: Generate the third supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 2 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 2 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -445,7 +539,7 @@ jobs:
         description: Generate the fourth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 3 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 3 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -470,7 +564,7 @@ jobs:
         description: Generate the fifth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 4 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 4 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -495,7 +589,7 @@ jobs:
         description: Generate the sixth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 5 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 5 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -520,7 +614,7 @@ jobs:
         description: Generate the seventh supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 6 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 6 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -545,7 +639,7 @@ jobs:
         description: Generate the eighth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 7 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 7 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -570,7 +664,7 @@ jobs:
         description: Generate the ninth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 8 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 8 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -595,7 +689,7 @@ jobs:
         description: Generate the tenth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 9 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 9 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -620,7 +714,7 @@ jobs:
         description: Generate the eleventh supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 10 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 10 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -645,7 +739,7 @@ jobs:
         description: Generate the twelfth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 11 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 11 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -670,7 +764,7 @@ jobs:
         description: Generate the thirteenth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 12 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 12 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -695,7 +789,7 @@ jobs:
         description: Generate the fourteenth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 13 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 13 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -720,7 +814,7 @@ jobs:
         description: Generate the fifteenth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 14 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 14 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -745,7 +839,7 @@ jobs:
         description: Generate the sixteenth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 15 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 15 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -770,7 +864,7 @@ jobs:
         description: Generate the seventeenth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 16 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 16 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -795,7 +889,7 @@ jobs:
         description: Generate the eighteenth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 17 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 17 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -820,7 +914,7 @@ jobs:
         description: Generate the nineteenth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 18 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 18 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -845,7 +939,7 @@ jobs:
         description: Generate the twentieth supporting concept image for one Ixen topic when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 19 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 19 && ((has(ixen.regenerate) && has(ixen.regenerate.images) && ixen.regenerate.images) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingImages) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-image"
@@ -870,7 +964,7 @@ jobs:
         description: Generate the card image for the first concept.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, (has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -894,7 +988,7 @@ jobs:
         description: Generate the card image for the second concept.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, (has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -918,7 +1012,7 @@ jobs:
         description: Generate the card image for the third concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 2 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 2 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -942,7 +1036,7 @@ jobs:
         description: Generate the card image for the fourth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 3 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 3 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -966,7 +1060,7 @@ jobs:
         description: Generate the card image for the fifth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 4 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 4 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -990,7 +1084,7 @@ jobs:
         description: Generate the card image for the sixth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 5 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 5 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1014,7 +1108,7 @@ jobs:
         description: Generate the card image for the seventh concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 6 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 6 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1038,7 +1132,7 @@ jobs:
         description: Generate the card image for the eighth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 7 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 7 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1062,7 +1156,7 @@ jobs:
         description: Generate the card image for the ninth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 8 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 8 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1086,7 +1180,7 @@ jobs:
         description: Generate the card image for the tenth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 9 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 9 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1110,7 +1204,7 @@ jobs:
         description: Generate the card image for the eleventh concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 10 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 10 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1134,7 +1228,7 @@ jobs:
         description: Generate the card image for the twelfth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 11 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 11 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1158,7 +1252,7 @@ jobs:
         description: Generate the card image for the thirteenth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 12 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 12 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1182,7 +1276,7 @@ jobs:
         description: Generate the card image for the fourteenth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 13 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 13 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1206,7 +1300,7 @@ jobs:
         description: Generate the card image for the fifteenth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 14 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 14 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1230,7 +1324,7 @@ jobs:
         description: Generate the card image for the sixteenth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 15 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 15 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1254,7 +1348,7 @@ jobs:
         description: Generate the card image for the seventeenth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 16 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 16 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1278,7 +1372,7 @@ jobs:
         description: Generate the card image for the eighteenth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 17 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 17 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1302,7 +1396,7 @@ jobs:
         description: Generate the card image for the nineteenth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 18 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 18 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1326,7 +1420,7 @@ jobs:
         description: Generate the card image for the twentieth concept when present.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, size(ixen.concepts) > 19 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.mediaProvider == "api" && size(ixen.concepts) > 19 && ((has(ixen.regenerate) && has(ixen.regenerate.cards) && ixen.regenerate.cards) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingCards) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-card"
@@ -1358,7 +1452,7 @@ jobs:
         description: Generate the soundtrack playlist for one Ixen topic when requested or when it does not already have enough MP3s.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, (has(ixen.regenerate) && has(ixen.regenerate.music) && ixen.regenerate.music) || data.latest("tracks-" + ixen.slug, "count").attributes.trackCount < inputs.musicSkipThreshold) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.musicProvider == "api" && ((has(ixen.regenerate) && has(ixen.regenerate.music) && ixen.regenerate.music) || data.latest("tracks-" + ixen.slug, "count").attributes.trackCount < inputs.musicSkipThreshold)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-music"
@@ -1375,6 +1469,29 @@ jobs:
             model: ${{ inputs.musicModel }}
             sunoVersion: ${{ inputs.sunoVersion }}
             outputDir: ${{ "ixen/" + self.ixen.slug }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: track-assets-${{ self.ixen.slug }}
+        description: Copy or verify a manually supplied soundtrack playlist for one Ixen topic.
+        forEach:
+          item: ixen
+          in: '${{ inputs.musicProvider == "api" ? [] : inputs.ixens }}'
+        task:
+          type: model_method
+          modelType: "@alvagante/content-music"
+          modelName: '${{ "music-" + self.ixen.slug }}'
+          methodName: savePlaylistAssets
+          inputs:
+            provider: ${{ inputs.musicProvider }}
+            topic: ${{ self.ixen.topic }}
+            title: ${{ self.ixen.title }}
+            genre: ${{ inputs.musicGenre }}
+            mood: ${{ inputs.musicMood }}
+            instrumental: ${{ inputs.musicInstrumental }}
+            model: ${{ inputs.musicProvider }}
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            tracks: ${{ self.ixen.musicTracks }}
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -1417,7 +1534,7 @@ jobs:
         description: Generate the cheatsheet HTML embedded by the Ixen page.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens }}
+          in: '${{ inputs.cheatsheetProvider == "api" ? inputs.ixens : [] }}'
         task:
           type: model_method
           modelType: "@alvagante/content-cheatsheet"
@@ -1439,6 +1556,29 @@ jobs:
         dependsOn: []
         weight: 0
         allowFailure: false
+      - name: cheatsheet-assets-${{ self.ixen.slug }}
+        description: Copy or verify cheatsheet.html for one Ixen topic.
+        forEach:
+          item: ixen
+          in: '${{ inputs.cheatsheetProvider == "api" ? [] : inputs.ixens }}'
+        task:
+          type: model_method
+          modelType: "@alvagante/content-ixen"
+          modelName: '${{ "ixen-" + self.ixen.slug }}'
+          methodName: stageMediaAssets
+          inputs:
+            provider: ${{ inputs.cheatsheetProvider }}
+            sourceDir: '${{ has(self.ixen.assetsDir) ? self.ixen.assetsDir : inputs.assetsRoot + "/" + self.ixen.slug }}'
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            requireAll: true
+            includeImages: false
+            includeCards: false
+            includeInfographic: false
+            extraFiles:
+              - cheatsheet.html
+        dependsOn: []
+        weight: 0
+        allowFailure: false
     dependsOn:
       - job: prepare
         condition:
@@ -1447,11 +1587,32 @@ jobs:
   - name: infographic
     description: Generate an infographic for each Ixen using its concepts as key points.
     steps:
+      - name: infographic-ready-${{ self.ixen.slug }}
+        description: Keep the infographic asset visible to the workflow when no generation is needed.
+        forEach:
+          item: ixen
+          in: ${{ inputs.ixens }}
+        task:
+          type: model_method
+          modelType: "@alvagante/content-ixen"
+          modelName: '${{ "ixen-" + self.ixen.slug }}'
+          methodName: stageMediaAssets
+          inputs:
+            provider: existing_assets
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            requireAll: false
+            includeImages: false
+            includeCards: false
+            includeInfographic: true
+            infographicHtml: infographic.html
+        dependsOn: []
+        weight: 0
+        allowFailure: false
       - name: infographic-${{ self.ixen.slug }}
         description: Generate the infographic for one Ixen topic.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens.filter(ixen, (has(ixen.regenerate) && has(ixen.regenerate.infographic) && ixen.regenerate.infographic) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingInfographic) > 0) }}
+          in: ${{ inputs.ixens.filter(ixen, inputs.infographicProvider == "api" && ((has(ixen.regenerate) && has(ixen.regenerate.infographic) && ixen.regenerate.infographic) || size(data.latest("ixen-" + ixen.slug, "media").attributes.missingInfographic) > 0)) }}
         task:
           type: model_method
           modelType: "@alvagante/content-infographic"
@@ -1469,9 +1630,39 @@ jobs:
             background: opaque
             quality: auto
             format: png
+            filename: infographic.png
             htmlFilename: infographic.html
             outputDir: ${{ "ixen/" + self.ixen.slug }}
             branding: "${{ {'logo': inputs.brandingLogo, 'name': inputs.brandingName, 'link': inputs.brandingLink} }}"
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: infographic-assets-${{ self.ixen.slug }}
+        description: Copy or verify infographic.png and wrap it as infographic.html.
+        forEach:
+          item: ixen
+          in: '${{ inputs.infographicProvider == "api" ? [] : inputs.ixens }}'
+        task:
+          type: model_method
+          modelType: "@alvagante/content-infographic"
+          modelName: '${{ "infographic-" + self.ixen.slug }}'
+          methodName: saveAsset
+          inputs:
+            provider: ${{ inputs.infographicProvider }}
+            sourcePath: '${{ (has(self.ixen.assetsDir) ? self.ixen.assetsDir : inputs.assetsRoot + "/" + self.ixen.slug) + "/infographic.png" }}'
+            topic: ${{ self.ixen.topic }}
+            title: ${{ self.ixen.title }}
+            details: ${{ self.ixen.details }}
+            keyPoints: ${{ self.ixen.concepts.map(c, c.name) }}
+            style: ${{ inputs.infographicStyle }}
+            orientation: wide
+            model: ${{ inputs.infographicProvider }}
+            background: opaque
+            quality: auto
+            format: png
+            filename: infographic.png
+            htmlFilename: infographic.html
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
         dependsOn: []
         weight: 0
         allowFailure: false
@@ -1481,13 +1672,13 @@ jobs:
           type: succeeded
     weight: 0
   - name: page
-    description: Generate the narrated Ixen page once hero art, music, cheatsheet and infographic are ready.
+    description: Generate or save the narrated Ixen page once hero art, music, cheatsheet and infographic are ready.
     steps:
       - name: ixen-${{ self.ixen.slug }}
         description: Generate the minisite for one Ixen topic.
         forEach:
           item: ixen
-          in: ${{ inputs.ixens }}
+          in: '${{ inputs.pageProvider == "api" ? inputs.ixens : [] }}'
         task:
           type: model_method
           modelType: "@alvagante/content-ixen"
@@ -1512,6 +1703,39 @@ jobs:
             cheatsheetPath: cheatsheet.html
             infographicPath: infographic.html
             includeBeginnerGuide: ${{ inputs.includeBeginnerGuide }}
+            cards: "${{ self.ixen.concepts.map(c, {'path': c.cardFilename, 'title': c.name}) }}"
+            outputDir: ${{ "ixen/" + self.ixen.slug }}
+            versionOutput: false
+            musicTracks: ${{ data.latest("tracks-" + self.ixen.slug, "tracks").attributes.tracks }}
+        dependsOn: []
+        weight: 0
+        allowFailure: false
+      - name: ixen-assets-${{ self.ixen.slug }}
+        description: Save an externally written Ixen page body without a text-generation API call.
+        forEach:
+          item: ixen
+          in: '${{ inputs.pageProvider == "api" ? [] : inputs.ixens }}'
+        task:
+          type: model_method
+          modelType: "@alvagante/content-ixen"
+          modelName: '${{ "ixen-" + self.ixen.slug }}'
+          methodName: saveFromFile
+          inputs:
+            sourcePath: '${{ has(self.ixen.pageSourcePath) ? self.ixen.pageSourcePath : (inputs.pageProvider == "manual_file" ? (has(self.ixen.assetsDir) ? self.ixen.assetsDir : inputs.assetsRoot + "/" + self.ixen.slug) + "/" + inputs.pageFilename : "ixen/" + self.ixen.slug + "/" + inputs.pageFilename) }}'
+            topic: ${{ self.ixen.topic }}
+            narrator: ${{ self.ixen.narrator }}
+            details: ${{ self.ixen.details }}
+            media: hero.png
+            concepts: ${{ self.ixen.concepts }}
+            skillLevel: ${{ inputs.skillLevel }}
+            outputLength: ${{ inputs.outputLength }}
+            model: ${{ inputs.pageProvider }}
+            persona: ${{ inputs.ixenPersona }}
+            credits: ${{ inputs.credits }}
+            headerContent: ${{ inputs.headerContent }}
+            footerContent: ${{ inputs.footerContent }}
+            cheatsheetPath: cheatsheet.html
+            infographicPath: infographic.html
             cards: "${{ self.ixen.concepts.map(c, {'path': c.cardFilename, 'title': c.name}) }}"
             outputDir: ${{ "ixen/" + self.ixen.slug }}
             versionOutput: false

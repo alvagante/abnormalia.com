@@ -253,5 +253,145 @@ export const extension = {
         return { dataHandles: [handle] };
       },
     },
+    stageMediaAssets: {
+      description:
+        "Stage selected Ixen media from local files or verify assets already present in outputDir without making generation API calls.",
+      arguments: z.object({
+        provider: z.enum(["manual_file", "existing_assets"]).default(
+          "existing_assets",
+        ),
+        sourceDir: z.string().optional(),
+        outputDir: z.string().optional(),
+        requireAll: z.boolean().default(true),
+        includeImages: z.boolean().default(true),
+        heroFile: z.string().default("hero.png"),
+        imageFiles: z.array(z.string()).default([]),
+        includeCards: z.boolean().default(true),
+        cardFiles: z.array(z.string()).default([]),
+        includeInfographic: z.boolean().default(true),
+        infographicHtml: z.string().default("infographic.html"),
+        extraFiles: z.array(z.string()).default([]),
+      }),
+      execute: async (
+        args: {
+          provider: "manual_file" | "existing_assets";
+          sourceDir?: string;
+          outputDir?: string;
+          requireAll: boolean;
+          includeImages: boolean;
+          heroFile: string;
+          imageFiles: string[];
+          includeCards: boolean;
+          cardFiles: string[];
+          includeInfographic: boolean;
+          infographicHtml: string;
+          extraFiles: string[];
+        },
+        context: ModelContext,
+      ) => {
+        const outputDir = args.outputDir ?? context.globalArgs.outputDir;
+        if (!outputDir) {
+          throw new Error("outputDir is required");
+        }
+        if (args.provider === "manual_file" && !args.sourceDir) {
+          throw new Error("sourceDir is required when provider is manual_file");
+        }
+
+        await Deno.mkdir(outputDir, { recursive: true });
+
+        const requested = new Map<string, RestoreGroup>();
+        if (args.includeImages) {
+          requested.set(args.heroFile, "images");
+          for (const file of args.imageFiles) requested.set(file, "images");
+        }
+        if (args.includeCards) {
+          for (const file of args.cardFiles) requested.set(file, "cards");
+        }
+        if (args.includeInfographic) {
+          const baseDir = args.provider === "manual_file"
+            ? args.sourceDir!
+            : outputDir;
+          for (
+            const file of await infographicFiles(baseDir, args.infographicHtml)
+          ) {
+            requested.set(file, "infographic");
+          }
+        }
+        for (const file of args.extraFiles) requested.set(file, "infographic");
+
+        const restored = new Map<RestoreGroup, string[]>([
+          ["images", []],
+          ["cards", []],
+          ["infographic", []],
+        ]);
+        const missing = new Map<RestoreGroup, string[]>([
+          ["images", []],
+          ["cards", []],
+          ["infographic", []],
+        ]);
+
+        for (const [file, group] of requested) {
+          const rel = safeRelativePath(file);
+          if (!rel) {
+            missing.get(group)?.push(file);
+            continue;
+          }
+          if (args.provider === "existing_assets") {
+            if (await pathExists(`${outputDir}/${rel}`)) {
+              restored.get(group)?.push(rel);
+            } else {
+              missing.get(group)?.push(rel);
+            }
+            continue;
+          }
+
+          if (await copyIfPresent(args.sourceDir!, outputDir, rel)) {
+            restored.get(group)?.push(rel);
+          } else {
+            missing.get(group)?.push(rel);
+          }
+        }
+
+        const restoredFiles = [
+          ...restored.get("images") ?? [],
+          ...restored.get("cards") ?? [],
+          ...restored.get("infographic") ?? [],
+        ];
+        const missingFiles = [
+          ...missing.get("images") ?? [],
+          ...missing.get("cards") ?? [],
+          ...missing.get("infographic") ?? [],
+        ];
+
+        if (args.requireAll && missingFiles.length > 0) {
+          throw new Error(
+            `Missing Ixen media asset(s): ${missingFiles.join(", ")}`,
+          );
+        }
+
+        context.logger.info(
+          "Staged {restored} media file(s), missing {missing} in {outputDir}",
+          {
+            restored: restoredFiles.length,
+            missing: missingFiles.length,
+            outputDir,
+          },
+        );
+
+        const handle = await context.writeResource("mediaRestore", "media", {
+          restoredImages: restored.get("images") ?? [],
+          missingImages: missing.get("images") ?? [],
+          restoredCards: restored.get("cards") ?? [],
+          missingCards: missing.get("cards") ?? [],
+          restoredInfographic: restored.get("infographic") ?? [],
+          missingInfographic: missing.get("infographic") ?? [],
+          restoredFiles,
+          missingFiles,
+          generatedAt: new Date().toISOString(),
+        });
+
+        return { dataHandles: [handle] };
+      },
+    },
   }],
 };

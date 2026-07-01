@@ -1,0 +1,180 @@
+# Input file for: swamp workflow run generate-iams --input-file workflows/iams/einstein.yaml
+#
+# Workflow DAG: prepare -> (media || music || influence-map || timeline) -> track-manifest -> page -> register
+
+# -- Subject -------------------------------------------------------------------
+subject: "Albert Einstein"
+subjectType: real
+wikipediaTitle: "Albert Einstein"
+sourceMode: both
+facts: |
+  I publish four transformative papers in 1905: the photoelectric effect,
+  Brownian motion, special relativity, and mass-energy equivalence.
+  I complete general relativity in 1915, and the 1919 eclipse expedition makes
+  my name public far beyond physics.
+  I leave Germany in 1933 after Hitler comes to power, settle at Princeton,
+  and spend my later life arguing for peace, civil rights, and world government.
+  I sign the 1939 Einstein-Szilard letter warning Franklin D. Roosevelt about
+  possible German atomic weapons, then I publicly oppose nuclear arms.
+details: |
+  I speak only in first person singular and present tense. I never describe
+  myself from outside. I treat documented facts as ground truth, but the voice
+  remains reflective and immediate: I think, I calculate, I doubt, I refuse,
+  I leave, I warn.
+description: "Albert Einstein speaks in first person present tense: relativity, exile, conscience, and the unfinished search."
+slug: einstein
+
+# -- Narrative -----------------------------------------------------------------
+title: "I Am the Equation"
+persona: fieldnotes
+outputLength: long
+iamModel: claude-opus-4-8
+
+# -- Subject metadata (shown in masthead strip) --------------------------------
+metaBorn: "14 March 1879"
+metaDied: "18 April 1955"
+metaNationality: "German-born / Swiss / American"
+metaEra: "20th century"
+metaDomain: "Physics, relativity, public conscience"
+
+# -- Facets --------------------------------------------------------------------
+facets:
+  - name: Annus Mirabilis
+    imageFilename: facet-annus-mirabilis.png
+    cardFilename: facet-card-annus-mirabilis.png
+    details: >-
+      I am a patent clerk in Bern in 1905. I publish on light quanta, Brownian
+      motion, special relativity, and E=mc^2. The work is radical, but I live it
+      as disciplined thought: clocks, trains, light, molecules, and equations.
+    imagePrompt: >-
+      A modest patent office desk covered with papers, a clock, a train timetable,
+      beams of light crossing the room, pencil-bw style transparent background.
+
+  - name: General Relativity
+    imageFilename: facet-general-relativity.png
+    cardFilename: facet-card-general-relativity.png
+    details: >-
+      I search for a theory where gravity is not a force but geometry. In 1915
+      I present the field equations. In 1919, starlight bending near the eclipsed
+      sun turns mathematical struggle into public myth.
+    imagePrompt: >-
+      A warped grid of spacetime bending around a dark sun, stars displaced at
+      the edge, chalk equations floating nearby, pencil-bw style transparent background.
+
+  - name: Exile and Conscience
+    imageFilename: facet-exile-conscience.png
+    cardFilename: facet-card-exile-conscience.png
+    details: >-
+      I leave Germany in 1933 and do not return. I become a refugee scholar at
+      Princeton. I warn Roosevelt because I fear Nazi Germany, then I spend the
+      atomic age insisting that security without political maturity is a trap.
+    imagePrompt: >-
+      A man with a violin and a suitcase walking away from a burning map of
+      Europe toward a quiet study, pencil-bw style transparent background.
+
+  - name: The Unfinished Field
+    imageFilename: facet-unfinished-field.png
+    cardFilename: facet-card-unfinished-field.png
+    details: >-
+      I resist the idea that quantum theory is complete. I debate Bohr, pursue a
+      unified field theory, and accept isolation as the price of trying to keep
+      nature intelligible in one piece.
+    imagePrompt: >-
+      A blackboard filled with incomplete equations, a compass, dice set aside
+      untouched, a violin on a chair, pencil-bw style transparent background.
+
+# -- Portrait ------------------------------------------------------------------
+portraitPrompt: >-
+  A portrait of Albert Einstein: older face, unruly white hair, mustache,
+  intense tired eyes, simple sweater. Pencil-bw, transparent background.
+  Editorial biography portrait style.
+portraitFilename: portrait.png
+
+# -- Images --------------------------------------------------------------------
+imageStyle: pencil-bw
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+
+# -- Cards ---------------------------------------------------------------------
+cardStyle: iam-portrait
+
+# -- Influence map -------------------------------------------------------------
+influenceMapStyle: clean
+influenceMapModel: gpt-image-1.5
+influenceMapBackground: transparent
+influenceMapProvider: existing_assets
+influenceMapPrompt: >-
+  Albert Einstein's intellectual influences and scientific network: Maxwell,
+  Newton, Mach, Hume, Spinoza, Riemann, Lorentz, Poincare, Planck, Minkowski,
+  Grossmann, Bohr. Place Einstein at center. Show later influence on modern
+  cosmology, quantum theory debates, nuclear politics, and public science.
+
+# -- Music ---------------------------------------------------------------------
+musicGenre: "modernist chamber music, violin-led, Central European, restrained piano"
+musicMood: "curious, lucid, exiled, morally tense, searching"
+musicModel: suno-ttapi
+musicInstrumental: false
+sunoVersion: chirp-v4-5
+musicProvider: existing_assets
+musicTracks:
+  - filename: i-am-the-equation-mqzt2lqk.mp3
+    title: "I Am the Equation"
+    lyrics: |
+      I am the equation that bends the light,
+      Born in the patent office, burning bright,
+      They say I proved the world is strange and curved,
+      That energy and mass are intertwined, observed.
+
+      I am the search for what holds all things,
+      The unified dream that my restless mind sings,
+      In Switzerland, then Berlin, then exile's call,
+      I tried to answer: what connects it all?
+
+      E equals mc squared--I gave them that,
+      A whisper that became the sound of fact,
+      But then they took my words and made them burn,
+      I watched the cities ash and had to turn away.
+
+      I am the conscience caught between two worlds,
+      The scientist whose equations became unfurled
+      Into the hands of those who loved the dark,
+      Who lit the sky with my own stolen spark.
+
+      They ask me now: did you know what you'd done?
+      I say: I only sought to understand the sun,
+      To feel the pulse beneath reality's skin,
+      To ask the questions that let truth slip in.
+
+      I am still searching in this distant shore,
+      For what I couldn't find before,
+      A formula for peace, a law of grace,
+      Some equation written on the human face.
+
+      I am the question, not the final word,
+      The violin note that trembles, unheard,
+      In chambers where the silence speaks the most,
+      I am the exile, the uncertain ghost.
+
+      But listen: in the bending of the light,
+      In every child who learns and wonders right,
+      In every mind that dares to ask "what if?"--
+      I am alive, I am the gift.
+
+timelineProvider: existing_assets
+
+# -- Regeneration flags (set to false after first run to preserve existing files)
+regenerate:
+  portrait: false
+  facetImages: false
+  facetCards: false
+  influenceMap: false
+  music: false
+
+# -- Site branding -------------------------------------------------------------
+credits: alvagante
+versionOutput: true
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+brandingLogo: assets/img/logo.png

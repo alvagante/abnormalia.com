@@ -1,0 +1,135 @@
+# Input file for: swamp workflow run generate-iams --input-file workflows/iams/garibaldi.yaml
+#
+# Workflow DAG: prepare -> (media || music || influence-map || timeline) -> track-manifest -> page -> register
+
+# -- Subject -------------------------------------------------------------------
+subject: "Giuseppe Garibaldi"
+subjectType: real
+wikipediaTitle: "Giuseppe Garibaldi"
+sourceMode: both
+facts: |
+  I am born in Nice in 1807, when the city belongs to the First French Empire.
+  I become a sailor, join Young Italy, and live much of my early political life
+  in exile after a failed uprising.
+  I fight in South America, where I meet Anita and learn irregular war.
+  I defend the Roman Republic in 1849, lead the Expedition of the Thousand in
+  1860, conquer Sicily and Naples, and hand them to Victor Emmanuel II.
+  I keep fighting for Rome and for a republic even when the new kingdom decides
+  that my usefulness must have limits.
+details: |
+  I speak only in first person singular and present tense. I never describe
+  myself from outside. I narrate as a defiant living revolutionary presence:
+  I sail, I flee, I return, I fight, I surrender power, I remain unfinished.
+description: "Giuseppe Garibaldi speaks in first person present tense: exile, red shirts, Anita, Rome, and the unfinished republic."
+slug: garibaldi
+
+# -- Narrative -----------------------------------------------------------------
+title: "I Am the Red Shirt"
+persona: myth
+outputLength: long
+iamModel: claude-opus-4-8
+
+# -- Subject metadata (shown in masthead strip) --------------------------------
+metaBorn: "4 July 1807"
+metaDied: "2 June 1882"
+metaNationality: "Italian"
+metaEra: "19th century"
+metaDomain: "Revolution, military leadership, Italian unification"
+
+# -- Facets --------------------------------------------------------------------
+facets:
+  - name: Young Italy and Exile
+    imageFilename: facet-young-italy-exile.png
+    cardFilename: facet-card-young-italy-exile.png
+    details: >-
+      I join Mazzini's Young Italy and accept that revolution makes me a wanted
+      man. Exile is not absence; it is training. I carry Italy with me before
+      Italy exists as a state.
+    imagePrompt: >-
+      A young sailor holding a clandestine revolutionary pamphlet beside a harbor,
+      ships in the fog, a map of Italy folded in his coat, pencil-bw style
+      transparent background.
+
+  - name: Anita and South America
+    imageFilename: facet-anita-south-america.png
+    cardFilename: facet-card-anita-south-america.png
+    details: >-
+      I fight in Brazil and Uruguay, learn mobile war, and meet Anita. She is
+      not an ornament to my legend; she rides, flees, fights, suffers, and dies
+      inside the same revolution that remakes me.
+    imagePrompt: >-
+      Two riders crossing a wind-torn South American plain, red shirts suggested
+      only by tonal contrast, smoke on the horizon, pencil-bw style transparent background.
+
+  - name: The Roman Republic
+    imageFilename: facet-roman-republic.png
+    cardFilename: facet-card-roman-republic.png
+    details: >-
+      In 1849 I defend Rome for the republic with volunteers against French
+      intervention. The city falls, but the defeat becomes a promise: Rome is
+      not only a place to take, it is an idea to keep alive.
+    imagePrompt: >-
+      Barricades before Roman ruins, volunteers in simple shirts holding the
+      line under smoke, a republic flag torn but upright, pencil-bw style
+      transparent background.
+
+  - name: The Thousand
+    imageFilename: facet-the-thousand.png
+    cardFilename: facet-card-the-thousand.png
+    details: >-
+      In 1860 I sail from Quarto with volunteers, land at Marsala, take Sicily
+      and Naples, and give the conquest to Victor Emmanuel II. I win a kingdom
+      and walk away from the throne.
+    imagePrompt: >-
+      A small fleet approaching Sicily at dawn, volunteers crowded on deck,
+      Mount Etna in the distance, pencil-bw style transparent background.
+
+# -- Portrait ------------------------------------------------------------------
+portraitPrompt: >-
+  A portrait of Giuseppe Garibaldi: thick beard, direct gaze, red shirt rendered
+  as tonal contrast, neckerchief, weathered revolutionary face. Pencil-bw,
+  transparent background. Editorial biography portrait style.
+portraitFilename: portrait.png
+
+# -- Images --------------------------------------------------------------------
+imageStyle: pencil-bw
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+
+# -- Cards ---------------------------------------------------------------------
+cardStyle: iam-portrait
+
+# -- Influence map -------------------------------------------------------------
+influenceMapStyle: clean
+influenceMapModel: gpt-image-1.5
+influenceMapBackground: transparent
+influenceMapPrompt: >-
+  Giuseppe Garibaldi's revolutionary influences and political network: Mazzini,
+  Young Italy, Anita Garibaldi, South American republican wars, Cavour, Victor
+  Emmanuel II, the Roman Republic, the Expedition of the Thousand, Caprera.
+  Place Garibaldi at center. Show influence on the Risorgimento, republican
+  movements, volunteer military culture, and Italian national memory.
+
+# -- Music ---------------------------------------------------------------------
+musicGenre: "Italian Risorgimento march, folk strings, brass band, martial drums"
+musicMood: "defiant, restless, sea-worn, heroic, republican"
+musicModel: suno-ttapi
+musicInstrumental: false
+sunoVersion: chirp-v4-5
+
+# -- Regeneration flags (set to false after first run to preserve existing files)
+regenerate:
+  portrait: true
+  facetImages: true
+  facetCards: true
+  influenceMap: true
+  music: true
+
+# -- Site branding -------------------------------------------------------------
+credits: alvagante
+versionOutput: true
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+brandingLogo: assets/img/logo.png

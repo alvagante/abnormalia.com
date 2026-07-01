@@ -6,6 +6,12 @@
 #   title       — stylized page title (may differ from subject name)
 #   date        — ISO 8601 date of generation
 #   description — one or two sentence teaser shown in the archive list
+- slug: einstein
+  subject: Albert Einstein
+  title: I Am the Equation
+  date: "2026-07-01"
+  description: >-
+    Albert Einstein speaks in first person present tense: relativity, exile, conscience, and the unfinished search.
 - slug: kafka
   subject: Franz Kafka
   title: I Am the Trial

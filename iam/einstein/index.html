@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I Am the Equation</title>
+<style>
+:root {
+  --bg: #faf8f4;
+  --ink: #1a1a18;
+  --dim: #6b6360;
+  --accent: #8b5e3c;
+  --rule: #d4cdc8;
+  --tinted: #f0ede6;
+  --slides-bg: #f2ede5;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: Georgia, "Times New Roman", "Liberation Serif", serif;
+  font-size: 16px; line-height: 1.72; color: var(--ink);
+  background: var(--bg); margin: 0; padding: 0;
+}
+
+/* ── Layout ── */
+.iam-layout {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  min-height: 100vh;
+}
+.iam-toc {
+  position: sticky; top: 0; align-self: start;
+  height: 100vh; overflow-y: auto;
+  padding: 2.2rem 1.2rem 2rem 1.8rem;
+  border-right: 1px solid var(--rule);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.76rem;
+}
+.iam-toc-label {
+  font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--dim); font-weight: 700; margin: 0 0 1rem; display: block;
+}
+.iam-toc-list { list-style: none; margin: 0; padding: 0; }
+.iam-toc-item { margin: 0; }
+.iam-toc-link {
+  display: block; padding: 0.28rem 0.5rem 0.28rem 0.6rem;
+  color: var(--dim); text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color 150ms, border-color 150ms;
+  line-height: 1.35;
+}
+.iam-toc-link:hover, .iam-toc-link.is-active {
+  color: var(--accent); border-left-color: var(--accent);
+}
+.iam-toc-divider { height: 1px; background: var(--rule); margin: 0.9rem 0 0.8rem; }
+.iam-toc-cards-btn {
+  display: block; width: 100%; text-align: left;
+  background: none; border: 1px solid var(--accent); color: var(--accent);
+  cursor: pointer; font-family: system-ui, sans-serif;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 0.3rem 0.5rem;
+  margin-top: 0.8rem;
+}
+.iam-toc-cards-btn:hover { background: var(--accent); color: #fff; }
+.iam-version-block {
+  margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid var(--rule);
+}
+.iam-version-block label {
+  display: block; font-size: 0.6rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--dim); margin-bottom: 0.3rem;
+}
+.iam-version-block select {
+  width: 100%; font-family: system-ui, sans-serif; font-size: 0.72rem;
+  color: var(--ink); background: var(--bg); border: 1px solid var(--rule);
+  padding: 0.28rem 0.4rem;
+}
+.iam-content {
+  padding: 3rem 3.5rem 8rem 3rem;
+  max-width: 740px;
+}
+
+/* ── Masthead ── */
+.iam-masthead {
+  margin: 0 0 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--ink);
+}
+.iam-name {
+  font-family: Georgia, serif;
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  font-weight: 400; line-height: 1.0; letter-spacing: -0.01em;
+  margin: 0 0 0.35rem; color: var(--ink);
+}
+.iam-title-line {
+  font-family: Georgia, serif; font-style: italic;
+  font-size: 1.1rem; color: var(--dim); margin: 0 0 1rem;
+}
+.iam-meta-strip {
+  display: flex; flex-direction: column; gap: 0.35rem;
+  font-family: system-ui, sans-serif; font-size: 0.74rem;
+  color: var(--dim); margin-bottom: 0;
+}
+.iam-meta-item { display: flex; gap: 0.35rem; align-items: baseline; }
+.iam-meta-label {
+  font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.09em; color: var(--accent);
+}
+.iam-lead { overflow: hidden; }
+.iam-portrait {
+  float: right; width: min(220px, 36%);
+  margin: 0.2rem 0 1rem 1.8rem;
+}
+.iam-portrait img {
+  width: 100%; display: block; cursor: zoom-in;
+  border: 1px solid var(--rule);
+}
+.iam-portrait figcaption {
+  font-family: system-ui, sans-serif; font-size: 0.68rem;
+  color: var(--dim); margin-top: 0.3rem; font-style: italic;
+}
+
+/* ── Section heads ── */
+.iam-section-head {
+  display: flex; align-items: baseline; gap: 0.9rem;
+  margin: 3.5rem 0 1.4rem; padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--rule); clear: both;
+}
+.iam-section-num {
+  font-family: system-ui, sans-serif; font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+  flex-shrink: 0;
+}
+.iam-section-name {
+  font-family: system-ui, sans-serif; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim);
+}
+
+/* ── Text rhythm ── */
+p { margin: 0 0 1.05em; }
+p strong { color: var(--ink); }
+blockquote.iam-pull {
+  margin: 2rem 0; padding: 0 0 0 1.4rem;
+  border-left: 3px solid var(--accent);
+  font-style: italic; font-size: 1.12rem; color: var(--dim); line-height: 1.55;
+}
+p.iam-aside {
+  font-family: system-ui, sans-serif; font-size: 0.78rem;
+  color: var(--dim); font-style: italic; margin: -0.5em 0 1em;
+}
+
+/* ── Facets ── */
+.iam-facet {
+  clear: both; margin: 2.5rem 0;
+  padding-top: 1rem; border-top: 1px solid var(--rule);
+}
+h2.iam-facet-name {
+  font-size: 1.35rem; font-weight: 400; font-style: italic;
+  margin: 0 0 0.9rem; color: var(--ink);
+}
+figure.iam-facet-img { margin: 0; }
+figure.iam-facet-img img { width: 100%; display: block; cursor: zoom-in; }
+figure.iam-facet-img figcaption {
+  font-family: system-ui, sans-serif; font-size: 0.68rem;
+  color: var(--dim); margin-top: 0.3rem; font-style: italic;
+}
+.iam-float-left {
+  float: left; width: min(250px, 42%);
+  margin: 0.2rem 1.5rem 0.8rem 0;
+}
+.iam-float-right {
+  float: right; width: min(250px, 42%);
+  margin: 0.2rem 0 0.8rem 1.5rem;
+}
+.iam-facet-controls { margin: 0.5rem 0 0.7rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+button.iam-drawer-trigger {
+  background: none; border: 1px solid var(--accent); color: var(--accent);
+  cursor: pointer; font-family: system-ui, sans-serif;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 0.28rem 0.7rem;
+}
+button.iam-drawer-trigger:hover { background: var(--accent); color: #fff; }
+figure.iam-facet-card { display: none; }
+
+/* ── Key Works ── */
+ul.iam-works { list-style: none; margin: 0; padding: 0; }
+li.iam-work {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "title year" "desc desc";
+  gap: 0.1rem 1rem;
+  padding: 0.75rem 0; border-bottom: 1px solid var(--rule);
+}
+li.iam-work:first-child { border-top: 1px solid var(--rule); }
+.iam-work-title { font-style: italic; grid-area: title; }
+.iam-work-year {
+  grid-area: year; align-self: center;
+  font-family: system-ui, sans-serif; font-size: 0.72rem; color: var(--dim);
+}
+.iam-work-desc {
+  grid-area: desc; font-family: system-ui, sans-serif;
+  font-size: 0.8rem; color: var(--dim);
+}
+
+/* ── Quotes ── */
+blockquote.iam-quote { margin: 1.5rem 0; padding: 1rem 1.2rem; }
+blockquote.iam-quote-verified { border-left: 3px solid var(--ink); }
+blockquote.iam-quote-verified p { font-size: 1.08rem; font-style: italic; margin: 0 0 0.45rem; }
+blockquote.iam-quote-verified footer {
+  font-family: system-ui, sans-serif; font-size: 0.74rem; color: var(--dim);
+}
+.iam-ai-voices-wrapper {
+  background: var(--tinted);
+  padding: 1.4rem 1.4rem 0.6rem;
+  margin: 0 -1.4rem;
+}
+.iam-ai-voices-label {
+  font-family: system-ui, sans-serif; font-size: 0.6rem;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--dim); font-weight: 700; margin: 0 0 1rem;
+  display: block;
+}
+blockquote.iam-quote-ai {
+  border-left: 2px solid var(--dim); margin: 0.8rem 0;
+  padding: 0 0 0 1rem;
+}
+blockquote.iam-quote-ai p {
+  font-size: 1rem; font-style: italic; color: var(--dim); margin: 0;
+}
+
+/* ── Links ── */
+.iam-links-list { display: flex; flex-direction: column; gap: 0.6rem; }
+a.iam-link {
+  display: grid; grid-template-columns: 1fr;
+  gap: 0.12rem; padding: 0.75rem;
+  border: 1px solid var(--rule); text-decoration: none; color: inherit;
+  transition: border-color 150ms;
+}
+a.iam-link:hover { border-color: var(--accent); }
+.iam-link-title { font-style: italic; font-size: 0.92rem; color: var(--accent); }
+.iam-link-source { font-family: system-ui, sans-serif; font-size: 0.68rem; color: var(--dim); }
+.iam-link-desc { font-family: system-ui, sans-serif; font-size: 0.78rem; color: var(--dim); }
+
+/* ── Timeline (dateline) section ── */
+.iam-dateline-section { clear: both; margin: 3.5rem 0 0; }
+.iam-dateline-section iframe {
+  width: 100%; height: 80vh; border: 1px solid var(--rule); display: block;
+}
+
+/* ── Influence map section ── */
+.iam-influence-section { clear: both; margin: 3.5rem 0 0; }
+.iam-influence-section iframe {
+  width: 100%; height: 75vh; border: 1px solid var(--rule); display: block;
+}
+.iam-influence-section img { width: 100%; cursor: zoom-in; display: block; }
+
+/* ── Side drawer ── */
+.iam-drawer {
+  display: block; /* override [hidden] attribute if present */
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(480px, 90vw); background: var(--bg);
+  border-left: 1px solid var(--rule);
+  box-shadow: -6px 0 32px rgba(0,0,0,0.10);
+  z-index: 60; overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 280ms cubic-bezier(0.4,0,0.2,1);
+}
+.iam-drawer.is-open { transform: translateX(0); }
+.iam-drawer-bar {
+  display: flex; justify-content: flex-end; padding: 0.7rem 1rem;
+  position: sticky; top: 0; background: var(--bg);
+  border-bottom: 1px solid var(--rule); z-index: 1;
+}
+button.iam-drawer-close {
+  background: none; border: 1px solid var(--dim); color: var(--dim);
+  cursor: pointer; font-family: system-ui, sans-serif;
+  font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.28rem 0.7rem;
+}
+button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.iam-drawer-facet-name {
+  font-family: Georgia, serif; font-style: italic;
+  font-size: 1.1rem; padding: 1rem 1.4rem 0.5rem;
+  border-bottom: 1px solid var(--rule); color: var(--ink);
+}
+.iam-drawer-slides {
+  padding: 1.2rem 1.4rem 1.4rem;
+  background: var(--slides-bg);
+  border-bottom: 2px solid var(--rule);
+}
+.iam-drawer-slides-label {
+  font-family: system-ui, sans-serif; font-size: 0.6rem;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--accent); font-weight: 700; margin: 0 0 0.7rem; display: block;
+}
+.iam-drawer-slides ul {
+  margin: 0; padding: 0 0 0 1.1rem;
+  font-family: system-ui, sans-serif; font-size: 0.82rem; color: var(--ink);
+}
+.iam-drawer-slides li { margin: 0.3rem 0; line-height: 1.42; }
+.iam-drawer-slides table {
+  width: 100%; border-collapse: collapse;
+  font-family: system-ui, sans-serif; font-size: 0.78rem; margin-top: 0.5rem;
+}
+.iam-drawer-slides td, .iam-drawer-slides th {
+  padding: 0.28rem 0.5rem; border: 1px solid var(--rule); text-align: left;
+}
+.iam-drawer-slides th { background: var(--tinted); font-weight: 600; }
+.iam-drawer-notes {
+  padding: 1.2rem 1.4rem 1.6rem;
+  font-size: 0.88rem; line-height: 1.68;
+}
+.iam-drawer-notes-label {
+  font-family: system-ui, sans-serif; font-size: 0.6rem;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--dim); font-weight: 700; margin: 0 0 0.7rem; display: block;
+}
+.iam-drawer-notes p { margin: 0 0 0.85em; }
+.iam-drawer-notes strong { color: var(--ink); }
+
+/* ── Card grid popup ── */
+.iam-card-grid-popup {
+  position: fixed; inset: 0; background: rgba(26,26,24,0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 65;
+}
+.iam-card-grid-popup[hidden] { display: none; }
+.iam-card-grid-popup-inner {
+  background: var(--bg); border: 1px solid var(--rule);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+  max-width: min(900px, 94vw); max-height: 88vh;
+  overflow-y: auto; padding: 1.5rem;
+}
+.iam-card-grid-popup-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1rem;
+}
+.iam-card-grid-popup-bar h2 {
+  font-family: system-ui, sans-serif; font-size: 0.68rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--dim); font-weight: 700; margin: 0;
+}
+.iam-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1.1rem;
+}
+.iam-card-item { perspective: 800px; cursor: pointer; }
+.iam-card-inner {
+  position: relative; width: 100%; aspect-ratio: 2.5 / 3.5;
+  transform-style: preserve-3d;
+  transition: transform 450ms cubic-bezier(0.4,0,0.2,1);
+}
+.iam-card-item.is-flipped .iam-card-inner { transform: rotateY(180deg); }
+.iam-card-front, .iam-card-back {
+  position: absolute; inset: 0; backface-visibility: hidden;
+  border: 1px solid var(--rule); border-radius: 3px; overflow: hidden;
+  box-shadow: 2px 4px 14px rgba(0,0,0,0.13);
+}
+.iam-card-front img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.iam-card-back {
+  transform: rotateY(180deg); background: var(--bg);
+  padding: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem;
+}
+.iam-card-back-name {
+  font-family: system-ui, sans-serif; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent);
+}
+.iam-card-back-desc {
+  font-family: system-ui, sans-serif; font-size: 0.72rem;
+  color: var(--dim); line-height: 1.42;
+}
+
+/* ── Backdrop ── */
+.iam-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.18); z-index: 55;
+}
+
+/* ── Lightbox ── */
+.iam-lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.86);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.iam-lightbox img { max-width: 92vw; max-height: 92vh; }
+
+/* ── Provenance footer ── */
+.iam-provenance {
+  clear: both; margin: 4rem 0 0; padding-top: 0.8rem;
+  border-top: 1px solid var(--rule);
+  font-family: system-ui, sans-serif; font-size: 0.68rem;
+  color: var(--dim); text-align: center;
+}
+.iam-provenance a { color: var(--dim); text-decoration: underline dotted; }
+.iam-provenance-meta { margin-top: 0.2rem; }
+.iam-provenance-meta span + span::before { content: " / "; color: #bbb; }
+
+/* ── Brand footer ── */
+.iam-brand-footer {
+  clear: both; margin: 1.5rem 0 0; padding: 0.5rem 0;
+  border-top: 1px solid var(--rule); text-align: right; opacity: 0.65;
+}
+.iam-brand-footer img { height: 20px; width: auto; vertical-align: middle; }
+.iam-brand-footer a { text-decoration: none; color: inherit; }
+.iam-brand-footer:hover { opacity: 1; }
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .iam-layout { grid-template-columns: 1fr; }
+  .iam-toc {
+    position: relative; height: auto; border-right: none;
+    border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 1.2rem; display: flex; flex-wrap: wrap;
+    align-items: center; gap: 0.2rem 0.8rem;
+  }
+  .iam-toc-list {
+    display: flex; flex-wrap: wrap; gap: 0.1rem 0.5rem;
+  }
+  .iam-toc-link {
+    padding: 0.15rem 0; border-left: none;
+    border-bottom: 2px solid transparent;
+  }
+  .iam-toc-link.is-active { border-bottom-color: var(--accent); border-left-color: transparent; }
+  .iam-toc-divider, .iam-version-block { display: none; }
+  .iam-content { padding: 2rem 1.4rem 6rem; }
+  .iam-portrait { width: min(160px, 40%); }
+  .iam-name { font-size: clamp(2.2rem, 7vw, 3.2rem); }
+  .iam-ai-voices-wrapper { margin: 0 -1.4rem; padding: 1rem 1.4rem 0.4rem; }
+}
+
+#iam-player {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--ink); border-top: 1px solid var(--accent);
+  z-index: 80; padding: 0.4rem 1.2rem 0.3rem;
+  font-family: system-ui, sans-serif; font-size: 0.76rem; color: #ccc;
+}
+#iam-player-row { display: flex; align-items: center; gap: 0.6rem; }
+.iam-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 0.95rem; padding: 0.15rem 0.3rem;
+  line-height: 1; flex-shrink: 0;
+}
+.iam-pbtn:hover { color: var(--accent); }
+#iam-player.iam-autoplay-blocked #iam-play-btn {
+  color: #fff; background: var(--accent); border-radius: 2px;
+  animation: iam-play-pulse 1.35s ease-in-out infinite;
+}
+@keyframes iam-play-pulse {
+  0%,100% { transform:scale(1); box-shadow:0 0 0 1px var(--accent); }
+  50% { transform:scale(1.12); box-shadow:0 0 0 1px var(--accent),0 0 18px rgba(139,94,60,0.6); }
+}
+#iam-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c8b89a; font-weight: 600;
+}
+#iam-ptime { color: #555; white-space: nowrap; font-size: 0.68rem; }
+#iam-vol { width: 52px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+#iam-pbar { height: 2px; background: #333; cursor: pointer; margin-top: 0.3rem; }
+#iam-pfill { height: 100%; background: var(--accent); width: 0%; pointer-events: none; }
+#iam-lyrics-panel {
+  position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%);
+  width: min(600px, 90vw); max-height: 42vh; overflow-y: auto;
+  background: #1a1a18; border: 1px solid #2a2a28; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.iam-lyrics-head {
+  font-family: system-ui, sans-serif; color: var(--accent); font-weight: 700;
+  font-size: 0.72rem; letter-spacing: 0.07em; text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+#iam-lyrics-panel pre {
+  font-family: system-ui, sans-serif; font-size: 0.8rem; line-height: 1.85;
+  color: #aaa; white-space: pre-wrap; margin: 0;
+}
+#iam-tracklist-panel {
+  position: fixed; bottom: 48px; right: 1.2rem;
+  background: #1a1a18; border: 1px solid #2a2a28; border-bottom: none;
+  padding: 0.4rem; z-index: 81; min-width: 200px; max-height: 55vh; overflow-y: auto;
+}
+.iam-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: system-ui, sans-serif; font-size: 0.76rem;
+  cursor: pointer; padding: 0.32rem 0.5rem;
+}
+.iam-track-item:hover { color: #eee; }
+.iam-track-item.active { color: var(--accent); }
+</style>
+</head>
+<body>
+<!-- @alvagante/content-iam -->
+<div class="iam-layout">
+<nav class="iam-toc" aria-label="Table of contents">
+  <span class="iam-toc-label">Contents</span>
+  <ul class="iam-toc-list">
+    <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-biography">Biography</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-key-works">Key Works</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-facets">Facets</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-quotes">In Their Own Words</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-ai-voices">AI Voices</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-influence">Influence Map</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-dateline">Timeline</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-links">Links</a></li>
+  </ul>
+    <div class="iam-toc-divider"></div>
+    <button class="iam-toc-cards-btn">Facet Cards</button>
+</nav>
+<div class="iam-content">
+<header class="iam-masthead">
+  <p class="iam-aside">Profile by alvagante — 20260701-08:41</p>
+  <h1 class="iam-name">Albert Einstein</h1>
+  <p class="iam-title-line">I Am the Equation</p>
+  <div class="iam-lead">
+  <figure class="iam-portrait"><img src="./portrait.png" alt="Portrait of Albert Einstein"><figcaption>Albert Einstein</figcaption></figure>
+  <div class="iam-meta-strip"><span class="iam-meta-item"><span class="iam-meta-label">Dates</span>14 March 1879 – 18 April 1955</span><span class="iam-meta-item"><span class="iam-meta-label">Nationality</span>German-born / Swiss / American</span><span class="iam-meta-item"><span class="iam-meta-label">Era</span>20th century</span><span class="iam-meta-item"><span class="iam-meta-label">Domain</span>Physics, relativity, public conscience</span></div>
+  </div>
+</header>
+<main>
+<section id="iam-biography">
+<p>I am born in Ulm, in the Kingdom of Württemberg, on the fourteenth of March, 1879. A subject of an empire that expects certain things of me. I disappoint most of them early.</p>
+
+<p>I am not a prodigy in the way people later imagine. I am slow to speak. I question what the schoolroom insists I accept. In 1895 I go to Switzerland. The following year I give up my German citizenship — the first time I walk away from a country, though not the last.</p>
+
+<p>At seventeen I enroll at the polytechnic in Zurich to become a teacher of mathematics and physics. I graduate in 1900. No university wants me. So I take a desk at the patent office in Bern, examining other men's inventions.</p>
+
+<p>It is the best thing that could have happened to me.</p>
+
+<blockquote class="iam-pull">I do my most radical thinking as a clerk, with a clock on the wall and a train timetable in my head.</blockquote>
+
+<p>In 1905 I publish four papers. Light behaves as particles. Molecules jostle a grain of pollen into visible dance. Time and simultaneity are not what anyone assumed. And mass and energy are the same thing wearing different clothes: E equals mc squared. I submit my doctoral dissertation to the University of Zurich the same year.</p>
+
+<p>Ten years later I finish the harder work. Gravity is not a force pulling across empty space. It is the shape of space and time itself, curved by whatever fills it. In 1915 I present the field equations. In 1919, when starlight bends around the eclipsed sun exactly as I predict, my name leaves the seminar rooms and enters the newspapers. I become something I never asked to be: a public figure.</p>
+
+<p>In 1921 I receive the Nobel Prize — not for relativity, which the committee finds too controversial, but for the photoelectric effect. I take it. Vindication rarely arrives in the shape you expect.</p>
+
+<p>In 1914 I had returned to Berlin, to the Prussian Academy, becoming German again. In 1933, while I am visiting America, Hitler takes power. I decide not to go back. I am a Jew, and I have watched what is coming for long enough. I settle at Princeton. In 1940 I become an American.</p>
+
+<p>In 1939 I sign a letter to President Roosevelt, warning that Germany might build an atomic weapon. It is the most consequential signature of my life, and I come to regret its harvest. I spend the atomic age arguing against the very fire I helped light — for peace, for civil rights, for world government, for the maturity that power demands and so rarely earns.</p>
+
+<p>In my last decades I quarrel with the physics I helped create. I refuse to believe that chance sits at the bottom of nature. I chase a unified field theory that never comes. I grow isolated. I do not mind, entirely. Some questions are worth being wrong about for a very long time.</p>
+
+<p>I die in Princeton on the eighteenth of April, 1955, with equations unfinished on the page beside me.</p>
+</section>
+
+<section id="iam-key-works">
+<ul class="iam-works">
+<li class="iam-work">
+<span class="iam-work-title">On the Photoelectric Effect</span>
+<span class="iam-work-year">1905</span>
+<span class="iam-work-desc">Light as discrete quanta; the paper that later earns me the Nobel Prize.</span>
+</li>
+<li class="iam-work">
+<span class="iam-work-title">On Brownian Motion</span>
+<span class="iam-work-year">1905</span>
+<span class="iam-work-desc">The random jitter of suspended particles as proof that atoms and molecules are real.</span>
+</li>
+<li class="iam-work">
+<span class="iam-work-title">On the Electrodynamics of Moving Bodies</span>
+<span class="iam-work-year">1905</span>
+<span class="iam-work-desc">The special theory of relativity; simultaneity, time, and light rebuilt.</span>
+</li>
+<li class="iam-work">
+<span class="iam-work-title">Does the Inertia of a Body Depend on Its Energy Content?</span>
+<span class="iam-work-year">1905</span>
+<span class="iam-work-desc">Mass and energy shown to be equivalent — E = mc².</span>
+</li>
+<li class="iam-work">
+<span class="iam-work-title">The Field Equations of Gravitation</span>
+<span class="iam-work-year">1915</span>
+<span class="iam-work-desc">General relativity; gravity reimagined as the curvature of spacetime.</span>
+</li>
+<li class="iam-work">
+<span class="iam-work-title">Cosmological Considerations in General Relativity</span>
+<span class="iam-work-year">1917</span>
+<span class="iam-work-desc">The universe modeled as a whole; introduces the cosmological constant.</span>
+</li>
+<li class="iam-work">
+<span class="iam-work-title">On the Quantum Theory of Radiation</span>
+<span class="iam-work-year">1917</span>
+<span class="iam-work-desc">Spontaneous and stimulated emission — the seed of the laser and maser.</span>
+</li>
+<li class="iam-work">
+<span class="iam-work-title">The Einstein–Szilard Letter</span>
+<span class="iam-work-year">1939</span>
+<span class="iam-work-desc">A warning to Roosevelt on the possibility of a German atomic bomb.</span>
+</li>
+</ul>
+</section>
+
+<section id="iam-facets">
+
+<section class="iam-facet" id="facet-annus-mirabilis">
+<h2 class="iam-facet-name">Annus Mirabilis</h2>
+<figure class="iam-facet-img iam-float-right">
+<img src="./facet-annus-mirabilis.png" alt="A modest patent office desk covered with papers, a clock, a train timetable, beams of light crossing the room, pencil-bw style transparent background.">
+<figcaption>The desk where the century turns.</figcaption>
+</figure>
+<figure class="iam-facet-card" data-desc="1905: four papers in a single year from a third-class technical examiner in Bern — light quanta, Brownian motion, special relativity, and mass–energy equivalence."><img src="./facet-card-annus-mirabilis.png" alt="Annus Mirabilis card"><figcaption>Annus Mirabilis</figcaption></figure>
+<div class="iam-facet-controls">
+<button class="iam-drawer-trigger" data-drawer="drawer-facet-1">Study</button>
+</div>
+<p>People imagine I do this work in some tower of pure thought. I do it in a patent office. Between applications for electrical timing devices and coupled clocks, I think about what it would mean to ride alongside a beam of light.</p>
+<p>The examiner's discipline serves me. All day I ask of an invention: what does it actually do, mechanically, honestly, stripped of the inventor's flattery? I ask the same of the universe. What does a clock truly measure? What does it mean to say two events happen at once?</p>
+<p>I have no laboratory. My instruments are trains, lightning, moving rulers, and a pencil. I take a coffee, I take a walk, I take these ordinary objects to the edge of what they can bear. The papers arrive in a rush, four in one year, and I am twenty-six and mostly unknown.</p>
+</section>
+
+<aside class="iam-drawer" id="drawer-facet-1">
+<div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
+<div class="iam-drawer-facet-name">Annus Mirabilis</div>
+<div class="iam-drawer-slides">
+<span class="iam-drawer-slides-label">Study notes</span>
+<ul>
+<li><strong>Year:</strong> 1905, the "miracle year," published in <em>Annalen der Physik</em></li>
+<li><strong>Position:</strong> technical expert third class, Swiss Patent Office, Bern</li>
+<li><strong>Paper 1:</strong> photoelectric effect — light energy in quanta (hf); grounds later photon concept</li>
+<li><strong>Paper 2:</strong> Brownian motion — statistical proof of atomic/molecular reality</li>
+<li><strong>Paper 3:</strong> special relativity — constant speed of light; relativity of simultaneity; time dilation, length contraction</li>
+<li><strong>Paper 4:</strong> mass–energy equivalence, E = mc²</li>
+<li><strong>PhD:</strong> dissertation submitted to University of Zurich, 1905</li>
+<li><strong>Nobel:</strong> awarded 1921 for the photoelectric law, not relativity</li>
+</ul>
+</div>
+<div class="iam-drawer-notes">
+<span class="iam-drawer-notes-label">Notes</span>
+<p>The four 1905 papers are not variations on one theme; they address independent frontiers, which is what makes the year extraordinary. Two of them (light quanta and Brownian motion) argue for the discreteness of matter and radiation; two (special relativity and its energy corollary) reconstruct the continuum of space and time. The photoelectric paper is the most conceptually rebellious — Einstein himself called it "revolutionary" — because it treats light as granular at a moment when the wave picture was thought settled. Special relativity, by contrast, is presented almost conservatively: it demands no new experiment, only that two accepted principles (the relativity of motion and the invariance of light-speed) be taken at full strength simultaneously. The synthesis was in the courage to hold both without flinching.</p>
+</div>
+</aside>
+
+<section class="iam-facet" id="facet-general-relativity">
+<h2 class="iam-facet-name">General Relativity</h2>
+<figure class="iam-facet-img iam-float-left">
+<img src="./facet-general-relativity.png" alt="A warped grid of spacetime bending around a dark sun, stars displaced at the edge, chalk equations floating nearby, pencil-bw style transparent background.">
+<figcaption>Space bends, and the stars appear to move.</figcaption>
+</figure>
+<figure class="iam-facet-card" data-desc="1915: gravity recast as the curvature of spacetime; confirmed in 1919 when the eclipse expedition measures starlight bending near the Sun."><img src="./facet-card-general-relativity.png" alt="General Relativity card"><figcaption>General Relativity</figcaption></figure>
+<div class="iam-facet-controls">
+<button class="iam-drawer-trigger" data-drawer="drawer-facet-2">Study</button>
+</div>
+<p>Special relativity leaves me uneasy. It treats uniform motion, but not acceleration, not gravity. And I have what I later call the happiest thought of my life: a person falling freely does not feel their own weight. Gravity and acceleration are, locally, the same thing.</p>
+<p>It takes me eight years to turn that thought into mathematics. I need geometry I do not know. I struggle, I make errors, I abandon a version and return to it. This is not the swift 1905 rush. This is grinding, patient, humiliating labor.</p>
+<p>In 1915 the field equations close. Matter tells spacetime how to curve; curved spacetime tells matter how to move. Then in 1919 they photograph an eclipse, and the stars near the sun sit exactly where my curved space says they must. Overnight I am no longer a physicist. I am a headline.</p>
+</section>
+
+<aside class="iam-drawer" id="drawer-facet-2">
+<div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
+<div class="iam-drawer-facet-name">General Relativity</div>
+<div class="iam-drawer-slides">
+<span class="iam-drawer-slides-label">Study notes</span>
+<ul>
+<li><strong>Completed:</strong> November 1915, Prussian Academy of Sciences, Berlin</li>
+<li><strong>Core idea:</strong> gravitation = curvature of spacetime, not a force</li>
+<li><strong>Equivalence principle:</strong> free fall is locally indistinguishable from inertial motion</li>
+<li><strong>Math:</strong> Riemannian geometry, tensor calculus (aided by Marcel Grossmann)</li>
+<li><strong>Early success:</strong> explains anomalous precession of Mercury's perihelion</li>
+<li><strong>1919 test:</strong> Eddington's eclipse expeditions (Sobral, Príncipe) measure light deflection</li>
+<li><strong>1917 extension:</strong> cosmology paper introduces the cosmological constant (Λ)</li>
+</ul>
+</div>
+<div class="iam-drawer-notes">
+<span class="iam-drawer-notes-label">Notes</span>
+<p>The eclipse of May 1919 mattered as much for the moment as the measurement. Announced in November 1919, barely a year after the Armistice, it presented a German-born theory confirmed by British astronomers — a rare gesture of internationalism after a war that had shattered scientific fellowship. The press amplified it enormously; this is the true origin of Einstein as a global celebrity. Physically, general relativity's later fruits far exceed the 1919 test: gravitational lensing, black holes, gravitational waves, and the expansion of the universe all descend from these equations. The cosmological constant Einstein added in 1917 to permit a static universe he later reportedly regretted; it has since returned as a leading description of cosmic acceleration.</p>
+</div>
+</aside>
+
+<section class="iam-facet" id="facet-exile-conscience">
+<h2 class="iam-facet-name">Exile and Conscience</h2>
+<figure class="iam-facet-img iam-float-right">
+<img src="./facet-exile-conscience.png" alt="A man with a violin and a suitcase walking away from a burning map of Europe toward a quiet study, pencil-bw style transparent background.">
+<figcaption>I carry the violin and leave the country.</figcaption>
+</figure>
+<figure class="iam-facet-card" data-desc="1933: Einstein leaves Germany for good, settles at Princeton, signs the 1939 letter to Roosevelt, then campaigns against nuclear arms and for peace and civil rights."><img src="./facet-card-exile-conscience.png" alt="Exile and Conscience card"><figcaption>Exile and Conscience</figcaption></figure>
+<div class="iam-facet-controls">
+<button class="iam-drawer-trigger" data-drawer="drawer-facet-3">Study</button>
+</div>
+<p>I am abroad when Hitler takes power in 1933. I understand at once that I will not go home. My property is seized, my name blacklisted, my science denounced as "Jewish." I settle at Princeton, a refugee with a desk and a reputation.</p>
+<p>In 1939 I lend my signature to a warning: Germany might build a weapon from the very equation that made me famous. I fear that fire in the wrong hands more than I fear the fire itself. So I sign.</p>
+<p>Then I watch what the fire does. And I spend my remaining years insisting that a nation cannot buy safety with physics alone — that security without political maturity is a trap, and that peace, civil rights, and some form of world governance are not idealism but arithmetic. I speak for the persecuted because I have been one.</p>
+</section>
+
+<aside class="iam-drawer" id="drawer-facet-3">
+<div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
+<div class="iam-drawer-facet-name">Exile and Conscience</div>
+<div class="iam-drawer-slides">
+<span class="iam-drawer-slides-label">Study notes</span>
+<ul>
+<li><strong>1933:</strong> renounces German citizenship for the second time; never returns to Germany</li>
+<li><strong>Destination:</strong> Institute for Advanced Study, Princeton, New Jersey</li>
+<li><strong>Citizenship:</strong> naturalized US citizen, 1940 (retains Swiss citizenship)</li>
+<li><strong>1939 letter:</strong> drafted by Leó Szilárd, signed by Einstein, sent to F.D. Roosevelt</li>
+<li><strong>Outcome:</strong> spurred US atomic research, later the Manhattan Project (in which he did not work)</li>
+<li><strong>Later causes:</strong> nuclear disarmament, world government, anti-racism, Zionism / support for a Jewish homeland</li>
+<li><strong>1955:</strong> co-signs the Russell–Einstein Manifesto against nuclear weapons, days before his death</li>
+</ul>
+</div>
+<div class="iam-drawer-notes">
+<span class="iam-drawer-notes-label">Notes</span>
+<p>The tension of this period is genuine and unresolved: Einstein was a lifelong pacifist who nonetheless urged the development of a weapon, reasoning that a Nazi monopoly on atomic arms would be catastrophic. He did not participate in the Manhattan Project — he was denied security clearance — and later described his signature on the letter as his "one great mistake," qualifying that it was justified only by the danger a German bomb posed. In America he became an outspoken critic of segregation and McCarthyism, aligning himself with civil-rights advocates at real cost to his standing. His conscience was not a late accessory to his fame but the same refusal to accept received authority that had driven his physics.</p>
+</div>
+</aside>
+
+<section class="iam-facet" id="facet-unfinished-field">
+<h2 class="iam-facet-name">The Unfinished Field</h2>
+<figure class="iam-facet-img iam-float-left">
+<img src="./facet-unfinished-field.png" alt="A blackboard filled with incomplete equations, a compass, dice set aside untouched, a violin on a chair, pencil-bw style transparent background.">
+<figcaption>The dice remain untouched. The equations remain open.</figcaption>
+</figure>
+<figure class="iam-facet-card" data-desc="Einstein's last decades: resisting quantum indeterminacy, debating Bohr, and pursuing an unrealized unified field theory in growing isolation."><img src="./facet-card-unfinished-field.png" alt="The Unfinished Field card"><figcaption>The Unfinished Field</figcaption></figure>
+<div class="iam-facet-controls">
+<button class="iam-drawer-trigger" data-drawer="drawer-facet-4">Study</button>
+</div>
+<p>I help build the quantum theory, and then I refuse to be at peace with it. Not because the mathematics fails — it succeeds embarrassingly well — but because it asks me to accept that chance sits at the foundation of the world. I do not believe nature rolls dice in secret.</p>
+<p>Niels Bohr and I argue for years, in conference halls and in print. He is generous, formidable, and, most of history now says, right. I invent thought experiments to trap the theory; he escapes them. I lose these debates. I do not stop.</p>
+<p>Meanwhile I hunt for a unified field theory — one geometry that would hold gravity and electromagnetism together, the way general relativity held space and time. I never find it. I grow separate from the young physicists who have moved on. I accept the isolation. To me it is the honest cost of trying to keep the universe intelligible in a single piece.</p>
+<blockquote class="iam-pull">Some questions are worth being wrong about for a very long time.</blockquote>
+</section>
+
+<aside class="iam-drawer" id="drawer-facet-4">
+<div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
+<div class="iam-drawer-facet-name">The Unfinished Field</div>
+<div class="iam-drawer-slides">
+<span class="iam-drawer-slides-label">Study notes</span>
+<ul>
+<li><strong>Contributions to quantum theory:</strong> photons, stimulated emission, Bose–Einstein statistics (with S.N. Bose)</li>
+<li><strong>Objection:</strong> opposed fundamental randomness — "God does not play dice"</li>
+<li><strong>Bohr–Einstein debates:</strong> ongoing from the 1920s (Solvay conferences) onward</li>
+<li><strong>EPR paper (1935):</strong> with Podolsky and Rosen; argued quantum mechanics is incomplete; introduced entanglement puzzle</li>
+<li><strong>Unified field theory:</strong> decades-long attempt to unite gravity and electromagnetism geometrically — unsuccessful</li>
+<li><strong>Consequence:</strong> increasing isolation from mainstream physics in his final decades</li>
+</ul>
+</div>
+<div class="iam-drawer-notes">
+<span class="iam-drawer-notes-label">Notes</span>
+<p>Einstein's later resistance is often mischaracterized as reactionary; it was better understood as a demand for completeness. He did not doubt quantum mechanics' predictive power — he doubted that it was the final, complete description of reality. The 1935 EPR argument, intended to expose the theory's incompleteness, instead sharpened the concept of entanglement and seeded some of the most productive work in modern physics, including Bell's theorem and quantum information science. His unified-field program failed partly because it ignored the nuclear forces then being discovered, which no purely gravitational-electromagnetic geometry could accommodate. Yet the ambition — a single unifying framework — remains the guiding dream of theoretical physics, pursued today under other names.</p>
+</div>
+</aside>
+
+</section>
+
+<section id="iam-quotes">
+<blockquote class="iam-quote iam-quote-verified">
+<p>God does not play dice.</p>
+<footer>— my recurring objection to quantum indeterminacy</footer>
+</blockquote>
+</section>
+
+<section id="iam-ai-voices">
+<div class="iam-ai-voices-wrapper">
+<span class="iam-ai-voices-label">AI-imagined voice — not historical</span>
+<blockquote class="iam-quote iam-quote-ai">
+<p>I gave the world an equation and could not take it back. The clerk who imagined riding a beam of light did not know he was lighting a fuse.</p>
+</blockquote>
+<blockquote class="iam-quote iam-quote-ai">
+<p>They call me the mind of the century. I would settle for having kept the universe in one piece — and I did not manage even that.</p>
+</blockquote>
+</div>
+</section>
+
+<section id="iam-links">
+<div class="iam-links-list">
+<a class="iam-link" href="https://en.wikipedia.org/wiki/Albert_Einstein" target="_blank" rel="noopener noreferrer">
+<span class="iam-link-title">Albert Einstein — Wikipedia</span>
+<span class="iam-link-source">en.wikipedia.org</span>
+<span class="iam-link-desc">The primary biographical reference for dates, works, citizenships, and personal history.</span>
+</a>
+<a class="iam-link" href="https://www.nobelprize.org/prizes/physics/1921/einstein/facts/" target="_blank" rel="noopener noreferrer">
+<span class="iam-link-title">The Nobel Prize in Physics 1921</span>
+<span class="iam-link-source">nobelprize.org</span>
+<span class="iam-link-desc">The official citation — awarded for the law of the photoelectric effect.</span>
+</a>
+<a class="iam-link" href="https://www.osti.gov/opennet/manhattan-project-history/Events/1939-1942/einstein_letter.htm" target="_blank" rel="noopener noreferrer">
+<span class="iam-link-title">The Einstein–Szilard Letter, 1939</span>
+<span class="iam-link-source">osti.gov</span>
+<span class="iam-link-desc">Text and context of the letter warning Roosevelt about a possible German atomic weapon.</span>
+</a>
+</div>
+</section>
+
+<section id="iam-closing">
+<p>I leave the equations open on the page. I never unite the fields. I never reconcile with the dice.</p>
+<p>I still do not believe the universe is built on chance. But I am no longer here to argue it, and the young ones have gone on without me.</p>
+<p>Whether nature is, at its foundation, intelligible in a single piece — that question outlives me. I hand it forward, unanswered.</p>
+</section>
+</main>
+
+<section id="iam-influence" class="iam-influence-section" aria-label="Influence Map">
+  <div class="iam-section-head"><span class="iam-section-num">—</span><span class="iam-section-name">Influence Map</span></div>
+  <iframe src="./influence-map.html" title="Influence Map" loading="lazy"></iframe>
+</section>
+
+<section id="iam-dateline" class="iam-dateline-section" aria-label="Dateline">
+  <div class="iam-section-head"><span class="iam-section-num">—</span><span class="iam-section-name">Timeline</span></div>
+  <iframe src="./timeline.html" title="Timeline: Albert Einstein" loading="lazy"></iframe>
+</section>
+
+<footer class="iam-brand-footer"><a href="https://abnormalia.com"><img src="assets/img/logo.png" alt="abnormalia"></a></footer>
+<footer class="iam-provenance"><a href="https://swamp-club.com/extensions/@alvagante/content-iam" target="_blank" rel="noopener noreferrer">Generated with Swamp extension @alvagante/content-iam</a><div class="iam-provenance-meta"><span>fieldnotes</span><span>subject type: real</span></div></footer>
+</div>
+</div>
+<script>
+(function(){
+  // ToC active-section tracking
+  var tocLinks=Array.from(document.querySelectorAll('.iam-toc-link'));
+  var sectionIds=tocLinks.map(function(l){return l.getAttribute('href').replace(/^#/,'');});
+  var sections=sectionIds.map(function(id){return document.getElementById(id);}).filter(Boolean);
+  function updateToc(){
+    var scrollY=window.scrollY||window.pageYOffset;
+    var threshold=scrollY+window.innerHeight*0.38;
+    var active=0;
+    for(var i=0;i<sections.length;i++){
+      if(sections[i]&&sections[i].offsetTop<=threshold) active=i;
+    }
+    tocLinks.forEach(function(l,i){l.classList.toggle('is-active',i===active);});
+  }
+  window.addEventListener('scroll',updateToc,{passive:true});
+  window.addEventListener('resize',updateToc);
+  updateToc();
+
+  // Backdrop
+  var backdrop=document.createElement('div');
+  backdrop.className='iam-backdrop';
+  backdrop.hidden=true;
+  document.body.appendChild(backdrop);
+
+  function closeDrawers(){
+    document.querySelectorAll('.iam-drawer').forEach(function(d){d.classList.remove('is-open');});
+    backdrop.hidden=true;
+  }
+
+  // Card grid popup
+  var cardPopup=null;
+  function openCardPopup(){
+    if(cardPopup){cardPopup.hidden=false;return;}
+    var facetCards=Array.from(document.querySelectorAll('figure.iam-facet-card'));
+    if(!facetCards.length) return;
+    cardPopup=document.createElement('div');
+    cardPopup.className='iam-card-grid-popup';
+    var inner=document.createElement('div');
+    inner.className='iam-card-grid-popup-inner';
+    var bar=document.createElement('div');
+    bar.className='iam-card-grid-popup-bar';
+    var heading=document.createElement('h2');
+    heading.textContent='Facet Cards';
+    var closeBtn=document.createElement('button');
+    closeBtn.className='iam-drawer-close';
+    closeBtn.textContent='Close';
+    closeBtn.addEventListener('click',function(){cardPopup.hidden=true;});
+    bar.appendChild(heading); bar.appendChild(closeBtn);
+    inner.appendChild(bar);
+    var grid=document.createElement('div');
+    grid.className='iam-card-grid';
+    facetCards.forEach(function(card){
+      var img=card.querySelector('img');
+      var caption=card.querySelector('figcaption');
+      var name=caption?caption.textContent.trim():(img?img.alt:'');
+      var desc=card.getAttribute('data-desc')||'';
+      var item=document.createElement('div');
+      item.className='iam-card-item';
+      item.innerHTML='<div class="iam-card-inner">'+
+        '<div class="iam-card-front"><img src="'+(img?img.src:'')+'" alt="'+(img?img.alt:'')+'" loading="lazy" style="cursor:zoom-in"></div>'+
+        '<div class="iam-card-back"><div class="iam-card-back-name">'+escH(name)+'</div>'+
+        '<div class="iam-card-back-desc">'+escH(desc)+'</div></div>'+
+        '</div>';
+      item.addEventListener('click',function(){item.classList.toggle('is-flipped');});
+      var frontImg=item.querySelector('.iam-card-front img');
+      if(frontImg){frontImg.addEventListener('click',function(e){
+        e.stopPropagation();
+        var box=document.createElement('div');
+        box.className='iam-lightbox';
+        box.style.zIndex='90';
+        var big=document.createElement('img');
+        big.src=frontImg.src;big.alt=frontImg.alt;
+        box.appendChild(big);
+        box.addEventListener('click',function(){box.remove();});
+        document.body.appendChild(box);
+      });}
+      grid.appendChild(item);
+    });
+    inner.appendChild(grid);
+    cardPopup.appendChild(inner);
+    cardPopup.addEventListener('click',function(e){if(e.target===cardPopup)cardPopup.hidden=true;});
+    document.body.appendChild(cardPopup);
+  }
+
+  function escH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+  document.addEventListener('click',function(e){
+    // Drawer trigger
+    var trigger=e.target.closest?e.target.closest('.iam-drawer-trigger'):null;
+    if(trigger){
+      closeDrawers();
+      var id=trigger.getAttribute('data-drawer');
+      var drawer=document.getElementById(id);
+      if(drawer){drawer.classList.add('is-open');backdrop.hidden=false;}
+      return;
+    }
+    // Drawer close
+    if(e.target.closest&&(e.target.closest('.iam-drawer-close')||e.target.closest('.iam-backdrop'))){
+      closeDrawers(); return;
+    }
+    // Cards button
+    var cardsBtn=e.target.closest?e.target.closest('.iam-toc-cards-btn'):null;
+    if(cardsBtn){ openCardPopup(); return; }
+    // Lightbox
+    var zoomImg=e.target.closest?e.target.closest(
+      'figure.iam-facet-img img, figure.iam-portrait img, .iam-influence-section img'
+    ):null;
+    if(zoomImg&&!e.target.closest('.iam-drawer')){
+      var box=document.createElement('div');
+      box.className='iam-lightbox';
+      var big=document.createElement('img');
+      big.src=zoomImg.src; big.alt=zoomImg.alt;
+      box.appendChild(big);
+      box.addEventListener('click',function(){box.remove();});
+      document.body.appendChild(box);
+      return;
+    }
+  });
+
+  backdrop.addEventListener('click',closeDrawers);
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      closeDrawers();
+      document.querySelectorAll('.iam-lightbox').forEach(function(b){b.remove();});
+      if(cardPopup) cardPopup.hidden=true;
+    }
+  });
+
+  // Version select
+  var vs=document.getElementById('iam-version-select');
+  if(vs){
+    var match=window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    vs.value=match?match[1]:'current';
+    vs.addEventListener('change',function(){
+      var val=vs.value;
+      var inV=/\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      window.location.href=val==='current'
+        ?(inV?'../index.html':'index.html')
+        :(inV?'../'+val+'/index.html':val+'/index.html');
+    });
+  }
+})();
+</script>
+
+<script type="application/json" id="iam-tracks-data">[{"title":"I Am the Equation","filename":"i-am-the-equation-mqzt2lqk.mp3","lyrics":"I am the equation that bends the light,\nBorn in the patent office, burning bright,\nThey say I proved the world is strange and curved,\nThat energy and mass are intertwined, observed.\n\nI am the search for what holds all things,\nThe unified dream that my restless mind sings,\nIn Switzerland, then Berlin, then exile's call,\nI tried to answer: what connects it all?\n\nE equals mc squared--I gave them that,\nA whisper that became the sound of fact,\nBut then they took my words and made them burn,\nI watched the cities ash and had to turn away.\n\nI am the conscience caught between two worlds,\nThe scientist whose equations became unfurled\nInto the hands of those who loved the dark,\nWho lit the sky with my own stolen spark.\n\nThey ask me now: did you know what you'd done?\nI say: I only sought to understand the sun,\nTo feel the pulse beneath reality's skin,\nTo ask the questions that let truth slip in.\n\nI am still searching in this distant shore,\nFor what I couldn't find before,\nA formula for peace, a law of grace,\nSome equation written on the human face.\n\nI am the question, not the final word,\nThe violin note that trembles, unheard,\nIn chambers where the silence speaks the most,\nI am the exile, the uncertain ghost.\n\nBut listen: in the bending of the light,\nIn every child who learns and wonders right,\nIn every mind that dares to ask \"what if?\"--\nI am alive, I am the gift.\n"}]</script>
+<div id="iam-player">
+  <audio id="iam-audio" preload="auto"></audio>
+  <div id="iam-player-row">
+    <button class="iam-pbtn" id="iam-prev-btn" title="Previous">|&#9664;</button>
+    <button class="iam-pbtn" id="iam-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="iam-pbtn" id="iam-next-btn" title="Next">&#9654;|</button>
+    <span id="iam-ptitle">&#8212;</span>
+    <span id="iam-ptime"></span>
+    <input type="range" id="iam-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="iam-pbtn" id="iam-lyrics-btn" title="Lyrics">&#9834;</button>
+    <button class="iam-pbtn" id="iam-tracks-btn" title="Track list" hidden>&#8801;</button>
+  </div>
+  <div id="iam-pbar"><div id="iam-pfill"></div></div>
+</div>
+<div id="iam-lyrics-panel" hidden>
+  <div class="iam-lyrics-head" id="iam-lyrics-head"></div>
+  <pre id="iam-lyrics-text"></pre>
+</div>
+<div id="iam-tracklist-panel" hidden></div>
+<script>
+(function(){
+function runPlayer(T){
+var au=document.getElementById('iam-audio');
+var playBtn=document.getElementById('iam-play-btn');
+var prevBtn=document.getElementById('iam-prev-btn');
+var nextBtn=document.getElementById('iam-next-btn');
+var pbar=document.getElementById('iam-pbar');
+var pfill=document.getElementById('iam-pfill');
+var ptime=document.getElementById('iam-ptime');
+var ptitle=document.getElementById('iam-ptitle');
+var vol=document.getElementById('iam-vol');
+var lyrBtn=document.getElementById('iam-lyrics-btn');
+var lyrPanel=document.getElementById('iam-lyrics-panel');
+var lyrHead=document.getElementById('iam-lyrics-head');
+var lyrTxt=document.getElementById('iam-lyrics-text');
+var trkBtn=document.getElementById('iam-tracks-btn');
+var trkPanel=document.getElementById('iam-tracklist-panel');
+var player=document.getElementById('iam-player');
+var idx=0,playing=false;
+function fmt(s){if(!s||isNaN(s))return'0:00';var m=Math.floor(s/60),ss=Math.floor(s%60);return m+':'+(ss<10?'0':'')+ss;}
+function loadIdx(i,autoplay){
+  idx=i;var t=T[i];au.src='./'+t.filename;ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';if(ptime)ptime.textContent='';
+  document.querySelectorAll('.iam-track-item').forEach(function(el,j){el.classList.toggle('active',j===i);});
+  if(autoplay)doPlay();
+}
+function setBlocked(blocked){player.classList.toggle('iam-autoplay-blocked',blocked);playBtn.title=blocked?'Play':'Play / Pause';}
+function doPlay(){setBlocked(false);au.play().then(function(){playing=true;playBtn.textContent='⏸';setBlocked(false);}).catch(function(){playing=false;playBtn.textContent='▶';setBlocked(true);});}
+function doPause(){au.pause();playing=false;playBtn.textContent='▶';}
+playBtn.addEventListener('click',function(){au.paused?doPlay():doPause();});
+prevBtn.addEventListener('click',function(){loadIdx((idx-1+T.length)%T.length,playing);});
+nextBtn.addEventListener('click',function(){loadIdx((idx+1)%T.length,playing);});
+au.addEventListener('ended',function(){if(T.length>1){loadIdx((idx+1)%T.length,true);}else{playing=false;playBtn.textContent='▶';}});
+au.addEventListener('timeupdate',function(){if(au.duration){pfill.style.width=(au.currentTime/au.duration*100)+'%';if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);}});
+pbar.addEventListener('click',function(e){if(!au.duration)return;var r=pbar.getBoundingClientRect();au.currentTime=(e.clientX-r.left)/r.width*au.duration;});
+if(vol)vol.addEventListener('input',function(){au.volume=+vol.value;});
+lyrBtn.addEventListener('click',function(){lyrPanel.hidden=!lyrPanel.hidden;if(trkPanel)trkPanel.hidden=true;});
+if(trkBtn)trkBtn.addEventListener('click',function(){trkPanel.hidden=!trkPanel.hidden;lyrPanel.hidden=true;});
+if(T.length>1){T.forEach(function(t,i){var b=document.createElement('button');b.className='iam-track-item';b.textContent=(i+1)+'. '+t.title;b.addEventListener('click',function(){loadIdx(i,playing);if(trkPanel)trkPanel.hidden=true;});if(trkPanel)trkPanel.appendChild(b);});if(trkBtn)trkBtn.hidden=false;}else{if(trkBtn)trkBtn.hidden=true;}
+player.style.display='block';document.body.style.paddingBottom='4rem';loadIdx(0,false);doPlay();
+}
+var baked=JSON.parse(document.getElementById('iam-tracks-data').textContent);
+if(baked.length>0){runPlayer(baked);}
+else{fetch('./iam-soundtrack.json').then(function(r){return r.ok?r.json():null;}).then(function(d){if(d&&d.tracks&&d.tracks.length>0)runPlayer(d.tracks);}).catch(function(){});}
+})();
+</script>
+</body>
+</html>

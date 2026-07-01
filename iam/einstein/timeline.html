@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Albert Einstein — Timeline</title>
+<style>
+:root {
+  --tl-bg: #faf8f4;
+  --tl-ink: #1a1a18;
+  --tl-dim: #6b6360;
+  --tl-rule: #d4cdc8;
+  --tl-surface: #f0ede6;
+  --tl-header-bg: #1a1a18;
+  --tl-amber: #8b5e3c;
+  --tl-sage:  #4a6741;
+  --tl-rust:  #8b3522;
+  --tl-slate: #3a4f68;
+  --tl-dusk:  #54437a;
+  --tl-umber: #5e4824;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: Georgia, "Times New Roman", "Liberation Serif", serif;
+  font-size: 13px;
+  line-height: 1.58;
+  background: var(--tl-bg);
+  color: var(--tl-ink);
+}
+.tl-page-header {
+  background: var(--tl-header-bg);
+  color: #fff;
+  padding: 14px 22px 11px;
+}
+.tl-page-header h1 {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  margin: 0 0 3px;
+}
+.tl-page-meta {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  color: #9aa0a6;
+}
+.tl-main { padding: 14px 18px 28px; }
+
+/* Phase block */
+.tl-phase { margin-bottom: 20px; }
+.tl-phase-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 10px;
+  background: var(--tl-surface);
+  border-left: 3px solid var(--tl-rule);
+  border-bottom: 1px solid var(--tl-rule);
+}
+.tl-phase[data-color="amber"] .tl-phase-header { border-left-color: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-phase-header { border-left-color: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-phase-header { border-left-color: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-phase-header { border-left-color: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-phase-header { border-left-color: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-phase-header { border-left-color: var(--tl-umber); }
+.tl-phase-name {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tl-dim);
+}
+.tl-phase[data-color="amber"] .tl-phase-name { color: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-phase-name { color: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-phase-name { color: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-phase-name { color: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-phase-name { color: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-phase-name { color: var(--tl-umber); }
+.tl-phase-span {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  color: var(--tl-dim);
+  letter-spacing: 0.03em;
+}
+
+/* Events list */
+.tl-events {
+  padding: 4px 0 2px 0;
+  border-left: 3px solid var(--tl-rule);
+  margin-left: 10px;
+}
+.tl-phase[data-color="amber"] .tl-events { border-left-color: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-events { border-left-color: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-events { border-left-color: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-events { border-left-color: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-events { border-left-color: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-events { border-left-color: var(--tl-umber); }
+
+/* Single event row */
+.tl-event {
+  display: grid;
+  grid-template-columns: 80px 22px 1fr;
+  min-height: 28px;
+  padding: 3px 0;
+}
+.tl-date {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  color: var(--tl-dim);
+  text-align: right;
+  padding: 4px 8px 0 0;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.tl-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.tl-connector::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background: var(--tl-rule);
+}
+.tl-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tl-rule);
+  margin-top: 5px;
+  z-index: 1;
+  position: relative;
+  flex-shrink: 0;
+}
+.tl-phase[data-color="amber"] .tl-dot { background: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-dot { background: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-dot { background: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-dot { background: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-dot { background: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-dot { background: var(--tl-umber); }
+.tl-body { padding: 2px 0 6px 6px; }
+.tl-title {
+  font-family: system-ui, sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--tl-ink);
+  line-height: 1.35;
+}
+.tl-desc {
+  font-family: Georgia, serif;
+  font-size: 11.5px;
+  color: var(--tl-dim);
+  line-height: 1.5;
+  margin-top: 1px;
+}
+
+/* Branding footer */
+.tl-brand-footer {
+  padding: 0.5rem 1.2rem;
+  text-align: right;
+  border-top: 1px solid var(--tl-rule);
+  margin-top: 4px;
+}
+.tl-brand-footer img { height: 18px; width: auto; vertical-align: middle; }
+.tl-brand-footer a { text-decoration: none; opacity: 0.55; }
+.tl-brand-footer a:hover { opacity: 1; }
+
+@media print {
+  body { background: white; font-size: 11px; }
+  .tl-page-header { background: #1a1a18 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tl-phase { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<header class="tl-page-header">
+  <h1>Albert Einstein</h1>
+  <div class="tl-page-meta">biographical · standard  ·  model: claude-opus-4-8  ·  2026-06-29</div>
+</header>
+<main class="tl-main">
+<div class="tl-phase" data-color="amber">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">Childhood and Education</span>
+    <span class="tl-phase-span">1879 – 1900</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1879 Mar 14</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Born in Ulm, Germany</div>
+        <div class="tl-desc">Born to Hermann and Pauline Einstein, a secular Jewish family. The family moved to Munich the following year.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1896</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Enters Zurich Polytechnic</div>
+        <div class="tl-desc">Renounced his German citizenship and enrolled at the Swiss Federal Polytechnic to train as a physics and mathematics teacher.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1900</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Graduates from the Polytechnic</div>
+        <div class="tl-desc">Earned his teaching diploma but struggled to secure an academic post in the years that followed.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tl-phase" data-color="sage">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">Patent Office and Miracle Year</span>
+    <span class="tl-phase-span">1902 – 1909</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1902</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Begins work at Bern patent office</div>
+        <div class="tl-desc">Took a position as a technical examiner third class, which gave him time to pursue theoretical physics.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1903 Jan 6</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Marries Mileva Marić</div>
+        <div class="tl-desc">Married his former fellow student; the couple would have sons Hans Albert and Eduard.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1905</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">The four transformative papers</div>
+        <div class="tl-desc">Published works on the photoelectric effect, Brownian motion, special relativity, and mass-energy equivalence (E=mc²).</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1905 Apr 30</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Earns doctorate from Zurich</div>
+        <div class="tl-desc">Received his PhD from the University of Zurich for his dissertation on the dimensions of molecules.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tl-phase" data-color="rust">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">Rise to Fame</span>
+    <span class="tl-phase-span">1909 – 1922</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1914</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Moves to Berlin</div>
+        <div class="tl-desc">Appointed to the Prussian Academy of Sciences and director of the Kaiser Wilhelm Institute for Physics.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1915 Nov</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Completes general relativity</div>
+        <div class="tl-desc">Presented the final field equations of his general theory of relativity to the Prussian Academy.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1919 May 29</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Eclipse expedition confirms theory</div>
+        <div class="tl-desc">Eddington's measurements of starlight bending during a solar eclipse confirmed general relativity, making Einstein world-famous.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1919 Jun 2</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Marries Elsa Löwenthal</div>
+        <div class="tl-desc">Married his cousin Elsa, having divorced Mileva Marić earlier that year.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1922</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Awarded Nobel Prize in Physics</div>
+        <div class="tl-desc">Received the 1921 Nobel Prize, awarded in 1922, chiefly for his explanation of the photoelectric effect.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tl-phase" data-color="slate">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">Exile and Princeton</span>
+    <span class="tl-phase-span">1933 – 1945</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1933</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Leaves Germany after Hitler's rise</div>
+        <div class="tl-desc">Renounced German citizenship and emigrated to the United States, joining the Institute for Advanced Study in Princeton.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1939 Aug 2</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Signs the Einstein-Szilard letter</div>
+        <div class="tl-desc">Signed a letter to President Roosevelt warning of possible German atomic weapons, helping prompt the Manhattan Project.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1940 Oct 1</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Becomes a U.S. citizen</div>
+        <div class="tl-desc">Sworn in as an American citizen while retaining his Swiss citizenship.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tl-phase" data-color="dusk">
+  <div class="tl-phase-header">
+    <span class="tl-phase-name">Later Life and Activism</span>
+    <span class="tl-phase-span">1946 – 1955</span>
+  </div>
+  <div class="tl-events">
+    <div class="tl-event">
+      <div class="tl-date">1946</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Advocates against nuclear arms</div>
+        <div class="tl-desc">Chaired the Emergency Committee of Atomic Scientists, campaigning for peace, civil rights, and world government.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1952</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Declines presidency of Israel</div>
+        <div class="tl-desc">Offered the largely ceremonial post of President of Israel after Chaim Weizmann's death, which he respectfully declined.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1955 Apr 11</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Signs the Russell-Einstein Manifesto</div>
+        <div class="tl-desc">Co-signed a final public appeal warning of the dangers of nuclear weapons, released days after his death.</div>
+      </div>
+    </div>
+    <div class="tl-event">
+      <div class="tl-date">1955 Apr 18</div>
+      <div class="tl-connector"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-title">Dies in Princeton</div>
+        <div class="tl-desc">Died of a ruptured abdominal aortic aneurysm at age 76, having refused surgery.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<footer class="tl-brand-footer"><a href="https://abnormalia.com"><img src="assets/img/logo.png" alt="abnormalia"></a></footer>
+</body>
+</html>
