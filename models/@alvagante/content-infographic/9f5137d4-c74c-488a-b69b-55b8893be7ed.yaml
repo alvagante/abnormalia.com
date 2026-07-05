@@ -1,0 +1,13 @@
+type: '@alvagante/content-infographic'
+typeVersion: 2026.07.05.1
+id: 9f5137d4-c74c-488a-b69b-55b8893be7ed
+name: infographic-ntp-ptp
+version: 1
+tags: {}
+globalArguments:
+  apiKey: '${{ vault.get(openai-keys, api-key) }}'
+  branding:
+    logo: assets/img/logo.png
+    name: abnormalia
+    link: 'https://abnormalia.com'
+methods: {}

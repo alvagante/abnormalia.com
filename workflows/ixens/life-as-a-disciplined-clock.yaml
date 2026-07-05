@@ -1,0 +1,250 @@
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: intermediate
+outputLength: long
+ixenModel: claude-opus-4-8
+ixenPersona: abnormalia
+credits: alvagante
+versionOutput: true
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+      <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+    </a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: |-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: assets/img/logo.png
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: standard
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+imageStyle: ixen-light
+imageBackground: opaque
+imageModel: gpt-image-2
+imageSize: 1024x1024
+imageQuality: auto
+musicGenre: minimal techno berlin school
+musicMood: precise, ticking, hypnotic, relentless
+musicModel: suno-ttapi
+musicInstrumental: false
+musicProvider: existing_assets
+cheatsheetProvider: existing_assets
+sunoVersion: chirp-v4-5
+infographicStyle: ixen-light
+infographicModel: gpt-image-2
+includeBeginnerGuide: true
+ixens:
+  - slug: ntp-ptp
+    regenerate:
+      images: false
+      cards: false
+      infographic: false
+      music: false
+    musicTracks:
+      - filename: life-as-a-disciplined-clock-1.mp3
+        title: Life as a disciplined clock
+      - filename: life-as-a-disciplined-clock-2.mp3
+        title: Life as a disciplined clock (Alt 2)
+      - filename: life-as-a-disciplined-clock-3.mp3
+        title: Life as a disciplined clock (Alt 3)
+      - filename: life-as-a-disciplined-clock-4.mp3
+        title: Life as a disciplined clock (Alt 4)
+    title: Life as a disciplined clock
+    description: >-
+      A server's system clock narrates drift, offset, NTP strata and algorithms,
+      chrony discipline, PTP hardware timestamps, leap-second smearing, and why
+      distributed systems collapse when time lies.
+    topic: Network time synchronization with NTP and PTP
+    narrator: >-
+      the system clock of a production server, permanently drifting and
+      permanently corrected, disciplined by NTP and PTP
+    heroPrompt: >-
+      A server's system clock as a vast horological machine being continuously
+      disciplined from outside: GPS satellites and atomic clocks at the apex, a
+      pyramid of NTP strata below, packets carrying four timestamps across an
+      imperfect network, a crystal oscillator drifting with temperature at the
+      core, PTP hardware timestamps engraved at the network interface, technical
+      surrealism with crisp documentary detail and forensic systems-map
+      precision.
+    concepts:
+      - name: Drift, offset, and jitter — why clocks lie
+        imageFilename: concept-1.png
+        cardFilename: concept-1-card.png
+        imagePrompt: >-
+          A quartz crystal oscillator as an imperfect metronome inside a server,
+          its frequency bending with temperature curves, drift measured in parts
+          per million, offset and jitter plotted as diverging clock faces
+          against a reference timeline, meticulous ixen-light technical
+          illustration.
+        details: >-
+          Cover why unsynchronized clocks are wrong by construction: quartz
+          crystal oscillators, frequency error in parts per million, thermal
+          drift, aging, the difference between offset (phase error), drift
+          (frequency error), and jitter (measurement noise). Explain what a few
+          ppm means in seconds per day, wall clock versus monotonic clocks,
+          CLOCK_REALTIME versus CLOCK_MONOTONIC, TSC and clocksources on Linux,
+          and why the question is never whether the clock is wrong but how
+          wrong and in which direction.
+      - name: Timescales — UTC, TAI, and the leap second problem
+        imageFilename: concept-2.png
+        cardFilename: concept-2-card.png
+        imagePrompt: >-
+          UTC, TAI, and GPS time as three parallel rails diverging by integer
+          seconds, leap seconds inserted as physical shims between rails, a
+          smearing curve stretching one second across twenty-four hours, Unix
+          epoch counters ticking beneath, precise ixen-light systems diagram.
+        details: >-
+          Explain the timescales beneath the protocols: TAI as the atomic
+          timescale, UTC as TAI plus leap seconds, GPS time offset from TAI by
+          a constant, Unix time as a representation of UTC that pretends leap
+          seconds do not exist. Cover leap second insertion, the outages leap
+          seconds have caused, leap smearing as practiced by Google and AWS,
+          the 2035 decision to abandon leap seconds, and why PTP distributes
+          TAI plus a UTC offset while NTP distributes UTC directly.
+      - name: The NTP hierarchy — strata, pools, and reference clocks
+        imageFilename: concept-3.png
+        cardFilename: concept-3-card.png
+        imagePrompt: >-
+          The NTP stratum hierarchy as a pyramid: atomic clocks and GNSS
+          receivers at stratum 0, their attached servers at stratum 1, layers
+          of servers fanning out below, the public NTP pool as a rotating
+          globe of volunteer machines, dashed lines marking peering and
+          upstream selection, ixen-light technical illustration.
+        details: >-
+          Cover the NTP architecture: stratum 0 reference clocks (GNSS
+          receivers, atomic clocks, radio time signals), stratum 1 servers
+          directly attached to them, the stratum hierarchy as hop count from
+          reference rather than quality guarantee, stratum 16 as unsynchronized.
+          Explain client/server, symmetric peer, and broadcast modes, the
+          public pool.ntp.org DNS rotation, vendor pool zones, why you
+          configure multiple upstream sources, and the etiquette and abuse
+          history of public NTP infrastructure.
+      - name: The wire algorithm — four timestamps against an asymmetric network
+        imageFilename: concept-4.png
+        cardFilename: concept-4-card.png
+        imagePrompt: >-
+          One NTP exchange dissected: a request and reply crossing a network,
+          four timestamps T1 T2 T3 T4 stamped at origin, receive, transmit,
+          and destination, offset and round-trip delay derived as geometric
+          constructions between the two clock rails, the hidden assumption of
+          path symmetry drawn as a fragile bridge, crisp ixen-light diagram.
+        details: >-
+          Explain the core measurement: the four timestamps of an NTP exchange
+          (origin, receive, transmit, destination), how offset and round-trip
+          delay are computed from them, and why the calculation silently
+          assumes symmetric network paths. Cover what asymmetry does to
+          accuracy, the clock filter selecting the best of the last eight
+          samples, root delay and root dispersion as accumulated uncertainty,
+          and the selection and clustering algorithms — Marzullo-style interval
+          intersection voting truechimers against falsetickers before combining
+          survivors.
+      - name: Discipline — slewing, stepping, and the daemons that do it
+        imageFilename: concept-5.png
+        cardFilename: concept-5-card.png
+        imagePrompt: >-
+          A clock discipline feedback loop as an engine room: measured offset
+          entering a PLL/FLL governor, adjtimex levers slewing the kernel clock
+          gently versus a step lever yanking it, chronyd and ntpd and
+          systemd-timesyncd as three different operators of the same machinery,
+          makestep thresholds and drift files as labeled gauges, ixen-light
+          systems art.
+        details: >-
+          Cover how measurement becomes correction: the kernel clock discipline
+          via adjtimex, slewing versus stepping and why stepping backwards
+          breaks applications, the PLL/FLL feedback loop, the drift file
+          remembering frequency error across reboots. Compare implementations:
+          ntpd as the reference, chrony as the modern default with faster
+          convergence and better behavior on intermittent links, chronyc
+          tracking and sources and sourcestats as operational tools,
+          systemd-timesyncd as minimal SNTP, and makestep policy on boot
+          versus during operation.
+      - name: PTP — when microseconds are not enough
+        imageFilename: concept-6.png
+        cardFilename: concept-6-card.png
+        imagePrompt: >-
+          IEEE 1588 PTP as a precision engraving workshop inside the network
+          interface: hardware timestamps etched at the PHY as packets cross the
+          wire, a grandmaster clock radiating Sync and Follow_Up and Delay_Req
+          messages, the Best Master Clock Algorithm as an election among
+          candidate clocks, nanosecond scale rulers, ixen-light technical
+          illustration.
+        details: >-
+          Explain why PTP exists: NTP's software timestamps carry OS jitter,
+          PTP timestamps packets in hardware at the PHY, reaching sub-microsecond
+          to nanosecond accuracy. Cover IEEE 1588, the grandmaster and the Best
+          Master Clock Algorithm, the message flow (Sync, Follow_Up, Delay_Req,
+          Delay_Resp, Announce), one-step versus two-step clocks, end-to-end
+          versus peer-to-peer delay mechanisms, and the PTP domains and profiles
+          landscape: default, telecom (ITU-T G.8275), enterprise, and White
+          Rabbit reaching sub-nanosecond in particle accelerators.
+      - name: PTP infrastructure — boundary clocks, transparent clocks, and linuxptp
+        imageFilename: concept-7.png
+        cardFilename: concept-7-card.png
+        imagePrompt: >-
+          A PTP-aware network as a relay of custodians: boundary clocks
+          terminating and re-originating time at each switch, transparent
+          clocks stamping residence time into correction fields, the PTP
+          hardware clock inside a NIC as a separate small observatory, ptp4l
+          and phc2sys as two technicians passing time from NIC to system
+          clock, ixen-light systems map.
+        details: >-
+          Cover what the network must do for PTP to deliver: ordinary switches
+          add variable queuing delay that destroys precision, boundary clocks
+          terminate and re-source time per port, transparent clocks measure
+          residence time and write it into the correction field. Explain the
+          PHC — the PTP hardware clock living inside the NIC as a separate
+          clock device — and the linuxptp toolchain: ptp4l disciplining the
+          PHC from the network, phc2sys copying PHC time into the system
+          clock, pmc for management queries, ethtool -T to check hardware
+          timestamping capabilities, and hardware versus software timestamping
+          fallbacks.
+      - name: Trust, attacks, and why everything needs the right time
+        imageFilename: concept-8.png
+        cardFilename: concept-8-card.png
+        imagePrompt: >-
+          Time as a security dependency: TLS certificate validity windows,
+          Kerberos tickets, and distributed database ordering all hanging from
+          a single clock rail, an attacker bending the rail with spoofed NTP
+          packets and GPS spoofing antennas, NTS cryptographic seals guarding
+          the packets, regulatory stopwatches labeled MiFID II, forensic
+          ixen-light illustration.
+        details: >-
+          Cover why time is a security and correctness dependency: TLS
+          certificate validation, Kerberos and its five-minute tolerance, OTP
+          codes, log correlation and forensics, database ordering from Lamport
+          clocks to Spanner's TrueTime uncertainty intervals, financial
+          regulations like MiFID II mandating hundred-microsecond traceability.
+          Then the attacks: unauthenticated NTP as a man-in-the-middle target,
+          the 2013 NTP amplification DDoS era and monlist, GPS spoofing against
+          stratum 0, falseticker tolerance through source diversity, and the
+          fixes: NTS (Network Time Security, RFC 8915) bringing authenticated
+          NTP, symmetric keys, and operational hygiene — multiple sources,
+          sanity limits, monitoring offset like any other SLO.
+    details: >-
+      Treat the reader as a peer. The narrator is the system clock of a
+      production server: it drifts by construction, it is corrected from
+      outside, and it has opinions about both. Give a complete overview of
+      network time synchronization: why quartz oscillators drift and what ppm
+      means operationally, offset versus drift versus jitter, wall versus
+      monotonic clocks, UTC, TAI, GPS time, leap seconds and smearing, the NTP
+      stratum hierarchy, reference clocks, the public pool, client/server and
+      peer modes, the four-timestamp offset and delay calculation and its
+      symmetric-path assumption, clock filter, selection and clustering,
+      truechimers and falsetickers, root delay and dispersion, kernel clock
+      discipline via adjtimex, slewing versus stepping, ntpd versus chrony
+      versus systemd-timesyncd with real chronyc tracking/sources workflows,
+      then PTP: IEEE 1588, hardware timestamping at the PHY, grandmaster and
+      BMCA, Sync/Follow_Up/Delay_Req message flow, one-step versus two-step,
+      E2E versus P2P delay, boundary and transparent clocks, PTP profiles
+      including telecom and White Rabbit, the PHC and the linuxptp toolchain
+      (ptp4l, phc2sys, pmc, ethtool -T). Close with time as a dependency:
+      TLS, Kerberos, distributed databases and TrueTime, MiFID II, log
+      forensics, NTP amplification history, GPS spoofing, and NTS. Emphasize
+      the systems logic throughout: synchronization is a control loop, not a
+      lookup; accuracy is bounded by network asymmetry you cannot measure;
+      NTP and PTP are not competitors but different points on the
+      cost-precision curve; and a clock that is never questioned is a clock
+      that is quietly wrong.

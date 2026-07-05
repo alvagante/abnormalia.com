@@ -18,3 +18,7 @@
   title: I Am Told When To Run
   date: '2026-06-25'
   description: 'The generate-ixens swamp workflow narrates its own execution: DAG topology, vault secrets, CEL wiring, model zoo, and the recursive horror of generating the ixen that documents the thing that generated it.'
+- slug: ntp-ptp
+  title: The Clock That Is Never Questioned
+  date: '2026-07-05'
+  description: A server's system clock narrates drift, offset, NTP strata and algorithms, chrony discipline, PTP hardware timestamps, leap-second smearing, and why distributed systems collapse when time lies.

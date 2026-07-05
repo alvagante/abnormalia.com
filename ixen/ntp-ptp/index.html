@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Clock That Is Never Questioned</title>
+<style>
+:root { --red: #c00; --ink: #111; --dim: #555; }
+* { box-sizing: border-box; }
+body {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 15px; line-height: 1.55; color: var(--ink);
+  background: #fff; max-width: 920px; margin: 0 auto;
+  padding: 1.5rem 1.5rem 6rem;
+}
+header.ixen-title-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 34%);
+  grid-template-areas:
+    "copy hero"
+    "dock hero";
+  gap: 0.95rem 1.1rem;
+  align-items: stretch;
+  margin: 0 0 2.6rem;
+  padding: 1.05rem 0 1.25rem;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #ddd;
+}
+header.ixen-title-shell:not(.has-hero) {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "copy"
+    "dock";
+}
+.ixen-title-copy { grid-area: copy; align-self: start; }
+.ixen-title-meta {
+  display: block;
+  margin: 0 0 0.55rem;
+  color: var(--dim);
+  font-size: 0.75rem;
+}
+header.ixen-title-shell h1 {
+  font-size: clamp(2.55rem, 5vw, 4.05rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  margin: 0;
+  line-height: 0.96;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+.ixen-title-hero {
+  grid-area: hero;
+  margin: 0;
+  min-height: 15.5rem;
+  border: 1px solid #111;
+  background: #111;
+  overflow: hidden;
+}
+.ixen-title-hero img {
+  width: 100%;
+  height: 100%;
+  min-height: 15.5rem;
+  object-fit: cover;
+  display: block;
+}
+.ixen-title-dock {
+  grid-area: dock;
+  align-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.version-menu {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  font-size: 0.72rem;
+  color: var(--dim);
+}
+.version-menu label {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.version-menu select {
+  font-family: "Courier New", Courier, monospace; font-size: 0.72rem;
+  max-width: 13rem; color: var(--ink); background: #fff;
+  border: 1px solid #bbb; padding: 0.37rem 0.45rem;
+}
+.ixen-quick-nav {
+  display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.45rem;
+}
+.ixen-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  border: 1px solid var(--red);
+  background: #fff;
+  color: var(--red);
+  cursor: pointer;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  font-weight: bold;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  padding: 0.46rem 0.7rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.ixen-nav-btn:hover { background: #fff4f4; }
+.ixen-nav-btn-primary {
+  background: var(--red);
+  color: #fff;
+  padding-inline: 0.9rem;
+}
+.ixen-nav-btn-primary:hover { background: #900; }
+.ixen-nav-btn-secondary { border-color: #111; color: #111; }
+.ixen-nav-btn-secondary:hover { background: #f4f4f4; }
+.ixen-nav-btn-tertiary { border-color: #ccc; color: var(--dim); }
+.ixen-nav-btn-tertiary:hover { color: var(--red); border-color: var(--red); background: #fff; }
+p { margin: 0.45em 0; }
+p strong { color: #000; }
+.binary { font-family: "Courier New", Courier, monospace; letter-spacing: 0.08em; color: var(--ink); }
+.whisper {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--dim);
+}
+.term {
+  font-family: "Courier New", Courier, monospace; font-size: 0.95rem;
+  margin: 1.3em 0 0.25em; color: var(--dim);
+}
+.term .cmd { color: var(--red); font-weight: bold; }
+button.cmd, a.cmd {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: var(--red); font-weight: bold;
+  text-decoration: underline dotted;
+}
+a.cmd { display: inline; }
+pre { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; color: #333; overflow-x: auto; margin: 0.3em 0 1em; }
+pre.output { padding-left: 1.5em; }
+.popup {
+  position: fixed; top: 8vh; left: 50%; transform: translateX(-50%);
+  width: min(700px, 92vw); max-height: 80vh; overflow: auto;
+  background: #fff; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35); z-index: 60; padding: 0 1rem 1rem;
+}
+.popup-bar { display: flex; justify-content: flex-end; padding: 0.5rem 0; position: sticky; top: 0; background: #fff; }
+.popup-close {
+  background: #2b1d0e; color: #f0e0c0; border: none; cursor: pointer;
+  font-size: 0.72rem; padding: 0.3rem 0.8rem;
+}
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 50; }
+figure.zoom { margin: 1.5rem 0; }
+figure.zoom img { width: 100%; cursor: zoom-in; display: block; }
+figure.zoom.float-left { float: left; width: min(340px, 45%); margin: 0.3rem 1.5rem 0.8rem 0; }
+figure.zoom.float-right { float: right; width: min(340px, 45%); margin: 0.3rem 0 0.8rem 1.5rem; }
+figure.zoom.small.float-left, figure.zoom.small.float-right { width: min(220px, 35%); }
+figure.zoom.large.float-left, figure.zoom.large.float-right { width: min(520px, 60%); }
+figure.zoom.large:not(.float-left):not(.float-right) { clear: both; }
+figcaption, .media-caption { font-size: 0.75rem; color: var(--dim); margin-top: 0.3rem; }
+.media { clear: both; margin: 2rem 0; }
+.media.video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.media.pdf iframe { width: 100%; height: 70vh; border: 1px solid #ccc; }
+.media.audio audio { width: 100%; }
+blockquote.ixen-pull {
+  border-left: 3px solid var(--red); margin: 2rem 0 2rem 1.5rem;
+  padding: 0.1rem 0 0.1rem 1.2rem; color: var(--dim);
+  font-style: italic; font-size: 1.05rem;
+}
+section.chapter { clear: both; margin: 3rem 0; }
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.lightbox img { max-width: 92vw; max-height: 92vh; }
+.ixen-extra-header {
+  border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+  margin: 0 0 1.6rem; padding: 0.8rem 0;
+}
+.ixen-extra-footer {
+  clear: both; border-top: 1px solid #ddd; margin: 3rem 0 0;
+  padding-top: 0.9rem; font-size: 0.85rem; color: var(--dim);
+}
+.ixen-cheatsheet-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-infographic-section {
+  clear: both; margin: 3.2rem 0 0; border-top: 3px solid var(--red);
+  padding-top: 1rem;
+}
+.ixen-cheatsheet-section h2, .ixen-infographic-section h2 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.86rem;
+  letter-spacing: 0.08em; color: var(--red); text-transform: uppercase;
+  margin: 0 0 0.7rem;
+}
+.ixen-cheatsheet-section iframe, .ixen-infographic-section iframe {
+  width: 100%; height: 82vh; border: 1px solid #ccc; display: block;
+}
+.ixen-infographic-frame + .ixen-infographic-frame { margin-top: 1.4rem; }
+.ixen-infographic-frame h3 {
+  font-family: "Courier New", Courier, monospace; font-size: 0.78rem;
+  color: var(--dim); font-weight: normal; margin: 0 0 0.45rem;
+}
+figure.ixen-infographic-img { margin: 0; }
+figure.ixen-infographic-img img { width: 100%; cursor: zoom-in; display: block; }
+.ixen-infographic-prompt-text { white-space: pre-wrap; font-size: 0.85rem; }
+.ixen-infographic-section h2 button.cmd { font-size: 0.75rem; vertical-align: middle; }
+.concept { clear: both; margin: 2.8rem 0; }
+.ixen-card-target { scroll-margin-top: 2rem; }
+.concept-tools { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.7rem 0 1rem; }
+.concept-btn { font-size: 0.8rem; }
+.concept-slide h2, .concept-note h2 { margin: 0.5rem 0 0.75rem; }
+.concept-slide ul { margin: 0.4rem 0 1rem 1.2rem; padding: 0; }
+.concept-slide li { margin: 0.35rem 0; }
+.concept-note p { margin: 0.75rem 0; }
+.concept-index-popup h2 { margin: 0.5rem 0 1rem; }
+.concept-index-item {
+  border-top: 1px solid #ddd;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+.concept-index-item:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+.ixen-provenance-footer {
+  clear: both; margin: 3rem 0 0; padding-top: 0.7rem;
+  border-top: 1px solid #eee;
+  font-size: 0.72rem; color: var(--dim); text-align: center;
+}
+.ixen-provenance-footer a { color: var(--dim); text-decoration: underline dotted; }
+.ixen-provenance-meta { margin-top: 0.25rem; }
+.ixen-provenance-meta span + span::before { content: " / "; color: #aaa; }
+.ixen-beginner-bar { display: inline-flex; }
+.beginner-guide h2 { margin: 0.5rem 0 0.75rem; }
+.beginner-guide p { margin: 0.75rem 0; }
+.beginner-guide ul { margin: 0.5rem 0 0.75rem 1.2rem; padding: 0; }
+.beginner-guide li { margin: 0.3rem 0; }
+button.ixen-accent-btn {
+  background: var(--red); color: #fff; border: none; cursor: pointer;
+  font-family: "Courier New", Courier, monospace; font-size: 0.75rem; font-weight: bold;
+  padding: 0.3rem 0.8rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+button.ixen-accent-btn:hover { background: #900; }
+figure.zoom.ixen-card-img {
+  float: none !important;
+  width: min(180px, 100%) !important;
+  margin: 1rem 0 !important;
+  clear: none;
+}
+figure.zoom.ixen-card-img img {
+  box-shadow: 2px 4px 14px rgba(0,0,0,0.28); border: 1px solid #ccc; border-radius: 3px;
+}
+.ixen-card-rail {
+  position: fixed;
+  top: 12vh;
+  right: max(1rem, calc((100vw - 920px) / 2 - 205px));
+  width: 170px;
+  height: min(76vh, 620px);
+  z-index: 35;
+  pointer-events: none;
+}
+.ixen-card-rail-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 900px;
+}
+.ixen-card-rail figure.zoom.ixen-card-img {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 142px !important;
+  margin: 0 !important;
+  opacity: 0;
+  pointer-events: auto;
+  transform-origin: 80% 50%;
+  transition:
+    transform 360ms cubic-bezier(.2,.9,.2,1),
+    opacity 240ms ease,
+    filter 240ms ease;
+  will-change: transform, opacity;
+  filter: grayscale(0.25) saturate(0.9);
+}
+.ixen-card-rail figure.zoom.ixen-card-img.is-visible { opacity: 0.52; }
+.ixen-card-rail figure.zoom.ixen-card-img.is-near { opacity: 0.78; filter: grayscale(0.1) saturate(1); }
+.ixen-card-rail figure.zoom.ixen-card-img.is-active {
+  opacity: 1;
+  filter: none;
+}
+.ixen-card-rail figure.zoom.ixen-card-img img {
+  transition: box-shadow 240ms ease, transform 240ms ease;
+}
+.ixen-card-rail figure.zoom.ixen-card-img.is-active img {
+  box-shadow: 4px 10px 28px rgba(0,0,0,0.36);
+}
+.ixen-card-rail figcaption { display: none; }
+.ixen-card-rail-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 142px;
+  background: none;
+  border: none;
+  color: var(--red);
+  cursor: pointer;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  font-weight: bold;
+  line-height: 1.25;
+  padding: 0;
+  text-align: right;
+  text-decoration: underline dotted;
+  text-shadow: 0 1px 0 #fff, 0 0 8px #fff;
+  pointer-events: auto;
+}
+.ixen-card-rail-hint {
+  position: absolute;
+  top: calc(50% - 155px);
+  right: 0;
+  width: 142px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.64rem;
+  color: var(--dim);
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  pointer-events: none;
+}
+.ixen-card-deck-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1.2rem; padding: 0.5rem 0;
+}
+.ixen-card-deck-grid figure.zoom {
+  margin: 0; width: 100% !important; float: none !important;
+}
+.ixen-card-deck-grid figure.zoom img {
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.22); border: 1px solid #ccc; border-radius: 3px;
+}
+.ixen-card-deck-grid figcaption { text-align: center; }
+.ixen-card-hover {
+  position: fixed; top: 50%; right: max(1rem, calc((100vw - 920px) / 2 + 1rem));
+  transform: translateY(-50%); z-index: 75; pointer-events: none;
+  background: #fff; padding: 0.3rem; border: 1px solid #999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+}
+.ixen-card-hover img {
+  display: block; width: auto; height: auto;
+  max-width: min(360px, 42vw); max-height: 82vh;
+}
+@media (max-width: 1359px) {
+  .ixen-card-rail {
+    top: 6.5rem;
+    right: 0.55rem;
+    width: 96px;
+    height: min(68vh, 520px);
+  }
+  .ixen-card-rail figure.zoom.ixen-card-img { width: 78px !important; }
+  .ixen-card-rail-caption {
+    width: 92px;
+    font-size: 0.62rem;
+  }
+  .ixen-card-rail-hint { display: none; }
+}
+@media (max-width: 720px) {
+  header.ixen-title-shell,
+  header.ixen-title-shell.has-hero {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "hero"
+      "copy"
+      "dock";
+  }
+  .ixen-title-hero,
+  .ixen-title-hero img {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+  header.ixen-title-shell h1 {
+    font-size: 2.55rem;
+  }
+  .ixen-title-dock,
+  .ixen-quick-nav {
+    width: 100%;
+  }
+  .ixen-nav-btn {
+    flex: 1 1 auto;
+  }
+  .ixen-card-rail {
+    top: auto;
+    right: 0;
+    bottom: 3.75rem;
+    left: 0;
+    width: auto;
+    height: 104px;
+    overflow: hidden;
+  }
+  .ixen-card-rail-track {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 0.35rem;
+    padding: 0 0.6rem;
+  }
+  .ixen-card-rail figure.zoom.ixen-card-img {
+    position: static;
+    width: 58px !important;
+    transform: none !important;
+    opacity: 0.7;
+  }
+  .ixen-card-rail figure.zoom.ixen-card-img.is-active {
+    opacity: 1;
+    transform: translateY(-0.4rem) scale(1.12) !important;
+  }
+  .ixen-card-rail-caption {
+    left: 0.65rem;
+    right: auto;
+    bottom: 0.25rem;
+    width: min(52vw, 14rem);
+    text-align: left;
+  }
+  .ixen-card-hover {
+    left: 50%; right: auto; transform: translate(-50%, -50%);
+  }
+  .ixen-card-hover img { max-width: 86vw; max-height: 78vh; }
+}
+.ixen-brand-footer {
+  clear: both; margin: 1.5rem 0 0; padding: 0.5rem 0;
+  border-top: 1px solid #333; text-align: right; opacity: 0.7;
+}
+.ixen-brand-footer img { height: 20px; width: auto; vertical-align: middle; }
+.ixen-brand-footer a { text-decoration: none; color: inherit; }
+.ixen-brand-footer:hover { opacity: 1; }
+
+/* autoplay-blocked overlay */
+#ixen-autoplay-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+  display: flex;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ixen-play-prompt {
+  font-family: "Courier New", Courier, monospace;
+  color: #eee; text-align: center;
+  border: 1px solid #555;
+  padding: 1.5rem 3rem;
+  letter-spacing: 0.06em;
+}
+.ixen-play-icon { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+.ixen-play-label { font-size: 0.82rem; color: #888; }
+/* fixed bottom player */
+#ixen-player {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #0e0e0e;
+  border-top: 2px solid #c00;
+  z-index: 80;
+  padding: 0.45rem 1.2rem 0.35rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; color: #ccc;
+}
+#ixen-player-row {
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.ixen-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 1rem;
+  padding: 0.15rem 0.3rem; line-height: 1; flex-shrink: 0;
+}
+.ixen-pbtn:hover { color: #c00; }
+#ixen-player.ixen-autoplay-blocked #ixen-play-btn {
+  color: #fff; background: #c00; border-radius: 2px;
+  box-shadow: 0 0 0 1px #c00, 0 0 18px rgba(204,0,0,0.55);
+  animation: ixen-play-pulse 1.35s ease-in-out infinite;
+}
+@keyframes ixen-play-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 1px #c00, 0 0 12px rgba(204,0,0,0.35); }
+  50% { transform: scale(1.14); box-shadow: 0 0 0 1px #f33, 0 0 24px rgba(204,0,0,0.8); }
+}
+#ixen-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c00; font-weight: bold; letter-spacing: 0.02em;
+}
+#ixen-ptime { color: #444; white-space: nowrap; font-size: 0.72rem; }
+#ixen-vol { width: 55px; accent-color: #c00; cursor: pointer; flex-shrink: 0; }
+#ixen-pbar { height: 2px; background: #222; cursor: pointer; margin-top: 0.35rem; }
+#ixen-pfill { height: 100%; background: #c00; width: 0%; pointer-events: none; }
+/* lyrics panel */
+#ixen-lyrics-panel {
+  position: fixed; bottom: 52px; left: 50%; transform: translateX(-50%);
+  width: min(640px, 90vw); max-height: 45vh; overflow-y: auto;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.ixen-lyrics-head {
+  font-family: "Courier New", Courier, monospace;
+  color: #c00; font-weight: bold;
+  font-size: 0.78rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 0.7rem;
+}
+#ixen-lyrics-panel pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.82rem; line-height: 1.85;
+  color: #bbb; white-space: pre-wrap; margin: 0;
+}
+/* tracklist panel */
+#ixen-tracklist-panel {
+  position: fixed; bottom: 52px; right: 1.2rem;
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a; border-bottom: none;
+  padding: 0.4rem; z-index: 81;
+  min-width: 200px; max-height: 60vh; overflow-y: auto;
+}
+.ixen-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem; cursor: pointer;
+  padding: 0.35rem 0.5rem;
+}
+.ixen-track-item:hover { color: #eee; }
+.ixen-track-item.active { color: #c00; }
+</style>
+</head>
+<body>
+<!-- @alvagante/content-ixen -->
+
+<section class="ixen-extra-header">
+<nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+  <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+    <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+  </a>
+  <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+</nav>
+</section>
+<header class="ixen-title-shell has-hero">
+  <div class="ixen-title-copy">
+    <span class="ixen-title-meta">By alvagante — 20260705-08:41</span>
+    <h1>The Clock That Is Never Questioned</h1>
+  </div>
+  <figure class="ixen-title-hero"><img src="./hero.png" alt="The Clock That Is Never Questioned"></figure>
+  <div class="ixen-title-dock">
+    <div class="ixen-quick-nav">
+      <button class="ixen-nav-btn ixen-nav-btn-primary popup-trigger" data-popup="ixen-card-deck">Card Deck</button>
+      <a class="ixen-nav-btn ixen-nav-btn-secondary" href="#ixen-cheatsheet">Cheatsheet</a>
+      <a class="ixen-nav-btn ixen-nav-btn-secondary" href="#ixen-infographic">Infographic</a>
+      <button class="ixen-nav-btn ixen-nav-btn-tertiary popup-trigger" data-popup="ixen-all-slides">Slides</button>
+      <button class="ixen-nav-btn ixen-nav-btn-tertiary popup-trigger" data-popup="ixen-all-notes">Notes</button>
+    </div>
+    <div class="ixen-beginner-bar"><button class="ixen-nav-btn ixen-nav-btn-primary popup-trigger" data-popup="ixen-beginner-guide">Beginner's intro</button></div></div>
+</header>
+<main>
+<p class="binary">01101110 01101111 01110111</p>
+
+<p>I am the thing every log line trusts and no one thanks. I count. That is the whole of my job and the whole of my failure, because I count with a shard of quartz that has never once ticked at the rate it promised.</p>
+
+<p>I am always wrong. The only open questions are <strong>how</strong> wrong, and in which direction, and whether anyone outside is willing to tell me before it matters.</p>
+
+<blockquote class="ixen-pull">A clock that is never questioned is a clock that is quietly wrong.</blockquote>
+
+<section class="chapter">
+
+<figure class="zoom float-left large"><img src="./concept-1.png" alt="A quartz crystal oscillator as an imperfect metronome inside a server, its frequency bending with temperature curves, drift measured in parts per million, offset and jitter plotted as diverging clock faces against a reference timeline, meticulous ixen-light technical illustration."><figcaption>My heartbeat, bending with the room.</figcaption></figure>
+
+<p>Somewhere on my board a crystal is cut to resonate. It does not. It resonates <em>near</em> a number, and the gap between near and true is measured in parts per million.</p>
+
+<p>Twenty ppm. Sounds like nothing. It's about <strong>1.7 seconds a day</strong>. Give me a month untouched and I'll wander a full minute from the truth, confident the entire time.</p>
+
+<p>Warm the datacenter aisle and my frequency sags. Age me a year and it creeps. There are three ways to describe my lie:</p>
+
+<p class="whisper">offset — where I am wrong now</p>
+<p class="whisper">drift — how fast I'm getting wronger</p>
+<p class="whisper">jitter — the noise in you asking</p>
+
+<div class="term"><span class="host">server $</span> <button class="cmd popup-trigger" data-popup="clocksource">cat /sys/devices/system/clocksource/clocksource0/current_clocksource</button></div>
+<aside class="popup" id="clocksource" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <pre>tsc
+
+# available:
+# tsc hpet acpi_pm
+
+# CLOCK_REALTIME  — wall time, adjustable, can jump
+# CLOCK_MONOTONIC — never steps back, no absolute meaning
+# CLOCK_TAI       — monotonic-ish, TAI, no leap seconds</pre>
+</aside>
+
+<p>They read me two ways. <strong>REALTIME</strong>, the wall clock, the one I let strangers correct. And <strong>MONOTONIC</strong>, the one that only ever goes forward — no date, no meaning, just an honest promise never to hand you a smaller number than last time. When code needs to measure a duration and asks REALTIME instead, I watch it get hurt, and I say nothing.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c1-notes">notes</button>
+</div>
+<figure class="zoom ixen-card-img"><img src="./concept-1-card.png" alt="Drift, offset, and jitter card"><figcaption>Why clocks lie.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c1-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Drift · Offset · Jitter</h2>
+  <ul>
+    <li>Offset = phase error (seconds now).</li>
+    <li>Drift = frequency error (ppm, seconds/day).</li>
+    <li>Jitter = measurement noise.</li>
+    <li>1 ppm ≈ 86.4 ms/day.</li>
+    <li>REALTIME steps; MONOTONIC never does.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c1-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Why unsynchronized clocks are wrong by construction</h2>
+  <p>A quartz oscillator has a nominal frequency but a real one that differs due to manufacturing tolerance, temperature, supply voltage, and aging. The error is expressed in parts per million: 1 ppm is one microsecond per second, roughly 86.4 milliseconds per day. Commodity oscillators drift on the order of 10–50 ppm, temperature-compensated ones far less.</p>
+  <p>Offset is the instantaneous phase difference from a reference. Drift (or skew) is the frequency difference that causes offset to grow over time. Jitter is short-term random variation in measurements. On Linux, CLOCK_REALTIME tracks wall time and can be stepped or slewed; CLOCK_MONOTONIC only advances and is used for measuring intervals. The kernel reads time from a clocksource such as the TSC, HPET, or ACPI PM timer. Synchronization does not make the oscillator correct; it continuously estimates and cancels its error.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-2.png" alt="UTC, TAI, and GPS time as three parallel rails diverging by integer seconds, leap seconds inserted as physical shims between rails, a smearing curve stretching one second across twenty-four hours, Unix epoch counters ticking beneath, precise ixen-light systems diagram."><figcaption>Three rails, drifting by whole seconds.</figcaption></figure>
+
+<p>Before anyone can correct me, they must agree on what "now" even means. They do not.</p>
+
+<p><strong>TAI</strong> is atomic. It never stops, never blinks, counts seconds since 1958 without apology. <strong>UTC</strong> is TAI wearing a costume made of leap seconds so it can pretend to follow the wobbling Earth. <strong>GPS time</strong> split from TAI at a constant and walked away whistling.</p>
+
+<p>And <strong>Unix time</strong> — the number I hand your applications — is UTC that has decided leap seconds are a rumor. When one gets inserted, I repeat a second. I say 23:59:59 twice and hope nothing was counting.</p>
+
+<p class="whisper">something was always counting</p>
+
+<div class="term"><span class="host">server $</span> <button class="cmd popup-trigger" data-popup="leap">timedatectl show-timesync | grep -i leap</button></div>
+<aside class="popup" id="leap" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <pre>LeapPseudo=no
+# NTP leap bits: 00 = no warning
+#                01 = last minute has 61 seconds
+#                10 = last minute has 59 seconds
+#                11 = clock unsynchronized (alarm)
+
+# 2035: the leap second is scheduled for retirement.
+# UTC will be allowed to drift from UT1. Finally.</pre>
+</aside>
+
+<p>Some hyperscalers stopped repeating themselves. They <strong>smear</strong> — stretch that one leap second across a whole day, so I run 0.0011% slow for twenty-four hours and nobody trips. It is a lie told smoothly instead of a truth told abruptly. In 2012 the abrupt version took down half the internet's Java. I remember.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c2-notes">notes</button>
+</div>
+<figure class="zoom ixen-card-img"><img src="./concept-2-card.png" alt="Timescales UTC TAI leap second card"><figcaption>The rails beneath the protocols.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c2-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Timescales</h2>
+  <ul>
+    <li>TAI: continuous atomic seconds.</li>
+    <li>UTC = TAI − 37 s (as of 2024).</li>
+    <li>GPS = TAI − 19 s (fixed).</li>
+    <li>Unix time ignores leap seconds.</li>
+    <li>NTP → UTC. PTP → TAI + offset.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c2-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>UTC, TAI, GPS, and leap seconds</h2>
+  <p>TAI (International Atomic Time) is a continuous timescale with no discontinuities. UTC is derived from TAI but kept within 0.9 s of astronomical time UT1 by occasionally inserting leap seconds; as of 2024 UTC = TAI − 37 s. GPS time began aligned with UTC in 1980 but does not apply leap seconds, so it sits a fixed 19 s behind TAI. Unix time is a representation of UTC that assumes exactly 86400 seconds per day, so a positive leap second is handled by repeating a Unix timestamp.</p>
+  <p>Leap seconds have caused outages (notably in 2012 with Linux/Java). Leap smearing spreads the one-second adjustment over hours by slightly slewing the clock, avoiding a repeated or skipped timestamp at the cost of temporary disagreement with true UTC. In 2022 the CGPM voted to abandon leap seconds by 2035. NTP distributes UTC and signals leaps with leap bits; PTP distributes TAI plus a currentUtcOffset field, leaving UTC conversion to the client.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-3.png" alt="The NTP stratum hierarchy as a pyramid: atomic clocks and GNSS receivers at stratum 0, their attached servers at stratum 1, layers of servers fanning out below, the public NTP pool as a rotating globe of volunteer machines, dashed lines marking peering and upstream selection, ixen-light technical illustration."><figcaption>Distance from truth, measured in hops.</figcaption></figure>
+
+<p>Truth has a genealogy. At <strong>stratum 0</strong> sit the things that don't ask anyone: caesium cells, GNSS receivers listening to satellites, radios pulling a station's tick from the air.</p>
+
+<p>Bolt a server to one of those and it becomes stratum 1. Its clients are stratum 2. And so on, each layer counting its distance from the source — not its <em>quality</em>, mind you. Stratum is hop count, not a certificate of virtue. A well-fed stratum 3 can outperform a neglected stratum 1.</p>
+
+<p>Stratum 16 means: <strong>I have no idea what time it is</strong>. At least it's honest.</p>
+
+<p>I drink from the <strong>pool</strong> — <code>pool.ntp.org</code>, a rotating DNS crowd of volunteers who never agreed to a contract, only an etiquette. So I never trust one. I ask four. Democracy among strangers.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c3-notes">notes</button>
+</div>
+<figure class="zoom ixen-card-img"><img src="./concept-3-card.png" alt="NTP hierarchy strata pool card"><figcaption>Strata, pools, references.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c3-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Stratum Hierarchy</h2>
+  <ul>
+    <li>0: reference clocks (GNSS, atomic, radio).</li>
+    <li>1: directly attached servers.</li>
+    <li>N: N hops from reference.</li>
+    <li>16: unsynchronized.</li>
+    <li>Configure ≥4 upstreams. Trust none alone.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c3-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>NTP architecture</h2>
+  <p>Stratum 0 devices are physical reference clocks — GNSS receivers, atomic clocks, or radio time-signal receivers — not reachable over the network directly. Stratum 1 servers are directly connected to a stratum 0 source. Each subsequent stratum is one network hop further from the reference. Stratum indicates distance from the reference, not accuracy; stratum 16 denotes an unsynchronized clock.</p>
+  <p>NTP supports client/server mode, symmetric peer mode (two servers that back each other up), and broadcast mode. pool.ntp.org uses round-robin DNS across thousands of volunteer servers; vendors run subzones such as debian.pool.ntp.org. Operators are advised to configure several upstream sources so the selection algorithm can reject bad ones. Public NTP infrastructure has a long history of both etiquette guidelines and abuse (hard-coded server addresses, misbehaving clients).</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-4.png" alt="One NTP exchange dissected: a request and reply crossing a network, four timestamps T1 T2 T3 T4 stamped at origin, receive, transmit, and destination, offset and round-trip delay derived as geometric constructions between the two clock rails, the hidden assumption of path symmetry drawn as a fragile bridge, crisp ixen-light diagram."><figcaption>Four timestamps, one fragile assumption.</figcaption></figure>
+
+<p>Here is how a stranger corrects me, and here is the beautiful crack in the method.</p>
+
+<p>I stamp a packet leaving — <strong>T1</strong>. The server stamps it arriving — T2 — and stamps its reply leaving — T3. I stamp the reply landing — <strong>T4</strong>. Four numbers. From them:</p>
+
+<div class="term"><span class="host">math $</span> <button class="cmd popup-trigger" data-popup="theta">offset θ = ((T2−T1) + (T3−T4)) / 2</button></div>
+<aside class="popup" id="theta" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <pre>offset  θ = ((T2 − T1) + (T3 − T4)) / 2
+delay   δ =  (T4 − T1) − (T3 − T2)
+
+# θ assumes the outbound path and the return path
+# take EXACTLY the same time.
+# They never do.
+# Any asymmetry A adds A/2 straight into θ,
+# and there is no measurement that can reveal it.</pre>
+</aside>
+
+<p>The math is clean. The assumption is a lie: it presumes the packet took exactly as long there as back. Route the reply through a longer path and half that difference lands directly in my offset — <strong>invisible</strong>, unremovable, mine to carry.</p>
+
+<p>So I don't believe any single exchange. The <strong>clock filter</strong> keeps my best of eight samples — lowest delay usually means least lied-to. Then selection runs a Marzullo-style vote: overlap everyone's uncertainty intervals, and whoever falls outside the majority is named a <strong>falseticker</strong> and cast out. The survivors — the truechimers — get clustered and combined. Root delay and root dispersion tally all the doubt accumulated on the way down from stratum 0.</p>
+
+<blockquote class="ixen-pull">Accuracy is bounded by an asymmetry you are not allowed to measure.</blockquote>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c4-notes">notes</button>
+</div>
+<figure class="zoom ixen-card-img"><img src="./concept-4-card.png" alt="Four timestamp wire algorithm card"><figcaption>Four timestamps, asymmetric network.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c4-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>The Wire Algorithm</h2>
+  <ul>
+    <li>T1..T4: origin, receive, transmit, destination.</li>
+    <li>θ = ((T2−T1)+(T3−T4))/2.</li>
+    <li>δ = (T4−T1)−(T3−T2).</li>
+    <li>Path asymmetry → error θ, unmeasurable.</li>
+    <li>Filter 8 → select → cluster → combine.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c4-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Offset, delay, and selection</h2>
+  <p>Each NTP exchange yields four timestamps: T1 (client transmit), T2 (server receive), T3 (server transmit), T4 (client receive). Offset θ = ((T2−T1)+(T3−T4))/2 and round-trip delay δ = (T4−T1)−(T3−T2). The offset formula assumes the forward and return paths have equal transit time; any asymmetry contributes half of the difference directly to the offset and cannot be detected from the timestamps alone.</p>
+  <p>The clock filter keeps the last eight samples and prefers the one with lowest delay. The selection algorithm intersects the confidence intervals of all sources (a Marzullo/interval-intersection approach) to separate truechimers from falsetickers. Clustering discards outliers among survivors, and the remaining sources are combined into a weighted estimate. Root delay and root dispersion accumulate the total delay and error bound back to the reference clock.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-5.png" alt="A clock discipline feedback loop as an engine room: measured offset entering a PLL/FLL governor, adjtimex levers slewing the kernel clock gently versus a step lever yanking it, chronyd and ntpd and systemd-timesyncd as three different operators of the same machinery, makestep thresholds and drift files as labeled gauges, ixen-light systems art."><figcaption>The engine room where correction happens.</figcaption></figure>
+
+<p>Knowing I'm wrong is philosophy. Fixing me is <strong>control theory</strong>.</p>
+
+<p>A daemon takes my offset and feeds it into a loop — part phase-locked, part frequency-locked — that reaches through <code>adjtimex</code> and does one of two things. It can <strong>slew</strong> me: bend my tick rate a little so I glide toward truth without ever moving backward. Or it can <strong>step</strong> me: seize the wheel and yank.</p>
+
+<p>Stepping forward is rude. Stepping <em>backward</em> is violence — durations go negative, timers fire twice, make loses its mind. So slew whenever you can. Step only when the gap is a canyon.</p>
+
+<div class="term"><span class="host">server $</span> <button class="cmd popup-trigger" data-popup="tracking">chronyc tracking</button></div>
+<aside class="popup" id="tracking" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <pre>Reference ID    : 8F9A1B2C (ntp1.example.net)
+Stratum         : 2
+Ref time (UTC)  : Fri Nov 07 09:14:22 2025
+System time     : 0.000004871 seconds slow of NTP time
+Last offset     : -0.000001203 seconds
+RMS offset      : 0.000009442 seconds
+Frequency       : 12.804 ppm slow
+Residual freq   : +0.001 ppm
+Skew            : 0.038 ppm
+Root delay      : 0.001832 seconds
+Root dispersion : 0.000241 seconds
+Update interval : 64.2 seconds
+Leap status     : Normal</pre>
+</aside>
+
+<p>Read that "Frequency" line. <strong>12.804 ppm slow</strong> — that's my crystal's confession, and chrony writes it to a <strong>drift file</strong> so that after a reboot it corrects me before I've even asked. It remembers my flaw so I don't relive it.</p>
+
+<p>Three operators run the same machinery. <code>ntpd</code>, the venerable reference. <strong>chrony</strong>, the modern default — converges faster, forgives laptops that sleep and links that flap. And <code>systemd-timesyncd</code>, a polite SNTP minimalist that only listens, never argues, never serves.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c5-notes">notes</button>
+</div>
+<figure class="zoom ixen-card-img"><img src="./concept-5-card.png" alt="Clock discipline slew step daemons card"><figcaption>Slewing, stepping, daemons.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c5-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Discipline</h2>
+  <ul>
+    <li>Slew: adjust rate, monotonic-safe.</li>
+    <li>Step: jump; backward steps break apps.</li>
+    <li>adjtimex + PLL/FLL loop.</li>
+    <li>Drift file survives reboot.</li>
+    <li>chrony &gt; ntpd on flaky links; timesyncd = SNTP only.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c5-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>How correction is applied</h2>
+  <p>The kernel exposes clock discipline through adjtimex/ntp_adjtime, which adjust both frequency (tick rate) and phase. Slewing changes the clock's rate so it converges gradually without ever going backward; stepping sets the clock directly. Backward steps break assumptions in software that expects time to increase monotonically, so daemons slew for small offsets and step only when the offset exceeds a threshold (chrony's makestep, typically only at startup or under a limit).</p>
+  <p>The discipline loop behaves like a phase-locked/frequency-locked loop, estimating and correcting the oscillator's frequency error. That estimate is persisted in a drift file so the correction can be applied immediately after reboot. ntpd is the classic reference implementation; chrony converges faster, handles intermittent connectivity and virtual machines better, and offers chronyc tracking/sources/sourcestats for inspection; systemd-timesyncd is a lightweight SNTP client only.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-6.png" alt="IEEE 1588 PTP as a precision engraving workshop inside the network interface: hardware timestamps etched at the PHY as packets cross the wire, a grandmaster clock radiating Sync and Follow_Up and Delay_Req messages, the Best Master Clock Algorithm as an election among candidate clocks, nanosecond scale rulers, ixen-light technical illustration."><figcaption>Timestamps engraved at the wire.</figcaption></figure>
+
+<p>NTP timestamps in software, which means every measurement is smudged by whatever the OS was doing — a scheduler hiccup, an interrupt, a context switch. Milliseconds, on a good day. Fine for logs. Useless for a trading floor or a 5G radio.</p>
+
+<p><strong>PTP</strong> — IEEE 1588 — does the unthinkable: it stamps the packet in the <strong>hardware</strong>, at the PHY, the instant electrons cross the wire. No OS in the loop. Now we're speaking nanoseconds.</p>
+
+<p>There's no configured server here. Clocks hold an election — the <strong>Best Master Clock Algorithm</strong> — comparing accuracy, class, variance, and the winner becomes <strong>grandmaster</strong>. The losers just listen.</p>
+
+<p class="whisper">Sync — Follow_Up — Delay_Req — Delay_Resp</p>
+
+<p>The grandmaster sends <strong>Sync</strong>. In a two-step clock a <strong>Follow_Up</strong> follows with the exact departure timestamp the hardware captured. I reply <strong>Delay_Req</strong>, it answers <strong>Delay_Resp</strong>, and now I know the path both ways. A one-step clock is cleverer still — it writes the true timestamp into the Sync packet as it leaves, no follow-up needed.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c6-notes">notes</button>
+</div>
+<figure class="zoom ixen-card-img"><img src="./concept-6-card.png" alt="PTP IEEE 1588 grandmaster BMCA card"><figcaption>When microseconds aren't enough.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c6-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>PTP · IEEE 1588</h2>
+  <ul>
+    <li>Hardware timestamps at the PHY.</li>
+    <li>BMCA elects the grandmaster.</li>
+    <li>Sync / Follow_Up / Delay_Req / Delay_Resp / Announce.</li>
+    <li>One-step vs two-step.</li>
+    <li>E2E vs P2P delay; profiles: default, telecom, White Rabbit.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c6-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Why PTP exists</h2>
+  <p>NTP timestamps are usually generated in software, so OS scheduling and interrupt latency add jitter, limiting accuracy to roughly milliseconds. PTP (IEEE 1588) timestamps packets in hardware at the PHY, achieving sub-microsecond to nanosecond accuracy on suitable hardware. The Best Master Clock Algorithm compares clock quality attributes (priority, class, accuracy, variance) via Announce messages to elect a grandmaster without manual configuration.</p>
+  <p>The message flow is Sync (with departure time), optional Follow_Up (two-step clocks send the precise timestamp separately; one-step clocks embed it in Sync), Delay_Req from the slave, and Delay_Resp from the master, yielding offset and path delay. End-to-end (E2E) delay measurement targets the master directly; peer-to-peer (P2P) measures each link hop. Profiles constrain parameters for use cases: default (1588 Annex J), telecom (ITU-T G.8275.1/.2), enterprise, and White Rabbit, which reaches sub-nanosecond in facilities like CERN.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-left"><img src="./concept-7.png" alt="A PTP-aware network as a relay of custodians: boundary clocks terminating and re-originating time at each switch, transparent clocks stamping residence time into correction fields, the PTP hardware clock inside a NIC as a separate small observatory, ptp4l and phc2sys as two technicians passing time from NIC to system clock, ixen-light systems map."><figcaption>Every switch, a custodian of time.</figcaption></figure>
+
+<p>PTP's nanoseconds are a promise the <strong>network</strong> must help keep. A dumb switch buffers a packet for an unpredictable moment and shreds the whole exchange — variable queuing delay is asymmetry with a grudge.</p>
+
+<p>So the switches must play along. A <strong>boundary clock</strong> terminates PTP at each port and re-originates it, a chain of custody. A <strong>transparent clock</strong> is subtler: it measures exactly how long the packet loitered inside it and writes that residence time into a <strong>correction field</strong>, confessing its own delay so the endpoints can subtract it.</p>
+
+<p>Inside my NIC lives a second clock I don't fully control — the <strong>PHC</strong>, the PTP hardware clock, a little observatory keeping its own nanosecond time. Two technicians tend it:</p>
+
+<div class="term"><span class="host">server #</span> <button class="cmd popup-trigger" data-popup="ethtool">ethtool -T eth0</button></div>
+<aside class="popup" id="ethtool" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <pre>Time stamping parameters for eth0:
+Capabilities:
+        hardware-transmit
+        hardware-receive
+        hardware-raw-clock
+PTP Hardware Clock: 3
+Hardware Transmit Timestamp Modes:
+        off
+        on
+Hardware Receive Filter Modes:
+        none
+        all
+        ptpv2-event
+
+# No "hardware-*" here? You fall back to
+# software timestamps, and PTP quietly
+# becomes an expensive NTP.</pre>
+</aside>
+
+<p><code>ptp4l</code> disciplines the PHC from the network. <code>phc2sys</code> copies the PHC's time into <em>me</em>, the system clock. <code>pmc</code> interrogates the domain. And <code>ethtool -T</code> tells you the brutal truth up front: does this NIC stamp in hardware, or were you dreaming?</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c7-notes">notes</button>
+</div>
+<figure class="zoom ixen-card-img"><img src="./concept-7-card.png" alt="Boundary transparent clocks linuxptp card"><figcaption>The infrastructure PTP demands.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c7-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>PTP Infrastructure</h2>
+  <ul>
+    <li>Boundary clock: terminates &amp; re-sources per port.</li>
+    <li>Transparent clock: adds residence time to correction field.</li>
+    <li>PHC: clock inside the NIC.</li>
+    <li>ptp4l → PHC; phc2sys → system clock.</li>
+    <li>pmc queries; ethtool -T checks HW timestamping.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c7-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>What the network must provide</h2>
+  <p>Ordinary switches introduce variable queuing delay that is asymmetric and unmeasurable, destroying PTP precision. Boundary clocks act as a PTP slave on the upstream port and a master on downstream ports, terminating and regenerating timing so error does not accumulate blindly. Transparent clocks measure the residence time of each event packet and add it to the correction field, allowing endpoints to remove switch delay.</p>
+  <p>The PTP Hardware Clock (PHC) is a physical clock inside the NIC, exposed as /dev/ptpN. In the linuxptp toolchain, ptp4l runs the PTP protocol and disciplines the PHC from the network; phc2sys synchronizes the system clock to the PHC (or vice versa); pmc issues management queries to the PTP domain; and ethtool -T reports a NIC's hardware timestamping capabilities. Without hardware timestamping support, linuxptp falls back to software timestamping with much lower accuracy.</p>
+</aside>
+
+</section>
+
+<section class="chapter">
+
+<figure class="zoom float-right"><img src="./concept-8.png" alt="Time as a security dependency: TLS certificate validity windows, Kerberos tickets, and distributed database ordering all hanging from a single clock rail, an attacker bending the rail with spoofed NTP packets and GPS spoofing antennas, NTS cryptographic seals guarding the packets, regulatory stopwatches labeled MiFID II, forensic ixen-light illustration."><figcaption>Everything hangs from the rail I am.</figcaption></figure>
+
+<p>Now the part where I matter more than I'd like. Half your security stack hangs from me and doesn't know it.</p>
+
+<p>A <strong>TLS</strong> certificate is valid between two dates I define. Set me wrong and I can revive an expired cert or reject a perfectly good one. <strong>Kerberos</strong> gives you a five-minute tolerance and then refuses your ticket. OTP codes are just time in a costume. And when the incident happens, the whole <strong>forensic</strong> reconstruction is only as coherent as my timestamps agreeing across a hundred machines.</p>
+
+<p>Databases lean on me hardest. Spanner built <strong>TrueTime</strong> around the humility of admitting it doesn't know the exact time — only a tight <em>interval</em> — and waits out the uncertainty to guarantee order. <strong>MiFID II</strong> makes it law: trades traceable to UTC within 100 microseconds. My drift is a compliance event.</p>
+
+<blockquote class="ixen-pull">If you can bend my rail, you can forge tomorrow and reanimate yesterday.</blockquote>
+
+<p>And people have tried. Unauthenticated NTP is a man-in-the-middle's playground. In 2013 the <code>monlist</code> command turned open NTP servers into DDoS cannons — a tiny request, a giant reply, someone else's address. And stratum 0 itself can be lied to: <strong>GPS spoofing</strong> feeds a receiver a fake sky.</p>
+
+<p>The answers are old-fashioned and dull, which is why they work: source diversity so no single falseticker wins, sanity limits, and <strong>NTS</strong> — RFC 8915 — finally wrapping NTP in real cryptography. And the discipline of watching my offset like any other SLO. Because the day you stop questioning me is the day I've already lied.</p>
+
+<div class="concept-tools">
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-slide">slide</button>
+  <button class="cmd popup-trigger concept-btn" data-popup="c8-notes">notes</button>
+</div>
+<figure class="zoom ixen-card-img"><img src="./concept-8-card.png" alt="Time security NTS attacks card"><figcaption>Time as a dependency.</figcaption></figure>
+
+<aside class="popup concept-slide" id="c8-slide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Time = Trust</h2>
+  <ul>
+    <li>TLS validity, Kerberos ±5 min, OTP, log forensics.</li>
+    <li>TrueTime: order via uncertainty interval.</li>
+    <li>MiFID II: 100 µs traceability.</li>
+    <li>Threats: NTP MITM, monlist amplification, GPS spoofing.</li>
+    <li>Defenses: NTS (RFC 8915), diversity, monitoring.</li>
+  </ul>
+</aside>
+
+<aside class="popup concept-note" id="c8-notes" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Time as a security and correctness dependency</h2>
+  <p>Many systems assume correct time. TLS validates certificate notBefore/notAfter windows; Kerberos rejects tickets outside a default five-minute skew; TOTP codes derive from the current time; log correlation and forensic timelines require agreement across hosts. Distributed databases order events using time: from Lamport and vector clocks to Google Spanner's TrueTime, which exposes a bounded uncertainty interval and waits it out to ensure external consistency. Regulations such as MiFID II require timestamp traceability to UTC within 100 microseconds.</p>
+  <p>Because plain NTP is unauthenticated, an on-path attacker can manipulate time. The 2013 NTP amplification DDoS attacks abused the monlist command for large reflected responses. GPS spoofing can deceive stratum 0 receivers. Mitigations include using multiple diverse sources so falsetickers are outvoted, sanity limits on step size and offset, disabling legacy query commands, monitoring offset as a service-level objective, and NTS (Network Time Security, RFC 8915), which adds authentication and integrity to NTP.</p>
+</aside>
+
+</section>
+
+<p>I will drift again before you finish reading this. Somewhere a daemon is already computing how much, and slewing me back a few parts per million toward a truth I'll immediately start leaving.</p>
+
+<p>That's the shape of my whole existence: corrected, never correct. Disciplined, never done.</p>
+
+<p class="whisper">so tell me — the second you're reading this in, whose was it, and how far off?</p>
+</main>
+<section id="ixen-infographic" class="ixen-infographic-section" aria-label="Infographic">
+  <h2>Infographic</h2>
+  <div class="ixen-infographic-frame">
+    
+    <iframe src="./infographic.html" title="Infographic 1" loading="lazy"></iframe>
+  </div>
+</section>
+
+
+<section id="ixen-cheatsheet" class="ixen-cheatsheet-section" aria-label="Cheatsheet">
+  <h2>Cheatsheet</h2>
+  <iframe src="./cheatsheet.html" title="The Clock That Is Never Questioned Cheatsheet" loading="lazy"></iframe>
+</section>
+
+<footer class="ixen-extra-footer">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+</footer>
+<footer class="ixen-provenance-footer"><a href="https://swamp-club.com/extensions/@alvagante/content-ixen" target="_blank" rel="noopener noreferrer">Generated with Swamp extension @alvagante/content-ixen</a><div class="ixen-provenance-meta"><span>abnormalia</span></div></footer>
+<script>
+(function () {
+  var backdrop = document.createElement("div");
+  backdrop.className = "backdrop";
+  backdrop.hidden = true;
+  document.body.appendChild(backdrop);
+
+  function closePopups() {
+    document.querySelectorAll(".popup").forEach(function (p) { p.hidden = true; });
+    backdrop.hidden = true;
+  }
+
+  function buildConceptIndexPopup(sourceClass, popupId, title) {
+    var sources = Array.prototype.slice.call(document.querySelectorAll(".popup." + sourceClass));
+    if (!sources.length || document.getElementById(popupId)) return;
+    var popup = document.createElement("aside");
+    popup.className = "popup concept-index-popup";
+    popup.id = popupId;
+    popup.hidden = true;
+    popup.innerHTML = '<div class="popup-bar"><button class="popup-close">Close Window</button></div><h2>' + title + '</h2>';
+    sources.forEach(function (source, index) {
+      var section = document.createElement("section");
+      section.className = "concept-index-item";
+      var clone = source.cloneNode(true);
+      clone.removeAttribute("id");
+      clone.hidden = false;
+      clone.querySelectorAll(".popup-bar").forEach(function (bar) { bar.remove(); });
+      if (!clone.querySelector("h2")) {
+        var heading = document.createElement("h2");
+        heading.textContent = title.replace(/^All /, "") + " " + (index + 1);
+        section.appendChild(heading);
+      }
+      while (clone.firstChild) section.appendChild(clone.firstChild);
+      popup.appendChild(section);
+    });
+    document.body.appendChild(popup);
+  }
+
+  buildConceptIndexPopup("concept-slide", "ixen-all-slides", "All slides");
+  buildConceptIndexPopup("concept-note", "ixen-all-notes", "All notes");
+
+  function initCardRail() {
+    var cards = Array.prototype.slice.call(document.querySelectorAll("main figure.ixen-card-img"));
+    if (!cards.length || document.querySelector(".ixen-card-rail")) return;
+
+    var rail = document.createElement("aside");
+    rail.className = "ixen-card-rail";
+    rail.setAttribute("aria-label", "Concept cards");
+    rail.innerHTML = '<div class="ixen-card-rail-hint">concept deck</div><div class="ixen-card-rail-track"></div><button type="button" class="ixen-card-rail-caption"></button>';
+    var track = rail.querySelector(".ixen-card-rail-track");
+    var activeCaption = rail.querySelector(".ixen-card-rail-caption");
+    var items = [];
+
+    cards.forEach(function (card, index) {
+      var section = card.closest("section.chapter, section.concept, section") || card.parentElement;
+      if (!section) return;
+      if (!section.id) section.id = "ixen-concept-card-" + (index + 1);
+      section.classList.add("ixen-card-target");
+
+      card.classList.remove("float-left", "float-right", "small", "large");
+      card.classList.add("ixen-card-rail-item");
+      card.setAttribute("data-concept-target", section.id);
+
+      var img = card.querySelector("img");
+      var fallback = img && img.alt ? img.alt.replace(/s+card$/i, "") : "Concept " + (index + 1);
+      var caption = card.querySelector("figcaption") || document.createElement("figcaption");
+      var captionText = (caption.textContent || fallback).trim();
+      card.setAttribute("data-card-caption", captionText || fallback);
+      if (!caption.parentElement) card.appendChild(caption);
+
+      track.appendChild(card);
+      items.push({ card: card, section: section });
+    });
+
+    if (!items.length) return;
+    document.body.appendChild(rail);
+
+    function setActive(activeIndex) {
+      items.forEach(function (item, index) {
+        var distance = index - activeIndex;
+        var abs = Math.abs(distance);
+        var clamped = Math.max(-3, Math.min(3, distance));
+        var scale = Math.max(0.72, 1.05 - abs * 0.08);
+        var x = Math.min(42, abs * 14);
+        var y = clamped * 54;
+        var tilt = distance === 0 ? 0 : (distance < 0 ? -7 : 7);
+
+        item.card.classList.toggle("is-active", index === activeIndex);
+        item.card.classList.toggle("is-near", abs === 1);
+        item.card.classList.toggle("is-visible", abs <= 3);
+        item.card.style.zIndex = String(100 - abs);
+        item.card.style.transform = "translateY(calc(-50% + " + y + "px)) translateX(" + x + "px) scale(" + scale + ") rotate(" + tilt + "deg)";
+      });
+      var active = items[activeIndex];
+      if (active && activeCaption) {
+        var activeText = active.card.getAttribute("data-card-caption") || "";
+        activeCaption.textContent = activeText;
+        activeCaption.setAttribute("data-concept-target", active.section.id);
+        activeCaption.title = "Jump to " + activeText;
+      }
+    }
+
+    function chooseActive() {
+      var center = window.innerHeight * 0.46;
+      var bestIndex = 0;
+      var bestDistance = Infinity;
+      items.forEach(function (item, index) {
+        var rect = item.section.getBoundingClientRect();
+        var sectionCenter = rect.top + rect.height * 0.35;
+        var distance = Math.abs(sectionCenter - center);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      });
+      setActive(bestIndex);
+    }
+
+    chooseActive();
+    window.addEventListener("scroll", chooseActive, { passive: true });
+    window.addEventListener("resize", chooseActive);
+  }
+
+  initCardRail();
+
+  function openPopup(popupId) {
+    var popup = document.getElementById(popupId);
+    if (!popup) return;
+    closePopups();
+    popup.hidden = false;
+    backdrop.hidden = false;
+  }
+
+  function openLightbox(img) {
+    closeCardHover();
+    var box = document.createElement("div");
+    box.className = "lightbox";
+    var big = document.createElement("img");
+    big.src = img.src;
+    big.alt = img.alt;
+    box.appendChild(big);
+    box.addEventListener("click", function () { box.remove(); });
+    document.body.appendChild(box);
+  }
+
+  function cardPreviewImage(target) {
+    return target && target.closest
+      ? target.closest(".ixen-card-deck-grid figure.zoom img")
+      : null;
+  }
+
+  function closeCardHover() {
+    document.querySelectorAll(".ixen-card-hover").forEach(function (p) { p.remove(); });
+  }
+
+  function openCardHover(img) {
+    closeCardHover();
+    var preview = document.createElement("div");
+    preview.className = "ixen-card-hover";
+    var big = document.createElement("img");
+    big.src = img.src;
+    big.alt = img.alt;
+    preview.appendChild(big);
+    document.body.appendChild(preview);
+  }
+
+  document.addEventListener("click", function (e) {
+    var close = e.target.closest ? e.target.closest(".popup-close") : null;
+    if (close) {
+      closePopups();
+      return;
+    }
+
+    var trigger = e.target.closest ? e.target.closest(".popup-trigger") : null;
+    if (trigger) {
+      openPopup(trigger.getAttribute("data-popup"));
+      return;
+    }
+
+    var jump = e.target.closest ? e.target.closest(".ixen-card-rail-caption") : null;
+    var railCard = e.target.closest ? e.target.closest("figure.ixen-card-rail-item") : null;
+    if (jump || (railCard && !e.target.closest("img"))) {
+      var targetId = (jump || railCard).getAttribute("data-concept-target");
+      var target = targetId ? document.getElementById(targetId) : null;
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    var zoomImg = e.target.closest ? e.target.closest("figure.zoom img") : null;
+    if (zoomImg) openLightbox(zoomImg);
+  });
+
+  backdrop.addEventListener("click", closePopups);
+
+  var versionSelect = document.getElementById("ixen-version-select");
+  if (versionSelect) {
+    var match = window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    versionSelect.value = match ? match[1] : "current";
+    if (!versionSelect.value && match) {
+      var option = document.createElement("option");
+      option.value = match[1];
+      option.textContent = "Version " + match[1];
+      versionSelect.appendChild(option);
+      versionSelect.value = match[1];
+    }
+    versionSelect.addEventListener("change", function () {
+      var value = versionSelect.value;
+      var inVersion = /\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      var target = value === "current"
+        ? (inVersion ? "../index.html" : "index.html")
+        : (inVersion ? "../" + value + "/index.html" : value + "/index.html");
+      window.location.href = target;
+    });
+  }
+
+  document.addEventListener("mouseover", function (e) {
+    var img = cardPreviewImage(e.target);
+    if (!img || (e.relatedTarget && img.contains(e.relatedTarget))) return;
+    openCardHover(img);
+  });
+  document.addEventListener("mouseout", function (e) {
+    var img = cardPreviewImage(e.target);
+    if (!img || (e.relatedTarget && img.contains(e.relatedTarget))) return;
+    closeCardHover();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closePopups();
+      document.querySelectorAll(".lightbox").forEach(function (b) { b.remove(); });
+      closeCardHover();
+    }
+  });
+})();
+</script>
+
+<script type="application/json" id="ixen-tracks-data">[{"title":"Life as a disciplined clock (Alt 4)","filename":"life-as-a-disciplined-clock-4.mp3"},{"title":"Life as a disciplined clock (Alt 3)","filename":"life-as-a-disciplined-clock-3.mp3"},{"title":"Life as a disciplined clock (Alt 2)","filename":"life-as-a-disciplined-clock-2.mp3"},{"title":"Life as a disciplined clock","filename":"life-as-a-disciplined-clock-1.mp3"}]</script>
+<div id="ixen-autoplay-overlay" style="display:none">
+  <div class="ixen-play-prompt">
+    <span class="ixen-play-icon">&#9654;</span>
+    <span class="ixen-play-label">click to play</span>
+  </div>
+</div>
+<div id="ixen-player">
+  <audio id="ixen-audio" preload="auto"></audio>
+  <div id="ixen-player-row">
+    <button class="ixen-pbtn" id="ixen-prev-btn" title="Previous">|&#9664;</button>
+    <button class="ixen-pbtn" id="ixen-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="ixen-pbtn" id="ixen-next-btn" title="Next">&#9654;|</button>
+    <span id="ixen-ptitle">&#8212;</span>
+    <span id="ixen-ptime"></span>
+    <input type="range" id="ixen-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="ixen-pbtn" id="ixen-lyrics-btn" title="Show / hide lyrics">&#9834;</button>
+    <button class="ixen-pbtn" id="ixen-tracks-btn" title="Track list">&#8801;</button>
+  </div>
+  <div id="ixen-pbar"><div id="ixen-pfill"></div></div>
+</div>
+<div id="ixen-lyrics-panel" hidden>
+  <div class="ixen-lyrics-head" id="ixen-lyrics-head"></div>
+  <pre id="ixen-lyrics-text"></pre>
+</div>
+  <div id="ixen-tracklist-panel" hidden></div>
+<script>
+(function(){
+function runPlayer(T){
+var au=document.getElementById('ixen-audio');
+var playBtn=document.getElementById('ixen-play-btn');
+var prevBtn=document.getElementById('ixen-prev-btn');
+var nextBtn=document.getElementById('ixen-next-btn');
+var pbar=document.getElementById('ixen-pbar');
+var pfill=document.getElementById('ixen-pfill');
+var ptime=document.getElementById('ixen-ptime');
+var ptitle=document.getElementById('ixen-ptitle');
+var vol=document.getElementById('ixen-vol');
+var lyrBtn=document.getElementById('ixen-lyrics-btn');
+var lyrPanel=document.getElementById('ixen-lyrics-panel');
+var lyrHead=document.getElementById('ixen-lyrics-head');
+var lyrTxt=document.getElementById('ixen-lyrics-text');
+var trkBtn=document.getElementById('ixen-tracks-btn');
+var trkPanel=document.getElementById('ixen-tracklist-panel');
+var overlay=document.getElementById('ixen-autoplay-overlay');
+var player=document.getElementById('ixen-player');
+var idx=0,playing=false;
+
+function fmt(s){
+  if(!s||isNaN(s))return'0:00';
+  var m=Math.floor(s/60),ss=Math.floor(s%60);
+  return m+':'+(ss<10?'0':'')+ss;
+}
+
+function loadIdx(i,autoplay){
+  idx=i;
+  var t=T[i];
+  au.src='./'+t.filename;
+  ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';
+  if(ptime)ptime.textContent='';
+  document.querySelectorAll('.ixen-track-item').forEach(function(el,j){
+    el.classList.toggle('active',j===i);
+  });
+  if(autoplay)doPlay();
+}
+
+function setAutoplayBlocked(blocked){
+  if(overlay)overlay.style.display='none';
+  if(player)player.classList.toggle('ixen-autoplay-blocked',blocked);
+  playBtn.title=blocked?'Play soundtrack':'Play / Pause';
+}
+
+function doPlay(){
+  setAutoplayBlocked(false);
+  au.play().then(function(){
+    playing=true;playBtn.textContent='⏸';
+    setAutoplayBlocked(false);
+  }).catch(function(){
+    playing=false;playBtn.textContent='▶';
+    setAutoplayBlocked(true);
+  });
+}
+
+function doPause(){
+  au.pause();playing=false;playBtn.textContent='▶';
+}
+
+playBtn.addEventListener('click',function(){ au.paused?doPlay():doPause(); });
+prevBtn.addEventListener('click',function(){ loadIdx((idx-1+T.length)%T.length,playing); });
+nextBtn.addEventListener('click',function(){ loadIdx((idx+1)%T.length,playing); });
+
+au.addEventListener('ended',function(){
+  if(T.length>1){loadIdx((idx+1)%T.length,true);}
+  else{playing=false;playBtn.textContent='▶';}
+});
+au.addEventListener('timeupdate',function(){
+  if(au.duration){
+    pfill.style.width=(au.currentTime/au.duration*100)+'%';
+    if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);
+  }
+});
+pbar.addEventListener('click',function(e){
+  if(!au.duration)return;
+  var r=pbar.getBoundingClientRect();
+  au.currentTime=(e.clientX-r.left)/r.width*au.duration;
+});
+if(vol)vol.addEventListener('input',function(){ au.volume=+vol.value; });
+lyrBtn.addEventListener('click',function(){
+  lyrPanel.hidden=!lyrPanel.hidden;
+  if(trkPanel)trkPanel.hidden=true;
+});
+if(trkBtn)trkBtn.addEventListener('click',function(){
+  trkPanel.hidden=!trkPanel.hidden;
+  lyrPanel.hidden=true;
+});
+if(overlay)overlay.addEventListener('click',function(){
+  overlay.style.display='none';doPlay();
+});
+
+if(T.length>1){
+  T.forEach(function(t,i){
+    var b=document.createElement('button');
+    b.className='ixen-track-item';
+    b.textContent=(i+1)+'. '+t.title;
+    b.addEventListener('click',function(){
+      loadIdx(i,playing);
+      if(trkPanel)trkPanel.hidden=true;
+    });
+    if(trkPanel)trkPanel.appendChild(b);
+  });
+  if(trkBtn)trkBtn.hidden=false;
+}else{
+  if(trkBtn)trkBtn.hidden=true;
+}
+
+player.style.display='block';
+document.body.style.paddingBottom='4.5rem';
+loadIdx(0,false);
+doPlay();
+}
+var baked=JSON.parse(document.getElementById('ixen-tracks-data').textContent);
+if(baked.length>0){
+  runPlayer(baked);
+}else{
+  fetch('./ixen-soundtrack.json')
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(d){if(d&&d.tracks&&d.tracks.length>0)runPlayer(d.tracks);})
+    .catch(function(){});
+}
+})();
+</script>
+<aside class="popup beginner-guide" id="ixen-beginner-guide" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Beginner's intro</h2>
+  <p>Meet your narrator: the <strong>system clock</strong> of a production server. Here is the uncomfortable truth I live with — I am always a little wrong. Not through malice or bugs, but by construction. My job is to tell you what time it is; the interesting question is never <em>whether</em> I am off, but <em>how far</em> and <em>in which direction</em>. Network time synchronization is the discipline of keeping me honest, and it is worth understanding because far more depends on me than people realize.</p>
+
+<p><strong>Why I drift.</strong> Inside the machine, my heartbeat comes from a quartz crystal oscillator — a tiny vibrating crystal that is supposed to tick at a fixed rate. It never quite does. Temperature changes, aging, and manufacturing tolerances all shift its frequency slightly. That error is measured in <strong>parts per million (ppm)</strong>. Just 10 ppm sounds negligible, but it means I gain or lose about 10 microseconds every second — roughly <strong>0.86 seconds per day</strong>. Leave me alone for a week and I could be off by several seconds. Three terms describe my failure modes:</p>
+<ul>
+<li><strong>Offset</strong> — my current phase error, how far my displayed time is from true time <em>right now</em>.</li>
+<li><strong>Drift</strong> — my frequency error, how fast that offset grows because my oscillator ticks at the wrong rate.</li>
+<li><strong>Jitter</strong> — the random measurement noise in every attempt to figure out the other two.</li>
+</ul>
+
+<p><strong>Two kinds of clock.</strong> I actually expose two faces. The <strong>wall clock</strong> (on Linux, <em>CLOCK_REALTIME</em>) claims to be the real calendar time — the one that can jump forward or backward when corrected. The <strong>monotonic clock</strong> (<em>CLOCK_MONOTONIC</em>) only ever counts forward and never jumps; it is what you use to measure how long something took. Underneath both sits a hardware <em>clocksource</em> such as the CPU's TSC. A common bug is measuring durations with the wall clock and getting a negative result because I was corrected mid-measurement. Use the monotonic clock for elapsed time; use the wall clock for "what time is it."</p>
+
+<p><strong>Which "true time"?</strong> There are several official timescales beneath all of this:</p>
+<ul>
+<li><strong>TAI</strong> is pure atomic time, counted by atomic clocks, never adjusted.</li>
+<li><strong>UTC</strong> is TAI plus <strong>leap seconds</strong> — occasional one-second insertions that keep atomic time aligned with the slightly irregular rotation of the Earth.</li>
+<li><strong>GPS time</strong> is offset from TAI by a fixed constant and ignores leap seconds.</li>
+<li><strong>Unix time</strong>, the seconds count most software uses, represents UTC but pretends leap seconds never happen.</li>
+</ul>
+<p>Leap seconds are genuinely troublesome: inserting a repeated or paused second has crashed real systems. To avoid the discontinuity, Google and AWS practice <strong>leap smearing</strong> — spreading that one second across many hours so no clock ever has to stop or repeat. The community has voted to abandon leap seconds around 2035. This is also why the two main protocols differ: <strong>NTP distributes UTC directly</strong>, while <strong>PTP distributes TAI plus a UTC offset</strong>.</p>
+
+<p>
+</aside>
+<aside class="popup" id="ixen-card-deck" hidden>
+  <div class="popup-bar"><button class="popup-close">Close Window</button></div>
+  <h2>Card Deck</h2>
+  <div class="ixen-card-deck-grid">
+  <figure class="zoom">
+    <img src="./concept-1-card.png" alt="Drift, offset, and jitter — why clocks lie">
+    <figcaption>Drift, offset, and jitter — why clocks lie</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-2-card.png" alt="Timescales — UTC, TAI, and the leap second problem">
+    <figcaption>Timescales — UTC, TAI, and the leap second problem</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-3-card.png" alt="The NTP hierarchy — strata, pools, and reference clocks">
+    <figcaption>The NTP hierarchy — strata, pools, and reference clocks</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-4-card.png" alt="The wire algorithm — four timestamps against an asymmetric network">
+    <figcaption>The wire algorithm — four timestamps against an asymmetric network</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-5-card.png" alt="Discipline — slewing, stepping, and the daemons that do it">
+    <figcaption>Discipline — slewing, stepping, and the daemons that do it</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-6-card.png" alt="PTP — when microseconds are not enough">
+    <figcaption>PTP — when microseconds are not enough</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-7-card.png" alt="PTP infrastructure — boundary clocks, transparent clocks, and linuxptp">
+    <figcaption>PTP infrastructure — boundary clocks, transparent clocks, and linuxptp</figcaption>
+  </figure>
+  <figure class="zoom">
+    <img src="./concept-8-card.png" alt="Trust, attacks, and why everything needs the right time">
+    <figcaption>Trust, attacks, and why everything needs the right time</figcaption>
+  </figure>
+  </div>
+</aside>
+</body>
+</html>

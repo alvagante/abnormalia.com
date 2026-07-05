@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "/var/folders/m3/n4278kjj4lq8l0nd8pb0qy3r0000gn/T/swamp-extension-review",
+      "/private/var/folders/m3/n4278kjj4lq8l0nd8pb0qy3r0000gn/T/swamp-extension-review"
+    ],
+    "allow": [
+      "Bash(kill 71686 71683)"
+    ]
+  }
+}

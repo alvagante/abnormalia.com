@@ -1,0 +1,11 @@
+type: '@alvagante/content-ixen'
+typeVersion: 2026.07.05.1
+id: 29cb2b99-dfc8-4e8f-ae79-e0ab204e267a
+name: ixen-ntp-ptp
+version: 1
+tags: {}
+globalArguments:
+  apiFormat: anthropic
+  apiKey: '${{ vault.get(anthropic-keys, api-key) }}'
+  baseUrl: 'https://api.anthropic.com'
+methods: {}

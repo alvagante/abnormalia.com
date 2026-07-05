@@ -1,0 +1,13 @@
+type: '@alvagante/content-image'
+typeVersion: 2026.07.05.1
+id: fb2a802e-d358-4b06-bfec-59b1f9e32aef
+name: image-ntp-ptp-concept-2
+version: 1
+tags: {}
+globalArguments:
+  apiKey: '${{ vault.get(openai-keys, api-key) }}'
+  branding:
+    logo: assets/img/logo.png
+    name: abnormalia
+    link: 'https://abnormalia.com'
+methods: {}
