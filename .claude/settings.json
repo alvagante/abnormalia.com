@@ -1,11 +1,13 @@
 {
   "permissions": {
+    "allow": [
+      "Bash(kill 71686 71683)",
+      "Bash(grep -n -o \"var baked=.\\\\{0,300\\\\}\" /Users/al/Documents/GITHUB/abnormalia.com/ixen/ntp-ptp/index.html)",
+      "Bash(python3 \"/private/tmp/claude-501/-Users-al-Documents-GITHUB-abnormalia-com/31a96a5d-a175-4e07-9f45-ca567b97d62a/scratchpad/add_lyrics.py\")"
+    ],
     "additionalDirectories": [
       "/var/folders/m3/n4278kjj4lq8l0nd8pb0qy3r0000gn/T/swamp-extension-review",
       "/private/var/folders/m3/n4278kjj4lq8l0nd8pb0qy3r0000gn/T/swamp-extension-review"
-    ],
-    "allow": [
-      "Bash(kill 71686 71683)"
     ]
   }
 }
