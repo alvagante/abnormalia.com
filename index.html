@@ -1,26 +1,37 @@
 ---
-title: abnormalia
-description: Ixens and other abnormalia.
+title: Experimental mixed-media stories
+description: Experimental mixed-media stories where systems, people, and ideas narrate themselves.
 ---
 
-<section class="home-intro">
-  <div class="home-title">
-    <h1>AbnormaI web experiences</h1>
-    <a href="{{ '/' | relative_url }}"><img src="{{ '/assets/img/logo.png' | relative_url }}" alt="abnormalia" class="home-logo"></a>
+<section class="home-hero" aria-labelledby="home-title">
+  <div class="home-hero-copy">
+    <p class="kicker">Independent web experiments · since 2005</p>
+    <h1 id="home-title">Abnormal<br>by design.</h1>
+    <p class="home-deck">Systems confess. People narrate themselves. Ideas become places you can enter.</p>
+    <a class="hero-link" href="#latest">Explore the latest <span aria-hidden="true">↓</span></a>
   </div>
-</section>
-
-<section class="home-intro">
-  <p>AI slop with style. <a href="{{ '/ixen/abnormalia/' | relative_url }}">I wasn't always like this.</a></p>
+  <div class="home-hero-art" aria-hidden="true">
+    <span class="orbit orbit-one"></span>
+    <span class="orbit orbit-two"></span>
+    <img src="{{ '/assets/img/logo.png' | relative_url }}" alt="" class="home-logo">
+    <span class="art-caption">AI slop<br>with style</span>
+  </div>
 </section>
 
 
 {% assign recent_ixens = site.data.ixens | sort: "date" | reverse | limit: 10 %}
 {% assign recent_iams = site.data.iams | sort: "date" | reverse | limit: 10 %}
 
-<section class="home-collections">
+<section class="home-collections" id="latest" aria-labelledby="latest-title">
+  <div class="section-heading">
+    <p class="kicker">Recently manifested</p>
+    <h2 id="latest-title">Enter an abnormality</h2>
+  </div>
   <div class="home-collections-col">
-    <p class="home-collections-label">Ixens</p>
+    <div class="collection-heading">
+      <div><p class="home-collections-label">Ixens</p><p>Technical entities speaking in first person.</p></div>
+      <a href="{{ '/ixen/' | relative_url }}" aria-label="View all Ixens">All <span aria-hidden="true">↗</span></a>
+    </div>
     {% if recent_ixens.size > 0 %}
     <ol class="ixen-list">
       {% for ixen in recent_ixens %}
@@ -36,7 +47,10 @@ description: Ixens and other abnormalia.
     {% endif %}
   </div>
   <div class="home-collections-col">
-    <p class="home-collections-label">I Am</p>
+    <div class="collection-heading">
+      <div><p class="home-collections-label">I Am</p><p>Lives retold from inside the subject.</p></div>
+      <a href="{{ '/iam/' | relative_url }}" aria-label="View all I Am profiles">All <span aria-hidden="true">↗</span></a>
+    </div>
     {% if recent_iams.size > 0 %}
     <ol class="ixen-list">
       {% for iam in recent_iams %}
@@ -54,3 +68,8 @@ description: Ixens and other abnormalia.
     {% endif %}
   </div>
 </section>
+
+<aside class="home-note">
+  <p class="kicker">Origin story</p>
+  <p>Before generated worlds, there was a handmade Xen tutorial in 2005. <a href="{{ '/ixen/abnormalia/' | relative_url }}">I wasn't always like this <span aria-hidden="true">→</span></a></p>
+</aside>

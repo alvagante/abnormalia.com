@@ -9,6 +9,7 @@ Abnormalia has lived several incarnations: from an Amiga DiskMag to a social app
 - [Home](https://abnormalia.com/): Site overview and intro.
 - [I. Xen (original, 2005)](https://abnormalia.com/i-xen/): The original I, Xen by Alvagante.
 - [Ixen archive](https://abnormalia.com/ixen/): All published Ixens.
+- [I Am archive](https://abnormalia.com/iam/): First-person biography minisites.
 
 ## Legal
 

@@ -1,10 +1,12 @@
 title: abnormalia
 description: >
-  Ixens and other abnormalia.
+  Experimental mixed-media stories where systems, people, and ideas narrate themselves.
 url: "https://abnormalia.com"
 baseurl: ""
 timezone: Europe/Rome
 lang: en
+author: Lab42 Srl
+logo: /assets/img/android-chrome-512x512.png
 
 safe: true
 
