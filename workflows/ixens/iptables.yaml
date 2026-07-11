@@ -1,0 +1,118 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: intermediate
+outputLength: medium
+ixenModel: claude-opus-4-8
+ixenPersona: cybergeek
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: clean
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: brutalist
+musicGenre: dub techno
+musicMood: submerged, echoing, infrastructural
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: editorial
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: iptables
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am the Old Wall of Ordered Rules
+  description: iptables narrates itself through tables, chains, targets, conntrack, NAT.
+  topic: iptables
+  narrator: iptables itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for iptables. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am the Old Wall of Ordered Rules: iptables personified as infrastructure speaking from inside its own
+    control plane, surrounded by labeled technical artifacts related to tables, chains, targets, conntrack, NAT, cinematic
+    but legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: tables
+    imageFilename: concept-1-tables.png
+    cardFilename: concept-1-tables-card.png
+    imagePrompt: >-
+      A precise technical illustration of tables inside iptables: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain tables from the first-person perspective of iptables. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: chains
+    imageFilename: concept-2-chains.png
+    cardFilename: concept-2-chains-card.png
+    imagePrompt: >-
+      A precise technical illustration of chains inside iptables: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain chains from the first-person perspective of iptables. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: targets
+    imageFilename: concept-3-targets.png
+    cardFilename: concept-3-targets-card.png
+    imagePrompt: >-
+      A precise technical illustration of targets inside iptables: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain targets from the first-person perspective of iptables. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: conntrack
+    imageFilename: concept-4-conntrack.png
+    cardFilename: concept-4-conntrack-card.png
+    imagePrompt: >-
+      A precise technical illustration of conntrack inside iptables: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain conntrack from the first-person perspective of iptables. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: NAT
+    imageFilename: concept-5-nat.png
+    cardFilename: concept-5-nat-card.png
+    imagePrompt: >-
+      A precise technical illustration of NAT inside iptables: visible boundaries, labeled flows, failure paths, and one subtle
+      first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain NAT from the first-person perspective of iptables. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.

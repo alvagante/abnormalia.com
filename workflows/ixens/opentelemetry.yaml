@@ -1,0 +1,108 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: intermediate
+outputLength: long
+ixenModel: claude-opus-4-8
+ixenPersona: abnormalia
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: pencil-color-accents
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: field-guide
+musicGenre: industrial glitch ambient
+musicMood: recursive, mechanical, claustrophobic
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: ixen-dark
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: opentelemetry
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am the Trace You Leave Behind
+  description: OpenTelemetry narrates itself through traces, metrics, logs, collectors.
+  topic: OpenTelemetry
+  narrator: OpenTelemetry itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for OpenTelemetry. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am the Trace You Leave Behind: OpenTelemetry personified as infrastructure speaking from inside its
+    own control plane, surrounded by labeled technical artifacts related to traces, metrics, logs, collectors, cinematic but
+    legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: traces
+    imageFilename: concept-1-traces.png
+    cardFilename: concept-1-traces-card.png
+    imagePrompt: >-
+      A precise technical illustration of traces inside OpenTelemetry: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, pencil-color-accents style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain traces from the first-person perspective of OpenTelemetry. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: metrics
+    imageFilename: concept-2-metrics.png
+    cardFilename: concept-2-metrics-card.png
+    imagePrompt: >-
+      A precise technical illustration of metrics inside OpenTelemetry: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, pencil-color-accents style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain metrics from the first-person perspective of OpenTelemetry. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: logs
+    imageFilename: concept-3-logs.png
+    cardFilename: concept-3-logs-card.png
+    imagePrompt: >-
+      A precise technical illustration of logs inside OpenTelemetry: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, pencil-color-accents style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain logs from the first-person perspective of OpenTelemetry. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: collectors
+    imageFilename: concept-4-collectors.png
+    cardFilename: concept-4-collectors-card.png
+    imagePrompt: >-
+      A precise technical illustration of collectors inside OpenTelemetry: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, pencil-color-accents style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain collectors from the first-person perspective of OpenTelemetry. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.

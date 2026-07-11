@@ -1,0 +1,130 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: senior
+outputLength: medium
+ixenModel: claude-opus-4-8
+ixenPersona: glitchpoet
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: editorial
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: blueprint
+musicGenre: darkwave
+musicMood: cold, archival, nocturnal
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: blueprint
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: slsa
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am the Provenance You Can Verify
+  description: >-
+    SLSA narrates itself through build levels, provenance, hermetic builds, trusted builders, source integrity, supply chain
+    threats.
+  topic: SLSA
+  narrator: SLSA itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for SLSA. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am the Provenance You Can Verify: SLSA personified as infrastructure speaking from inside its own control
+    plane, surrounded by labeled technical artifacts related to build levels, provenance, hermetic builds, trusted builders,
+    source integrity, supply chain threats, cinematic but legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: build levels
+    imageFilename: concept-1-build-levels.png
+    cardFilename: concept-1-build-levels-card.png
+    imagePrompt: >-
+      A precise technical illustration of build levels inside SLSA: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, editorial style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain build levels from the first-person perspective of SLSA. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: provenance
+    imageFilename: concept-2-provenance.png
+    cardFilename: concept-2-provenance-card.png
+    imagePrompt: >-
+      A precise technical illustration of provenance inside SLSA: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, editorial style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain provenance from the first-person perspective of SLSA. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: hermetic builds
+    imageFilename: concept-3-hermetic-builds.png
+    cardFilename: concept-3-hermetic-builds-card.png
+    imagePrompt: >-
+      A precise technical illustration of hermetic builds inside SLSA: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, editorial style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain hermetic builds from the first-person perspective of SLSA. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: trusted builders
+    imageFilename: concept-4-trusted-builders.png
+    cardFilename: concept-4-trusted-builders-card.png
+    imagePrompt: >-
+      A precise technical illustration of trusted builders inside SLSA: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, editorial style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain trusted builders from the first-person perspective of SLSA. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: source integrity
+    imageFilename: concept-5-source-integrity.png
+    cardFilename: concept-5-source-integrity-card.png
+    imagePrompt: >-
+      A precise technical illustration of source integrity inside SLSA: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, editorial style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain source integrity from the first-person perspective of SLSA. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: supply chain threats
+    imageFilename: concept-6-supply-chain-threats.png
+    cardFilename: concept-6-supply-chain-threats-card.png
+    imagePrompt: >-
+      A precise technical illustration of supply chain threats inside SLSA: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, editorial style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain supply chain threats from the first-person perspective of SLSA. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.

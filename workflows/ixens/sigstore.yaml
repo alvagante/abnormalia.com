@@ -1,0 +1,128 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: intermediate
+outputLength: long
+ixenModel: claude-opus-4-8
+ixenPersona: noir
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: clean
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: luminous-minimal
+musicGenre: post-rock
+musicMood: slow-burning, vast, fault-tolerant
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: ixen-dark
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: sigstore
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am the Signature Without a Private Key
+  description: Sigstore narrates itself through Fulcio, Rekor, Cosign, keyless signing, transparency log, OIDC identity.
+  topic: Sigstore
+  narrator: Sigstore itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for Sigstore. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am the Signature Without a Private Key: Sigstore personified as infrastructure speaking from inside
+    its own control plane, surrounded by labeled technical artifacts related to Fulcio, Rekor, Cosign, keyless signing, transparency
+    log, OIDC identity, cinematic but legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: Fulcio
+    imageFilename: concept-1-fulcio.png
+    cardFilename: concept-1-fulcio-card.png
+    imagePrompt: >-
+      A precise technical illustration of Fulcio inside Sigstore: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain Fulcio from the first-person perspective of Sigstore. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: Rekor
+    imageFilename: concept-2-rekor.png
+    cardFilename: concept-2-rekor-card.png
+    imagePrompt: >-
+      A precise technical illustration of Rekor inside Sigstore: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain Rekor from the first-person perspective of Sigstore. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: Cosign
+    imageFilename: concept-3-cosign.png
+    cardFilename: concept-3-cosign-card.png
+    imagePrompt: >-
+      A precise technical illustration of Cosign inside Sigstore: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain Cosign from the first-person perspective of Sigstore. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: keyless signing
+    imageFilename: concept-4-keyless-signing.png
+    cardFilename: concept-4-keyless-signing-card.png
+    imagePrompt: >-
+      A precise technical illustration of keyless signing inside Sigstore: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain keyless signing from the first-person perspective of Sigstore. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: transparency log
+    imageFilename: concept-5-transparency-log.png
+    cardFilename: concept-5-transparency-log-card.png
+    imagePrompt: >-
+      A precise technical illustration of transparency log inside Sigstore: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain transparency log from the first-person perspective of Sigstore. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.
+  - name: OIDC identity
+    imageFilename: concept-6-oidc-identity.png
+    cardFilename: concept-6-oidc-identity-card.png
+    imagePrompt: >-
+      A precise technical illustration of OIDC identity inside Sigstore: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain OIDC identity from the first-person perspective of Sigstore. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.

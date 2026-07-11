@@ -1,0 +1,128 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: guru
+outputLength: medium
+ixenModel: claude-opus-4-8
+ixenPersona: deadpan
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: technical-diagram
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: monochrome-ink
+musicGenre: baroque synthpop
+musicMood: formal, ornate, cryptographic
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: ixen-light
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: tls
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am the Handshake Under the Page
+  description: TLS narrates itself through handshake, cipher suites, certificate validation, session resumption, ALPN, mTLS.
+  topic: TLS
+  narrator: TLS itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for TLS. Assume a senior technical reader. Teach the real mechanics, failure boundaries, debugging
+    angles, and security implications without flattening the voice into documentation. The page should feel like the system
+    explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am the Handshake Under the Page: TLS personified as infrastructure speaking from inside its own control
+    plane, surrounded by labeled technical artifacts related to handshake, cipher suites, certificate validation, session
+    resumption, ALPN, mTLS, cinematic but legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: handshake
+    imageFilename: concept-1-handshake.png
+    cardFilename: concept-1-handshake-card.png
+    imagePrompt: >-
+      A precise technical illustration of handshake inside TLS: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, technical-diagram style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain handshake from the first-person perspective of TLS. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: cipher suites
+    imageFilename: concept-2-cipher-suites.png
+    cardFilename: concept-2-cipher-suites-card.png
+    imagePrompt: >-
+      A precise technical illustration of cipher suites inside TLS: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, technical-diagram style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain cipher suites from the first-person perspective of TLS. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: certificate validation
+    imageFilename: concept-3-certificate-validation.png
+    cardFilename: concept-3-certificate-validation-card.png
+    imagePrompt: >-
+      A precise technical illustration of certificate validation inside TLS: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, technical-diagram style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain certificate validation from the first-person perspective of TLS. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.
+  - name: session resumption
+    imageFilename: concept-4-session-resumption.png
+    cardFilename: concept-4-session-resumption-card.png
+    imagePrompt: >-
+      A precise technical illustration of session resumption inside TLS: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, technical-diagram style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain session resumption from the first-person perspective of TLS. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: ALPN
+    imageFilename: concept-5-alpn.png
+    cardFilename: concept-5-alpn-card.png
+    imagePrompt: >-
+      A precise technical illustration of ALPN inside TLS: visible boundaries, labeled flows, failure paths, and one subtle
+      first-person surreal detail, technical-diagram style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain ALPN from the first-person perspective of TLS. Keep the explanation technically real, show the operational consequence,
+      name the common failure mode, and include at least one concrete command, config fragment, protocol field, or inspection
+      path where appropriate.
+  - name: mTLS
+    imageFilename: concept-6-mtls.png
+    cardFilename: concept-6-mtls-card.png
+    imagePrompt: >-
+      A precise technical illustration of mTLS inside TLS: visible boundaries, labeled flows, failure paths, and one subtle
+      first-person surreal detail, technical-diagram style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain mTLS from the first-person perspective of TLS. Keep the explanation technically real, show the operational consequence,
+      name the common failure mode, and include at least one concrete command, config fragment, protocol field, or inspection
+      path where appropriate.

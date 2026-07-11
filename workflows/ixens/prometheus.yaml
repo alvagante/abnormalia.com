@@ -1,0 +1,108 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: intermediate
+outputLength: medium
+ixenModel: claude-opus-4-8
+ixenPersona: glitchpoet
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: technical-diagram
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: tarot-technical
+musicGenre: darkwave
+musicMood: cold, archival, nocturnal
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: editorial
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: prometheus
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am the Scrape Before the Alarm
+  description: Prometheus narrates itself through scraping, PromQL, labels, recording rules.
+  topic: Prometheus
+  narrator: Prometheus itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for Prometheus. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am the Scrape Before the Alarm: Prometheus personified as infrastructure speaking from inside its own
+    control plane, surrounded by labeled technical artifacts related to scraping, PromQL, labels, recording rules, cinematic
+    but legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: scraping
+    imageFilename: concept-1-scraping.png
+    cardFilename: concept-1-scraping-card.png
+    imagePrompt: >-
+      A precise technical illustration of scraping inside Prometheus: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, technical-diagram style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain scraping from the first-person perspective of Prometheus. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: PromQL
+    imageFilename: concept-2-promql.png
+    cardFilename: concept-2-promql-card.png
+    imagePrompt: >-
+      A precise technical illustration of PromQL inside Prometheus: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, technical-diagram style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain PromQL from the first-person perspective of Prometheus. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: labels
+    imageFilename: concept-3-labels.png
+    cardFilename: concept-3-labels-card.png
+    imagePrompt: >-
+      A precise technical illustration of labels inside Prometheus: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, technical-diagram style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain labels from the first-person perspective of Prometheus. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: recording rules
+    imageFilename: concept-4-recording-rules.png
+    cardFilename: concept-4-recording-rules-card.png
+    imagePrompt: >-
+      A precise technical illustration of recording rules inside Prometheus: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, technical-diagram style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain recording rules from the first-person perspective of Prometheus. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.

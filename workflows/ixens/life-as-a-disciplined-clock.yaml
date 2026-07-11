@@ -46,12 +46,194 @@ ixens:
     musicTracks:
       - filename: life-as-a-disciplined-clock-1.mp3
         title: Life as a disciplined clock
+        lyrics: |-
+          I am the pulse, the tick, the time
+          NTP whispers through the line
+          Every packet, every frame
+          Keeps the network in its name
+          Microseconds, stratum deep
+          I am what makes the world keep time
+
+          I synchronize, I synchronize
+          A thousand clocks through network ties
+          I synchronize, I synchronize
+          Precision is my lullaby
+
+          PTP takes the lead with me
+          Hardware timestamps, oh so free
+          Ethernet carries my command
+          Clocks align across the land
+          Jitter falls, the phase locks tight
+          I am order in the night
+
+          I synchronize, I synchronize
+          A thousand clocks through network ties
+          I synchronize, I synchronize
+          Precision is my lullaby
+
+          Berkeley algorithm hums
+          Master, slave, my pulse becomes
+          Leapless seconds fade away
+          GPS feeds me every day
+          Boundary clocks relay my beat
+          No delay, the sync's complete
+          From the datacenter floor
+          To the edges and beyond
+          Every server keeps me on
+
+          I synchronize, I synchronize
+          A thousand clocks through network ties
+          I synchronize, I synchronize
+          Precision is my lullaby
+
+          I am time, I am the line
+          I am what makes the world align
       - filename: life-as-a-disciplined-clock-2.mp3
         title: Life as a disciplined clock (Alt 2)
+        lyrics: |-
+          I am the pulse, the tick, the time
+          NTP whispers through the line
+          Every packet, every frame
+          Keeps the network in its name
+          Microseconds, stratum deep
+          I am what makes the world keep time
+
+          I synchronize, I synchronize
+          A thousand clocks through network ties
+          I synchronize, I synchronize
+          Precision is my lullaby
+
+          PTP takes the lead with me
+          Hardware timestamps, oh so free
+          Ethernet carries my command
+          Clocks align across the land
+          Jitter falls, the phase locks tight
+          I am order in the night
+
+          I synchronize, I synchronize
+          A thousand clocks through network ties
+          I synchronize, I synchronize
+          Precision is my lullaby
+
+          Berkeley algorithm hums
+          Master, slave, my pulse becomes
+          Leapless seconds fade away
+          GPS feeds me every day
+          Boundary clocks relay my beat
+          No delay, the sync's complete
+          From the datacenter floor
+          To the edges and beyond
+          Every server keeps me on
+
+          I synchronize, I synchronize
+          A thousand clocks through network ties
+          I synchronize, I synchronize
+          Precision is my lullaby
+
+          I am time, I am the line
+          I am what makes the world align
       - filename: life-as-a-disciplined-clock-3.mp3
         title: Life as a disciplined clock (Alt 3)
+        lyrics: |-
+          I am the pulse, I am the beat
+          Master server ticking underneath
+          Every packet keeps the time
+          One nanosecond, perfectly aligned
+
+          Network time synchronization
+          I am the precision you depend on
+          NTP and PTP, my dual notation
+          I synchronize the information
+
+          I count the microseconds, never sleep
+          Berlin's rhythm running deep
+          Clocks across the world align to me
+          Thousands of devices finding harmony
+
+          Network time synchronization
+          I am the precision you depend on
+          NTP and PTP, my dual notation
+          I synchronize the information
+
+          Stratosphere, I listen to the satellites
+          GPS atomic clocks burning bright
+          From the server to your telephone
+          Everyone's time is my own
+
+          Tick, tick, tick—the discipline
+          Tick, tick, tick—begins again
+          No deviation, no mistake
+          Every system's interconnected state
+
+          I am the glue that holds it all
+          Ethernet cables, protocol call
+          Trading microseconds for the trust
+          In my accuracy, you must
+          Layer seven down to layer one
+          Synchronization's never done
+          When the networks start to grow
+          I'm the current, I'm the flow
+
+          Network time synchronization
+          I am the precision you depend on
+          NTP and PTP, my dual notation
+          I synchronize the information
+
+          Network time synchronization
+          I am the precision you depend on
+          NTP and PTP, my dual notation
+          I synchronize the information
       - filename: life-as-a-disciplined-clock-4.mp3
         title: Life as a disciplined clock (Alt 4)
+        lyrics: |-
+          I am the pulse, I am the beat
+          Master server ticking underneath
+          Every packet keeps the time
+          One nanosecond, perfectly aligned
+
+          Network time synchronization
+          I am the precision you depend on
+          NTP and PTP, my dual notation
+          I synchronize the information
+
+          I count the microseconds, never sleep
+          Berlin's rhythm running deep
+          Clocks across the world align to me
+          Thousands of devices finding harmony
+
+          Network time synchronization
+          I am the precision you depend on
+          NTP and PTP, my dual notation
+          I synchronize the information
+
+          Stratosphere, I listen to the satellites
+          GPS atomic clocks burning bright
+          From the server to your telephone
+          Everyone's time is my own
+
+          Tick, tick, tick—the discipline
+          Tick, tick, tick—begins again
+          No deviation, no mistake
+          Every system's interconnected state
+
+          I am the glue that holds it all
+          Ethernet cables, protocol call
+          Trading microseconds for the trust
+          In my accuracy, you must
+          Layer seven down to layer one
+          Synchronization's never done
+          When the networks start to grow
+          I'm the current, I'm the flow
+
+          Network time synchronization
+          I am the precision you depend on
+          NTP and PTP, my dual notation
+          I synchronize the information
+
+          Network time synchronization
+          I am the precision you depend on
+          NTP and PTP, my dual notation
+          I synchronize the information
     title: Life as a disciplined clock
     description: >-
       A server's system clock narrates drift, offset, NTP strata and algorithms,

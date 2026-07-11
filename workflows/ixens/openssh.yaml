@@ -1,0 +1,108 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: guru
+outputLength: medium
+ixenModel: claude-opus-4-8
+ixenPersona: punkprof
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: editorial
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: brutalist
+musicGenre: minimal techno
+musicMood: disciplined, ticking, exact
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: ixen-light
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: openssh
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am the Narrow Door
+  description: OpenSSH narrates itself through key exchange, authorized keys, agent forwarding, known hosts.
+  topic: OpenSSH
+  narrator: OpenSSH itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for OpenSSH. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am the Narrow Door: OpenSSH personified as infrastructure speaking from inside its own control plane,
+    surrounded by labeled technical artifacts related to key exchange, authorized keys, agent forwarding, known hosts, cinematic
+    but legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: key exchange
+    imageFilename: concept-1-key-exchange.png
+    cardFilename: concept-1-key-exchange-card.png
+    imagePrompt: >-
+      A precise technical illustration of key exchange inside OpenSSH: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, editorial style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain key exchange from the first-person perspective of OpenSSH. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: authorized keys
+    imageFilename: concept-2-authorized-keys.png
+    cardFilename: concept-2-authorized-keys-card.png
+    imagePrompt: >-
+      A precise technical illustration of authorized keys inside OpenSSH: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, editorial style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain authorized keys from the first-person perspective of OpenSSH. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: agent forwarding
+    imageFilename: concept-3-agent-forwarding.png
+    cardFilename: concept-3-agent-forwarding-card.png
+    imagePrompt: >-
+      A precise technical illustration of agent forwarding inside OpenSSH: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, editorial style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain agent forwarding from the first-person perspective of OpenSSH. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: known hosts
+    imageFilename: concept-4-known-hosts.png
+    cardFilename: concept-4-known-hosts-card.png
+    imagePrompt: >-
+      A precise technical illustration of known hosts inside OpenSSH: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, editorial style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain known hosts from the first-person perspective of OpenSSH. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.

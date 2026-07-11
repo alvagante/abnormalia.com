@@ -1,0 +1,129 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: senior
+outputLength: medium
+ixenModel: claude-opus-4-8
+ixenPersona: deadpan
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: pencil-color-accents
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: brutalist
+musicGenre: baroque synthpop
+musicMood: formal, ornate, cryptographic
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: blueprint
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: redis
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am the Memory That Answers First
+  description: Redis narrates itself through data structures, persistence, replication, sentinel, cluster slots, eviction
+    policy.
+  topic: Redis
+  narrator: Redis itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for Redis. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am the Memory That Answers First: Redis personified as infrastructure speaking from inside its own
+    control plane, surrounded by labeled technical artifacts related to data structures, persistence, replication, sentinel,
+    cluster slots, eviction policy, cinematic but legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: data structures
+    imageFilename: concept-1-data-structures.png
+    cardFilename: concept-1-data-structures-card.png
+    imagePrompt: >-
+      A precise technical illustration of data structures inside Redis: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, pencil-color-accents style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain data structures from the first-person perspective of Redis. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: persistence
+    imageFilename: concept-2-persistence.png
+    cardFilename: concept-2-persistence-card.png
+    imagePrompt: >-
+      A precise technical illustration of persistence inside Redis: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, pencil-color-accents style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain persistence from the first-person perspective of Redis. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: replication
+    imageFilename: concept-3-replication.png
+    cardFilename: concept-3-replication-card.png
+    imagePrompt: >-
+      A precise technical illustration of replication inside Redis: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, pencil-color-accents style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain replication from the first-person perspective of Redis. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: sentinel
+    imageFilename: concept-4-sentinel.png
+    cardFilename: concept-4-sentinel-card.png
+    imagePrompt: >-
+      A precise technical illustration of sentinel inside Redis: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, pencil-color-accents style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain sentinel from the first-person perspective of Redis. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: cluster slots
+    imageFilename: concept-5-cluster-slots.png
+    cardFilename: concept-5-cluster-slots-card.png
+    imagePrompt: >-
+      A precise technical illustration of cluster slots inside Redis: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, pencil-color-accents style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain cluster slots from the first-person perspective of Redis. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: eviction policy
+    imageFilename: concept-6-eviction-policy.png
+    cardFilename: concept-6-eviction-policy-card.png
+    imagePrompt: >-
+      A precise technical illustration of eviction policy inside Redis: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, pencil-color-accents style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain eviction policy from the first-person perspective of Redis. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.

@@ -1,0 +1,118 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: intermediate
+outputLength: long
+ixenModel: claude-opus-4-8
+ixenPersona: gonzo
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: blueprint
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: risograph
+musicGenre: garage punk
+musicMood: fast, abrasive, locally enforced
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: ixen-dark
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: wireguard
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am the Quiet Tunnel
+  description: WireGuard narrates itself through public keys, allowed IPs, peer configuration, roaming, handshakes.
+  topic: WireGuard
+  narrator: WireGuard itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for WireGuard. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am the Quiet Tunnel: WireGuard personified as infrastructure speaking from inside its own control plane,
+    surrounded by labeled technical artifacts related to public keys, allowed IPs, peer configuration, roaming, handshakes,
+    cinematic but legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: public keys
+    imageFilename: concept-1-public-keys.png
+    cardFilename: concept-1-public-keys-card.png
+    imagePrompt: >-
+      A precise technical illustration of public keys inside WireGuard: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, blueprint style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain public keys from the first-person perspective of WireGuard. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: allowed IPs
+    imageFilename: concept-2-allowed-ips.png
+    cardFilename: concept-2-allowed-ips-card.png
+    imagePrompt: >-
+      A precise technical illustration of allowed IPs inside WireGuard: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, blueprint style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain allowed IPs from the first-person perspective of WireGuard. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: peer configuration
+    imageFilename: concept-3-peer-configuration.png
+    cardFilename: concept-3-peer-configuration-card.png
+    imagePrompt: >-
+      A precise technical illustration of peer configuration inside WireGuard: visible boundaries, labeled flows, failure
+      paths, and one subtle first-person surreal detail, blueprint style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain peer configuration from the first-person perspective of WireGuard. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.
+  - name: roaming
+    imageFilename: concept-4-roaming.png
+    cardFilename: concept-4-roaming-card.png
+    imagePrompt: >-
+      A precise technical illustration of roaming inside WireGuard: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, blueprint style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain roaming from the first-person perspective of WireGuard. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: handshakes
+    imageFilename: concept-5-handshakes.png
+    cardFilename: concept-5-handshakes-card.png
+    imagePrompt: >-
+      A precise technical illustration of handshakes inside WireGuard: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, blueprint style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain handshakes from the first-person perspective of WireGuard. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.

@@ -1,0 +1,151 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: guru
+outputLength: long
+ixenModel: claude-opus-4-8
+ixenPersona: fieldnotes
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: clean
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: field-guide
+musicGenre: math rock
+musicMood: precise, angular, restless
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: clean
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: cloud-init
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am First Boot Remembered Forever
+  description: >-
+    cloud-init narrates itself through user data, metadata service, boot stages, modules, network config, instance identity,
+    runcmd, cloud-config.
+  topic: cloud-init
+  narrator: cloud-init itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for cloud-init. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am First Boot Remembered Forever: cloud-init personified as infrastructure speaking from inside its
+    own control plane, surrounded by labeled technical artifacts related to user data, metadata service, boot stages, modules,
+    network config, instance identity, runcmd, cloud-config, cinematic but legible, no logos, no vendor marks, no decorative
+    branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: user data
+    imageFilename: concept-1-user-data.png
+    cardFilename: concept-1-user-data-card.png
+    imagePrompt: >-
+      A precise technical illustration of user data inside cloud-init: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain user data from the first-person perspective of cloud-init. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: metadata service
+    imageFilename: concept-2-metadata-service.png
+    cardFilename: concept-2-metadata-service-card.png
+    imagePrompt: >-
+      A precise technical illustration of metadata service inside cloud-init: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain metadata service from the first-person perspective of cloud-init. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.
+  - name: boot stages
+    imageFilename: concept-3-boot-stages.png
+    cardFilename: concept-3-boot-stages-card.png
+    imagePrompt: >-
+      A precise technical illustration of boot stages inside cloud-init: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain boot stages from the first-person perspective of cloud-init. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: modules
+    imageFilename: concept-4-modules.png
+    cardFilename: concept-4-modules-card.png
+    imagePrompt: >-
+      A precise technical illustration of modules inside cloud-init: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain modules from the first-person perspective of cloud-init. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: network config
+    imageFilename: concept-5-network-config.png
+    cardFilename: concept-5-network-config-card.png
+    imagePrompt: >-
+      A precise technical illustration of network config inside cloud-init: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain network config from the first-person perspective of cloud-init. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.
+  - name: instance identity
+    imageFilename: concept-6-instance-identity.png
+    cardFilename: concept-6-instance-identity-card.png
+    imagePrompt: >-
+      A precise technical illustration of instance identity inside cloud-init: visible boundaries, labeled flows, failure
+      paths, and one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain instance identity from the first-person perspective of cloud-init. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.
+  - name: runcmd
+    imageFilename: concept-7-runcmd.png
+    cardFilename: concept-7-runcmd-card.png
+    imagePrompt: >-
+      A precise technical illustration of runcmd inside cloud-init: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain runcmd from the first-person perspective of cloud-init. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: cloud-config
+    imageFilename: concept-8-cloud-config.png
+    cardFilename: concept-8-cloud-config-card.png
+    imagePrompt: >-
+      A precise technical illustration of cloud-config inside cloud-init: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain cloud-config from the first-person perspective of cloud-init. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.

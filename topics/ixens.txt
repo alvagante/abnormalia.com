@@ -1,0 +1,40 @@
+NTP
+DNS
+BGP
+Xen
+Puppet Catalog
+Puppet Server
+PuppetDB
+Hiera
+Swamp extension
+OpenSSH
+systemd
+SELinux
+AppArmor
+Linux capabilities
+cgroups
+namespaces
+seccomp
+eBPF
+iptables
+nftables
+WireGuard
+TLS
+PKI
+OCSP
+ACME
+Kerberos
+LDAP
+PostgreSQL
+Redis
+Prometheus
+Grafana
+OpenTelemetry
+Terraform state
+cloud-init
+container images
+SBOM
+SLSA
+Sigstore
+Reproducible builds
+Git hooks

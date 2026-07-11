@@ -1,0 +1,108 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: senior
+outputLength: long
+ixenModel: claude-opus-4-8
+ixenPersona: fieldnotes
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: blueprint
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: luminous-minimal
+musicGenre: math rock
+musicMood: precise, angular, restless
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: technical-diagram
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: puppet-catalog
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am Desired State, Serialized
+  description: Puppet Catalog narrates itself through resource graph, dependency ordering, catalog compilation, containment.
+  topic: Puppet Catalog
+  narrator: Puppet Catalog itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for Puppet Catalog. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am Desired State, Serialized: Puppet Catalog personified as infrastructure speaking from inside its
+    own control plane, surrounded by labeled technical artifacts related to resource graph, dependency ordering, catalog compilation,
+    containment, cinematic but legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: resource graph
+    imageFilename: concept-1-resource-graph.png
+    cardFilename: concept-1-resource-graph-card.png
+    imagePrompt: >-
+      A precise technical illustration of resource graph inside Puppet Catalog: visible boundaries, labeled flows, failure
+      paths, and one subtle first-person surreal detail, blueprint style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain resource graph from the first-person perspective of Puppet Catalog. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.
+  - name: dependency ordering
+    imageFilename: concept-2-dependency-ordering.png
+    cardFilename: concept-2-dependency-ordering-card.png
+    imagePrompt: >-
+      A precise technical illustration of dependency ordering inside Puppet Catalog: visible boundaries, labeled flows, failure
+      paths, and one subtle first-person surreal detail, blueprint style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain dependency ordering from the first-person perspective of Puppet Catalog. Keep the explanation technically real,
+      show the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.
+  - name: catalog compilation
+    imageFilename: concept-3-catalog-compilation.png
+    cardFilename: concept-3-catalog-compilation-card.png
+    imagePrompt: >-
+      A precise technical illustration of catalog compilation inside Puppet Catalog: visible boundaries, labeled flows, failure
+      paths, and one subtle first-person surreal detail, blueprint style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain catalog compilation from the first-person perspective of Puppet Catalog. Keep the explanation technically real,
+      show the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.
+  - name: containment
+    imageFilename: concept-4-containment.png
+    cardFilename: concept-4-containment-card.png
+    imagePrompt: >-
+      A precise technical illustration of containment inside Puppet Catalog: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, blueprint style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain containment from the first-person perspective of Puppet Catalog. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.

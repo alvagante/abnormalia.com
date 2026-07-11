@@ -1,0 +1,50 @@
+Ada Lovelace
+Alan Turing
+Grace Hopper
+Margaret Hamilton
+Dennis Ritchie
+Ken Thompson
+Edsger Dijkstra
+Donald Knuth
+Leslie Lamport
+Tim Berners-Lee
+Linus Torvalds
+Albert Einstein
+Isaac Newton
+Marie Curie
+Charles Darwin
+Nikola Tesla
+Galileo Galilei
+Leonardo da Vinci
+Aristotle
+Plato
+Socrates
+Hypatia
+William Shakespeare
+Dante Alighieri
+Homer
+Virginia Woolf
+Mary Shelley
+Franz Kafka
+George Orwell
+Jane Austen
+Ludwig van Beethoven
+Wolfgang Amadeus Mozart
+Frida Kahlo
+Vincent van Gogh
+Pablo Picasso
+Cleopatra
+Julius Caesar
+Napoleon Bonaparte
+Nelson Mandela
+Mahatma Gandhi
+Martin Luther King Jr.
+Rosa Parks
+Winston Churchill
+Abraham Lincoln
+Simone de Beauvoir
+Hannah Arendt
+Sigmund Freud
+Carl Jung
+Friedrich Nietzsche
+Karl Marx

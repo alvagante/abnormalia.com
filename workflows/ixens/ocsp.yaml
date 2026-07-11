@@ -1,0 +1,140 @@
+---
+ixenApiFormat: anthropic
+ixenBaseUrl: https://api.anthropic.com
+skillLevel: senior
+outputLength: long
+ixenModel: claude-opus-4-8
+ixenPersona: gonzo
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="font-weight:bold;text-decoration:none;">abnormalia</a>
+    <a href="/ixen/" style="font-weight:bold;text-decoration:none;">Ixens</a>
+  </nav>
+footerContent: >-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash;
+  <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLogo: ''
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+cheatsheetVerbosity: detailed
+cheatsheetCompleteness: comprehensive
+cheatsheetModel: claude-opus-4-8
+credits: txt by al
+versionOutput: false
+assetsRoot: ''
+mediaProvider: api
+imageStyle: clean
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+cardStyle: technical-diagram
+musicGenre: garage punk
+musicMood: fast, abrasive, locally enforced
+musicModel: suno-ttapi
+musicInstrumental: false
+musicSkipThreshold: 0
+musicProvider: api
+sunoVersion: chirp-v4-5
+infographicStyle: technical-diagram
+infographicModel: gpt-image-1.5
+infographicProvider: api
+cheatsheetProvider: api
+pageProvider: api
+pageFilename: page.html
+includeBeginnerGuide: false
+ixens:
+- slug: ocsp
+  regenerate:
+    images: false
+    cards: false
+    infographic: false
+    music: true
+  title: I Am the Question Asked Too Late
+  description: >-
+    OCSP narrates itself through revocation status, stapling, responder availability, soft fail, must-staple, privacy leakage,
+    cache behavior.
+  topic: OCSP
+  narrator: OCSP itself, speaking in first person as the infrastructure component, protocol, or tool.
+  details: >-
+    Create a self-narrated Ixen for OCSP. Assume a senior technical reader. Teach the real mechanics, failure boundaries,
+    debugging angles, and security implications without flattening the voice into documentation. The page should feel like
+    the system explaining what it is, what humans misunderstand about it, and what breaks when it is trusted lazily.
+  heroPrompt: >-
+    A hero image for I Am the Question Asked Too Late: OCSP personified as infrastructure speaking from inside its own control
+    plane, surrounded by labeled technical artifacts related to revocation status, stapling, responder availability, soft
+    fail, must-staple, privacy leakage, cache behavior, cinematic but legible, no logos, no vendor marks, no decorative branding.
+  assetsDir: ''
+  pageSourcePath: ''
+  musicTracks: []
+  concepts:
+  - name: revocation status
+    imageFilename: concept-1-revocation-status.png
+    cardFilename: concept-1-revocation-status-card.png
+    imagePrompt: >-
+      A precise technical illustration of revocation status inside OCSP: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain revocation status from the first-person perspective of OCSP. Keep the explanation technically real, show the
+      operational consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol
+      field, or inspection path where appropriate.
+  - name: stapling
+    imageFilename: concept-2-stapling.png
+    cardFilename: concept-2-stapling-card.png
+    imagePrompt: >-
+      A precise technical illustration of stapling inside OCSP: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain stapling from the first-person perspective of OCSP. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: responder availability
+    imageFilename: concept-3-responder-availability.png
+    cardFilename: concept-3-responder-availability-card.png
+    imagePrompt: >-
+      A precise technical illustration of responder availability inside OCSP: visible boundaries, labeled flows, failure paths,
+      and one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain responder availability from the first-person perspective of OCSP. Keep the explanation technically real, show
+      the operational consequence, name the common failure mode, and include at least one concrete command, config fragment,
+      protocol field, or inspection path where appropriate.
+  - name: soft fail
+    imageFilename: concept-4-soft-fail.png
+    cardFilename: concept-4-soft-fail-card.png
+    imagePrompt: >-
+      A precise technical illustration of soft fail inside OCSP: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain soft fail from the first-person perspective of OCSP. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: must-staple
+    imageFilename: concept-5-must-staple.png
+    cardFilename: concept-5-must-staple-card.png
+    imagePrompt: >-
+      A precise technical illustration of must-staple inside OCSP: visible boundaries, labeled flows, failure paths, and one
+      subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain must-staple from the first-person perspective of OCSP. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: privacy leakage
+    imageFilename: concept-6-privacy-leakage.png
+    cardFilename: concept-6-privacy-leakage-card.png
+    imagePrompt: >-
+      A precise technical illustration of privacy leakage inside OCSP: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain privacy leakage from the first-person perspective of OCSP. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
+  - name: cache behavior
+    imageFilename: concept-7-cache-behavior.png
+    cardFilename: concept-7-cache-behavior-card.png
+    imagePrompt: >-
+      A precise technical illustration of cache behavior inside OCSP: visible boundaries, labeled flows, failure paths, and
+      one subtle first-person surreal detail, clean style, high legibility, no logos, no vendor marks.
+    details: >-
+      Explain cache behavior from the first-person perspective of OCSP. Keep the explanation technically real, show the operational
+      consequence, name the common failure mode, and include at least one concrete command, config fragment, protocol field,
+      or inspection path where appropriate.
