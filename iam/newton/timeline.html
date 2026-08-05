@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Isaac Newton — Timeline</title>
+<style>
+:root {
+  --tl-bg: #faf8f4;
+  --tl-ink: #1a1a18;
+  --tl-dim: #6b6360;
+  --tl-rule: #d4cdc8;
+  --tl-surface: #f0ede6;
+  --tl-header-bg: #1a1a18;
+  --tl-amber: #8b5e3c;
+  --tl-sage:  #4a6741;
+  --tl-rust:  #8b3522;
+  --tl-slate: #3a4f68;
+  --tl-dusk:  #54437a;
+  --tl-umber: #5e4824;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: Georgia, "Times New Roman", "Liberation Serif", serif;
+  font-size: 13px;
+  line-height: 1.58;
+  background: var(--tl-bg);
+  color: var(--tl-ink);
+}
+.tl-page-header {
+  background: var(--tl-header-bg);
+  color: #fff;
+  padding: 14px 22px 11px;
+}
+.tl-page-header h1 {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  margin: 0 0 3px;
+}
+.tl-page-meta {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  color: #9aa0a6;
+}
+.tl-main { padding: 14px 18px 28px; }
+
+/* Phase block */
+.tl-phase { margin-bottom: 20px; }
+.tl-phase-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 10px;
+  background: var(--tl-surface);
+  border-left: 3px solid var(--tl-rule);
+  border-bottom: 1px solid var(--tl-rule);
+}
+.tl-phase[data-color="amber"] .tl-phase-header { border-left-color: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-phase-header { border-left-color: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-phase-header { border-left-color: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-phase-header { border-left-color: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-phase-header { border-left-color: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-phase-header { border-left-color: var(--tl-umber); }
+.tl-phase-name {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tl-dim);
+}
+.tl-phase[data-color="amber"] .tl-phase-name { color: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-phase-name { color: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-phase-name { color: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-phase-name { color: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-phase-name { color: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-phase-name { color: var(--tl-umber); }
+.tl-phase-span {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  color: var(--tl-dim);
+  letter-spacing: 0.03em;
+}
+
+/* Events list */
+.tl-events {
+  padding: 4px 0 2px 0;
+  border-left: 3px solid var(--tl-rule);
+  margin-left: 10px;
+}
+.tl-phase[data-color="amber"] .tl-events { border-left-color: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-events { border-left-color: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-events { border-left-color: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-events { border-left-color: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-events { border-left-color: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-events { border-left-color: var(--tl-umber); }
+
+/* Single event row */
+.tl-event {
+  display: grid;
+  grid-template-columns: 80px 22px 1fr;
+  min-height: 28px;
+  padding: 3px 0;
+}
+.tl-date {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  color: var(--tl-dim);
+  text-align: right;
+  padding: 4px 8px 0 0;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.tl-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.tl-connector::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background: var(--tl-rule);
+}
+.tl-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tl-rule);
+  margin-top: 5px;
+  z-index: 1;
+  position: relative;
+  flex-shrink: 0;
+}
+.tl-phase[data-color="amber"] .tl-dot { background: var(--tl-amber); }
+.tl-phase[data-color="sage"]  .tl-dot { background: var(--tl-sage);  }
+.tl-phase[data-color="rust"]  .tl-dot { background: var(--tl-rust);  }
+.tl-phase[data-color="slate"] .tl-dot { background: var(--tl-slate); }
+.tl-phase[data-color="dusk"]  .tl-dot { background: var(--tl-dusk);  }
+.tl-phase[data-color="umber"] .tl-dot { background: var(--tl-umber); }
+.tl-body { padding: 2px 0 6px 6px; }
+.tl-title {
+  font-family: system-ui, sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--tl-ink);
+  line-height: 1.35;
+}
+.tl-desc {
+  font-family: Georgia, serif;
+  font-size: 11.5px;
+  color: var(--tl-dim);
+  line-height: 1.5;
+  margin-top: 1px;
+}
+
+/* Branding footer */
+.tl-brand-footer {
+  padding: 0.5rem 1.2rem;
+  text-align: right;
+  border-top: 1px solid var(--tl-rule);
+  margin-top: 4px;
+}
+.tl-brand-footer img { height: 18px; width: auto; vertical-align: middle; }
+.tl-brand-footer a { text-decoration: none; opacity: 0.55; }
+.tl-brand-footer a:hover { opacity: 1; }
+
+@media print {
+  body { background: white; font-size: 11px; }
+  .tl-page-header { background: #1a1a18 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tl-phase { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<header class="tl-page-header">
+  <h1>Isaac Newton</h1>
+  <div class="tl-page-meta">biographical · standard  ·  model: claude-opus-4-8  ·  2026-08-05</div>
+</header>
+<main class="tl-main">
+<div class="tl-phase" data-color="amber">
+<div class="tl-phase-header">
+<span class="tl-phase-name">Birth and Early Life</span>
+<span class="tl-phase-span">1642 – 1661</span>
+</div>
+<div class="tl-events">
+<div class="tl-event">
+<div class="tl-date">1642 Dec 25</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Born at Woolsthorpe Manor</div>
+<div class="tl-desc">Born prematurely in Lincolnshire (25 December Old Style; 4 January 1643 Gregorian). His father had died three months before his birth.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1646</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Mother remarries; left with grandmother</div>
+<div class="tl-desc">His mother Hannah married Reverend Barnabas Smith and moved away, leaving young Isaac to be raised by his maternal grandmother.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">c. 1655</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">The King's School, Grantham</div>
+<div class="tl-desc">Attended the grammar school at Grantham, lodging with the apothecary Mr. Clarke, where he showed early aptitude for mechanical models.</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="tl-phase" data-color="sage">
+<div class="tl-phase-header">
+<span class="tl-phase-name">Cambridge and the Miracle Years</span>
+<span class="tl-phase-span">1661 – 1669</span>
+</div>
+<div class="tl-events">
+<div class="tl-event">
+<div class="tl-date">1661 Jun</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Admitted to Trinity College, Cambridge</div>
+<div class="tl-desc">Entered as a subsizar, paying his way through service. He immersed himself in the works of Descartes, Galileo, and other modern thinkers.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1665</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Earns Bachelor of Arts degree</div>
+<div class="tl-desc">Graduated from Trinity College shortly before the university closed due to the Great Plague.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1665 – 1666</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Plague closure and the "anni mirabiles"</div>
+<div class="tl-desc">During the plague retreat at Woolsthorpe he developed early ideas on calculus, the theory of colors, and gravitation.</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="tl-phase" data-color="rust">
+<div class="tl-phase-header">
+<span class="tl-phase-name">Professorship and Discovery</span>
+<span class="tl-phase-span">1669 – 1696</span>
+</div>
+<div class="tl-events">
+<div class="tl-event">
+<div class="tl-date">1669</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Appointed Lucasian Professor of Mathematics</div>
+<div class="tl-desc">Succeeded Isaac Barrow to the prestigious Cambridge chair at the age of 26.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1672</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Elected Fellow of the Royal Society</div>
+<div class="tl-desc">His reflecting telescope and a paper on light and colors brought him into the Society, sparking a long dispute with Robert Hooke.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1687 Jul 5</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Publishes the Principia Mathematica</div>
+<div class="tl-desc">Philosophiæ Naturalis Principia Mathematica, published with Edmond Halley's encouragement and funding, set out the laws of motion and universal gravitation.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1689</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Member of Parliament for Cambridge</div>
+<div class="tl-desc">Represented the University of Cambridge in the Convention Parliament following the Glorious Revolution.</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="tl-phase" data-color="slate">
+<div class="tl-phase-header">
+<span class="tl-phase-name">The Mint and Public Life</span>
+<span class="tl-phase-span">1696 – 1705</span>
+</div>
+<div class="tl-events">
+<div class="tl-event">
+<div class="tl-date">1696</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Appointed Warden of the Mint</div>
+<div class="tl-desc">Moved to London and oversaw the Great Recoinage, vigorously pursuing counterfeiters and clippers.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1699</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Promoted to Master of the Mint</div>
+<div class="tl-desc">Assumed the senior and lucrative office, which he held for the remainder of his life.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1703</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Elected President of the Royal Society</div>
+<div class="tl-desc">Assumed leadership of the Society after Hooke's death, a post he retained until his own death.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1704</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Publishes Opticks</div>
+<div class="tl-desc">Presented his experiments with prisms and the composition of white light, written largely in English rather than Latin.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1705 Apr 16</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Knighted by Queen Anne</div>
+<div class="tl-desc">Knighted at Trinity College, Cambridge—likely for political reasons—becoming Sir Isaac Newton.</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="tl-phase" data-color="dusk">
+<div class="tl-phase-header">
+<span class="tl-phase-name">Disputes and Final Years</span>
+<span class="tl-phase-span">1710 – 1727</span>
+</div>
+<div class="tl-events">
+<div class="tl-event">
+<div class="tl-date">1712 – 1713</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Calculus priority dispute with Leibniz</div>
+<div class="tl-desc">A Royal Society committee, guided by Newton, ruled in his favor over Gottfried Wilhelm Leibniz, defining a bitter late conflict.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1713</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Second edition of the Principia</div>
+<div class="tl-desc">Published a revised edition edited by Roger Cotes, including the famous "General Scholium" with his theological reflections.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1727 Mar 20</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Death in London</div>
+<div class="tl-desc">Died in his sleep (Old Style; 31 March Gregorian) at Kensington and was buried with honors in Westminster Abbey.</div>
+</div>
+</div>
+<div class="tl-event">
+<div class="tl-date">1728</div>
+<div class="tl-connector"><div class="tl-dot"></div></div>
+<div class="tl-body">
+<div class="tl-title">Posthumous chronology published</div>
+<div class="tl-desc">The Chronology of Ancient Kingdoms Amended appeared after his death, reflecting his lifelong writings on history, theology, and prophecy.</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="tl-brand-footer"><a href="https://abnormalia.com"><img src="assets/img/logo.png" alt="abnormalia"></a></footer>
+</body>
+</html>

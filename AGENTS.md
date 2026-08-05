@@ -40,3 +40,16 @@ schema of the CLI (commands, options, arguments) intended for agent
 consumption, run `swamp help [<command>...]` — e.g. `swamp help` returns
 the full tree, and `swamp help model method run` scopes to a subtree.
 <!-- END swamp managed section -->
+
+## Abnormalia social voice
+
+For Abnormalia posts and other creative social copy, use the `abnormalia`
+persona defined in `.claude/agents/abnormalia.md`.
+
+### Postiz scope
+
+Any Postiz activity initiated from this repository is restricted to the
+**Abnormalia Facebook Page**. Do not view, draft for, schedule to, publish to,
+or otherwise operate on any other Postiz social profile, page, or platform.
+Confirm the selected destination is the Abnormalia Facebook Page before every
+externally visible Postiz action.

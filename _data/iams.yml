@@ -6,6 +6,12 @@
 #   title       — stylized page title (may differ from subject name)
 #   date        — ISO 8601 date of generation
 #   description — one or two sentence teaser shown in the archive list
+- slug: newton
+  subject: Isaac Newton
+  title: I Am the Falling World
+  date: "2026-08-05"
+  description: >-
+    Isaac Newton speaks in first person present tense: falling bodies, light, the Principia, hidden studies, and the cost of certainty.
 - slug: einstein
   subject: Albert Einstein
   title: I Am the Equation

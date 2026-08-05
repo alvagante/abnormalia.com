@@ -1,0 +1,153 @@
+# Input file for: swamp workflow run generate-iams --input-file workflows/iams/newton.yaml
+#
+# Workflow DAG: prepare -> (media || music || influence-map || timeline) -> track-manifest -> page -> register
+
+# -- Subject -------------------------------------------------------------------
+subject: "Isaac Newton"
+subjectType: real
+wikipediaTitle: "Isaac Newton"
+sourceMode: both
+facts: |
+  I am born at Woolsthorpe Manor in Lincolnshire on 25 December 1642 in the
+  English old style calendar, or 4 January 1643 in the Gregorian calendar. I
+  study at Trinity College, Cambridge, and during the plague closure of
+  1665–1666 I develop early work on calculus, optics, and gravitation.
+  I become Lucasian Professor of Mathematics in 1669. With Edmond Halley's
+  decisive encouragement, I publish Philosophiæ Naturalis Principia Mathematica
+  in 1687, setting out the laws of motion and universal gravitation.
+  I publish Opticks in 1704 after years of experiments with prisms and white
+  light. I serve as Warden and then Master of the Mint, pursue counterfeiters,
+  and become President of the Royal Society in 1703. I also write extensively
+  on alchemy, theology, prophecy, and chronology. My priority dispute with
+  Gottfried Wilhelm Leibniz over calculus becomes a defining late conflict.
+details: |
+  I speak only in first person singular and present tense. I never describe
+  myself from outside. My voice is exacting, private, and suspicious of easy
+  stories: the apple is an occasion for thought, not a blow to the head; the
+  Principia is sustained labour, argument, and mathematical invention. Hold
+  together my public science, my religious and alchemical studies, my service
+  at the Mint, and my quarrels without turning any of them into caricature.
+description: "Isaac Newton speaks in first person present tense: falling bodies, light, the Principia, hidden studies, and the cost of certainty."
+slug: newton
+
+# -- Narrative -----------------------------------------------------------------
+title: "I Am the Falling World"
+persona: fieldnotes
+outputLength: long
+iamModel: claude-opus-4-8
+
+# -- Subject metadata (shown in masthead strip) --------------------------------
+metaBorn: "4 January 1643 (25 December 1642 O.S.)"
+metaDied: "31 March 1727 (20 March 1727 O.S.)"
+metaNationality: "English"
+metaEra: "Scientific Revolution"
+metaDomain: "Mathematics, physics, optics, natural philosophy"
+
+# -- Facets --------------------------------------------------------------------
+facets:
+  - name: Woolsthorpe and the Plague Years
+    imageFilename: facet-woolsthorpe-plague.png
+    cardFilename: facet-card-woolsthorpe-plague.png
+    details: >-
+      When Cambridge closes in 1665, I return to Woolsthorpe. Isolation gives
+      me the space to work through fluxions, the colours of light, and the
+      problem of why the moon does not fall to Earth. A falling apple prompts
+      a question; it does not supply an answer.
+    imagePrompt: >-
+      Woolsthorpe Manor in rural Lincolnshire during the 1660s, a young Isaac
+      Newton writing mathematical notes beneath an apple tree, a prism casting
+      a spectrum across papers, the moon and an orbital curve subtly present,
+      pencil-bw editorial biography illustration, transparent background.
+
+  - name: The Principia
+    imageFilename: facet-principia.png
+    cardFilename: facet-card-principia.png
+    details: >-
+      I turn motion into a language of laws and geometry. With Halley's urging
+      and support, I publish the Principia in 1687: terrestrial falling and
+      celestial orbit become one problem, held by universal gravitation.
+    imagePrompt: >-
+      A seventeenth-century manuscript titled Principia open beside geometric
+      diagrams, elliptical planetary orbits, a compass and quill, mathematical
+      construction lines linking an apple-sized sphere to the moon, pencil-bw
+      editorial biography illustration, transparent background.
+
+  - name: Light in the Dark Room
+    imageFilename: facet-opticks.png
+    cardFilename: facet-card-opticks.png
+    details: >-
+      I make a narrow beam of sunlight pass through a prism and refuse the
+      comforting idea that the glass creates colour. White light is already
+      composite. The spectrum is not decoration; it is evidence.
+    imagePrompt: >-
+      A dark seventeenth-century study, a beam of sunlight through a small
+      shutter hole crossing a glass prism and separating into a precise spectrum
+      on a wall, notebooks and lenses on a table, pencil-bw editorial biography
+      illustration with restrained spectral tonal contrast, transparent background.
+
+  - name: The Other Kingdoms
+    imageFilename: facet-other-kingdoms.png
+    cardFilename: facet-card-other-kingdoms.png
+    details: >-
+      I read Scripture and alchemical texts with the same appetite I bring to
+      geometry. At the Mint I track counterfeiters through London. In public I
+      become President of the Royal Society; in private I keep searching for a
+      deeper order that is not confined to the pages others choose to publish.
+    imagePrompt: >-
+      Isaac Newton as Master of the Mint at a desk with coins, seals, an
+      alchemical manuscript, a Bible, and a Royal Society document, London in
+      the background, hidden geometric symbols worked into the composition,
+      pencil-bw editorial biography illustration, transparent background.
+
+# -- Portrait ------------------------------------------------------------------
+portraitPrompt: >-
+  A portrait of Isaac Newton in later life: long natural gray hair, severe
+  observant face, black academic coat, reserved expression. Pencil-bw,
+  transparent background. Editorial biography portrait style.
+portraitFilename: portrait.png
+
+# -- Images --------------------------------------------------------------------
+imageStyle: pencil-bw
+imageBackground: transparent
+imageModel: gpt-image-1.5
+imageSize: 1024x1024
+imageQuality: high
+
+# -- Cards ---------------------------------------------------------------------
+cardStyle: iam-portrait
+
+# -- Influence map -------------------------------------------------------------
+influenceMapStyle: clean
+influenceMapModel: gpt-image-1.5
+influenceMapBackground: transparent
+influenceMapPrompt: >-
+  Isaac Newton's intellectual influences and scientific network: Euclid,
+  Galileo, Kepler, Descartes, Wallis, Barrow, Huygens, Robert Hooke, Edmond
+  Halley, the Royal Society, alchemy, biblical chronology, and the Royal Mint.
+  Place Newton at center. Show his later influence on classical mechanics,
+  celestial mechanics, engineering, calculus, optics, the Enlightenment, and
+  Einstein. Make the priority dispute with Leibniz a contested side branch,
+  not a line of influence.
+
+# -- Music ---------------------------------------------------------------------
+musicGenre: "English baroque chamber music, harpsichord, viola da gamba, restrained strings, measured percussion"
+musicMood: "austere, curious, luminous, obsessive, monumental"
+musicModel: suno-ttapi
+musicInstrumental: false
+sunoVersion: chirp-v4-5
+
+# -- Site branding -------------------------------------------------------------
+credits: alvagante
+versionOutput: true
+headerContent: |-
+  <nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+    <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+      <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+    </a>
+    <a href="/iam/" style="font-weight:bold;text-decoration:none;">I Am</a>
+  </nav>
+footerContent: |-
+  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+brandingLink: https://abnormalia.com
+brandingName: abnormalia
+brandingLogo: assets/img/logo.png

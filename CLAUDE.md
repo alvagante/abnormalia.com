@@ -92,3 +92,14 @@ New Ixens are produced by the `generate-ixens` swamp workflow:
 - `page` — generates `ixen/<slug>/index.html` via `@alvagante/content-ixen` (Claude).
 
 **Vaults required:** `anthropic-keys` (`api-key`), `openai-keys` (`api-key`), `onemin-keys` (`API_KEY`).
+
+## Abnormalia social voice
+
+Use the `abnormalia` agent in `.claude/agents/abnormalia.md` for Abnormalia
+posts and other creative social copy.
+
+### Postiz scope
+
+All Postiz activity from this repository is limited to the **Abnormalia
+Facebook Page**. Do not operate on any other social profile, page, or platform;
+verify the selected destination before every externally visible action.

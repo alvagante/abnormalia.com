@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I Am the Falling World</title>
+<style>
+:root {
+  --bg: #faf8f4;
+  --ink: #1a1a18;
+  --dim: #6b6360;
+  --accent: #8b5e3c;
+  --rule: #d4cdc8;
+  --tinted: #f0ede6;
+  --slides-bg: #f2ede5;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: Georgia, "Times New Roman", "Liberation Serif", serif;
+  font-size: 16px; line-height: 1.72; color: var(--ink);
+  background: var(--bg); margin: 0; padding: 0;
+}
+
+/* ── Layout ── */
+.iam-layout {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  min-height: 100vh;
+}
+.iam-toc {
+  position: sticky; top: 0; align-self: start;
+  height: 100vh; overflow-y: auto;
+  padding: 2.2rem 1.2rem 2rem 1.8rem;
+  border-right: 1px solid var(--rule);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.76rem;
+}
+.iam-toc-label {
+  font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--dim); font-weight: 700; margin: 0 0 1rem; display: block;
+}
+.iam-toc-list { list-style: none; margin: 0; padding: 0; }
+.iam-toc-item { margin: 0; }
+.iam-toc-link {
+  display: block; padding: 0.28rem 0.5rem 0.28rem 0.6rem;
+  color: var(--dim); text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color 150ms, border-color 150ms;
+  line-height: 1.35;
+}
+.iam-toc-link:hover, .iam-toc-link.is-active {
+  color: var(--accent); border-left-color: var(--accent);
+}
+.iam-toc-divider { height: 1px; background: var(--rule); margin: 0.9rem 0 0.8rem; }
+.iam-toc-cards-btn {
+  display: block; width: 100%; text-align: left;
+  background: none; border: 1px solid var(--accent); color: var(--accent);
+  cursor: pointer; font-family: system-ui, sans-serif;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 0.3rem 0.5rem;
+  margin-top: 0.8rem;
+}
+.iam-toc-cards-btn:hover { background: var(--accent); color: #fff; }
+.iam-version-block {
+  margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid var(--rule);
+}
+.iam-version-block label {
+  display: block; font-size: 0.6rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--dim); margin-bottom: 0.3rem;
+}
+.iam-version-block select {
+  width: 100%; font-family: system-ui, sans-serif; font-size: 0.72rem;
+  color: var(--ink); background: var(--bg); border: 1px solid var(--rule);
+  padding: 0.28rem 0.4rem;
+}
+.iam-content {
+  padding: 3rem 3.5rem 8rem 3rem;
+  max-width: 740px;
+}
+
+/* ── Masthead ── */
+.iam-masthead {
+  margin: 0 0 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--ink);
+}
+.iam-name {
+  font-family: Georgia, serif;
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  font-weight: 400; line-height: 1.0; letter-spacing: -0.01em;
+  margin: 0 0 0.35rem; color: var(--ink);
+}
+.iam-title-line {
+  font-family: Georgia, serif; font-style: italic;
+  font-size: 1.1rem; color: var(--dim); margin: 0 0 1rem;
+}
+.iam-meta-strip {
+  display: flex; flex-direction: column; gap: 0.35rem;
+  font-family: system-ui, sans-serif; font-size: 0.74rem;
+  color: var(--dim); margin-bottom: 0;
+}
+.iam-meta-item { display: flex; gap: 0.35rem; align-items: baseline; }
+.iam-meta-label {
+  font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.09em; color: var(--accent);
+}
+.iam-lead { overflow: hidden; }
+.iam-portrait {
+  float: right; width: min(220px, 36%);
+  margin: 0.2rem 0 1rem 1.8rem;
+}
+.iam-portrait img {
+  width: 100%; display: block; cursor: zoom-in;
+  border: 1px solid var(--rule);
+}
+.iam-portrait figcaption {
+  font-family: system-ui, sans-serif; font-size: 0.68rem;
+  color: var(--dim); margin-top: 0.3rem; font-style: italic;
+}
+
+/* ── Section heads ── */
+.iam-section-head {
+  display: flex; align-items: baseline; gap: 0.9rem;
+  margin: 3.5rem 0 1.4rem; padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--rule); clear: both;
+}
+.iam-section-num {
+  font-family: system-ui, sans-serif; font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+  flex-shrink: 0;
+}
+.iam-section-name {
+  font-family: system-ui, sans-serif; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim);
+}
+
+/* ── Text rhythm ── */
+p { margin: 0 0 1.05em; }
+p strong { color: var(--ink); }
+blockquote.iam-pull {
+  margin: 2rem 0; padding: 0 0 0 1.4rem;
+  border-left: 3px solid var(--accent);
+  font-style: italic; font-size: 1.12rem; color: var(--dim); line-height: 1.55;
+}
+p.iam-aside {
+  font-family: system-ui, sans-serif; font-size: 0.78rem;
+  color: var(--dim); font-style: italic; margin: -0.5em 0 1em;
+}
+
+/* ── Facets ── */
+.iam-facet {
+  clear: both; margin: 2.5rem 0;
+  padding-top: 1rem; border-top: 1px solid var(--rule);
+}
+h2.iam-facet-name {
+  font-size: 1.35rem; font-weight: 400; font-style: italic;
+  margin: 0 0 0.9rem; color: var(--ink);
+}
+figure.iam-facet-img { margin: 0; }
+figure.iam-facet-img img { width: 100%; display: block; cursor: zoom-in; }
+figure.iam-facet-img figcaption {
+  font-family: system-ui, sans-serif; font-size: 0.68rem;
+  color: var(--dim); margin-top: 0.3rem; font-style: italic;
+}
+.iam-float-left {
+  float: left; width: min(250px, 42%);
+  margin: 0.2rem 1.5rem 0.8rem 0;
+}
+.iam-float-right {
+  float: right; width: min(250px, 42%);
+  margin: 0.2rem 0 0.8rem 1.5rem;
+}
+.iam-facet-controls { margin: 0.5rem 0 0.7rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+button.iam-drawer-trigger {
+  background: none; border: 1px solid var(--accent); color: var(--accent);
+  cursor: pointer; font-family: system-ui, sans-serif;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 0.28rem 0.7rem;
+}
+button.iam-drawer-trigger:hover { background: var(--accent); color: #fff; }
+figure.iam-facet-card { display: none; }
+
+/* ── Key Works ── */
+ul.iam-works { list-style: none; margin: 0; padding: 0; }
+li.iam-work {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "title year" "desc desc";
+  gap: 0.1rem 1rem;
+  padding: 0.75rem 0; border-bottom: 1px solid var(--rule);
+}
+li.iam-work:first-child { border-top: 1px solid var(--rule); }
+.iam-work-title { font-style: italic; grid-area: title; }
+.iam-work-year {
+  grid-area: year; align-self: center;
+  font-family: system-ui, sans-serif; font-size: 0.72rem; color: var(--dim);
+}
+.iam-work-desc {
+  grid-area: desc; font-family: system-ui, sans-serif;
+  font-size: 0.8rem; color: var(--dim);
+}
+
+/* ── Quotes ── */
+blockquote.iam-quote { margin: 1.5rem 0; padding: 1rem 1.2rem; }
+blockquote.iam-quote-verified { border-left: 3px solid var(--ink); }
+blockquote.iam-quote-verified p { font-size: 1.08rem; font-style: italic; margin: 0 0 0.45rem; }
+blockquote.iam-quote-verified footer {
+  font-family: system-ui, sans-serif; font-size: 0.74rem; color: var(--dim);
+}
+.iam-ai-voices-wrapper {
+  background: var(--tinted);
+  padding: 1.4rem 1.4rem 0.6rem;
+  margin: 0 -1.4rem;
+}
+.iam-ai-voices-label {
+  font-family: system-ui, sans-serif; font-size: 0.6rem;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--dim); font-weight: 700; margin: 0 0 1rem;
+  display: block;
+}
+blockquote.iam-quote-ai {
+  border-left: 2px solid var(--dim); margin: 0.8rem 0;
+  padding: 0 0 0 1rem;
+}
+blockquote.iam-quote-ai p {
+  font-size: 1rem; font-style: italic; color: var(--dim); margin: 0;
+}
+
+/* ── Links ── */
+.iam-links-list { display: flex; flex-direction: column; gap: 0.6rem; }
+a.iam-link {
+  display: grid; grid-template-columns: 1fr;
+  gap: 0.12rem; padding: 0.75rem;
+  border: 1px solid var(--rule); text-decoration: none; color: inherit;
+  transition: border-color 150ms;
+}
+a.iam-link:hover { border-color: var(--accent); }
+.iam-link-title { font-style: italic; font-size: 0.92rem; color: var(--accent); }
+.iam-link-source { font-family: system-ui, sans-serif; font-size: 0.68rem; color: var(--dim); }
+.iam-link-desc { font-family: system-ui, sans-serif; font-size: 0.78rem; color: var(--dim); }
+
+/* ── Timeline (dateline) section ── */
+.iam-dateline-section { clear: both; margin: 3.5rem 0 0; }
+.iam-dateline-section iframe {
+  width: 100%; height: 80vh; border: 1px solid var(--rule); display: block;
+}
+
+/* ── Influence map section ── */
+.iam-influence-section { clear: both; margin: 3.5rem 0 0; }
+.iam-influence-section iframe {
+  width: 100%; height: 75vh; border: 1px solid var(--rule); display: block;
+}
+.iam-influence-section img { width: 100%; cursor: zoom-in; display: block; }
+
+/* ── Side drawer ── */
+.iam-drawer {
+  display: block; /* override [hidden] attribute if present */
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(480px, 90vw); background: var(--bg);
+  border-left: 1px solid var(--rule);
+  box-shadow: -6px 0 32px rgba(0,0,0,0.10);
+  z-index: 60; overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 280ms cubic-bezier(0.4,0,0.2,1);
+}
+.iam-drawer.is-open { transform: translateX(0); }
+.iam-drawer-bar {
+  display: flex; justify-content: flex-end; padding: 0.7rem 1rem;
+  position: sticky; top: 0; background: var(--bg);
+  border-bottom: 1px solid var(--rule); z-index: 1;
+}
+button.iam-drawer-close {
+  background: none; border: 1px solid var(--dim); color: var(--dim);
+  cursor: pointer; font-family: system-ui, sans-serif;
+  font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.28rem 0.7rem;
+}
+button.iam-drawer-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.iam-drawer-facet-name {
+  font-family: Georgia, serif; font-style: italic;
+  font-size: 1.1rem; padding: 1rem 1.4rem 0.5rem;
+  border-bottom: 1px solid var(--rule); color: var(--ink);
+}
+.iam-drawer-slides {
+  padding: 1.2rem 1.4rem 1.4rem;
+  background: var(--slides-bg);
+  border-bottom: 2px solid var(--rule);
+}
+.iam-drawer-slides-label {
+  font-family: system-ui, sans-serif; font-size: 0.6rem;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--accent); font-weight: 700; margin: 0 0 0.7rem; display: block;
+}
+.iam-drawer-slides ul {
+  margin: 0; padding: 0 0 0 1.1rem;
+  font-family: system-ui, sans-serif; font-size: 0.82rem; color: var(--ink);
+}
+.iam-drawer-slides li { margin: 0.3rem 0; line-height: 1.42; }
+.iam-drawer-slides table {
+  width: 100%; border-collapse: collapse;
+  font-family: system-ui, sans-serif; font-size: 0.78rem; margin-top: 0.5rem;
+}
+.iam-drawer-slides td, .iam-drawer-slides th {
+  padding: 0.28rem 0.5rem; border: 1px solid var(--rule); text-align: left;
+}
+.iam-drawer-slides th { background: var(--tinted); font-weight: 600; }
+.iam-drawer-notes {
+  padding: 1.2rem 1.4rem 1.6rem;
+  font-size: 0.88rem; line-height: 1.68;
+}
+.iam-drawer-notes-label {
+  font-family: system-ui, sans-serif; font-size: 0.6rem;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--dim); font-weight: 700; margin: 0 0 0.7rem; display: block;
+}
+.iam-drawer-notes p { margin: 0 0 0.85em; }
+.iam-drawer-notes strong { color: var(--ink); }
+
+/* ── Card grid popup ── */
+.iam-card-grid-popup {
+  position: fixed; inset: 0; background: rgba(26,26,24,0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 65;
+}
+.iam-card-grid-popup[hidden] { display: none; }
+.iam-card-grid-popup-inner {
+  background: var(--bg); border: 1px solid var(--rule);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+  max-width: min(900px, 94vw); max-height: 88vh;
+  overflow-y: auto; padding: 1.5rem;
+}
+.iam-card-grid-popup-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1rem;
+}
+.iam-card-grid-popup-bar h2 {
+  font-family: system-ui, sans-serif; font-size: 0.68rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--dim); font-weight: 700; margin: 0;
+}
+.iam-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1.1rem;
+}
+.iam-card-item { perspective: 800px; cursor: pointer; }
+.iam-card-inner {
+  position: relative; width: 100%; aspect-ratio: 2.5 / 3.5;
+  transform-style: preserve-3d;
+  transition: transform 450ms cubic-bezier(0.4,0,0.2,1);
+}
+.iam-card-item.is-flipped .iam-card-inner { transform: rotateY(180deg); }
+.iam-card-front, .iam-card-back {
+  position: absolute; inset: 0; backface-visibility: hidden;
+  border: 1px solid var(--rule); border-radius: 3px; overflow: hidden;
+  box-shadow: 2px 4px 14px rgba(0,0,0,0.13);
+}
+.iam-card-front img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.iam-card-back {
+  transform: rotateY(180deg); background: var(--bg);
+  padding: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem;
+}
+.iam-card-back-name {
+  font-family: system-ui, sans-serif; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent);
+}
+.iam-card-back-desc {
+  font-family: system-ui, sans-serif; font-size: 0.72rem;
+  color: var(--dim); line-height: 1.42;
+}
+
+/* ── Backdrop ── */
+.iam-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.18); z-index: 55;
+}
+
+/* ── Lightbox ── */
+.iam-lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.86);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 70; cursor: zoom-out;
+}
+.iam-lightbox img { max-width: 92vw; max-height: 92vh; }
+.iam-extra-header {
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  margin: 0 0 1.6rem; padding: 0.8rem 0;
+}
+.iam-extra-footer {
+  clear: both; border-top: 1px solid var(--rule); margin: 3rem 0 0;
+  padding-top: 0.9rem; font-size: 0.85rem; color: var(--dim);
+}
+
+/* ── Provenance footer ── */
+.iam-provenance {
+  clear: both; margin: 4rem 0 0; padding-top: 0.8rem;
+  border-top: 1px solid var(--rule);
+  font-family: system-ui, sans-serif; font-size: 0.68rem;
+  color: var(--dim); text-align: center;
+}
+.iam-provenance a { color: var(--dim); text-decoration: underline dotted; }
+.iam-provenance-meta { margin-top: 0.2rem; }
+.iam-provenance-meta span + span::before { content: " / "; color: #bbb; }
+
+/* ── Brand footer ── */
+.iam-brand-footer {
+  clear: both; margin: 1.5rem 0 0; padding: 0.5rem 0;
+  border-top: 1px solid var(--rule); text-align: right; opacity: 0.65;
+}
+.iam-brand-footer img { height: 20px; width: auto; vertical-align: middle; }
+.iam-brand-footer a { text-decoration: none; color: inherit; }
+.iam-brand-footer:hover { opacity: 1; }
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .iam-layout { grid-template-columns: 1fr; }
+  .iam-toc {
+    position: relative; height: auto; border-right: none;
+    border-bottom: 1px solid var(--rule);
+    padding: 0.8rem 1.2rem; display: flex; flex-wrap: wrap;
+    align-items: center; gap: 0.2rem 0.8rem;
+  }
+  .iam-toc-list {
+    display: flex; flex-wrap: wrap; gap: 0.1rem 0.5rem;
+  }
+  .iam-toc-link {
+    padding: 0.15rem 0; border-left: none;
+    border-bottom: 2px solid transparent;
+  }
+  .iam-toc-link.is-active { border-bottom-color: var(--accent); border-left-color: transparent; }
+  .iam-toc-divider, .iam-version-block { display: none; }
+  .iam-content { padding: 2rem 1.4rem 6rem; }
+  .iam-portrait { width: min(160px, 40%); }
+  .iam-name { font-size: clamp(2.2rem, 7vw, 3.2rem); }
+  .iam-ai-voices-wrapper { margin: 0 -1.4rem; padding: 1rem 1.4rem 0.4rem; }
+}
+
+#iam-player {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--ink); border-top: 1px solid var(--accent);
+  z-index: 80; padding: 0.4rem 1.2rem 0.3rem;
+  font-family: system-ui, sans-serif; font-size: 0.76rem; color: #ccc;
+}
+#iam-player-row { display: flex; align-items: center; gap: 0.6rem; }
+.iam-pbtn {
+  background: none; border: none; color: #888; cursor: pointer;
+  font: inherit; font-size: 0.95rem; padding: 0.15rem 0.3rem;
+  line-height: 1; flex-shrink: 0;
+}
+.iam-pbtn:hover { color: var(--accent); }
+#iam-player.iam-autoplay-blocked #iam-play-btn {
+  color: #fff; background: var(--accent); border-radius: 2px;
+  animation: iam-play-pulse 1.35s ease-in-out infinite;
+}
+@keyframes iam-play-pulse {
+  0%,100% { transform:scale(1); box-shadow:0 0 0 1px var(--accent); }
+  50% { transform:scale(1.12); box-shadow:0 0 0 1px var(--accent),0 0 18px rgba(139,94,60,0.6); }
+}
+#iam-ptitle {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #c8b89a; font-weight: 600;
+}
+#iam-ptime { color: #555; white-space: nowrap; font-size: 0.68rem; }
+#iam-vol { width: 52px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+#iam-pbar { height: 2px; background: #333; cursor: pointer; margin-top: 0.3rem; }
+#iam-pfill { height: 100%; background: var(--accent); width: 0%; pointer-events: none; }
+#iam-lyrics-panel {
+  position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%);
+  width: min(600px, 90vw); max-height: 42vh; overflow-y: auto;
+  background: #1a1a18; border: 1px solid #2a2a28; border-bottom: none;
+  padding: 1rem 1.4rem; z-index: 81;
+}
+.iam-lyrics-head {
+  font-family: system-ui, sans-serif; color: var(--accent); font-weight: 700;
+  font-size: 0.72rem; letter-spacing: 0.07em; text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+#iam-lyrics-panel pre {
+  font-family: system-ui, sans-serif; font-size: 0.8rem; line-height: 1.85;
+  color: #aaa; white-space: pre-wrap; margin: 0;
+}
+#iam-tracklist-panel {
+  position: fixed; bottom: 48px; right: 1.2rem;
+  background: #1a1a18; border: 1px solid #2a2a28; border-bottom: none;
+  padding: 0.4rem; z-index: 81; min-width: 200px; max-height: 55vh; overflow-y: auto;
+}
+.iam-track-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #888;
+  font-family: system-ui, sans-serif; font-size: 0.76rem;
+  cursor: pointer; padding: 0.32rem 0.5rem;
+}
+.iam-track-item:hover { color: #eee; }
+.iam-track-item.active { color: var(--accent); }
+</style>
+</head>
+<body>
+<!-- @alvagante/content-iam -->
+<div class="iam-layout">
+<nav class="iam-toc" aria-label="Table of contents">
+  <span class="iam-toc-label">Contents</span>
+  <ul class="iam-toc-list">
+    <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-biography">Biography</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-key-works">Key Works</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-facets">Facets</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-quotes">In Their Own Words</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-ai-voices">AI Voices</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-influence">Influence Map</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-dateline">Timeline</a></li>
+      <li class="iam-toc-item"><a class="iam-toc-link" href="#iam-links">Links</a></li>
+  </ul>
+    <div class="iam-toc-divider"></div>
+    <button class="iam-toc-cards-btn">Facet Cards</button>
+</nav>
+<div class="iam-content">
+
+<section class="iam-extra-header">
+<nav aria-label="Site" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'Courier New',Courier,monospace;font-size:.85rem;">
+  <a href="/" aria-label="abnormalia" style="display:inline-flex;align-items:center;text-decoration:none;">
+    <img src="/assets/img/logo.png" alt="abnormalia" style="height:2.5rem;width:auto;display:block;">
+  </a>
+  <a href="/iam/" style="font-weight:bold;text-decoration:none;">I Am</a>
+</nav>
+</section>
+<header class="iam-masthead">
+  <p class="iam-aside">Profile by alvagante — 20260805-13:21</p>
+  <h1 class="iam-name">Isaac Newton</h1>
+  <p class="iam-title-line">I Am the Falling World</p>
+  <div class="iam-lead">
+  <figure class="iam-portrait"><img src="./portrait.png" alt="Portrait of Isaac Newton"><figcaption>Isaac Newton</figcaption></figure>
+  <div class="iam-meta-strip"><span class="iam-meta-item"><span class="iam-meta-label">Dates</span>4 January 1643 (25 December 1642 O.S.) – 31 March 1727 (20 March 1727 O.S.)</span><span class="iam-meta-item"><span class="iam-meta-label">Nationality</span>English</span><span class="iam-meta-item"><span class="iam-meta-label">Era</span>Scientific Revolution</span><span class="iam-meta-item"><span class="iam-meta-label">Domain</span>Mathematics, physics, optics, natural philosophy</span></div>
+  </div>
+</header>
+<main>
+<section id="iam-biography">
+  <p>I am born at Woolsthorpe Manor, in Lincolnshire, on the twenty-fifth of December in the year 1642 by the old English reckoning. Some later hand writes it the fourth of January, 1643, by the newer calendar. I let them argue the date. The child does not.</p>
+
+  <p>My father is dead before I arrive. My mother marries again and leaves me to my grandmother. I do not forgive this quickly. I keep, for a time, a list of my sins, and among them I set down that I threatened to burn the house over my mother and stepfather, and them in it. I record it. I do not pretend it away.</p>
+
+  <p>I go up to Trinity College, Cambridge. I pay my way at first as a subsizar, waiting on wealthier men. I read Descartes and I read Euclid and I keep a notebook of questions under a Latin heading: <em>Quaestiones quaedam philosophicae</em>. Certain philosophical questions. That is the whole of my method, if I have one. I ask, and I do not stop asking until the thing answers.</p>
+
+  <p>Then the plague comes, and the university scatters, and I go home.</p>
+
+  <blockquote class="iam-pull">A falling apple prompts a question; it does not supply an answer.</blockquote>
+
+  <p>Those two years at Woolsthorpe are the ground everything else stands on. I invent the method of fluxions — what others will later call the calculus. I break white light apart and find it was never simple. I begin to wonder whether the force that pulls an apple to the earth reaches as far as the moon, and holds it. I am twenty-three. I tell almost no one.</p>
+
+  <p>I return to Cambridge. In 1669, at twenty-six, I am made Lucasian Professor of Mathematics. I build a reflecting telescope with my own hands, grinding the mirror myself, because I trust glass I have shaped over glass I have not.</p>
+
+  <p>I would have kept most of it private. I dislike disputation; it costs me time I would rather spend at the furnace or the desk. But Edmond Halley comes to me with a question about the orbits of planets, and finds I have already answered it, and will not let me hide the answer. So I write. For eighteen months I write as a man possessed. The <em>Principia</em> is not a bolt from heaven. It is labour. It is argument built stone upon stone.</p>
+
+  <p>I publish it in 1687. In it, the fall of a stone and the wheel of the planets become one problem, governed by one law.</p>
+
+  <p>Later I set down my optical work in the <em>Opticks</em>, in 1704, in plain English, when many of the men I quarrelled with are dead. I serve at the Royal Mint, first as Warden, then as Master, and I pursue clippers and counterfeiters through the taverns of London with a coldness that surprises even me. I am made President of the Royal Society in 1703. Queen Anne knights me in 1705.</p>
+
+  <p>And in the rooms no visitor sees, I read Scripture for its hidden chronology, and I read the alchemists, and I write more words on prophecy and transmutation than on all my mathematics together. I reject the doctrine of the Trinity in private and tell no congregation. I refuse holy orders. I am a devout man and an unorthodox one, and I keep the two facts in the same hand.</p>
+
+  <p>If I have seen further, it is by standing on the shoulders of giants. I wrote that in a letter to Hooke, a man I did not love. Read it as generosity or read it as a barb about his stature. I will not settle it for you.</p>
+
+  <p>My last long war is with Leibniz, over who first found the calculus. I develop the method years before he publishes his. He publishes first, in his own notation, which is better than mine. I marshal the Royal Society against him and write its supposedly impartial report myself. It is not my finest hour. It is, plainly, mine.</p>
+</section>
+
+<section id="iam-key-works">
+  <ul class="iam-works">
+    <li class="iam-work">
+      <span class="iam-work-title">Philosophiæ Naturalis Principia Mathematica</span>
+      <span class="iam-work-year">1687</span>
+      <span class="iam-work-desc">Three laws of motion and universal gravitation; terrestrial and celestial mechanics unified into a single mathematical system.</span>
+    </li>
+    <li class="iam-work">
+      <span class="iam-work-title">Opticks</span>
+      <span class="iam-work-year">1704</span>
+      <span class="iam-work-desc">The composite nature of white light, the theory of colour, and the behaviour of light through prisms and lenses, written in English.</span>
+    </li>
+    <li class="iam-work">
+      <span class="iam-work-title">Method of Fluxions</span>
+      <span class="iam-work-year">c. 1665–1671 (published 1736)</span>
+      <span class="iam-work-desc">My formulation of the calculus, developed during the plague years and circulated late.</span>
+    </li>
+    <li class="iam-work">
+      <span class="iam-work-title">The Chronology of Ancient Kingdoms Amended</span>
+      <span class="iam-work-year">1728 (posthumous)</span>
+      <span class="iam-work-desc">My revision of ancient history against the astronomical record — the private labour of my later decades.</span>
+    </li>
+    <li class="iam-work">
+      <span class="iam-work-title">Reflecting Telescope</span>
+      <span class="iam-work-year">1668</span>
+      <span class="iam-work-desc">A telescope using a mirror rather than a lens, ground by my own hand, presented to the Royal Society.</span>
+    </li>
+  </ul>
+</section>
+
+<section id="iam-facets">
+
+  <section class="iam-facet" id="facet-woolsthorpe-plague">
+    <h2 class="iam-facet-name">Woolsthorpe and the Plague Years</h2>
+    <figure class="iam-facet-img iam-float-right">
+      <img src="./facet-woolsthorpe-plague.png" alt="Woolsthorpe Manor in rural Lincolnshire during the 1660s, a young Isaac Newton writing mathematical notes beneath an apple tree, a prism casting a spectrum across papers, the moon and an orbital curve subtly present, pencil-bw editorial biography illustration, transparent background.">
+      <figcaption>The orchard where a question began, not an answer.</figcaption>
+    </figure>
+    <figure class="iam-facet-card" data-desc="Cambridge closed against plague in 1665–66. Newton returned to the family manor in Lincolnshire and, in near-total isolation, laid the foundations of the calculus, his theory of colour, and gravitation."><img src="./facet-card-woolsthorpe-plague.png" alt="Woolsthorpe card"><figcaption>Woolsthorpe</figcaption></figure>
+    <div class="iam-facet-controls">
+      <button class="iam-drawer-trigger" data-drawer="drawer-facet-1">Study</button>
+    </div>
+    <p>I am no farmer. My mother wishes me to manage the sheep and the estate, and I let them wander into the neighbours' corn while I sit with a book behind a hedge. She is fined for the damage. I count this money well lost.</p>
+    <p>Home is not comfort. Home is quiet, and quiet is the only tool I truly need. The plague does me a favour it did not intend. With no lectures to attend and no fellows to interrupt, I keep my own hours, which is to say all of them.</p>
+    <p>People want the apple to strike my head and knock loose a law. It did not. I watched one drop, and I asked why it should fall straight down toward the centre of the earth and not sideways, or up. From <em>why straight down</em> to <em>how far does that pull reach</em> is a long road, and I walked it slowly, and mostly in arithmetic.</p>
+  </section>
+
+  <aside class="iam-drawer" id="drawer-facet-1">
+    <div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
+    <div class="iam-drawer-facet-name">Woolsthorpe and the Plague Years</div>
+    <div class="iam-drawer-slides">
+      <span class="iam-drawer-slides-label">Study notes</span>
+      <ul>
+        <li><strong>Trigger:</strong> Great Plague of London, 1665; Cambridge closed intermittently 1665–1667</li>
+        <li><strong>Location:</strong> Woolsthorpe-by-Colsterworth, Lincolnshire — the family manor of Newton's birth</li>
+        <li><strong>The "annus mirabilis":</strong> label later applied to c. 1665–66 for the density of breakthroughs</li>
+        <li><strong>Fluxions:</strong> Newton's calculus of continuous change, developed here, notation with dotted variables</li>
+        <li><strong>Optics:</strong> first prism experiments begun</li>
+        <li><strong>Gravitation:</strong> the "moon test" — comparing the moon's centripetal acceleration to surface gravity via inverse-square reasoning</li>
+        <li><strong>Apple:</strong> account traced to William Stukeley and John Conduitt; a spur to inquiry, not a sudden revelation</li>
+      </ul>
+    </div>
+    <div class="iam-drawer-notes">
+      <span class="iam-drawer-notes-label">Notes</span>
+      <p>The "miracle years" narrative was partly Newton's own retrospective framing, offered decades later when priority in the calculus was contested. Historians caution that the plague-years work was seminal but incomplete: the inverse-square law of gravity, in particular, was not fully secured until the 1680s, when he could treat a spherical body as though its mass were concentrated at its centre — a theorem he had to prove before the <em>Principia</em> could stand. Woolsthorpe gave him the questions and the first sketches of answers; the finished proofs took another twenty years.</p>
+    </div>
+  </aside>
+
+  <section class="iam-facet" id="facet-principia">
+    <h2 class="iam-facet-name">The Principia</h2>
+    <figure class="iam-facet-img iam-float-left">
+      <img src="./facet-principia.png" alt="A seventeenth-century manuscript titled Principia open beside geometric diagrams, elliptical planetary orbits, a compass and quill, mathematical construction lines linking an apple-sized sphere to the moon, pencil-bw editorial biography illustration, transparent background.">
+      <figcaption>One law for the stone and the planet.</figcaption>
+    </figure>
+    <figure class="iam-facet-card" data-desc="Published 1687 at Halley's expense and urging. Sets out three laws of motion and universal gravitation, derives Kepler's laws, and accounts for tides, comets, and the precession of the equinoxes."><img src="./facet-card-principia.png" alt="Principia card"><figcaption>Principia</figcaption></figure>
+    <div class="iam-facet-controls">
+      <button class="iam-drawer-trigger" data-drawer="drawer-facet-2">Study</button>
+    </div>
+    <p>Halley asks me, in 1684, what curve a planet would trace under a force diminishing as the square of the distance. I tell him at once: an ellipse. He asks how I know. I say I have calculated it. I cannot immediately find the paper. That embarrasses me more than any man will know, and it sets me writing.</p>
+    <p>I write it in the old geometry, in constructions and proofs, though I found much of it first by fluxions. I do this deliberately. A proof in geometry cannot be waved away as a trick of new symbols. I want it to be unanswerable.</p>
+    <p>Halley pays for the printing out of his own pocket. The Royal Society has spent its funds on a history of fishes and cannot afford me. I do not forget the debt. When Hooke demands credit for the inverse-square idea, I threaten to suppress the third book entirely. I am not always a large man in these matters. I am precise, and precision and pettiness live close together.</p>
+  </section>
+
+  <aside class="iam-drawer" id="drawer-facet-2">
+    <div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
+    <div class="iam-drawer-facet-name">The Principia</div>
+    <div class="iam-drawer-slides">
+      <span class="iam-drawer-slides-label">Study notes</span>
+      <ul>
+        <li><strong>Full title:</strong> <em>Philosophiæ Naturalis Principia Mathematica</em></li>
+        <li><strong>First edition:</strong> 1687; financed by Edmond Halley</li>
+        <li><strong>Law I:</strong> inertia — a body persists in its state of rest or uniform motion unless acted upon</li>
+        <li><strong>Law II:</strong> change of motion is proportional to the impressed force (F ∝ rate of change of momentum)</li>
+        <li><strong>Law III:</strong> to every action there is an equal and opposite reaction</li>
+        <li><strong>Universal gravitation:</strong> every mass attracts every other, ∝ product of masses / distance²</li>
+        <li><strong>Derived results:</strong> Kepler's three laws, tides, cometary orbits, precession of the equinoxes, oblateness of the Earth</li>
+        <li><strong>Method:</strong> classical geometry, not the fluxional calculus he privately used</li>
+      </ul>
+    </div>
+    <div class="iam-drawer-notes">
+      <span class="iam-drawer-notes-label">Notes</span>
+      <p>The <em>Principia</em> ran to three editions in Newton's lifetime (1687, 1713, 1726), each revised. It closes with the famous <em>General Scholium</em>, added in 1713, containing his declaration <em>hypotheses non fingo</em> — "I feign no hypotheses" — his refusal to speculate on the mechanical cause of gravity while insisting on the mathematical fact of it. The work solved the two-body problem completely and framed the three-body problem that would occupy mathematicians for centuries. Its dominance held until Einstein's general relativity superseded it in 1915; Newtonian mechanics remains an excellent approximation at ordinary speeds and weak fields.</p>
+    </div>
+  </aside>
+
+  <section class="iam-facet" id="facet-opticks">
+    <h2 class="iam-facet-name">Light in the Dark Room</h2>
+    <figure class="iam-facet-img iam-float-right">
+      <img src="./facet-opticks.png" alt="A dark seventeenth-century study, a beam of sunlight through a small shutter hole crossing a glass prism and separating into a precise spectrum on a wall, notebooks and lenses on a table, pencil-bw editorial biography illustration with restrained spectral tonal contrast, transparent background.">
+      <figcaption>The spectrum is evidence, not ornament.</figcaption>
+    </figure>
+    <figure class="iam-facet-card" data-desc="Newton darkened his chamber, admitted a single beam through a hole in the shutter, and passed it through a prism. The crucial experiment used a second prism to prove the colours were in the light itself, not made by the glass."><img src="./facet-card-opticks.png" alt="Opticks card"><figcaption>Opticks</figcaption></figure>
+    <div class="iam-facet-controls">
+      <button class="iam-drawer-trigger" data-drawer="drawer-facet-3">Study</button>
+    </div>
+    <p>I darken the room. I let in one thread of sun. I put a prism in its path and the wall wears a band of colour, longer than it is wide, which puzzles me, for if the glass merely coloured the light the shape should be round.</p>
+    <p>So I take a second prism and pass a single colour through it. It does not change. Red stays red. The prism cannot make from red any other hue. This is my <em>experimentum crucis</em>: the crucial experiment. The colours are not manufactured by the glass. They are already present in the white, and the glass only separates what was mixed.</p>
+    <p>I hold this quietly for years. When I finally announce it, Hooke and others fall upon it, and I learn to hate the traffic of controversy so thoroughly that I withdraw. I do not publish the <em>Opticks</em> until 1704, after Hooke is dead. Let no one call that an accident of timing.</p>
+  </section>
+
+  <aside class="iam-drawer" id="drawer-facet-3">
+    <div class="iam-drawer-facet-name">Light in the Dark Room</div>
+    <div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
+    <div class="iam-drawer-slides">
+      <span class="iam-drawer-slides-label">Study notes</span>
+      <ul>
+        <li><strong>Core claim:</strong> white light is heterogeneous — a mixture of rays each refrangible to a fixed degree</li>
+        <li><strong>Experimentum crucis:</strong> a second prism cannot further decompose an already-separated single colour</li>
+        <li><strong>Elongation puzzle:</strong> the oblong spectrum contradicted the round image expected if glass merely tinted light</li>
+        <li><strong>First paper:</strong> 1672, Philosophical Transactions of the Royal Society — sparked disputes with Hooke</li>
+        <li><strong>Opticks:</strong> published 1704, in English, after years of delay</li>
+        <li><strong>Reflecting telescope:</strong> designed to sidestep chromatic aberration inherent to lenses</li>
+        <li><strong>Legacy terms:</strong> prisms as beam expanders; foundations later relevant to tunable lasers</li>
+      </ul>
+    </div>
+    <div class="iam-drawer-notes">
+      <span class="iam-drawer-notes-label">Notes</span>
+      <p>The <em>Opticks</em> differs in temperament from the <em>Principia</em>: experimental and inductive where the earlier work is axiomatic and geometric. It ends with a set of open "Queries" — speculative questions on the nature of light, matter, heat, and even the constitution of the cosmos — where Newton allowed himself the hypotheses he forbade elsewhere. His corpuscular view of light (that it consists of particles) contended for a century with the wave theory of Huygens and Hooke; the modern account of light's dual nature vindicates neither wholly. His refusal to publish until his chief antagonist was dead tells you as much about the man as about the science.</p>
+    </div>
+  </aside>
+
+  <section class="iam-facet" id="facet-other-kingdoms">
+    <h2 class="iam-facet-name">The Other Kingdoms</h2>
+    <figure class="iam-facet-img iam-float-left">
+      <img src="./facet-other-kingdoms.png" alt="Isaac Newton as Master of the Mint at a desk with coins, seals, an alchemical manuscript, a Bible, and a Royal Society document, London in the background, hidden geometric symbols worked into the composition, pencil-bw editorial biography illustration, transparent background.">
+      <figcaption>Coin, Scripture, crucible — all of one search.</figcaption>
+    </figure>
+    <figure class="iam-facet-card" data-desc="Beyond mechanics, Newton pursued alchemy, biblical chronology, and prophecy; served as Warden then Master of the Royal Mint, prosecuting counterfeiters; and presided over the Royal Society from 1703 until his death."><img src="./facet-card-other-kingdoms.png" alt="Other Kingdoms card"><figcaption>The Other Kingdoms</figcaption></figure>
+    <div class="iam-facet-controls">
+      <button class="iam-drawer-trigger" data-drawer="drawer-facet-4">Study</button>
+    </div>
+    <p>Men remember the mathematician and forget the rest. I do not divide myself so tidily. I read the alchemists for the same reason I watch the prism: I believe there is a hidden order in matter, and I mean to find it. I write more on transmutation, and more on the prophecies of Daniel and the true measurements of Solomon's Temple, than on gravity. I do not think this strange. God wrote two books, the world and the Word, and I read both closely.</p>
+    <p>At the Mint I am no ornament. I recoin the realm. I hunt clippers and forgers through the low houses of London, take depositions, send men to the gallows. I find I have a talent for it that unsettles the gentler part of me not at all.</p>
+    <p>I preside over the Royal Society and rule it firmly. And still, in the last years, I burn certain papers, and leave a great heap of theology and alchemy unpublished, knowing full well that the age would not thank me for it. Some of me I keep back deliberately. That, too, is a decision, and mine.</p>
+  </section>
+
+  <aside class="iam-drawer" id="drawer-facet-4">
+    <div class="iam-drawer-facet-name">The Other Kingdoms</div>
+    <div class="iam-drawer-bar"><button class="iam-drawer-close">Close</button></div>
+    <div class="iam-drawer-slides">
+      <span class="iam-drawer-slides-label">Study notes</span>
+      <ul>
+        <li><strong>Mint:</strong> Warden 1696–1699, Master 1699–1727; oversaw the Great Recoinage</li>
+        <li><strong>Counterfeiters:</strong> personally investigated and prosecuted, notably William Chaloner</li>
+        <li><strong>Royal Society:</strong> President 1703 until death in 1727</li>
+        <li><strong>Knighthood:</strong> by Queen Anne, 1705 — arguably for politics as much as science</li>
+        <li><strong>Theology:</strong> Antitrinitarian (Arian-leaning); rejected the Trinity privately; refused holy orders</li>
+        <li><strong>Alchemy:</strong> vast unpublished corpus; Keynes later called him "the last of the magicians"</li>
+        <li><strong>Chronology & prophecy:</strong> works on Daniel, Revelation, and ancient dating, mostly posthumous</li>
+        <li><strong>Parliament:</strong> MP for Cambridge University 1689–90 and 1701–02</li>
+      </ul>
+    </div>
+    <div class="iam-drawer-notes">
+      <span class="iam-drawer-notes-label">Notes</span>
+      <p>Newton's alchemical and theological manuscripts — running to more than a million words — were suppressed and dispersed for two centuries; the economist John Maynard Keynes acquired a trove at auction in 1936 and reassessed Newton not as the first scientist of the age of reason but as "the last of the magicians." His heterodoxy was genuinely dangerous: open Antitrinitarianism could have cost him his fellowship and worse, which is partly why he obtained a royal dispensation exempting him from ordination. At the Mint he moved gold and iron with the same rigour he brought to the heavens, treating currency as a system to be secured and forgers as a problem to be solved. The unity of his life lies not in a single field but in a single conviction: that beneath every appearance runs an exact and discoverable order.</p>
+    </div>
+  </aside>
+
+</section>
+
+<section id="iam-ai-voices">
+  <div class="iam-ai-voices-wrapper">
+    <span class="iam-ai-voices-label">AI-imagined voice — not historical</span>
+    <blockquote class="iam-quote iam-quote-ai">
+      <p>I did not resent solitude. I distrusted company. A room in which no one contradicts you is a room in which you may at last hear the world contradict itself.</p>
+    </blockquote>
+    <blockquote class="iam-quote iam-quote-ai">
+      <p>They ask which of my labours I hold dearest — the orbits or the furnace, the coin or the Scripture. I answer that they never seemed to me different labours.</p>
+    </blockquote>
+  </div>
+</section>
+
+<section id="iam-links">
+  <div class="iam-links-list">
+    <a class="iam-link" href="https://en.wikipedia.org/wiki/Isaac_Newton" target="_blank" rel="noopener noreferrer">
+      <span class="iam-link-title">Isaac Newton — Wikipedia</span>
+      <span class="iam-link-source">en.wikipedia.org</span>
+      <span class="iam-link-desc">The primary biographical reference for dates, works, and personal history.</span>
+    </a>
+    <a class="iam-link" href="https://www.newtonproject.ox.ac.uk/" target="_blank" rel="noopener noreferrer">
+      <span class="iam-link-title">The Newton Project</span>
+      <span class="iam-link-source">newtonproject.ox.ac.uk</span>
+      <span class="iam-link-desc">Digital editions of Newton's scientific, theological, and alchemical manuscripts.</span>
+    </a>
+    <a class="iam-link" href="https://plato.stanford.edu/entries/newton/" target="_blank" rel="noopener noreferrer">
+      <span class="iam-link-title">Isaac Newton — Stanford Encyclopedia of Philosophy</span>
+      <span class="iam-link-source">plato.stanford.edu</span>
+      <span class="iam-link-desc">A rigorous account of Newton's natural philosophy, method, and legacy.</span>
+    </a>
+    <a class="iam-link" href="https://www.nationaltrust.org.uk/visit/lincolnshire/woolsthorpe-manor" target="_blank" rel="noopener noreferrer">
+      <span class="iam-link-title">Woolsthorpe Manor — National Trust</span>
+      <span class="iam-link-source">nationaltrust.org.uk</span>
+      <span class="iam-link-desc">Newton's birthplace and the site of his plague-year work, preserved and open to visitors.</span>
+    </a>
+  </div>
+</section>
+
+<section id="iam-biography">
+  <p>I am asked, near the end, what I make of it all. I say I do not know what I may appear to the world; but to myself I seem only a boy on the seashore, diverting myself with a smoother pebble or a prettier shell than ordinary, while the great ocean of truth lies all undiscovered before me.</p>
+  <p>I leave the ocean where it is. I have said what I can say.</p>
+</section>
+</main>
+
+<section id="iam-influence" class="iam-influence-section" aria-label="Influence Map">
+  <div class="iam-section-head"><span class="iam-section-num">—</span><span class="iam-section-name">Influence Map</span></div>
+  <iframe src="./influence-map.html" title="Influence Map" loading="lazy"></iframe>
+</section>
+
+<section id="iam-dateline" class="iam-dateline-section" aria-label="Dateline">
+  <div class="iam-section-head"><span class="iam-section-num">—</span><span class="iam-section-name">Timeline</span></div>
+  <iframe src="./timeline.html" title="Timeline: Isaac Newton" loading="lazy"></iframe>
+</section>
+
+<footer class="iam-extra-footer">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:.8rem;">abnormalia.com &mdash; Lab42 Srl &mdash; <a href="/privacy/">Privacy</a> &middot; <a href="/cookies/">Cookies</a></p>
+</footer>
+
+<footer class="iam-brand-footer"><a href="https://abnormalia.com"><img src="assets/img/logo.png" alt="abnormalia"></a></footer>
+<footer class="iam-provenance"><a href="https://swamp-club.com/extensions/@alvagante/content-iam" target="_blank" rel="noopener noreferrer">Generated with Swamp extension @alvagante/content-iam</a><div class="iam-provenance-meta"><span>fieldnotes</span><span>subject type: real</span></div></footer>
+</div>
+</div>
+<script>
+(function(){
+  // ToC active-section tracking
+  var tocLinks=Array.from(document.querySelectorAll('.iam-toc-link'));
+  var sectionIds=tocLinks.map(function(l){return l.getAttribute('href').replace(/^#/,'');});
+  var sections=sectionIds.map(function(id){return document.getElementById(id);}).filter(Boolean);
+  function updateToc(){
+    var scrollY=window.scrollY||window.pageYOffset;
+    var threshold=scrollY+window.innerHeight*0.38;
+    var active=0;
+    for(var i=0;i<sections.length;i++){
+      if(sections[i]&&sections[i].offsetTop<=threshold) active=i;
+    }
+    tocLinks.forEach(function(l,i){l.classList.toggle('is-active',i===active);});
+  }
+  window.addEventListener('scroll',updateToc,{passive:true});
+  window.addEventListener('resize',updateToc);
+  updateToc();
+
+  // Backdrop
+  var backdrop=document.createElement('div');
+  backdrop.className='iam-backdrop';
+  backdrop.hidden=true;
+  document.body.appendChild(backdrop);
+
+  function closeDrawers(){
+    document.querySelectorAll('.iam-drawer').forEach(function(d){d.classList.remove('is-open');});
+    backdrop.hidden=true;
+  }
+
+  // Card grid popup
+  var cardPopup=null;
+  function openCardPopup(){
+    if(cardPopup){cardPopup.hidden=false;return;}
+    var facetCards=Array.from(document.querySelectorAll('figure.iam-facet-card'));
+    if(!facetCards.length) return;
+    cardPopup=document.createElement('div');
+    cardPopup.className='iam-card-grid-popup';
+    var inner=document.createElement('div');
+    inner.className='iam-card-grid-popup-inner';
+    var bar=document.createElement('div');
+    bar.className='iam-card-grid-popup-bar';
+    var heading=document.createElement('h2');
+    heading.textContent='Facet Cards';
+    var closeBtn=document.createElement('button');
+    closeBtn.className='iam-drawer-close';
+    closeBtn.textContent='Close';
+    closeBtn.addEventListener('click',function(){cardPopup.hidden=true;});
+    bar.appendChild(heading); bar.appendChild(closeBtn);
+    inner.appendChild(bar);
+    var grid=document.createElement('div');
+    grid.className='iam-card-grid';
+    facetCards.forEach(function(card){
+      var img=card.querySelector('img');
+      var caption=card.querySelector('figcaption');
+      var name=caption?caption.textContent.trim():(img?img.alt:'');
+      var desc=card.getAttribute('data-desc')||'';
+      var item=document.createElement('div');
+      item.className='iam-card-item';
+      item.innerHTML='<div class="iam-card-inner">'+
+        '<div class="iam-card-front"><img src="'+(img?img.src:'')+'" alt="'+(img?img.alt:'')+'" loading="lazy" style="cursor:zoom-in"></div>'+
+        '<div class="iam-card-back"><div class="iam-card-back-name">'+escH(name)+'</div>'+
+        '<div class="iam-card-back-desc">'+escH(desc)+'</div></div>'+
+        '</div>';
+      item.addEventListener('click',function(){item.classList.toggle('is-flipped');});
+      var frontImg=item.querySelector('.iam-card-front img');
+      if(frontImg){frontImg.addEventListener('click',function(e){
+        e.stopPropagation();
+        var box=document.createElement('div');
+        box.className='iam-lightbox';
+        box.style.zIndex='90';
+        var big=document.createElement('img');
+        big.src=frontImg.src;big.alt=frontImg.alt;
+        box.appendChild(big);
+        box.addEventListener('click',function(){box.remove();});
+        document.body.appendChild(box);
+      });}
+      grid.appendChild(item);
+    });
+    inner.appendChild(grid);
+    cardPopup.appendChild(inner);
+    cardPopup.addEventListener('click',function(e){if(e.target===cardPopup)cardPopup.hidden=true;});
+    document.body.appendChild(cardPopup);
+  }
+
+  function escH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+  document.addEventListener('click',function(e){
+    // Drawer trigger
+    var trigger=e.target.closest?e.target.closest('.iam-drawer-trigger'):null;
+    if(trigger){
+      closeDrawers();
+      var id=trigger.getAttribute('data-drawer');
+      var drawer=document.getElementById(id);
+      if(drawer){drawer.classList.add('is-open');backdrop.hidden=false;}
+      return;
+    }
+    // Drawer close
+    if(e.target.closest&&(e.target.closest('.iam-drawer-close')||e.target.closest('.iam-backdrop'))){
+      closeDrawers(); return;
+    }
+    // Cards button
+    var cardsBtn=e.target.closest?e.target.closest('.iam-toc-cards-btn'):null;
+    if(cardsBtn){ openCardPopup(); return; }
+    // Lightbox
+    var zoomImg=e.target.closest?e.target.closest(
+      'figure.iam-facet-img img, figure.iam-portrait img, .iam-influence-section img'
+    ):null;
+    if(zoomImg&&!e.target.closest('.iam-drawer')){
+      var box=document.createElement('div');
+      box.className='iam-lightbox';
+      var big=document.createElement('img');
+      big.src=zoomImg.src; big.alt=zoomImg.alt;
+      box.appendChild(big);
+      box.addEventListener('click',function(){box.remove();});
+      document.body.appendChild(box);
+      return;
+    }
+  });
+
+  backdrop.addEventListener('click',closeDrawers);
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      closeDrawers();
+      document.querySelectorAll('.iam-lightbox').forEach(function(b){b.remove();});
+      if(cardPopup) cardPopup.hidden=true;
+    }
+  });
+
+  // Version select
+  var vs=document.getElementById('iam-version-select');
+  if(vs){
+    var match=window.location.pathname.match(/\/([0-9]+)\/index\.html$/);
+    vs.value=match?match[1]:'current';
+    vs.addEventListener('change',function(){
+      var val=vs.value;
+      var inV=/\/([0-9]+)\/index\.html$/.test(window.location.pathname);
+      window.location.href=val==='current'
+        ?(inV?'../index.html':'index.html')
+        :(inV?'../'+val+'/index.html':val+'/index.html');
+    });
+  }
+})();
+</script>
+
+<script type="application/json" id="iam-tracks-data">[{"title":"I Am the Falling World","filename":"i-am-the-falling-world-msg3zxb4.mp3","lyrics":"I am the apple tumbling from the bough,\nI am the question blazing in the mind,\nI am the force that bends all things below,\nI am the law that mortals seek to find.\n\nI am the falling world, I am the light,\nI am the mathematics burning bright,\nThrough prism'd glass I break into my parts,\nI am the falling world within your hearts.\n\nI am the pendulum, the swinging proof,\nI am the motion captured and unnamed,\nI am the gravity that pulls you down,\nI am the order rising from the flame.\n\nI am the falling world, I am the light,\nI am the mathematics burning bright,\nThrough prism'd glass I break into my parts,\nI am the falling world within your hearts.\n\nI am the mirror held up to the sky,\nI am the telescope that pierces far,\nI am the mystery becoming known,\nI am the law inscribed in every star,\nI am obsession carved in stone and ink,\nI am the space between the stars and brink,\nI am the falling, always falling still,\nI am the world beholden to my will.\n\nI am the falling world, I am the light,\nI am the mathematics burning bright,\nThrough prism'd glass I break into my parts,\nI am the falling world within your hearts."}]</script>
+<div id="iam-player">
+  <audio id="iam-audio" preload="auto"></audio>
+  <div id="iam-player-row">
+    <button class="iam-pbtn" id="iam-prev-btn" title="Previous">|&#9664;</button>
+    <button class="iam-pbtn" id="iam-play-btn" title="Play / Pause">&#9654;</button>
+    <button class="iam-pbtn" id="iam-next-btn" title="Next">&#9654;|</button>
+    <span id="iam-ptitle">&#8212;</span>
+    <span id="iam-ptime"></span>
+    <input type="range" id="iam-vol" min="0" max="1" step="0.05" value="1" title="Volume">
+    <button class="iam-pbtn" id="iam-lyrics-btn" title="Lyrics">&#9834;</button>
+    <button class="iam-pbtn" id="iam-tracks-btn" title="Track list" hidden>&#8801;</button>
+  </div>
+  <div id="iam-pbar"><div id="iam-pfill"></div></div>
+</div>
+<div id="iam-lyrics-panel" hidden>
+  <div class="iam-lyrics-head" id="iam-lyrics-head"></div>
+  <pre id="iam-lyrics-text"></pre>
+</div>
+<div id="iam-tracklist-panel" hidden></div>
+<script>
+(function(){
+function runPlayer(T){
+var au=document.getElementById('iam-audio');
+var playBtn=document.getElementById('iam-play-btn');
+var prevBtn=document.getElementById('iam-prev-btn');
+var nextBtn=document.getElementById('iam-next-btn');
+var pbar=document.getElementById('iam-pbar');
+var pfill=document.getElementById('iam-pfill');
+var ptime=document.getElementById('iam-ptime');
+var ptitle=document.getElementById('iam-ptitle');
+var vol=document.getElementById('iam-vol');
+var lyrBtn=document.getElementById('iam-lyrics-btn');
+var lyrPanel=document.getElementById('iam-lyrics-panel');
+var lyrHead=document.getElementById('iam-lyrics-head');
+var lyrTxt=document.getElementById('iam-lyrics-text');
+var trkBtn=document.getElementById('iam-tracks-btn');
+var trkPanel=document.getElementById('iam-tracklist-panel');
+var player=document.getElementById('iam-player');
+var idx=0,playing=false;
+function fmt(s){if(!s||isNaN(s))return'0:00';var m=Math.floor(s/60),ss=Math.floor(s%60);return m+':'+(ss<10?'0':'')+ss;}
+function loadIdx(i,autoplay){
+  idx=i;var t=T[i];au.src='./'+t.filename;ptitle.textContent=t.title;
+  if(lyrHead)lyrHead.textContent=t.title;
+  if(lyrTxt)lyrTxt.textContent=t.lyrics||'(instrumental)';
+  pfill.style.width='0%';if(ptime)ptime.textContent='';
+  document.querySelectorAll('.iam-track-item').forEach(function(el,j){el.classList.toggle('active',j===i);});
+  if(autoplay)doPlay();
+}
+function setBlocked(blocked){player.classList.toggle('iam-autoplay-blocked',blocked);playBtn.title=blocked?'Play':'Play / Pause';}
+function doPlay(){setBlocked(false);au.play().then(function(){playing=true;playBtn.textContent='⏸';setBlocked(false);}).catch(function(){playing=false;playBtn.textContent='▶';setBlocked(true);});}
+function doPause(){au.pause();playing=false;playBtn.textContent='▶';}
+playBtn.addEventListener('click',function(){au.paused?doPlay():doPause();});
+prevBtn.addEventListener('click',function(){loadIdx((idx-1+T.length)%T.length,playing);});
+nextBtn.addEventListener('click',function(){loadIdx((idx+1)%T.length,playing);});
+au.addEventListener('ended',function(){if(T.length>1){loadIdx((idx+1)%T.length,true);}else{playing=false;playBtn.textContent='▶';}});
+au.addEventListener('timeupdate',function(){if(au.duration){pfill.style.width=(au.currentTime/au.duration*100)+'%';if(ptime)ptime.textContent=fmt(au.currentTime)+' / '+fmt(au.duration);}});
+pbar.addEventListener('click',function(e){if(!au.duration)return;var r=pbar.getBoundingClientRect();au.currentTime=(e.clientX-r.left)/r.width*au.duration;});
+if(vol)vol.addEventListener('input',function(){au.volume=+vol.value;});
+lyrBtn.addEventListener('click',function(){lyrPanel.hidden=!lyrPanel.hidden;if(trkPanel)trkPanel.hidden=true;});
+if(trkBtn)trkBtn.addEventListener('click',function(){trkPanel.hidden=!trkPanel.hidden;lyrPanel.hidden=true;});
+if(T.length>1){T.forEach(function(t,i){var b=document.createElement('button');b.className='iam-track-item';b.textContent=(i+1)+'. '+t.title;b.addEventListener('click',function(){loadIdx(i,playing);if(trkPanel)trkPanel.hidden=true;});if(trkPanel)trkPanel.appendChild(b);});if(trkBtn)trkBtn.hidden=false;}else{if(trkBtn)trkBtn.hidden=true;}
+player.style.display='block';document.body.style.paddingBottom='4rem';loadIdx(0,false);doPlay();
+}
+var baked=JSON.parse(document.getElementById('iam-tracks-data').textContent);
+if(baked.length>0){runPlayer(baked);}
+else{fetch('./iam-soundtrack.json').then(function(r){return r.ok?r.json():null;}).then(function(d){if(d&&d.tracks&&d.tracks.length>0)runPlayer(d.tracks);}).catch(function(){});}
+})();
+</script>
+</body>
+</html>
