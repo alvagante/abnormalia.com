@@ -1,75 +1,96 @@
 ---
 title: Experimental mixed-media stories
 description: Experimental mixed-media stories where systems, people, and ideas narrate themselves.
+home: true
 ---
+{% assign by_slug = site.data.ixens | group_by: "slug" %}
+{% assign iams = site.data.iams | sort: "born" %}
+{% assign ticker = "01000001 01001110 01001111 01001101 01000001 01001100 01011001 &nbsp;·&nbsp; SYSTEMS CONFESS &nbsp;·&nbsp; PEOPLE NARRATE THEMSELVES &nbsp;·&nbsp; IDEAS BECOME PLACES &nbsp;·&nbsp; COMPILED FRESH, DISCARDED &nbsp;·&nbsp; " %}
 
-<section class="home-hero" aria-labelledby="home-title">
-  <div class="home-hero-copy">
-    <p class="kicker">Independent web experiments · since 2005</p>
-    <h1 id="home-title">Abnormal<br>by design.</h1>
-    <p class="home-deck">Systems confess. People narrate themselves. Ideas become places you can enter.</p>
-    <a class="hero-link" href="#latest">Explore the latest <span aria-hidden="true">↓</span></a>
-  </div>
-  <div class="home-hero-art" aria-hidden="true">
-    <span class="orbit orbit-one"></span>
-    <span class="orbit orbit-two"></span>
-    <img src="{{ '/assets/img/logo.png' | relative_url }}" alt="" class="home-logo">
-    <span class="art-caption">AI slop<br>with style</span>
-  </div>
-</section>
+<div class="hm-ticker" aria-hidden="true"><div class="hm-ticker-track"><span>{{ ticker }}</span><span>{{ ticker }}</span></div></div>
 
-
-{% assign recent_ixens = site.data.ixens | sort: "date" | reverse | limit: 10 %}
-{% assign recent_iams = site.data.iams | sort: "date" | reverse | limit: 10 %}
-
-<section class="home-collections" id="latest" aria-labelledby="latest-title">
-  <div class="section-heading">
-    <p class="kicker">Recently manifested</p>
-    <h2 id="latest-title">Enter an abnormality</h2>
-  </div>
-  <div class="home-collections-col">
-    <div class="collection-heading">
-      <div><p class="home-collections-label">Ixens</p><p>Technical entities speaking in first person.</p></div>
-      <a href="{{ '/ixen/' | relative_url }}" aria-label="View all Ixens">All <span aria-hidden="true">↗</span></a>
-    </div>
-    {% if recent_ixens.size > 0 %}
-    <ol class="ixen-list">
-      {% for ixen in recent_ixens %}
-        <li>
-          <a href="{{ '/ixen/' | append: ixen.slug | append: '/' | relative_url }}">
-            <span>{{ ixen.title }}</span>
-            {% if ixen.date %}<time datetime="{{ ixen.date }}">{{ ixen.date | date: "%Y-%m-%d" }}</time>{% endif %}
-          </a>
-          {% if ixen.description %}<p>{{ ixen.description }}</p>{% endif %}
-        </li>
-      {% endfor %}
-    </ol>
-    {% endif %}
-  </div>
-  <div class="home-collections-col">
-    <div class="collection-heading">
-      <div><p class="home-collections-label">I Am</p><p>Lives retold from inside the subject.</p></div>
-      <a href="{{ '/iam/' | relative_url }}" aria-label="View all I Am profiles">All <span aria-hidden="true">↗</span></a>
-    </div>
-    {% if recent_iams.size > 0 %}
-    <ol class="ixen-list">
-      {% for iam in recent_iams %}
-        <li>
-          <a href="{{ '/iam/' | append: iam.slug | append: '/' | relative_url }}">
-            <span>{{ iam.title | default: iam.subject }}</span>
-            {% if iam.date %}<time datetime="{{ iam.date }}">{{ iam.date | date: "%Y-%m-%d" }}</time>{% endif %}
-          </a>
-          {% if iam.description %}<p>{{ iam.description }}</p>{% endif %}
-        </li>
-      {% endfor %}
-    </ol>
-    {% else %}
-    <p class="empty-state">No I Am profiles yet.</p>
-    {% endif %}
+<section class="hm-hero" aria-labelledby="home-title">
+  <p class="hm-status"><span class="hm-blink" aria-hidden="true">●</span> recompiled on load: this index lives for one session</p>
+  <h1 id="home-title">Abnormal <em>by design</em><span class="hm-dot">.</span></h1>
+  <p class="hm-deck">Systems confess. People narrate themselves. Ideas become places you can enter. Abnormalia has lived several incarnations, from an Amiga DiskMag to a social apparition, from experimental web projects to this AI slop with style, and now keeps two kinds of anomaly.</p>
+  <div class="hm-figs">
+    <a href="#ixens"><span class="hm-figlabel">fig.01 · Ixens · {{ site.data.ixens.size }}</span><span class="hm-figtext">Technical entities speaking in first person.</span></a>
+    <a href="#iam"><span class="hm-figlabel">fig.02 · I Am · {{ iams.size }}</span><span class="hm-figtext">Lives retold from inside the subject.</span></a>
   </div>
 </section>
 
-<aside class="home-note">
-  <p class="kicker">Origin story</p>
-  <p>Before generated worlds, there was a handmade Xen tutorial in 2005. <a href="{{ '/i-xen/' | relative_url }}">I wasn't always like this <span aria-hidden="true">→</span></a></p>
-</aside>
+<section id="ixens" class="hm-section" aria-labelledby="ixens-title">
+  <div class="hm-caption">
+    <h2 id="ixens-title">fig.01 — ixens · systems that narrate themselves</h2>
+    <span class="hm-caption-r"><span class="hm-hide-s">directed · acyclic · briefly alive</span><a href="{{ '/ixen/' | relative_url }}" aria-label="View all Ixens">All ↗</a></span>
+  </div>
+  <div class="hm-graph hm-graph-ixens" id="ixen-graph">
+    <canvas aria-hidden="true"></canvas>
+    <i class="hm-c tl"></i><i class="hm-c tr"></i><i class="hm-c bl"></i><i class="hm-c br"></i>
+    {% for node in site.data.home_graph.nodes %}
+      {% assign ixen = site.data.ixens | where: "slug", node.slug | first %}
+      <div class="hm-node" data-node="{{ forloop.index0 }}" data-title="{{ ixen.title | escape }}" style="left:{{ node.x }}%;top:{{ node.y }}%">
+        <a class="hm-card" href="{{ '/ixen/' | append: node.slug | append: '/' | relative_url }}">
+          <span class="hm-row"><b>{{ node.n }}</b><span>open ↗</span></span>
+          <span class="hm-titlerow">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">{% include icon.html name=node.icon %}</svg>
+            <h3>{{ ixen.title }}</h3>
+          </span>
+          <span class="hm-meta">{{ ixen.date | date: "%Y-%m-%d" }} · {{ node.tag }}</span>
+          <p>{{ node.blurb }}</p>
+        </a>
+      </div>
+    {% endfor %}
+    <span class="hm-label hm-hover-label" data-default="hover a node to trace its edges">// hover a node to trace its edges</span>
+    <span class="hm-label hm-stats">{{ site.data.home_graph.nodes.size }} nodes · {{ site.data.home_graph.edges.size }} edges · 0 cycles</span>
+    <script type="application/json" id="ixen-edges">{{ site.data.home_graph.edges | jsonify }}</script>
+  </div>
+</section>
+
+<section id="iam" class="hm-section" aria-labelledby="iam-title">
+  <div class="hm-caption">
+    <h2 id="iam-title">fig.02 — i am · lives retold from inside</h2>
+    <span class="hm-caption-r"><span class="hm-hide-s">linear · first person · present tense</span><a href="{{ '/iam/' | relative_url }}" aria-label="View all I Am profiles">All ↗</a></span>
+  </div>
+  <div class="hm-graph hm-graph-iam" id="iam-graph">
+    <i class="hm-c tl"></i><i class="hm-c tr"></i><i class="hm-c bl"></i><i class="hm-c br"></i>
+    <div class="hm-axis" aria-hidden="true"></div>
+    <div class="hm-ticks" aria-hidden="true">
+      {% for year in (1650..1950) %}{% assign m = year | modulo: 50 %}{% if m == 0 %}
+        {% assign pct = year | minus: 1620 | times: 100.0 | divided_by: 360 %}
+        <span class="hm-tick" style="left:{{ pct | round: 2 }}%"></span><span class="hm-tickl" style="left:{{ pct | round: 2 }}%">{{ year }}</span>
+      {% endif %}{% endfor %}
+    </div>
+    {% assign gap_from = iams[0].died %}{% assign gap_to = iams[1].born %}
+    {% assign gl = gap_from | minus: 1620 | times: 100.0 | divided_by: 360 %}
+    {% assign gw = gap_to | minus: gap_from | times: 100.0 | divided_by: 360 %}
+    {% assign gm = gw | divided_by: 2 | plus: gl %}
+    <div class="hm-gap" aria-hidden="true" style="left:{{ gl | round: 2 }}%;width:{{ gw | round: 2 }}%"></div>
+    <div class="hm-gaplabel" aria-hidden="true" style="left:{{ gm | round: 2 }}%">{{ gap_to | minus: gap_from }} years · no one narrates</div>
+    {% for iam in iams %}
+      {% assign l = iam.born | minus: 1620 | times: 100.0 | divided_by: 360 %}
+      {% assign w = iam.died | minus: iam.born | times: 100.0 | divided_by: 360 %}
+      {% assign mid = w | divided_by: 2 | plus: l %}
+      {% if iam.lane > 0 %}{% assign lead_top = "calc(50% + 12px)" %}{% assign lead_h = "calc(" | append: iam.card_top | append: "% - 12px)" %}{% else %}{% assign lead_top = "30%" %}{% assign lead_h = "calc(20% + " | append: iam.lane | append: "px)" %}{% endif %}
+      <div class="hm-bar" data-life="{{ forloop.index0 }}" aria-hidden="true" style="left:{{ l | round: 2 }}%;width:{{ w | round: 2 }}%;top:calc(50% + {{ iam.lane }}px)"></div>
+      <div class="hm-lead" data-life="{{ forloop.index0 }}" aria-hidden="true" style="left:{{ mid | round: 2 }}%;{% if iam.lane > 0 %}top:calc(50% + 12px);height:calc({{ iam.card_top | minus: 50 }}% - 12px){% else %}top:{{ iam.card_top | plus: 8 }}%;height:calc({{ 50 | minus: iam.card_top | minus: 8 }}% + {{ iam.lane }}px){% endif %}"></div>
+      <div class="hm-node hm-node-iam" data-life="{{ forloop.index0 }}" data-title="{{ iam.subject | split: ' ' | last }}, {{ iam.born }}–{{ iam.died }}" style="left:{{ mid | round: 2 }}%;top:{{ iam.card_top }}%">
+        <a class="hm-card" href="{{ '/iam/' | append: iam.slug | append: '/' | relative_url }}">
+          <span class="hm-row"><b>{{ iam.subject | split: ' ' | last }} · {{ iam.born }}–{{ iam.died }}</b><span>enter ↗</span></span>
+          <h3 class="hm-iam-title">{{ iam.title }}</h3>
+          <span class="hm-meta">{{ iam.date | date: "%Y-%m-%d" }} · i am</span>
+          <p>{{ iam.description | strip | truncatewords: 14 }}</p>
+        </a>
+      </div>
+    {% endfor %}
+    <span class="hm-label hm-hover-label" data-default="hover a life to light its line">// hover a life to light its line</span>
+    <span class="hm-label hm-stats">{{ iams.size }} lives · 1620 → 1980</span>
+  </div>
+</section>
+
+<section class="hm-section">
+  <a class="hm-origin" href="{{ '/i-xen/' | relative_url }}">
+    <span class="hm-origin-l"><span class="hm-origin-k">fig.00 — origin · I, Xen (Alvagante, 2005)</span><span class="hm-origin-t">I wasn't always like this<span class="hm-dot" aria-hidden="true"> →</span></span></span>
+    <span class="hm-origin-r">A handmade Xen tutorial, the ancestor every ixen descends from.</span>
+  </a>
+</section>

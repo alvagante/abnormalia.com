@@ -1,0 +1,15 @@
+# Home page "fig.01" graph: one entry per node, in slot order.
+# title/date come from _data/ixens.yml by slug; the rest is presentation.
+nodes:
+  - {slug: git-repository, n: "04", tag: git, x: 16, y: 25, icon: git, blurb: "A Git repository narrates its objects, refs, index, merges, rebases, remotes and recovery."}
+  - {slug: generate-ixens-workflow, n: "02", tag: workflow, x: 50, y: 18, icon: workflow, blurb: "The generate-ixens workflow describes its own execution: DAG, secrets, wiring, recursion."}
+  - {slug: abnormalia, n: "03", tag: self, x: 84, y: 25, icon: self, blurb: "The project narrates its own history: Amiga diskmag, handmade web, social ghost, I-Xen."}
+  - {slug: puppet-catalog, n: "05", tag: puppet, x: 16, y: 75, icon: graph, blurb: "A Puppet catalog speaks of resources, edges, facts, and the harsh side of convergence."}
+  - {slug: xen-hypervisor, n: "06", tag: xen, x: 50, y: 82, icon: stack, blurb: "A host narrates Xen's domain model, CPU, memory, I/O, isolation, migration and failure."}
+  - {slug: ntp-ptp, n: "01 · new", tag: ntp/ptp, x: 84, y: 75, icon: clock, blurb: "A server's clock on drift, NTP, chrony, PTP, and how systems fail when time is wrong."}
+edges:
+  - [0, 1, triggers]
+  - [1, 2, publishes]
+  - [0, 3, versions]
+  - [3, 4, converges]
+  - [4, 5, hosts]

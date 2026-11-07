@@ -22,6 +22,7 @@ permalink: pretty
 exclude:
   - AGENTS.md
   - CLAUDE.md
+  - docker-compose.yml
   - Gemfile
   - Gemfile.lock
   - models/

@@ -1,0 +1,8 @@
+{%- case include.name -%}
+{%- when "git" -%}<circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="18" cy="12" r="2"/><path d="M5 8v8"/><path d="M7 6h7a2 2 0 0 1 2 2v2"/><path d="M16 14a2 2 0 0 1-2 2H7"/>
+{%- when "workflow" -%}<rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="4" width="6" height="5" rx="1"/><rect x="9" y="15" width="6" height="5" rx="1"/><path d="M9 6.5h6"/><path d="M6 9v3h6v3"/><path d="M18 9v3h-6"/>
+{%- when "self" -%}<rect x="4" y="3" width="16" height="18" rx="1"/><rect x="8" y="3" width="8" height="6"/><path d="M13 5v2"/><rect x="7" y="13" width="10" height="8"/>
+{%- when "graph" -%}<circle cx="6" cy="7" r="1.9"/><circle cx="18" cy="9" r="1.9"/><circle cx="11" cy="18" r="1.9"/><path d="M7.7 7.6 16.2 8.6"/><path d="M7.2 8.7 10 16.2"/><path d="M16.8 10.6 12 16.4"/>
+{%- when "stack" -%}<rect x="4" y="5" width="16" height="4" rx="1"/><rect x="4" y="11" width="16" height="4" rx="1"/><rect x="4" y="17" width="16" height="3" rx="1"/>
+{%- when "clock" -%}<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/>
+{%- endcase -%}
