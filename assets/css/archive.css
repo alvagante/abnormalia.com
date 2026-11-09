@@ -1,0 +1,62 @@
+/* List pages (/ixen/, /iam/). Loaded when page.archive is set; builds on home.css (.home shell, --hm-* tokens). */
+.archive .hm-hero { padding: 46px 0 26px; }
+.archive h1 { max-width: none; margin-bottom: 20px; font-size: clamp(56px, 10vw, 124px); line-height: 0.9; }
+.archive .hm-deck { margin-bottom: 0; }
+.ar-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 28px 48px; }
+.ar-stats { display: flex; gap: 28px; margin: 0; padding-top: 10px; border-top: 1px solid var(--hm-ink); font-family: var(--hm-mono); }
+.ar-stats dt { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hm-accent-text); }
+.ar-stats dd { margin: 6px 0 0; font-size: 15px; letter-spacing: 0.02em; color: var(--hm-ink); }
+.ar-empty { font-family: var(--hm-mono); font-size: 13px; color: var(--hm-mute); }
+
+/* Shared image frame: pencil drawings on white, multiplied onto the paper. */
+.ar-img { position: relative; display: grid; place-items: center; aspect-ratio: 1; overflow: hidden; background: var(--hm-card); border: 1px solid var(--hm-line); color: var(--hm-mute); transition: border-color 0.28s; }
+.ar-img img { display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; filter: grayscale(1) contrast(1.04); transition: filter 0.4s, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.ar-img .hm-c { opacity: 0; transition: opacity 0.28s; }
+a:hover .ar-img img, a:focus-visible .ar-img img { filter: none; transform: scale(1.045); }
+a:hover .ar-img .hm-c, a:focus-visible .ar-img .hm-c { opacity: 1; }
+
+/* ---- /ixen/: the register */
+.ar-list { margin: 0; padding: 0; list-style: none; border-bottom: 1px solid var(--hm-line); }
+.ar-entry { position: relative; display: grid; grid-template-columns: 4.5rem clamp(150px, 21vw, 232px) minmax(0, 1fr); gap: 0 clamp(18px, 3vw, 36px); align-items: start; padding: 26px 14px 26px 0; border-top: 1px solid var(--hm-line); color: inherit; text-decoration: none; transition: background 0.28s; }
+.ar-entry::before { content: ""; position: absolute; left: 0; top: -1px; width: 0; height: 1px; background: var(--hm-accent); transition: width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.ar-entry:hover, .ar-entry:focus-visible { background: rgb(255 255 255 / 30%); }
+.ar-entry:hover::before, .ar-entry:focus-visible::before { width: 100%; }
+.ar-entry:hover .ar-img, .ar-entry:focus-visible .ar-img { border-color: var(--hm-accent); }
+.ar-n { padding-left: 14px; font-family: var(--hm-serif); font-style: italic; font-size: clamp(30px, 4vw, 46px); line-height: 1; color: rgb(27 24 21 / 30%); transition: color 0.28s; }
+.ar-entry:hover .ar-n, .ar-entry:focus-visible .ar-n { color: var(--hm-accent); }
+.ar-body { display: flex; flex-direction: column; align-self: stretch; padding-top: 2px; }
+.ar-body .hm-row b { display: inline-flex; align-items: center; gap: 7px; text-transform: uppercase; letter-spacing: 0.14em; }
+.ar-body .hm-row { align-items: baseline; gap: 10px; }
+.ar-body .hm-row time { color: var(--hm-mute); white-space: nowrap; }
+.archive .ar-body h3 { margin: 14px 0 0; font-family: var(--hm-serif); font-weight: 500; font-size: clamp(26px, 3.6vw, 42px); line-height: 1.04; letter-spacing: -0.015em; text-transform: none; text-wrap: balance; transition: color 0.28s; }
+.ar-entry:hover h3, .ar-entry:focus-visible h3 { color: var(--hm-accent-text); }
+.ar-body p { max-width: 62ch; margin: 12px 0 16px; font-size: clamp(16px, 1.5vw, 18px); line-height: 1.5; color: #4a443c; }
+.ar-open { margin-top: auto; font-family: var(--hm-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--hm-mute); }
+.ar-open span { display: inline-block; transition: transform 0.28s; }
+.ar-entry:hover .ar-open, .ar-entry:focus-visible .ar-open { color: var(--hm-accent-text); }
+.ar-entry:hover .ar-open span, .ar-entry:focus-visible .ar-open span { transform: translate(3px, -3px); }
+
+/* ---- /iam/: the lives */
+.ar-lives { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); gap: 18px; margin: 0; padding: 0; list-style: none; }
+.ar-lives li { display: flex; }
+.ar-life { display: flex; flex-direction: column; width: 100%; padding: 14px 16px 18px; }
+.ar-life .ar-img { margin-bottom: 14px; background: #fff; }
+.archive .ar-life h3.hm-iam-title { font-size: clamp(27px, 2.8vw, 34px); }
+.ar-span { position: relative; height: 6px; margin-top: 16px; background: linear-gradient(rgb(27 24 21 / 28%), rgb(27 24 21 / 28%)) center / 100% 1px no-repeat; }
+.ar-span i { position: absolute; top: 0; height: 6px; background: rgb(27 24 21 / 55%); transition: background 0.25s; }
+.ar-life:hover .ar-span i, .ar-life:focus-visible .ar-span i { background: var(--hm-accent); }
+.ar-years { display: flex; justify-content: space-between; margin-top: 8px; font-family: var(--hm-mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--hm-mute); }
+.archive .ar-life p { margin-top: 12px; font-size: 15.5px; line-height: 1.45; }
+
+@media (max-width: 760px) {
+  .ar-entry { grid-template-columns: 88px minmax(0, 1fr); gap: 0 14px; padding: 20px 0; }
+  .ar-n { display: none; }
+  .ar-body .hm-row b { letter-spacing: 0.08em; }
+  .archive .ar-body h3 { margin-top: 10px; }
+  .ar-body p { font-size: 15.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ar-img img, .ar-entry::before, .ar-open span { transition: none; }
+  a:hover .ar-img img, a:focus-visible .ar-img img { transform: none; }
+}

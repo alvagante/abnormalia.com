@@ -1,8 +1,8 @@
 <header class="hm-header">
-  <a class="hm-brand" href="{{ '/' | relative_url }}"><span>abnormalia</span><span class="hm-sub">// index</span></a>
+  <a class="hm-brand" href="{{ '/' | relative_url }}"><span>abnormalia</span><span class="hm-sub">// {{ page.archive | default: "index" | replace: "iam", "i am" }}</span></a>
   <nav class="hm-nav" aria-label="Primary">
-    <a class="on" href="{{ '/ixen/' | relative_url }}">Ixens</a>
-    <a class="on" href="{{ '/iam/' | relative_url }}">I Am</a>
+    <a {% if page.home or page.archive == "ixens" %}class="on" {% endif %}{% if page.archive == "ixens" %}aria-current="page" {% endif %}href="{{ '/ixen/' | relative_url }}">Ixens</a>
+    <a {% if page.home or page.archive == "iam" %}class="on" {% endif %}{% if page.archive == "iam" %}aria-current="page" {% endif %}href="{{ '/iam/' | relative_url }}">I Am</a>
     <a href="{{ '/i-xen/' | relative_url }}">Origin</a>
     <a href="https://lab42.it">Lab42</a>
   </nav>

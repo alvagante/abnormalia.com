@@ -3,13 +3,14 @@
   <head>
     {% include head.html %}
   </head>
-  <body{% if page.home %} class="home"{% endif %}>
+  {% comment %}page.archive ("ixens" | "iam") marks a list page: it shares the home shell (.home) plus archive.css.{% endcomment %}
+  <body{% if page.home %} class="home"{% elsif page.archive %} class="home archive"{% endif %}>
     <a class="skip-link" href="#content">Skip to content</a>
-    {% if page.home %}{% include header-home.html %}{% else %}{% include header.html %}{% endif %}
+    {% if page.home or page.archive %}{% include header-home.html %}{% else %}{% include header.html %}{% endif %}
     <main class="site-main" id="content">
       {{ content }}
     </main>
-    {% if page.home %}{% include footer-home.html %}{% else %}{% include footer.html %}{% endif %}
+    {% if page.home or page.archive %}{% include footer-home.html %}{% else %}{% include footer.html %}{% endif %}
     {% if page.home %}<script src="{{ '/assets/js/home.js' | relative_url }}" defer></script>{% endif %}
   </body>
 </html>

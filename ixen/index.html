@@ -1,30 +1,70 @@
 ---
 title: Ixens
-description: Self-contained mixed-media pages.
+description: "The full register of Ixens: technical entities narrating themselves in first person, each a self-contained mixed-media minisite."
+archive: ixens
 ---
+{% assign ixens = site.data.ixens | sort: "date" | reverse %}
 
-<section class="page-heading">
-  <p class="kicker">Ixen archive</p>
-  <h1>Ixens</h1>
+<section class="hm-hero ar-hero" aria-labelledby="archive-title">
+  <p class="hm-status"><span class="hm-blink" aria-hidden="true">●</span> fig.01 · full register</p>
+  <div class="ar-head">
+    <div>
+      <h1 id="archive-title">Ixens<span class="hm-dot">.</span></h1>
+      <p class="hm-deck">Systems that narrate themselves. Each Ixen is a self-contained minisite where a technical entity speaks in first person, with its own drawings and soundtrack.</p>
+    </div>
+    {% if ixens.size > 0 %}
+      <dl class="ar-stats">
+        <div><dt>entries</dt><dd>{{ ixens.size }}</dd></div>
+        <div><dt>first</dt><dd>{{ ixens.last.date | date: "%Y-%m-%d" }}</dd></div>
+        <div><dt>latest</dt><dd>{{ ixens.first.date | date: "%Y-%m-%d" }}</dd></div>
+      </dl>
+    {% endif %}
+  </div>
 </section>
 
-{% assign ixens = site.data.ixens | sort: "date" | reverse %}
-{% if ixens.size > 0 %}
-  <ol class="ixen-list">
-    {% for ixen in ixens %}
-      <li>
-        <a href="{{ '/ixen/' | append: ixen.slug | append: '/' | relative_url }}">
-          <span>{{ ixen.title }}</span>
-          {% if ixen.date %}
-            <time datetime="{{ ixen.date }}">{{ ixen.date | date: "%Y-%m-%d" }}</time>
-          {% endif %}
-        </a>
-        {% if ixen.description %}
-          <p>{{ ixen.description }}</p>
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ol>
-{% else %}
-  <p class="empty-state">No Ixens have been published yet.</p>
-{% endif %}
+<section class="hm-section" aria-labelledby="register-title">
+  <div class="hm-caption">
+    <h2 id="register-title">register · newest first</h2>
+    <span class="hm-caption-r"><a href="{{ '/' | relative_url }}#ixens">Graph view ↗</a></span>
+  </div>
+  {% if ixens.size > 0 %}
+    <ol class="ar-list">
+      {% for ixen in ixens %}
+        {% assign node = site.data.home_graph.nodes | where: "slug", ixen.slug | first %}
+        {% assign thumb_path = "/ixen/" | append: ixen.slug | append: "/thumb.jpg" %}
+        {% assign thumb = site.static_files | where: "path", thumb_path | first %}
+        <li>
+          <a class="ar-entry" href="{{ '/ixen/' | append: ixen.slug | append: '/' | relative_url }}">
+            <div class="ar-n" aria-hidden="true">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</div>
+            <div class="ar-img">
+              {% if thumb %}
+                <img src="{{ thumb_path | relative_url }}" alt="" width="720" height="720" loading="{% if forloop.index > 3 %}lazy{% else %}eager{% endif %}" decoding="async">
+              {% elsif node.icon %}
+                <svg aria-hidden="true" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">{% include icon.html name=node.icon %}</svg>
+              {% endif %}
+              <i class="hm-c tl"></i><i class="hm-c tr"></i><i class="hm-c bl"></i><i class="hm-c br"></i>
+            </div>
+            <div class="ar-body">
+              <div class="hm-row">
+                <b>{% if node.icon %}<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">{% include icon.html name=node.icon %}</svg>{% endif %}{{ node.tag | default: "ixen" }}{% if forloop.first %} · new{% endif %}</b>
+                {% if ixen.date %}<time datetime="{{ ixen.date }}">{{ ixen.date | date: "%Y-%m-%d" }}</time>{% endif %}
+              </div>
+              <h3>{{ ixen.title }}</h3>
+              {% if ixen.description %}<p>{{ ixen.description }}</p>{% endif %}
+              <div class="ar-open">open <span aria-hidden="true">↗</span></div>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="ar-empty">No Ixens have been published yet.</p>
+  {% endif %}
+</section>
+
+<section class="hm-section">
+  <a class="hm-origin" href="{{ '/i-xen/' | relative_url }}">
+    <span class="hm-origin-l"><span class="hm-origin-k">fig.00 · origin · I, Xen (Alvagante, 2005)</span><span class="hm-origin-t">I wasn't always like this<span class="hm-dot" aria-hidden="true"> →</span></span></span>
+    <span class="hm-origin-r">A handmade Xen tutorial, the ancestor every ixen descends from.</span>
+  </a>
+</section>

@@ -83,6 +83,7 @@ New Ixens are produced by the `generate-ixens` swamp workflow:
    ```bash
    swamp workflow run generate-ixens --input-file workflows/generate-ixens-input.yaml
    ```
+4. Run `bin/thumbs.sh` to (re)build `thumb.jpg` next to each `hero.png` / `portrait.png`. The `/ixen/` and `/iam/` list pages show these thumbnails (they fall back to an icon or empty frame when missing).
 
 **Workflow job order:** `prepare` → (`images` ∥ `music`) → `page`
 

@@ -1,32 +1,65 @@
 ---
 title: I Am
-description: First-person biography minisites — real people, fictional characters, and constructed personas narrating their own lives.
+description: "First-person biography minisites: real people, fictional characters, and constructed personas narrating their own lives."
+archive: iam
 ---
+{% assign iams = site.data.iams | sort: "born" %}
 
-<section class="page-heading">
-  <p class="kicker">I Am archive</p>
-  <h1>I Am</h1>
+<section class="hm-hero ar-hero" aria-labelledby="archive-title">
+  <p class="hm-status"><span class="hm-blink" aria-hidden="true">●</span> fig.02 · all lives</p>
+  <div class="ar-head">
+    <div>
+      <h1 id="archive-title">I <em>Am</em><span class="hm-dot">.</span></h1>
+      <p class="hm-deck">Lives retold from inside the subject. Each one speaks in first person, present tense, as if the story were still happening.</p>
+    </div>
+    {% if iams.size > 0 %}
+      <dl class="ar-stats">
+        <div><dt>lives</dt><dd>{{ iams.size }}</dd></div>
+        <div><dt>earliest</dt><dd>{{ iams.first.born }}</dd></div>
+        <div><dt>latest</dt><dd>{{ iams.last.born }}</dd></div>
+      </dl>
+    {% endif %}
+  </div>
 </section>
 
-<p>Self-narrated biography minisites. Each subject speaks in first person.</p>
+<section class="hm-section" aria-labelledby="lives-title">
+  <div class="hm-caption">
+    <h2 id="lives-title">lives · by year of birth</h2>
+    <span class="hm-caption-r"><a href="{{ '/' | relative_url }}#iam">Timeline view ↗</a></span>
+  </div>
+  {% if iams.size > 0 %}
+    <ol class="ar-lives">
+      {% for iam in iams %}
+        {% assign thumb_path = "/iam/" | append: iam.slug | append: "/thumb.jpg" %}
+        {% assign thumb = site.static_files | where: "path", thumb_path | first %}
+        {% comment %}Same 1620 → 1980 axis as the home timeline.{% endcomment %}
+        {% assign l = iam.born | minus: 1620 | times: 100.0 | divided_by: 360 %}
+        {% assign w = iam.died | minus: iam.born | times: 100.0 | divided_by: 360 %}
+        <li>
+          <a class="hm-card ar-life" href="{{ '/iam/' | append: iam.slug | append: '/' | relative_url }}">
+            <div class="ar-img">
+              {% if thumb %}<img src="{{ thumb_path | relative_url }}" alt="Portrait of {{ iam.subject | escape }}" width="720" height="720" loading="{% if forloop.index > 3 %}lazy{% else %}eager{% endif %}" decoding="async">{% endif %}
+              <i class="hm-c tl"></i><i class="hm-c tr"></i><i class="hm-c bl"></i><i class="hm-c br"></i>
+            </div>
+            <div class="hm-row"><b>{{ iam.subject }}</b><span>enter ↗</span></div>
+            <h3 class="hm-iam-title">{{ iam.title | default: iam.subject }}</h3>
+            {% if iam.born and iam.died %}
+              <div class="ar-span" aria-hidden="true"><i style="left:{{ l | round: 2 }}%;width:{{ w | round: 2 }}%"></i></div>
+              <div class="ar-years"><span>{{ iam.born }}–{{ iam.died }}</span><span>{{ iam.died | minus: iam.born }} years</span></div>
+            {% endif %}
+            {% if iam.description %}<p>{{ iam.description }}</p>{% endif %}
+          </a>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="ar-empty">No I Am profiles have been published yet.</p>
+  {% endif %}
+</section>
 
-{% assign iams = site.data.iams | sort: "date" | reverse %}
-{% if iams.size > 0 %}
-  <ol class="ixen-list">
-    {% for iam in iams %}
-      <li>
-        <a href="{{ '/iam/' | append: iam.slug | append: '/' | relative_url }}">
-          <span>{{ iam.title | default: iam.subject }}</span>
-          {% if iam.date %}
-            <time datetime="{{ iam.date }}">{{ iam.date | date: "%Y-%m-%d" }}</time>
-          {% endif %}
-        </a>
-        {% if iam.description %}
-          <p>{{ iam.description }}</p>
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ol>
-{% else %}
-  <p class="empty-state">No I Am profiles have been published yet.</p>
-{% endif %}
+<section class="hm-section">
+  <a class="hm-origin" href="{{ '/ixen/' | relative_url }}">
+    <span class="hm-origin-l"><span class="hm-origin-k">fig.01 · ixens · {{ site.data.ixens.size }} entries</span><span class="hm-origin-t">Systems confess too<span class="hm-dot" aria-hidden="true"> →</span></span></span>
+    <span class="hm-origin-r">Technical entities speaking in first person: the other half of the archive.</span>
+  </a>
+</section>
